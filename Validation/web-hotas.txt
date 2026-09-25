@@ -1,0 +1,1 @@
+PASS: WebGL report with 32 axes and 128 buttons initializes; physical trigger press/release works without oversized AnyKey.

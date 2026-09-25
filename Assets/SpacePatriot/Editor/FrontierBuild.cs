@@ -102,6 +102,7 @@ public static class FrontierBuild
     [MenuItem("Space Patriot/Build browser")]
     public static void BuildWeb()
     {
+        PlayerSettings.WebGL.template="PROJECT:SpacePatriot";
         Validate();
         var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName="../Browser",target=BuildTarget.WebGL,options=BuildOptions.None});
         if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Browser build failed: "+report.summary.result);
