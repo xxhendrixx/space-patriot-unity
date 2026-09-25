@@ -15,6 +15,8 @@ namespace SpacePatriot
         public CaseFile[] cases;
         public FrontierWorld world;
         public Camera view;
+        public Spellworks effects;
+        public Fireworks combustion;
         public Transform ship,cabin,engines;
         Transform exterior;
         TextMesh velocityDisplay,serviceDisplay;
@@ -53,6 +55,8 @@ namespace SpacePatriot
             foreach(var c in cases)Progression.Get(save,c.id);
             FrontierEconomy.Ensure(save,worlds);
             if(save.ammo==null||save.ammo.Length!=5)save.ammo=System.Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));
+            effects=new GameObject("Spellworks / combat and survey effects").AddComponent<Spellworks>();effects.transform.SetParent(transform);
+            combustion=new GameObject("Fireworks / causal combustion").AddComponent<Fireworks>();combustion.transform.SetParent(transform);
             world=new GameObject("Frontier environment").AddComponent<FrontierWorld>();world.Generate(CurrentWorld);
             var cameraObj=new GameObject("Flight camera");cameraObj.tag="MainCamera";view=cameraObj.AddComponent<Camera>();cameraObj.AddComponent<AudioListener>();
             view.nearClipPlane=.08f;view.farClipPlane=7000;view.fieldOfView=65;view.backgroundColor=new Color(.2f,.28f,.36f);view.clearFlags=CameraClearFlags.Skybox;view.allowHDR=true;
@@ -67,7 +71,7 @@ namespace SpacePatriot
         {
             if(ship!=null){ship.gameObject.SetActive(false);Destroy(ship.gameObject);}
             ship=new GameObject(Spec.name).transform;ship.SetParent(transform);
-            var hullAsset=Resources.Load<GameObject>("OriginalShips/hull-"+Spec.family);
+            var hullAsset=Resources.Load<GameObject>("OriginalShips/refit-"+Spec.family);
             if(hullAsset==null)throw new System.InvalidOperationException("Original fleet assets must be imported before entering the game.");
             exterior=Instantiate(hullAsset,ship).transform;exterior.name="Exterior hull";
             var basis=ShipSpec.Fleet[Spec.family*10];exterior.localScale=new Vector3(Spec.width/basis.width,Spec.height/basis.height,Spec.length/basis.length);
@@ -206,6 +210,7 @@ namespace SpacePatriot
         void Sound(AudioClip clip,float volume){oneShot.PlayOneShot(clip,volume*PlayerPrefs.GetFloat("sp.volume",.55f));}
         public void Signal(string kind)
         {
+            if(kind=="sample"||kind=="scan")effects.Survey(walking?walkPosition:ship.position);
             foreach(var c in cases)
             {
                 if(Progression.CompleteStep(save,c,CurrentWorld.name,kind,out var report))
@@ -238,7 +243,7 @@ namespace SpacePatriot
             for(int i=0;i<2;i++)
             {
                 var body=Root("Unregistered interceptor",transform,new Vector3(420+i*100,180+i*40,520));
-                var hull=Instantiate(Resources.Load<GameObject>("OriginalShips/hull-1"),body).transform;hull.localPosition=Vector3.zero;
+                var hull=Instantiate(Resources.Load<GameObject>("OriginalShips/refit-1"),body).transform;hull.localPosition=Vector3.zero;
                 raiders.Add(new Raider{body=body,home=body.position,shoot=Time.time+5+i});
             }
         }
@@ -279,13 +284,13 @@ namespace SpacePatriot
                 if(b.enemy){var t=SegmentHit(from,to,walking?walkPosition-Vector3.up*.7f:ship.position,walking?.6f:Spec.width*.22f);if(t.HasValue&&t.Value<=nearest){Damage(b.damage);nearest=t.Value;hit=true;}}
                 else foreach(var r in raiders){if(r.dead)continue;var t=SegmentHit(from,to,r.body.position,4);if(t.HasValue&&t.Value<=nearest){victim=r;nearest=t.Value;hit=true;}}
                 if(victim!=null)HitRaider(victim,b.damage);
-                b.body.position=Vector3.Lerp(from,to,nearest);if(hit||b.age>b.lifetime){if(hit&&b.missile)Burst(b.body.position);Destroy(b.body.gameObject);bolts.RemoveAt(i);}
+                b.body.position=Vector3.Lerp(from,to,nearest);if(hit||b.age>b.lifetime){if(hit){if(b.missile)Burst(b.body.position);else effects.Impact(b.body.position,-b.velocity.normalized);}Destroy(b.body.gameObject);bolts.RemoveAt(i);}
 
             }
             for(int i=debris.Count-1;i>=0;i--){if(!debris[i]){debris.RemoveAt(i);continue;}debris[i].position+=debris[i].forward*dt*22;debris[i].Rotate(40*dt,65*dt,0);}
         }
         void Burst(Vector3 p)
-        {for(int i=0;i<12;i++){var d=Box("Hull fragment",transform,p,Vector3.one*UnityEngine.Random.Range(.15f,.65f),i<3?Orange:Steel).transform;d.rotation=UnityEngine.Random.rotation;debris.Add(d);Destroy(d.gameObject,3);}}
+        {effects.Impact(p,Vector3.up,true,3);if(CurrentWorld.biome=="temperate"&&p.y<world.Height(p.x,p.z)+14)combustion.Ignite(new Vector3(p.x,world.Height(p.x,p.z)+.2f,p.z),8,1.4f);for(int i=0;i<12;i++){var d=Box("Hull fragment",transform,p,Vector3.one*UnityEngine.Random.Range(.15f,.65f),i<3?Orange:Steel).transform;d.rotation=UnityEngine.Random.rotation;debris.Add(d);Destroy(d.gameObject,3);}}
         void Damage(float amount)
         {
             if(dead||amount<=0)return;hitTime=Time.time;float absorbed=Mathf.Min(shield,amount);shield-=absorbed;save.hull-=amount-absorbed;Sound(impactClip,.5f);

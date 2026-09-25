@@ -49,10 +49,12 @@ namespace SpacePatriot
             if(spec.id=="missile"&&lockProgress<1){Toast("Select a target with C and keep it inside the reticle until seeker lock.");fireTime=Time.time+.3f;return;}
             fireTime=Time.time+spec.interval;heat+=spec.heat;Sound(shotClip,.45f);if(spec.id=="laser")capacitor-=12;else Ammo.mag--;
             Vector3 direction=walking||aboard?view.transform.forward:ship.forward,origin=walking||aboard?view.transform.position+direction*.4f:ship.position+direction*Spec.length*.5f;
+            effects.Muzzle(origin,direction,spec.id=="laser");
             if(spec.id=="laser"){
                 Vector3 end=origin+direction*spec.range;float distance=spec.range;if(Physics.Raycast(origin,direction,out var hit,distance,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore)){distance=hit.distance;end=hit.point;}
                 Raider enemy=null;foreach(var r in raiders){if(r.dead)continue;float? t=SegmentHit(origin,end,r.body.position,4);if(t.HasValue){end=Vector3.Lerp(origin,end,t.Value);enemy=r;}}
                 if(enemy!=null)HitRaider(enemy,spec.damage);
+                if(enemy!=null||distance<spec.range)effects.Impact(end,-direction);
                 var go=new GameObject("Red pulse beam");var line=go.AddComponent<LineRenderer>();line.sharedMaterial=IndustrialArt.Glow("Pulse red",new Color(1,.025f,.015f),4);line.positionCount=2;line.SetPosition(0,origin);line.SetPosition(1,end);line.startWidth=.065f;line.endWidth=.025f;Destroy(go,.09f);return;
             }
             SpawnBolt(origin,direction*spec.speed+(walking?Vector3.zero:velocity),false,spec);

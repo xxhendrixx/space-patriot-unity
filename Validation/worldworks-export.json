@@ -1,0 +1,114 @@
+[
+  {
+    "world": "mercury",
+    "seed": 3321527684,
+    "style": "alpine",
+    "min": -92.87190132204603,
+    "max": 619.4557124678104,
+    "samples": 16641
+  },
+  {
+    "world": "venus",
+    "seed": 1732359244,
+    "style": "alpine",
+    "min": -164.3205053922729,
+    "max": 405.1229708867105,
+    "samples": 16641
+  },
+  {
+    "world": "earth",
+    "seed": 1270752749,
+    "style": "highlands",
+    "min": -142.7010855285643,
+    "max": 539.6856123354123,
+    "samples": 16641
+  },
+  {
+    "world": "mars",
+    "seed": 3778613462,
+    "style": "desert",
+    "min": -33.128193502267635,
+    "max": 421.57009984231956,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-b",
+    "seed": 1953829944,
+    "style": "alpine",
+    "min": -206.31072971354638,
+    "max": 304.55195859543676,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-c",
+    "seed": 1970607563,
+    "style": "alpine",
+    "min": -242.4881531828173,
+    "max": 379.71090351911187,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-d",
+    "seed": 2054495658,
+    "style": "alpine",
+    "min": -260.6941310607546,
+    "max": 346.37070983584823,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-e",
+    "seed": 2071273277,
+    "style": "highlands",
+    "min": -331.83382301406834,
+    "max": 450.6663768101627,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-f",
+    "seed": 2020940420,
+    "style": "highlands",
+    "min": -287.55308650531003,
+    "max": 192.26046613613454,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-g",
+    "seed": 2037718039,
+    "style": "highlands",
+    "min": -118.04121233384564,
+    "max": 430.29176155286507,
+    "samples": 16641
+  },
+  {
+    "world": "trappist-1-h",
+    "seed": 1853164230,
+    "style": "alpine",
+    "min": -128.82232134475606,
+    "max": 693.7695989665413,
+    "samples": 16641
+  },
+  {
+    "world": "toi-270-b",
+    "seed": 274680840,
+    "style": "alpine",
+    "min": -196.02924205248317,
+    "max": 244.33319772643637,
+    "samples": 16641
+  },
+  {
+    "world": "k2-141-b",
+    "seed": 3969741818,
+    "style": "alpine",
+    "min": -78.91509274287421,
+    "max": 895.4873578660088,
+    "samples": 16641
+  },
+  {
+    "world": "wasp-76-b",
+    "seed": 1016419044,
+    "style": "alpine",
+    "min": -224.10383156445687,
+    "max": 407.717703299574,
+    "samples": 16641
+  }
+]

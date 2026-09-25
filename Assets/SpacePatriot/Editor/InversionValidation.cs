@@ -25,6 +25,7 @@ public static class InversionValidation
     [MenuItem("Space Patriot/Validate live direction and launch controls")]
     public static void Controls()
     {
+        using var inputScope = new ValidationInputScope();
         var game=FrontierGame.Instance;if(game==null||!Application.isPlaying)throw new Exception("Enter Play mode first.");
         var flags=BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;var type=typeof(FrontierGame);var lines=new List<string>();
         void Set(string name,object value)=>type.GetField(name,flags).SetValue(game,value);
@@ -41,16 +42,16 @@ public static class InversionValidation
             var bindings=new FlightBindings();var names=new[]{"Forward","Reverse","Strafe left","Strafe right","Ascend","Descend","Pitch up","Pitch down","Yaw left","Yaw right","Roll left","Roll right"};
             var keys=new[]{Key.W,Key.S,Key.A,Key.D,Key.Space,Key.LeftCtrl,Key.UpArrow,Key.DownArrow,Key.LeftArrow,Key.RightArrow,Key.Q,Key.E};for(int i=0;i<names.Length;i++)bindings.entries.Find(x=>x.action==names[i]).key=keys[i];Set("bindings",bindings);
             void Reset(){game.started=true;game.menu=false;game.walking=false;game.aboard=false;game.cockpit=true;game.flying=true;game.gearDown=false;game.powered=true;game.instruments=false;game.armed=false;game.flightAssist=true;game.cruise=false;game.throttle=1;game.ship.position=new Vector3(0,game.world.Deck+150,0);game.ship.rotation=Quaternion.identity;Set("velocity",Vector3.zero);Set("angularVelocity",Vector3.zero);Set("inputNeutral",false);Set("focused",true);}
-            void Frame(Key key=Key.None,Vector2 mouseDelta=default,Vector2 look=default,bool rightMouse=false,float dt=.02f){InputSystem.QueueStateEvent(keyboard,key==Key.None?new KeyboardState():new KeyboardState(key));InputSystem.QueueStateEvent(mouse,new MouseState{delta=mouseDelta,buttons=(ushort)(rightMouse?2:0)});InputSystem.QueueStateEvent(pad,new GamepadState{rightStick=look});InputSystem.Update();Call("Flight",dt);}
+            void Frame(Key key=Key.None,Vector2 mouseDelta=default,Vector2 look=default,bool rightMouse=false,float dt=.02f){InputSystem.ResetDevice(mouse);InputSystem.QueueStateEvent(keyboard,key==Key.None?new KeyboardState():new KeyboardState(key));InputSystem.QueueStateEvent(mouse,new MouseState{delta=mouseDelta,buttons=(ushort)(rightMouse?2:0)});InputSystem.QueueStateEvent(pad,new GamepadState{rightStick=look});InputSystem.Update();Call("Flight",dt);}
             Vector3 Velocity()=>(Vector3)Get("velocity");
             Reset();Frame(Key.UpArrow);Check(game.ship.forward.y>0,"Up arrow pitches nose upward");Reset();Frame(Key.DownArrow);Check(game.ship.forward.y<0,"Down arrow pitches nose downward");
             Reset();Frame(Key.RightArrow);Check(game.ship.forward.x>0,"Right arrow yaws nose right");Reset();Frame(Key.LeftArrow);Check(game.ship.forward.x<0,"Left arrow yaws nose left");
             Reset();Frame(Key.Q);Check(game.ship.right.y>0,"Q rolls left wing down");Reset();Frame(Key.E);Check(game.ship.right.y<0,"E rolls right wing down");
             Reset();game.ship.rotation=Quaternion.Euler(0,90,0);Frame(Key.W);Check(Velocity().x>0&&Mathf.Abs(Velocity().z)<.001f,"Forward thrust follows the ship nose after yawing");
             Reset();game.ship.rotation=Quaternion.Euler(0,90,0);Frame(Key.S);Check(Velocity().x<0,"Reverse thrust follows the ship tail after yawing");
-            Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true);Check(game.ship.forward.y>0,"Mouse up pitches up in normal mode");var mouseAttitude=game.ship.rotation;Frame(rightMouse:true);Check(Quaternion.Angle(mouseAttitude,game.ship.rotation)<.001f,"Mouse stops steering when mouse movement stops");
+            Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true);Check(game.ship.forward.y>0,"Mouse up pitches up in normal mode");var mouseForward=game.ship.forward;var mouseUp=game.ship.up;Frame(rightMouse:true);Check((mouseForward-game.ship.forward).sqrMagnitude<1e-10f&&(mouseUp-game.ship.up).sqrMagnitude<1e-10f,"Mouse stops steering when mouse movement stops");
             Reset();Frame(mouseDelta:new Vector2(20,0),rightMouse:true);Check(game.ship.forward.x>0,"Mouse right yaws right");
-            Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true,dt:1/30f);var slow=game.ship.rotation;Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true,dt:1/120f);Check(Quaternion.Angle(slow,game.ship.rotation)<.001f,"Mouse angle is independent of frame duration");
+            Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true,dt:1/30f);var slow=game.ship.forward;Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true,dt:1/120f);Check((slow-game.ship.forward).sqrMagnitude<1e-10f,"Mouse angle is independent of frame duration");
             PlayerPrefs.SetInt("sp.invert",1);Reset();Frame(mouseDelta:new Vector2(0,20),rightMouse:true);Check(game.ship.forward.y<0,"Mouse inversion setting reverses only vertical look");PlayerPrefs.SetInt("sp.invert",0);
             Reset();Frame(look:Vector2.up);Check(game.ship.forward.y>0,"Right stick up pitches up in normal mode");Reset();Frame(look:Vector2.right);Check(game.ship.forward.x>0,"Right stick right yaws right");
             PlayerPrefs.SetInt("sp.padInvert",1);Reset();Frame(look:Vector2.up);Check(game.ship.forward.y<0,"Stick inversion preference works");PlayerPrefs.SetInt("sp.padInvert",0);

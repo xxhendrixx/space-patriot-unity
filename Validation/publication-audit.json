@@ -1,0 +1,21 @@
+{
+  "working_files": 7128,
+  "history_blobs": 6373,
+  "potential_secrets": [],
+  "large_working_files": [
+    {
+      "file": "Reference/Original/Space_Patriot.html",
+      "bytes": 89218835
+    }
+  ],
+  "large_history_blobs": [
+    {
+      "file": "Reference/Original/Space_Patriot.html",
+      "bytes": 89218835
+    },
+    {
+      "file": "Reference/Original/Space_Patriot.html",
+      "bytes": 89216820
+    }
+  ]
+}

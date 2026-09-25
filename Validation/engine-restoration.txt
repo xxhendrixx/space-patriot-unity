@@ -1,0 +1,36 @@
+PASS: Original terrain field loaded: mercury
+PASS: Original terrain field loaded: venus
+PASS: Original terrain field loaded: earth
+PASS: Original terrain field loaded: mars
+PASS: Original terrain field loaded: trappist-1-b
+PASS: Original terrain field loaded: trappist-1-c
+PASS: Original terrain field loaded: trappist-1-d
+PASS: Original terrain field loaded: trappist-1-e
+PASS: Original terrain field loaded: trappist-1-f
+PASS: Original terrain field loaded: trappist-1-g
+PASS: Original terrain field loaded: trappist-1-h
+PASS: Original terrain field loaded: toi-270-b
+PASS: Original terrain field loaded: k2-141-b
+PASS: Original terrain field loaded: wasp-76-b
+PASS: Fireworks recycles six causal emitter slots
+PASS: 14 solid worlds use compiled original engine fields
+PASS: Planet is a closed continuous mesh; every edge belongs to two triangles
+PASS: Rendered terrain / walking height agreement: 0.00012 m
+PASS: Grassworks grows bounded terrain-rooted blades: 53373
+PASS: Grass tiles stay stable while observer remains in same tile
+PASS: Grass is culled from orbital altitude
+PASS: Spellworks suppresses duplicate event IDs
+PASS: Destruction emits original 65 flame / 10 smoke burst
+PASS: Spellworks ring remains bounded after overflow
+PASS: Weatherworks wetness matches original equation
+PASS: Oceanworks directional wave field evolves with time
+PASS: Refit chassis 0 exists with at most 12 material batches
+PASS: Refit chassis 1 exists with at most 12 material batches
+PASS: Refit chassis 2 exists with at most 12 material batches
+PASS: Refit chassis 3 exists with at most 12 material batches
+PASS: Refit chassis 4 exists with at most 12 material batches
+PASS: Refit chassis 5 exists with at most 12 material batches
+PASS: Refit chassis 6 exists with at most 12 material batches
+PASS: Refit chassis 7 exists with at most 12 material batches
+PASS: Refit chassis 8 exists with at most 12 material batches
+PASS: Refit chassis 9 exists with at most 12 material batches

@@ -11,27 +11,29 @@ public static class RuntimeRestorationValidation
 {
     public static void Run()
     {
+        using var inputScope = new ValidationInputScope();
         var game=FrontierGame.Instance;if(game==null||!Application.isPlaying)throw new Exception("Run in Play mode.");
         var flags=BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public;var type=typeof(FrontierGame);var lines=new List<string>();
         void Set(string field,object value)=>type.GetField(field,flags).SetValue(game,value);
         object Call(string method,params object[] args)=>type.GetMethod(method,flags).Invoke(game,args);
         void Check(bool value,string name){if(!value)throw new Exception("RUNTIME CHECK FAILED: "+name);lines.Add("PASS "+name);}
         const string key="SpacePatriot.Unity.Frontier.v1";bool had=PlayerPrefs.HasKey(key);string stored=PlayerPrefs.GetString(key);
+        var oldMouse=Mouse.current;var mouse=InputSystem.AddDevice<Mouse>();
         var original=game.save;var oldKeyboard=Keyboard.current;var keyboard=InputSystem.AddDevice<Keyboard>();var oldPad=Gamepad.current;var pad=InputSystem.AddDevice<Gamepad>();
         try{
             game.save=JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(original));game.save.ship=0;game.save.fuel=100;game.save.hull=100;
             Call("RespawnShip");game.started=true;game.menu=false;game.walking=false;game.cockpit=true;game.flying=true;game.gearDown=false;game.powered=true;game.throttle=1;
             game.ship.position=new Vector3(0,game.world.Deck+120,0);Set("focused",true);Set("inputNeutral",false);
             Vector3 Velocity()=>(Vector3)type.GetField("velocity",flags).GetValue(game);
-            void Frame(params Key[] keys){InputSystem.QueueStateEvent(keyboard,new KeyboardState(keys));InputSystem.Update();Call("Flight",.02f);}
+            void Frame(params Key[] keys){InputSystem.QueueStateEvent(mouse,new MouseState());InputSystem.QueueStateEvent(keyboard,new KeyboardState(keys));InputSystem.Update();Call("Flight",.02f);}
             Frame(Key.A);Check(Velocity().x<0&&Mathf.Abs(Velocity().z)<.01f,"Actual A key creates lateral flight thrust");
             Set("velocity",Vector3.zero);Frame(Key.S);Check(Velocity().z<0,"Actual S key reverses");
             Set("velocity",Vector3.zero);Frame(Key.Space);Check(Velocity().y>0,"Actual Space key creates upward flight thrust");
             Set("velocity",Vector3.zero);Frame(Key.LeftCtrl);Check(Velocity().y<0,"Actual Ctrl key descends without firing");
             game.flightAssist=false;Set("velocity",new Vector3(20,0,0));Frame(Key.W);Check(Mathf.Abs(Velocity().x-20)<.01f&&Velocity().z>0,"Actual decoupled flight preserves lateral motion while accelerating forward");
             float before=Velocity().magnitude;Frame(Key.X);Check(Velocity().magnitude<before,"Actual X key brakes the ship");
-            Frame();game.flightAssist=true;Set("velocity",Vector3.zero);InputSystem.QueueStateEvent(pad,new GamepadState{leftStick=Vector2.right});InputSystem.Update();Call("Flight",.02f);
-            Check(Velocity().x>0,"Gamepad left stick supplies strafe through actual flight controller");
+            Frame();game.flightAssist=true;Set("inputNeutral",false);Set("focused",true);Set("velocity",Vector3.zero);InputSystem.QueueStateEvent(pad,new GamepadState{leftStick=Vector2.right});InputSystem.Update();Call("Flight",.02f);
+            Check(Velocity().x>0,"Gamepad left stick supplies strafe through actual flight controller: velocity="+Velocity()+" stick="+pad.leftStick.ReadValue()+" current="+(Gamepad.current==pad)+" neutral="+type.GetField("inputNeutral",flags).GetValue(game)+" instruments="+game.instruments+" flying="+game.flying+" focused="+type.GetField("focused",flags).GetValue(game));
             Set("velocity",Vector3.zero);InputSystem.QueueStateEvent(pad,new GamepadState().WithButton(GamepadButton.RightShoulder));InputSystem.Update();Call("Flight",.02f);
             Check(Velocity().y>0,"Gamepad shoulder supplies upward thrust");InputSystem.QueueStateEvent(pad,new GamepadState());InputSystem.Update();
             game.armed=false;game.heat=0;Set("shipWeapon",0);int rounds=game.save.ammo[0].mag;Call("Fire");Check(game.save.ammo[0].mag==rounds,"Safe weapon cannot expend ammunition");
@@ -58,7 +60,7 @@ public static class RuntimeRestorationValidation
             File.WriteAllLines("Validation/runtime-restoration-tests.txt",lines);Debug.Log("RUNTIME_RESTORATION_PASS: "+lines.Count+" actual controller/cargo checks.");
         }
         finally{
-            InputSystem.RemoveDevice(keyboard);if(oldKeyboard!=null)oldKeyboard.MakeCurrent();InputSystem.RemoveDevice(pad);if(oldPad!=null)oldPad.MakeCurrent();Call("ClearCombat");game.save=original;Call("RespawnShip");Call("SpawnRaiders");game.started=false;game.menu=true;
+            InputSystem.RemoveDevice(mouse);if(oldMouse!=null)oldMouse.MakeCurrent();InputSystem.RemoveDevice(keyboard);if(oldKeyboard!=null)oldKeyboard.MakeCurrent();InputSystem.RemoveDevice(pad);if(oldPad!=null)oldPad.MakeCurrent();Call("ClearCombat");game.save=original;Call("RespawnShip");Call("SpawnRaiders");game.started=false;game.menu=true;
             if(had)PlayerPrefs.SetString(key,stored);else PlayerPrefs.DeleteKey(key);PlayerPrefs.Save();
         }
     }

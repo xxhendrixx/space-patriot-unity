@@ -19,22 +19,6 @@ namespace SpacePatriot
         Transform content;
         Transform orbit;
         readonly List<UnityEngine.Object> generatedAssets=new List<UnityEngine.Object>();
-        public float Height(float x,float z)
-        {
-            const float step=25;float gx=(x+1800)/step,gz=(z+1800)/step;int ix=Mathf.FloorToInt(gx),iz=Mathf.FloorToInt(gz);float u=gx-ix,v=gz-iz;
-            float ax=ix*step-1800,az=iz*step-1800,a=RawHeight(ax,az),b=RawHeight(ax+step,az),c=RawHeight(ax,az+step),d=RawHeight(ax+step,az+step);
-            return u+v<=1?a+(b-a)*u+(c-a)*v:d+(c-d)*(1-u)+(b-d)*(1-v);
-        }
-        float RawHeight(float x,float z)
-        {
-            float seed=(info.seed%1000)*.271f;
-            float n=Mathf.PerlinNoise(x*.0017f+seed,z*.0017f+seed)*95+Mathf.PerlinNoise(x*.009f+seed,z*.009f)*19;
-            float plateauDistance=new Vector2(Mathf.Max(0,Mathf.Abs(x-120)-315),Mathf.Max(0,Mathf.Abs(z)-260)).magnitude;
-            float basin=Mathf.SmoothStep(0,1,Mathf.Clamp01(plateauDistance/300));
-            float mountain=Mathf.SmoothStep(0,1,Mathf.Clamp01((new Vector2(x,z).magnitude-350)/750));
-            float ridge=Mathf.Pow(1-Mathf.Abs(Mathf.PerlinNoise(x*.0011f+seed+4,z*.0011f+seed)*2-1),3);
-            return -3+(n+mountain*ridge*260)*basin;
-        }
         public void Generate(WorldInfo world)
         {
             info=world;if(content!=null){content.gameObject.SetActive(false);Destroy(content.gameObject);}places.Clear();
@@ -63,22 +47,12 @@ namespace SpacePatriot
                 p.y=Height(p.x,p.z);Rock(p,Random.Range(.8f,4));
             }
             // One combined static set avoids issuing a draw for every bolt and beam.
-            var staticObjects=new List<GameObject>();foreach(var renderer in content.GetComponentsInChildren<MeshRenderer>()){renderer.gameObject.isStatic=renderer.GetComponentInParent<HangarLift>()==null&&renderer.GetComponent<BuildingLiftPart>()==null;if(renderer.gameObject.isStatic)staticObjects.Add(renderer.gameObject);}
+            var staticObjects=new List<GameObject>();foreach(var renderer in content.GetComponentsInChildren<MeshRenderer>()){renderer.gameObject.isStatic=renderer.GetComponentInParent<HangarLift>()==null&&renderer.GetComponent<BuildingLiftPart>()==null;if(renderer.gameObject.isStatic&&renderer.gameObject.name!="Continuous spherical terrain")staticObjects.Add(renderer.gameObject);}
             StaticBatchingUtility.Combine(staticObjects.ToArray(),content.gameObject);
             BuildOrbit();
-        }
-        void Terrain()
-        {
-            int count=144;float size=3600;var verts=new Vector3[(count+1)*(count+1)];var uv=new Vector2[verts.Length];var tris=new int[count*count*6];int q=0;
-            for(int z=0;z<=count;z++)for(int x=0;x<=count;x++)
-            { int i=z*(count+1)+x;float px=(x/(float)count-.5f)*size,pz=(z/(float)count-.5f)*size;verts[i]=new Vector3(px,Height(px,pz),pz);uv[i]=new Vector2(px*.02f,pz*.02f);
-                if(x<count&&z<count){tris[q++]=i;tris[q++]=i+count+1;tris[q++]=i+1;tris[q++]=i+1;tris[q++]=i+count+1;tris[q++]=i+count+2;}
-            }
-            var mesh=new Mesh{name=info.name+" heightfield",vertices=verts,uv=uv,triangles=tris};mesh.RecalculateNormals();mesh.RecalculateTangents();mesh.RecalculateBounds();
-            generatedAssets.Add(mesh);
-            var surface=Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?5:info.biome=="ice"?10:info.biome=="volcanic"?14:info.biome=="temperate"?6:8));
-            MeshObject("Weathered terrain",content,mesh,surface!=null?surface:Metal(info.id+" terrain",info.Surface,0,.96f),Vector3.zero,Vector3.one);
-            if(info.biome=="gas")Box("Cloud sea",content,new Vector3(0,-8,0),new Vector3(3400,1,3400),Metal(info.id+" clouds",info.Surface*.85f,0,1));
+            grass=new GameObject("Grassworks / regional vegetation").AddComponent<Grassworks>();grass.transform.SetParent(content);grass.Initialize(this);
+            var weather=new GameObject("Weatherworks / climate").AddComponent<Weatherworks>();weather.transform.SetParent(content);weather.Initialize(this);
+            var water=new GameObject("Oceanworks / watershed").AddComponent<Oceanworks>();water.transform.SetParent(content);water.Initialize(this);
         }
         void Rock(Vector3 p,float scale)
         {
@@ -118,28 +92,11 @@ namespace SpacePatriot
             RenderSettings.fogDensity=Mathf.Lerp(.0008f,0,space);
             camera.clearFlags=space>.5f?CameraClearFlags.SolidColor:CameraClearFlags.Skybox;
             camera.backgroundColor=Color.Lerp(new Color(.13f,.19f,.25f),new Color(.003f,.006f,.012f),space);
-            camera.farClipPlane=15000;
+            camera.farClipPlane=80000;
         }
         void BuildOrbit()
         {
             if(orbit!=null)Destroy(orbit.gameObject);orbit=Root("Orbital scale vista",transform);
-            var planet=GameObject.CreatePrimitive(PrimitiveType.Sphere);planet.name=info.name+" / orbital globe";planet.transform.SetParent(orbit);planet.transform.position=new Vector3(0,-3640,0);planet.transform.localScale=Vector3.one*7200;Destroy(planet.GetComponent<Collider>());
-            var texture=new Texture2D(512,256,TextureFormat.RGB24,true);texture.name=info.name+" geology";var pixels=new Color[512*256];float seed=info.seed%913;
-            generatedAssets.Add(texture);
-            for(int y=0;y<256;y++)for(int x=0;x<512;x++)
-            {
-                float u=x/512f,v=y/256f;float theta=u*Mathf.PI*2;
-                float nx=Mathf.Cos(theta)*2+seed,nz=Mathf.Sin(theta)*2+seed;
-                float n=Mathf.PerlinNoise(nx+v*2,nz+v*4)*.64f+Mathf.PerlinNoise(nx*3,nz*3+v*12)*.24f+Mathf.PerlinNoise(nx*11,nz*11+v*23)*.12f;
-                Color c=Color.Lerp(info.Surface*.42f,info.Surface*1.7f,n);
-                if(info.biome=="temperate")c=n<.49f?new Color(.035f,.12f,.19f):Color.Lerp(new Color(.13f,.21f,.12f),new Color(.46f,.41f,.26f),Mathf.InverseLerp(.49f,.8f,n));
-                if(info.biome=="gas")c=Color.Lerp(info.Surface*.5f,info.Surface*1.8f,.5f+.5f*Mathf.Sin(v*130+n*8));
-                if(info.biome=="volcanic"&&n>.65f)c=Color.Lerp(c,new Color(.9f,.25f,.04f),(n-.65f)*3);
-                float polar=Mathf.SmoothStep(0,1,Mathf.Clamp01((Mathf.Abs(v-.5f)-.35f)*12));if(info.biome!="gas"&&info.biome!="volcanic")c=Color.Lerp(c,new Color(.71f,.77f,.78f),polar);
-                float cloud=Mathf.PerlinNoise(nx*4+8,nz*4+v*14);if(info.biome=="temperate")c=Color.Lerp(c,new Color(.78f,.8f,.77f),Mathf.Clamp01((cloud-.52f)*3));
-                pixels[y*512+x]=c;
-            }
-            texture.SetPixels(pixels);texture.Apply();var mat=Metal(info.id+" orbital surface",Color.white,.02f,.94f);mat.SetTexture("_BaseMap",texture);planet.GetComponent<Renderer>().sharedMaterial=mat;
             var vertices=new List<Vector3>();var triangles=new List<int>();
             Random.InitState(983);
             for(int i=0;i<700;i++)

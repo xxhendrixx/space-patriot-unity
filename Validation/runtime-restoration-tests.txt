@@ -4,7 +4,7 @@ PASS Actual Space key creates upward flight thrust
 PASS Actual Ctrl key descends without firing
 PASS Actual decoupled flight preserves lateral motion while accelerating forward
 PASS Actual X key brakes the ship
-PASS Gamepad left stick supplies strafe through actual flight controller
+PASS Gamepad left stick supplies strafe through actual flight controller: velocity=(0.63, 0.01, 0.00) stick=(1.00, 0.00) current=True neutral=False instruments=False flying=True focused=True
 PASS Gamepad shoulder supplies upward thrust
 PASS Safe weapon cannot expend ammunition
 PASS Actual Y key arms weapons

@@ -1,1 +1,1 @@
-PASS: 1151 imported meshes; 578754 nondegenerate triangles agree with their outward normals.
+PASS: 1246 imported meshes; 760862 nondegenerate triangles agree with their outward normals.

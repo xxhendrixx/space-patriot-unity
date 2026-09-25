@@ -13,6 +13,14 @@ Open this folder in Unity 6000.3.25f1, then open `Assets/SpacePatriot/Scenes/Fro
 - Settings includes separate mouse/controller vertical inversion and mouse sensitivity. Normal mode means up looks up.
 - Cargo: buy at the freight exchange, approach the cargo ramp, open the hatch and load. Unload before selling or handing over freight contracts. Close the hatch before launch.
 
-The original source and artwork are retained under `Reference/Original`. Unity assets use converted originals; a completed visual redesign is still pending. The Downloads originals are untouched.
+The original source and artwork are retained under `Reference/Original`. The current fleet includes ten industrial refits using the original atlas textures, specifications and interiors. The Downloads originals are untouched.
+
+Grassworks, Spellworks, terrain, weather, ocean and fire behavior now have native Unity integrations. See [ENGINE_INTEGRATION.md](ENGINE_INTEGRATION.md) for exactly what runs and what remains incomplete. Rebuildable conversion tools are in [Tools/AssetPipeline](Tools/AssetPipeline).
+
+## Build
+
+Install Unity 6000.3.25f1 with Web Build Support, open this project and let its pinned packages import. Choose **Space Patriot > Build browser**. The build is written to a sibling `Browser` folder and requires an HTTP server that serves `.gz` files with the matching `Content-Encoding: gzip` and MIME type.
+
+Unity caches, local settings, generated browser builds and credentials are excluded from version control. Public source availability does not grant a new license; existing asset and package terms still apply.
 
 Validation reports live under `Validation/`. Tests using virtual input devices exercise the running controller code, but do not replace hands-on testing. No validated WebGL build is included yet.

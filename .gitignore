@@ -10,3 +10,11 @@
 .vs/
 .DS_Store
 *.log
+
+**/node_modules/
+.env
+.env.*
+*.pem
+*.key
+Validation/*-status.txt
+/Assets/Resources/PerformanceTestRun*.json*
