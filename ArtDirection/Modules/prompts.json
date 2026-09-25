@@ -1,6 +1,6 @@
 {
   "tool": "built-in image_gen",
-  "purpose": "Isolated reference for local artwork-to-mesh generation",
+  "purpose": "Isolated component references for local artwork-to-mesh generation",
   "references": [
     "../fleet-target.png"
   ],
@@ -14,6 +14,21 @@
       "file": "kestrel-drive-reference-v2.png",
       "reference": "kestrel-drive-reference.png",
       "prompt": "Keep this exact industrial spacecraft engine nacelle unchanged in geometry, proportions, camera angle, worn ivory and mustard paint, black casing, and intricate surface detail. Replace the entire visible checkerboard background with a completely uniform PURE WHITE background (#FFFFFF). No checkerboard, no gray squares, no transparency preview pattern, no ground shadow, no floor, no extra objects, no labels. Preserve the full nacelle and all of its contours. A single isolated mechanical engine module on solid white, for image-to-3D reconstruction."
+    },
+    {
+      "file": "kestrel-hull-reference.png",
+      "references": ["../fleet-target.png"],
+      "prompt": "Reconstruct ONLY the single KESTREL courier in the upper-left quadrant of the supplied ship board as one isolated production mesh reference: its complete central forward pressure fuselage from blunt sensor nose through pilot cockpit and deep center hull to the aft mount shoulder. Include the characteristic raised angular glazed cockpit, continuous thick pale ivory armored fuselage, mustard belt panels, lower dark service keel, layered maintenance doors, sensible structural panel breaks and attached small conduits. Exclude BOTH engine pods, every wing, all landing gear, weapons, lettering, logos, ground, floor and shadow. The body is a solid closed standalone pressure hull, not hollow and not a whole ship. Front points to the LEFT of the frame; aft mount points to the RIGHT. One single three-quarter front-side view with minimal perspective, full silhouette occupying about 82% of a square canvas, broad white clearance. Clean soft diffuse neutral light, colours matching the Kestrel on the supplied design; NO extra ship, detached parts, labels, grid, or layout. Uniform pure-white #FFFFFF studio background with no gradient, no shadow. Detailed grounded working industrial spacecraft design with readable large-to-small structural hierarchy; retain precisely the restrained worn ivory, ochre and charcoal visual style of the Kestrel. This is a component extracted faithfully from the supplied original ship concept, not a new ship design."
+    },
+    {
+      "file": "kestrel-wing-reference.png",
+      "references": ["../fleet-target.png"],
+      "prompt": "Reference the KESTREL courier in the upper-left of the attached Space Patriot fleet design. Create ONE of the Kestrel's detachable short swept high-lift wings as a complete isolated mechanical ship part; this will be mirrored to make its counterpart. Wing only, no fuselage, canopy, engines, landing gear, pylons or other aircraft, no aircraft shadows. Root mounting face is a clearly visible vertical flat structural connection at the RIGHT, and the clipped swept wingtip points LEFT. Realistic 5.8-metre-span clipped trapezoidal industrial courier wing, thick cambered airfoil with visibly rounded manufactured leading edge, integrated two-segment flush access panels, carefully inset control-surface seam, recessed actuator hatches and two discrete structural hardpoints on the root underside. The design must be a believable structurally connected wing, not a thin sheet, plank or flattened triangle. Worn warm ivory ceramic-metal panels, one restrained mustard-yellow service panel at the root, dark inset charcoal mechanisms, small purposeful fasteners and clean readable silhouette. One single three-quarter view from above and in front, minimal perspective, full shape centered occupying 82% of square image. Neutral diffuse studio light reveals its 3D thickness and underside connection. Uniform pure white background. No weapons, no words, no labels, no logos, no floor and no shadow. Same precise industrial visual language and mature manufactured realism as the supplied Kestrel design."
+    },
+    {
+      "file": "kestrel-landing-gear-reference.png",
+      "references": ["../fleet-target.png"],
+      "prompt": "From the upper-left Kestrel courier in the provided Space Patriot ship sheet, faithfully create ONE full retractable main landing-leg assembly removed from the ship. It is the entire upright load-bearing strut and foot pad, not a wheel: telescopic thick anodized metal compression cylinder, overlapping rectangular ivory armor collar with the restrained Kestrel ochre service band, visible two-line hydraulic hoses, visible short deployment hinge and pivot lugs at its upper mounting clevis, large circular articulated steel foot plate at its lower end. Correctly connected plausible aerospace load path from top attachment fork to bottom contact pad. A 1.35-metre industrial aircraft undercarriage part with many readable but restrained manufacturing details, no floating pieces. Show one complete set only from a low three-quarter side angle with mounting clevis at TOP and ground plate at BOTTOM, all parts in view, occupying 82% of a square frame. Uniform pure-white #FFFFFF background with diffuse neutral light; no floor, cast shadow, labels, text, ship, tools or extra objects. Restrained worn ivory, mustard and dark charcoal palette; faithfully match the Kestrel courier on the provided art, not generic futuristic airplane gear."
     }
   ]
 }

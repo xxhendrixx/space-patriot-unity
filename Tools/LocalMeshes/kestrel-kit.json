@@ -1,0 +1,70 @@
+{
+  "ship": "Kestrel K-017",
+  "units": "metres",
+  "model": "VAST-AI/TripoSG",
+  "default_steps": 50,
+  "default_depth": 9,
+  "texture_px": 4096,
+  "lod_triangles": [50000, 17000, 6000],
+  "parts": [
+    {
+      "id": "Hull",
+      "reference": "ArtDirection/Modules/kestrel-hull-reference.png",
+      "generation": "local",
+      "seed": 17017,
+      "longest_axis_metres": 19.5,
+      "mesh_rotation": [0, 0, 90],
+      "mesh_scale": [1, 1, 0.7],
+      "projection_axes": [0, 1],
+      "projection_flip_u": true,
+      "uv_angle_degrees": 62,
+      "instances": [
+        { "name": "Hull", "position": [-0.5, 3.25, 0], "rotation": [0, 0, 0] }
+      ]
+    },
+    {
+      "id": "Wing",
+      "reference": "ArtDirection/Modules/kestrel-wing-reference.png",
+      "generation": "local",
+      "seed": 17018,
+      "longest_axis_metres": 7.0,
+      "mesh_rotation": [90, 0, 0],
+      "mesh_scale": [1, 0.2, 0.55],
+      "projection_axes": [0, 2],
+      "uv_angle_degrees": 48,
+      "instances": [
+        { "name": "Wing_Port", "position": [-0.9, 2.65, -4.0], "rotation": [0, -90, 0] },
+        { "name": "Wing_Starboard", "position": [-0.9, 2.65, 4.0], "rotation": [0, 90, 0] }
+      ]
+    },
+    {
+      "id": "LandingGear",
+      "reference": "ArtDirection/Modules/kestrel-landing-gear-reference.png",
+      "generation": "local",
+      "seed": 17019,
+      "longest_axis_metres": 2.25,
+      "mesh_rotation": [-90, 0, 0],
+      "mesh_scale": [1, 1, 1],
+      "projection_axes": [0, 1],
+      "uv_angle_degrees": 42,
+      "instances": [
+        { "name": "Gear_Nose", "position": [8.0, 1.35, 0], "rotation": [0, 0, 0] },
+        { "name": "Gear_Port", "position": [-4.2, 1.35, 2.8], "rotation": [0, 0, 8] },
+        { "name": "Gear_Starboard", "position": [-4.2, 1.35, -2.8], "rotation": [0, 0, -8] }
+      ]
+    },
+    {
+      "id": "Drive",
+      "reference": "ArtDirection/Modules/kestrel-drive-reference-v2.png",
+      "generation": "reuse",
+      "mesh": "ArtDirection/Generated/KestrelDrive/raw.glb",
+      "longest_axis_metres": 5.2,
+      "rotation": [0, 0, 0],
+      "uv_angle_degrees": 42,
+      "instances": [
+        { "name": "Drive_Port", "position": [-12.3, 5.9, 4.4], "rotation": [0, 180, 0] },
+        { "name": "Drive_Starboard", "position": [-12.3, 5.9, -4.4], "rotation": [0, 180, 0] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "model": "VAST-AI/TripoSG",
+  "weights_revision": "2c1c516d22d58db486a058d98d31bb6177344e06",
+  "source_revision": "fc5c40990181e2a756c4e0b1c2f4d6b5202faf8c",
+  "input": "kestrel-wing-reference.png",
+  "input_sha256": "aebb15f785617dbaed36667e09c550ac3d796993d99376dc3a5f0c7b9ead49d2",
+  "seed": 17018,
+  "steps": 50,
+  "octree_depth": 9,
+  "vertices": 440845,
+  "triangles": 881516,
+  "watertight": false,
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "peak_gpu_gib": 5.5142083168029785,
+  "seconds": 56.40700000000652,
+  "surface_extractor": "scikit-image marching cubes with valid sparse-field mask; upstream learned field unchanged",
+  "material_status": "untextured geometry; Blender cleanup and authoring still required"
+}

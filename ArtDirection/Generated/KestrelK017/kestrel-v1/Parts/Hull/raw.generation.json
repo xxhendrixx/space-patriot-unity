@@ -1,0 +1,18 @@
+{
+  "model": "VAST-AI/TripoSG",
+  "weights_revision": "2c1c516d22d58db486a058d98d31bb6177344e06",
+  "source_revision": "fc5c40990181e2a756c4e0b1c2f4d6b5202faf8c",
+  "input": "kestrel-hull-reference.png",
+  "input_sha256": "095484874674cb3dc41510711171741caa6af2b2f56dadfbbc59968a0038d814",
+  "seed": 17017,
+  "steps": 50,
+  "octree_depth": 9,
+  "vertices": 553971,
+  "triangles": 1107656,
+  "watertight": false,
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "peak_gpu_gib": 5.474708080291748,
+  "seconds": 61.71899999998277,
+  "surface_extractor": "scikit-image marching cubes with valid sparse-field mask; upstream learned field unchanged",
+  "material_status": "untextured geometry; Blender cleanup and authoring still required"
+}

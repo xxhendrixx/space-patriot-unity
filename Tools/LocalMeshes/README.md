@@ -23,6 +23,34 @@ Hunyuan3D 2.1 was also investigated. Its shape stage fits the GPU's nominal memo
 4. Assemble ships/buildings from those parts at metre scale. Animate rigid mechanisms around real mounting pivots. Cockpit buttons, screens, door apertures and connected walkable rooms remain authored functional structures.
 5. Export FBX with named clips and pivots. Configure materials, animation clips, LODGroup and gameplay bindings using Unity Editor APIs. Test the actual imported asset in the scene.
 
+## Kestrel multipart ship build
+
+`kestrel-kit.json` is the editable ship recipe: it assigns one isolated reference and deterministic model seed per component, sizes the mesh in metres, places mirrored wings and duplicate engine nacelles, and sets per-part LOD budgets. The hull, wing and landing gear are generated locally; the two engine instances reuse the already generated engine. All prompts and source references are in `ArtDirection/Modules/prompts.json` and `ArtDirection/Modules/`.
+
+Run the full pipeline from PowerShell on the configured development machine:
+
+```powershell
+.\Tools\LocalMeshes\build-kestrel.ps1
+```
+
+It generates any missing raw components with TripoSG, retains a JSON provenance report beside each mesh, then runs `assemble_ship.py` in Blender. Blender cleans and scales each module, unwraps a dedicated UV atlas, samples the painted component references into a shared 4096-pixel base-colour atlas, bakes high-to-low tangent normals and roughness/metallic maps, makes three LODs per component and exports an editable `.blend`, a combined FBX and review renders. The FBX and atlas are review candidates; generated geometry and concept-projected color need human art review before replacing production ship assets.
+
+To repeat or resume one named build without regenerating successful meshes:
+
+```powershell
+.\Tools\LocalMeshes\build-kestrel.ps1 -BuildId kestrel-v1 -Resume
+```
+
+The Unity Editor menu **Space Patriot → Art lab → Import latest baked Kestrel** copies the result into a versioned ArtLab folder, configures one URP atlas material and creates a prefab with the three levels grouped by distance. **Capture latest baked Kestrel** saves actual Unity renders for comparison. These commands leave the live fleet untouched. The color bake transfers visible paint placement from the reference; it cannot invent hidden-side paint or repair inaccurate mesh silhouettes. Screens, openings, controls, mechanical pivots and walkable interiors still require explicit authored geometry and interaction systems.
+
+Before accepting a bake, run the comparison pass:
+
+```powershell
+.\Tools\LocalMeshes\compare-kestrel.ps1 -BuildId kestrel-v1
+```
+
+It renders each LOD0 part with the actual atlas through an unlit material, compares the concept and baked colors in hue/saturation space, and writes silhouette IoU, area, and centroid metrics. Magenta/cyan contour overlays show where the concept and mesh disagree; white edges overlap. It also produces a whole-ship quarter-view overlay and a plan render so component form and mounting offsets can be reviewed separately. Outputs are stored under `Renders/Comparison/`. Part comparisons fit both foreground bounds to equal review cells; only the whole-ship overlay preserves the assembled layout. These metrics flag mismatches for review; they do not certify a generated mesh as production-ready.
+
 ## Commands
 
 Use an isolated Python 3.12 environment with PyTorch 2.8.0 + CUDA 12.8 and torchvision 0.23.0 for this RTX 50-series machine. Install `requirements-shape.txt` alongside those packages. Clone the pinned source and download the pinned official model before running offline inference.

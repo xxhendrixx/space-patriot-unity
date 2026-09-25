@@ -1,0 +1,92 @@
+{
+  "ship": "Kestrel K-017",
+  "build_id": "kestrel-v1",
+  "units": "metres",
+  "parts": [
+    {
+      "part": "Hull",
+      "reference": "kestrel-hull-reference.png",
+      "texture_quadrant": [
+        0,
+        0
+      ],
+      "lod_triangles": [
+        49999,
+        16999,
+        5999
+      ],
+      "instances": [
+        "Hull"
+      ]
+    },
+    {
+      "part": "Wing",
+      "reference": "kestrel-wing-reference.png",
+      "texture_quadrant": [
+        1,
+        0
+      ],
+      "lod_triangles": [
+        50000,
+        16999,
+        6000
+      ],
+      "instances": [
+        "Wing_Port",
+        "Wing_Starboard"
+      ]
+    },
+    {
+      "part": "LandingGear",
+      "reference": "kestrel-landing-gear-reference.png",
+      "texture_quadrant": [
+        0,
+        1
+      ],
+      "lod_triangles": [
+        50000,
+        17000,
+        6000
+      ],
+      "instances": [
+        "Gear_Nose",
+        "Gear_Port",
+        "Gear_Starboard"
+      ]
+    },
+    {
+      "part": "Drive",
+      "reference": "kestrel-drive-reference-v2.png",
+      "texture_quadrant": [
+        1,
+        1
+      ],
+      "lod_triangles": [
+        49999,
+        17000,
+        5999
+      ],
+      "instances": [
+        "Drive_Port",
+        "Drive_Starboard"
+      ]
+    }
+  ],
+  "instances": 8,
+  "lod_triangle_targets": [
+    50000,
+    17000,
+    6000
+  ],
+  "textures": {
+    "base_color": "Textures/Kestrel_BaseColor.png",
+    "normal": "Textures/Kestrel_Normal.png",
+    "metallic_smoothness": "Textures/Kestrel_MetallicSmoothness.png",
+    "roughness_source": "Textures/Kestrel_Roughness_source.png",
+    "atlas_size_px": 4096,
+    "layout": "2x2 shared material atlas; Hull, Wing, LandingGear, Drive"
+  },
+  "fbx": "Kestrel_K017.fbx",
+  "editable_blend": "Kestrel_K017.blend",
+  "status": "Assembled modular review candidate. Colors projected and baked from component references; high detail baked to tangent normal atlas."
+}

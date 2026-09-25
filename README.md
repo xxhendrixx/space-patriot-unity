@@ -38,6 +38,10 @@ Validation reports live under `Validation/`. Virtual-device tests exercise the r
 
 The first **locally generated mesh** is available in the art lab: [Kestrel drive trial](ArtDirection/Generated/KestrelDrive/VISUAL_REVIEW.md), [editable Blender file](ArtDirection/Generated/KestrelDrive/Kestrel_Drive.blend), and [artwork/mesh comparison](ArtDirection/local-mesh-review.html). TripoSG generated the geometry locally on an RTX 5060 Ti; Blender cleanup, three LODs, a mechanical rig and Unity animation import are verified. It remains an untextured candidate with softened details and an invented rear assembly. It has not replaced the live fleet.
 
+A repeatable [multipart ship recipe and Blender bake pipeline](Tools/LocalMeshes/README.md) now builds the Kestrel K-017 from separate locally generated hull, wing and landing-gear meshes plus the reusable drive nacelle. It makes a shared 4K painted-color atlas, high-to-low tangent normals, roughness/metalness maps, three mesh LODs, an editable Blender source, FBX and review renders. The result is an art-lab candidate; its generated silhouettes still need substantial cleanup and approval before it can replace a production ship.
+
+Model artists can start with the [model contribution guide](MODEL_CONTRIBUTING.md), which documents the ship axes, handoff folder, asset expectations, and comparison workflow. The current [Kestrel comparison board](ArtDirection/Generated/KestrelK017/kestrel-v1/Renders/Comparison/comparison-board.png) and [interactive report](ArtDirection/Generated/KestrelK017/kestrel-v1/Renders/Comparison/index.html) show the specific geometry and bake issues to improve.
+
 The working tools and pinned Windows environment are in [Tools/LocalMeshes](Tools/LocalMeshes). The installed neural model is an offline asset-authoring tool; it is not included in the game or this repository.
 
 ![Locally generated Kestrel engine after Blender cleanup](ArtDirection/Generated/KestrelDrive/quarter.png)
