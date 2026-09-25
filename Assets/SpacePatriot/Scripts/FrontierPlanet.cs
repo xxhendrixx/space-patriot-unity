@@ -12,6 +12,15 @@ namespace SpacePatriot
         public WorldworksTerrain terrainFields;
         public Grassworks grass;
         public Vector3 PlanetCenter=>new Vector3(0,-PlanetRadius-3,0);
+        float PlanetwideRelief(Vector3 normal)
+        {
+            normal.Normalize();float seed=(info.seed%65521)*.0017f;
+            Vector3 weights=new Vector3(Mathf.Abs(normal.x),Mathf.Abs(normal.y),Mathf.Abs(normal.z));weights/=Mathf.Max(.001f,weights.x+weights.y+weights.z);
+            float broad=weights.x*Mathf.PerlinNoise(normal.y*19+seed,normal.z*19-seed*.31f)+weights.y*Mathf.PerlinNoise(normal.x*19+seed*.73f,normal.z*19+seed)+weights.z*Mathf.PerlinNoise(normal.x*19-seed*.22f,normal.y*19+seed*.47f);
+            float ridged=weights.x*Mathf.PerlinNoise(normal.y*57-seed,normal.z*57+seed*.19f)+weights.y*Mathf.PerlinNoise(normal.x*57+seed*.11f,normal.z*57-seed)+weights.z*Mathf.PerlinNoise(normal.x*57+seed*.29f,normal.y*57-seed*.37f);
+            float amplitude=info.biome=="ice"?76:info.biome=="temperate"?92:info.biome=="volcanic"?145:118;
+            return (broad-.5f)*amplitude+(ridged-.5f)*amplitude*.24f;
+        }
         public float RawPlanetHeight(float x,float z)
         {
             float radius=new Vector2(x,z).magnitude;
@@ -22,7 +31,9 @@ namespace SpacePatriot
             float basin=Mathf.SmoothStep(0,1,flatDistance/230);
             float edge=1-Mathf.SmoothStep(0,1,(radius-2400)/600);
             float relief=terrainFields.Sample(x,z).x;
-            return Mathf.Lerp(-3,curvature+Mathf.Max(-16,relief)*.62f*edge,basin);
+            var radial=new Vector3(x,PlanetRadius+curvature,z).normalized;
+            float macro=PlanetwideRelief(radial)*Mathf.SmoothStep(2000,3900,radius);
+            return Mathf.Lerp(-3,curvature+macro+Mathf.Clamp(relief,-16,55)*.62f*edge,basin);
         }
         Vector3 RingVertex(int ring,int sector)
         {
@@ -72,7 +83,7 @@ namespace SpacePatriot
             {
                 Vector3 p;float local=0;
                 if(ring<=120){p=RingVertex(ring,j);local=1-Mathf.SmoothStep(0,1,(ring*RingStep-2100)/900);}
-                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-120)/113f),a=j*AngleStep;p=PlanetCenter+new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a))*PlanetRadius;}
+                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-120)/113f),a=j*AngleStep;var radial=new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a));float reliefWeight=Mathf.SmoothStep(2000,3900,theta*PlanetRadius);p=PlanetCenter+radial*(PlanetRadius+PlanetwideRelief(radial)*reliefWeight);}
                 Add(p,local);
             }
             Add(PlanetCenter-Vector3.up*PlanetRadius,0);
