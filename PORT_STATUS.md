@@ -27,7 +27,7 @@ The direction remains grounded industrial science fiction, browser first, premiu
 | Inventory/crafting | Inventoryworks, field inventory, equipment, consumables | Pending. |
 | Architecture/machinery | Building interiors/furniture, power machinery, pathways | Imported original furnished architecture, working lift/roof and native vessel power systems. Full original graphs and city/path simulation remain pending. |
 | Multiplayer | Peer-hosted sessions, authority, shared ship stations, lifts | Pending. No multiplayer claim is made. |
-| Browser delivery | WebGL support installed | No validated browser release yet. |
+| Browser delivery | WebGL support installed | Browser build succeeds; startup, entry, boarding and launch smoke-tested. Full flight feel, complete missions and sustained performance remain unvalidated. |
 
 Validation files distinguish source preservation, isolated logic checks, and actual runtime tests. A passing logic check is not evidence of game completion or visual quality.
 
@@ -37,4 +37,4 @@ The conversion had reflected mesh positions and normals without correcting trian
 
 Keyboard commands no longer wait for every input to return to neutral after focus/menu transitions. Holding Space continues to provide thrust after launch. Landing retains the speed limit instead of setting it to zero. Mouse steering uses direct angular displacement instead of delayed stick-style acceleration; mouse and controller vertical inversion are separate settings.
 
-`Validation/direction-and-launch.txt` records 23 live controller checks using virtual Input System devices. This does not certify every physical controller or full gameplay parity. The original controls/cargo/weapons and progression checks were rerun as well. No browser release has been validated.
+`Validation/direction-and-launch.txt` records 23 live controller checks using virtual Input System devices. This does not certify every physical controller or full gameplay parity. The original controls/cargo/weapons and progression checks were rerun as well. A browser startup/boarding/launch smoke test now passes; see Validation/browser-smoke-test.md for remaining limits.

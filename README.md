@@ -25,7 +25,7 @@ From the project directory, run `python Tools/serve_game.py`, then open `http://
 
 Unity caches, local settings, generated browser builds and credentials are excluded from version control. Public source availability does not grant a new license; existing asset and package terms still apply.
 
-Validation reports live under `Validation/`. Tests using virtual input devices exercise the running controller code, but do not replace hands-on testing. No validated WebGL build is included yet.
+Validation reports live under `Validation/`. Tests using virtual input devices exercise the running controller code, but do not replace hands-on testing. The WebGL build passed a browser startup, entry, boarding and launch smoke test; see [browser validation](Validation/browser-smoke-test.md) for its limits. Generated browser binaries are not committed.
 
 ## Current visual revision
 
