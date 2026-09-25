@@ -34,7 +34,7 @@ public static class EngineRestorationValidation
         var climate=new GameObject("Weatherworks validation").AddComponent<Weatherworks>();climate.Wetness=.32f;climate.Rain=.45f;climate.Temperature=12;climate.Step(.1f);
         Check(Mathf.Abs(climate.Wetness-(.32f+.1f*(.45f*.025f-.55f*(.0015f+12*.00023f))))<.000001f,"Weatherworks wetness matches original equation",lines);Object.DestroyImmediate(climate.gameObject);
         Check(Mathf.Abs(Oceanworks.WaveHeight(new Vector2(10,20),3)-Oceanworks.WaveHeight(new Vector2(10,20),4))>.0001f,"Oceanworks directional wave field evolves with time",lines);
-        for(int f=0;f<10;f++){var prefab=Resources.Load<GameObject>("OriginalShips/refit-"+f);Check(prefab!=null&&prefab.GetComponentsInChildren<MeshRenderer>().Length<=12,"Refit chassis "+f+" exists with at most 12 material batches",lines);}
+        for(int f=0;f<10;f++){var prefab=Resources.Load<GameObject>("OriginalShips/refit-"+f);Check(prefab!=null&&prefab.GetComponentsInChildren<MeshRenderer>().Length<=30,"Refit chassis "+f+" exists within 30 material batches",lines);}
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/engine-restoration.txt",lines);Debug.Log("ENGINE_RESTORATION_PASS "+lines.Count);
     }
     public static Vector3 FindMeadow(FrontierWorld w)

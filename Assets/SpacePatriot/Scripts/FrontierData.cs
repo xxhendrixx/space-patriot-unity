@@ -35,14 +35,16 @@ namespace SpacePatriot
     [Serializable] public class StockChange { public string world, good; public int units; }
     [Serializable] public class SaveData
     {
-        public int version=2, world=2, ship, credits=1800, organics=4, ore, crystal;
+        public int version=2, world=2, ship, credits=1800, organics=4, ore, crystal;public string settlement="";
         public int union, helix, redwake, kills;
-        public float hull=100, fuel=100;
+        public float hull=100, fuel=100,crewHealth=100;
         public bool striderOwned, wayfarerOwned;
         public List<int> ownedShips=new List<int>{0};
         public List<DockCargo> dockCargo=new List<DockCargo>();
         public VesselState vessel=new VesselState();
         public EconomyState economy=new EconomyState();
+        public SocietyState society=new SocietyState();
+        public FieldInventoryState inventory=new FieldInventoryState();
         public WeaponAmmo[] ammo=Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));
         public List<CaseProgress> cases=new List<CaseProgress>();
         public List<StockChange> stock=new List<StockChange>();

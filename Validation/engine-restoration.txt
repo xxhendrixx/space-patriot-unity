@@ -24,13 +24,13 @@ PASS: Destruction emits original 65 flame / 10 smoke burst
 PASS: Spellworks ring remains bounded after overflow
 PASS: Weatherworks wetness matches original equation
 PASS: Oceanworks directional wave field evolves with time
-PASS: Refit chassis 0 exists with at most 12 material batches
-PASS: Refit chassis 1 exists with at most 12 material batches
-PASS: Refit chassis 2 exists with at most 12 material batches
-PASS: Refit chassis 3 exists with at most 12 material batches
-PASS: Refit chassis 4 exists with at most 12 material batches
-PASS: Refit chassis 5 exists with at most 12 material batches
-PASS: Refit chassis 6 exists with at most 12 material batches
-PASS: Refit chassis 7 exists with at most 12 material batches
-PASS: Refit chassis 8 exists with at most 12 material batches
-PASS: Refit chassis 9 exists with at most 12 material batches
+PASS: Refit chassis 0 exists within 30 material batches
+PASS: Refit chassis 1 exists within 30 material batches
+PASS: Refit chassis 2 exists within 30 material batches
+PASS: Refit chassis 3 exists within 30 material batches
+PASS: Refit chassis 4 exists within 30 material batches
+PASS: Refit chassis 5 exists within 30 material batches
+PASS: Refit chassis 6 exists within 30 material batches
+PASS: Refit chassis 7 exists within 30 material batches
+PASS: Refit chassis 8 exists within 30 material batches
+PASS: Refit chassis 9 exists within 30 material batches

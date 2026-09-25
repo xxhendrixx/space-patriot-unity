@@ -40,20 +40,22 @@ namespace SpacePatriot
         public WorldInfo CurrentWorld=>worlds[save.world];
         public bool AtPort {get {if(flying||jumping||ship==null||world==null)return false;var pad=world.Nearest(ship.position,"landing");return pad!=null&&Vector3.Distance(ship.position,pad.position)<pad.range+StandHeight;}}
         public float HullPercent=>save.hull/Spec.health*100;
-        public bool HasSave=>PlayerPrefs.HasKey(SaveKey);
+        public bool HasSave=>!DesktopVerification.Active&&CampaignStorage.Exists;
 
         class Raider { public Transform body;public float hp=70,shoot;public Vector3 velocity,home;public bool dead; }
         class Bolt { public Transform body; public Vector3 velocity;public float age,damage=8,lifetime=3;public bool enemy,missile;public Raider target; }
 
         void Awake()
         {
-            Instance=this;bindings=new FlightBindings();Application.targetFrameRate=Application.platform==RuntimePlatform.WebGLPlayer?-1:60;QualitySettings.vSyncCount=0;
+            Instance=this;bindings=new FlightBindings();pilot=new PilotInput();Application.targetFrameRate=Application.platform==RuntimePlatform.WebGLPlayer?-1:60;QualitySettings.vSyncCount=0;
             worlds=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text).worlds;
             cases=JsonUtility.FromJson<CampaignCatalog>(Resources.Load<TextAsset>("Campaign").text).arcs;
-            try{save=HasSave?JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SaveKey)):new SaveData();}catch{save=new SaveData();}
+            try{save=DesktopVerification.Active?new SaveData():CampaignStorage.Load();}catch{save=new SaveData();}
             if(save==null||save.version<1)save=new SaveData();save.world=Mathf.Clamp(save.world,0,worlds.Length-1);if(save.version==1){save.ship=0;save.version=2;}save.ship=Mathf.Clamp(save.ship,0,99);save.ownedShips??=new List<int>{0};save.dockCargo??=new List<DockCargo>();save.vessel??=new VesselState();
             foreach(var c in cases)Progression.Get(save,c.id);
             FrontierEconomy.Ensure(save,worlds);
+            LivingUniverse.Ensure(save,worlds);
+            save.inventory??=new FieldInventoryState();
             if(save.ammo==null||save.ammo.Length!=5)save.ammo=System.Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));
             effects=new GameObject("Spellworks / combat and survey effects").AddComponent<Spellworks>();effects.transform.SetParent(transform);
             combustion=new GameObject("Fireworks / causal combustion").AddComponent<Fireworks>();combustion.transform.SetParent(transform);
@@ -65,6 +67,8 @@ namespace SpacePatriot
             RespawnShip();SetInitialCamera();MakeAudio();SpawnRaiders();
             var probe=new GameObject("Port reflection capture").AddComponent<ReflectionProbe>();probe.transform.position=new Vector3(0,world.Deck+7,0);probe.size=new Vector3(180,90,180);probe.resolution=128;probe.mode=UnityEngine.Rendering.ReflectionProbeMode.Realtime;probe.refreshMode=UnityEngine.Rendering.ReflectionProbeRefreshMode.ViaScripting;probe.RenderProbe();
             selectedShip=save.ship;selectedWorld=save.world==3?2:3;
+            if(!Application.isEditor&&Application.platform!=RuntimePlatform.WebGLPlayer&&!DesktopVerification.Active&&PlayerPrefs.GetInt("sp.fullscreen",0)==1)Screen.fullScreenMode=FullScreenMode.FullScreenWindow;
+            if(DesktopVerification.Active)StartCoroutine(VerifyDesktopPlayer());
         }
         void SetInitialCamera(){view.transform.position=ship.position+new Vector3(19,10,24);view.transform.LookAt(ship.position+Vector3.up);}
         void RespawnShip()
@@ -75,20 +79,22 @@ namespace SpacePatriot
             if(hullAsset==null)throw new System.InvalidOperationException("Original fleet assets must be imported before entering the game.");
             exterior=Instantiate(hullAsset,ship).transform;exterior.name="Exterior hull";
             var basis=ShipSpec.Fleet[Spec.family*10];exterior.localScale=new Vector3(Spec.width/basis.width,Spec.height/basis.height,Spec.length/basis.length);
-            cabin=Instantiate(Resources.Load<GameObject>("OriginalShips/cabin-"+(Spec.length>180?9:Spec.length>60?7:0)),ship).transform;
-            cabin.name="Pressure cabin";cabin.localPosition=new Vector3(0,Spec.height*.5f,Spec.length*.18f);
+            cabin=Instantiate(Resources.Load<GameObject>("OriginalShips/cabin-"+Spec.family),ship).transform;
+            cabin.name="Pressure cabin";PrepareDeck();cabin.localPosition=new Vector3(0,Spec.height*.23f,Spec.length*.18f);
+            cabin.gameObject.AddComponent<CabinLighting>().Configure(activeDeck);
             engines=new GameObject("Drive plumes").transform;engines.SetParent(ship,false);
             var model=ship.gameObject.AddComponent<OriginalShip>();model.eye=cabin.localPosition;model.exterior=exterior;model.cabin=cabin;
             var gearParts=new List<Transform>();foreach(var t in exterior.GetComponentsInChildren<Transform>())if(t.name=="Landing gear")gearParts.Add(t);model.gear=gearParts.ToArray();
             foreach(var control in cabin.GetComponentsInChildren<CockpitControl>())control.gameObject.layer=2;
-            velocityDisplay=Label(cabin,"VELOCITY",new Vector3(-.79f,-.53f,1.27f),.005f,new Color(.54f,.83f,.70f));
-            serviceDisplay=Label(cabin,"SYSTEMS",new Vector3(.79f,-.53f,1.27f),.005f,new Color(.54f,.83f,.70f));
-            navigationDisplay=Label(cabin,"NAVIGATION",new Vector3(0,-.49f,1.40f),.005f,new Color(.83f,.73f,.47f));
+            velocityDisplay=Label(cabin,"VELOCITY",new Vector3(-1.02f,-.87f,1.46f),.0018f,new Color(.75f,.84f,.52f));
+            serviceDisplay=Label(cabin,"SYSTEMS",new Vector3(1.02f,-.87f,1.46f),.0018f,new Color(.75f,.84f,.52f));
+            navigationDisplay=Label(cabin,"NAVIGATION",new Vector3(0,-.89f,1.44f),.002f,new Color(.75f,.84f,.52f));
+            velocityDisplay.gameObject.SetActive(false);serviceDisplay.gameObject.SetActive(false);navigationDisplay.gameObject.SetActive(false);SetupMfd();
             foreach(var r in exterior.GetComponentsInChildren<MeshRenderer>())if(r.sharedMaterial.name=="Hull finish"){var material=r.material;material.SetColor("_BaseColor",Color.Lerp(Spec.paint,new Color(.14f,.17f,.19f),.45f));}
-            var spawn=Spec.length>60?new Vector3(165,0,155):Vector3.zero;
+            var spawn=Spec.length>60?new Vector3(650,0,230):Vector3.zero;
             spawn.y=(Spec.length<=60&&world.lift!=null?world.Deck+world.lift.DeckOffset:world.SurfaceAt(spawn))+StandHeight;ship.position=spawn;ship.rotation=Quaternion.identity;
             velocity=Vector3.zero;angularVelocity=Vector3.zero;yaw=pitch=roll=0;throttle=1;speed=0;docking=false;flying=false;walking=false;aboard=false;
-            gearDown=true;flightAssist=true;powered=true;cruise=false;cargoDoor=false;inputNeutral=true;launchPending=false;systemsHull=save.hull;
+            gearDown=true;flightAssist=true;powered=true;cruise=false;cargoDoor=false;inputNeutral=true;launchPending=false;launchClearance=0;systemsHull=save.hull;
             save.hull=Mathf.Clamp(save.hull,1,Spec.health);RebuildCargo();
         }
         void StartGame()
@@ -97,7 +103,11 @@ namespace SpacePatriot
             Toast("WASD to walk • Right mouse to look • F to board • E to use equipment • Cargo handling at the freight terminal");Save();
         }
         public void Save()
-        {PlayerPrefs.SetString(SaveKey,JsonUtility.ToJson(save));PlayerPrefs.Save();saveTime=Time.unscaledTime;}
+        {
+            if(DesktopVerification.Active)return;
+            try{if(save.society!=null)save.society.savedUtc=DateTimeOffset.UtcNow.ToUnixTimeSeconds();CampaignStorage.Write(save);PlayerPrefs.Save();saveTime=Time.unscaledTime;}
+            catch(Exception e) when(e is System.IO.IOException||e is UnauthorizedAccessException){Debug.LogError("Unable to save campaign: "+e.Message);Toast("Could not write the save file. Check available disk space.");saveTime=Time.unscaledTime;}
+        }
         void OnApplicationPause(bool paused){if(paused&&save!=null)Save();}
         void OnApplicationQuit(){if(save!=null)Save();}
         public void Toast(string message){toast=message;toastTime=Time.unscaledTime+7;}
@@ -108,6 +118,7 @@ namespace SpacePatriot
         void Update()
         {
             float dt=Mathf.Min(Time.deltaTime,.04f);
+            if(Down(Key.F11))ToggleDesktopFullscreen();
             float fit=Mathf.Min(Screen.width/1440f,Screen.height/900f);float rw=1440*fit/Screen.width,rh=900*fit/Screen.height;view.rect=new Rect((1-rw)/2,(1-rh)/2,rw,rh);view.aspect=1.6f;
             world.Atmosphere(view,ship.position.y-world.Deck);
             if(Time.frameCount%8==0)UpdateInstruments();
@@ -130,6 +141,7 @@ namespace SpacePatriot
             if(menu||reportText!=""||dead){inputNeutral=true;Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
             TickVessel(dt);
             TickEconomy(dt);
+            TickSociety(dt);
             TickCargo(dt);
             ambient.volume=Mathf.Lerp(ambient.volume,PlayerPrefs.GetFloat("sp.volume",.55f)*(walking?.15f:flying?.3f:.1f),dt*4);
             ambient.pitch=Mathf.Lerp(ambient.pitch,flying?.65f+throttle*.45f:.5f,dt*3);
@@ -156,7 +168,7 @@ namespace SpacePatriot
             {next.y=ground+1.75f;walkPosition=next;}
             if(Down(Key.E)||Down(Key.Z)||pad?.buttonEast.wasPressedThisFrame==true)Interact();
             if(bindings.Down("Board / leave seat")||Down(Key.J))BoardOrExit();
-            if(Down(Key.B)){if(Held(Key.LeftShift)&&Vector3.Distance(walkPosition,world.grove)<300)Signal("sample");else Toast("Survey scan complete. Shift+B collects a sample near the field station.");}
+            if(Down(Key.B)){if(Held(Key.LeftShift))CollectFieldSample();else {Signal("scan");Toast("Survey scan complete. Shift+B collects a sample near the field station.");}}
         }
         Place NearInteract()
         {
@@ -166,11 +178,14 @@ namespace SpacePatriot
         }
         void Interact()
         {
+            if(SpeakToResident())return;
+            if(Vector3.Distance(walkPosition,new Vector3(49,world.Deck+1.75f,26))<4){menu=true;page="inventory";return;}
             var elevator=world.NearbyLift(walkPosition);if(elevator!=null){elevator.RequestNext();return;}
             if(AtCargoAccess){menu=true;page="cargo";return;}
             var near=NearInteract();
             if(near!=null)
             {
+                if(near.kind.StartsWith("city-")){CityInteraction(int.Parse(near.kind.Substring(5)));return;}
                 if(near.kind=="power"){page="reactor";menu=true;return;}
                 Signal(near.kind);
                 if(reportText==""){page=near.kind=="delivery"?"trade":"cases";menu=true;}
@@ -180,7 +195,7 @@ namespace SpacePatriot
         }
         void Land(Place pad)
         {
-            ship.position=pad.position+Vector3.up*(StandHeight-2.65f);ship.rotation=Quaternion.identity;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;
+            ship.position=pad.position+Vector3.up*(StandHeight-2.65f);ship.rotation=Quaternion.identity;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;launchClearance=0;
             Save();Toast("Landing secured. F to leave the seat. Cargo hatch and loading are available while landed.");Sound(buttonClip,.4f);
         }
         void FollowCamera(float dt)
@@ -193,7 +208,7 @@ namespace SpacePatriot
             {view.transform.position=cabin.position;view.transform.rotation=ship.rotation;exterior.gameObject.SetActive(false);}
             else
             {var target=ship.TransformPoint(new Vector3(0,Spec.height*.8f,-Spec.length*.95f));view.transform.position=Vector3.Lerp(view.transform.position,target,1-Mathf.Exp(-dt*5));view.transform.rotation=Quaternion.Slerp(view.transform.rotation,Quaternion.LookRotation(ship.position+ship.forward*22-view.transform.position),dt*7);exterior.gameObject.SetActive(true);}
-            view.fieldOfView=Mathf.Lerp(view.fieldOfView,walking?68:speed>Spec.speed?76:65,dt*2);
+            view.fieldOfView=Mathf.Lerp(view.fieldOfView,walking||aboard?68:cockpit?58.7f:speed>Spec.speed?76:65,dt*2);
         }
         void MakeAudio()
         {
@@ -293,10 +308,11 @@ namespace SpacePatriot
         {effects.Impact(p,Vector3.up,true,3);if(CurrentWorld.biome=="temperate"&&p.y<world.Height(p.x,p.z)+14)combustion.Ignite(new Vector3(p.x,world.Height(p.x,p.z)+.2f,p.z),8,1.4f);for(int i=0;i<12;i++){var d=Box("Hull fragment",transform,p,Vector3.one*UnityEngine.Random.Range(.15f,.65f),i<3?Orange:Steel).transform;d.rotation=UnityEngine.Random.rotation;debris.Add(d);Destroy(d.gameObject,3);}}
         void Damage(float amount)
         {
-            if(dead||amount<=0)return;hitTime=Time.time;float absorbed=Mathf.Min(shield,amount);shield-=absorbed;save.hull-=amount-absorbed;Sound(impactClip,.5f);
+            if(dead||amount<=0)return;if(walking||aboard){save.crewHealth=Mathf.Max(0,save.crewHealth-amount);if(save.crewHealth==0){dead=true;menu=false;Save();}return;}hitTime=Time.time;float absorbed=Mathf.Min(shield,amount);shield-=absorbed;save.hull-=amount-absorbed;Sound(impactClip,.5f);
             if(save.hull<=0){save.hull=0;dead=true;menu=false;velocity=Vector3.zero;Save();}
         }
         void Rescue()
-        {save.credits=Mathf.Max(0,save.credits-180);save.hull=Spec.health;save.fuel=Mathf.Max(save.fuel,35);shield=100;dead=false;ClearCombat();RespawnShip();SpawnRaiders();walking=true;walkPosition=ship.position+new Vector3(-Spec.width*.65f,1.75f-StandHeight,-3);Save();Toast("Port recovery complete. Service fee: up to 180 cr.");}
+        {save.credits=Mathf.Max(0,save.credits-180);save.hull=Spec.health;save.crewHealth=100;save.fuel=Mathf.Max(save.fuel,35);shield=100;dead=false;ClearCombat();RespawnShip();SpawnRaiders();walking=true;walkPosition=ship.position+new Vector3(-Spec.width*.65f,1.75f-StandHeight,-3);Save();Toast("Port recovery complete. Service fee: up to 180 cr.");}
     }
 }
+

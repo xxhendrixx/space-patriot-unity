@@ -5,12 +5,25 @@ using static SpacePatriot.IndustrialArt;
 
 namespace SpacePatriot
 {
-    [Serializable] public class DockCargo {public int world;public string good;public int units;}
+    [Serializable] public class DockCargo {public int world;public string settlement="",good;public int units;}
     public static class CargoHandling
     {
-        public static int Staged(SaveData s,int world,string good)=>s.dockCargo.Find(x=>x.world==world&&x.good==good)?.units??0;
+        static WorldInfo[] worldCatalog;
+        static WorldInfo[] Worlds=>worldCatalog??=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text).worlds;
+        static string Dock(SaveData s,int world)
+        {
+            if(world==s.world&&!string.IsNullOrEmpty(s.settlement))return s.settlement;
+            return SocietyEconomy.Primary(Worlds[world].id);
+        }
+        static DockCargo Row(SaveData s,int world,string good)
+        {
+            string dock=Dock(s,world);
+            foreach(var old in s.dockCargo)if(string.IsNullOrEmpty(old.settlement))old.settlement=SocietyEconomy.Primary(Worlds[old.world].id);
+            return s.dockCargo.Find(x=>x.world==world&&x.settlement==dock&&x.good==good);
+        }
+        public static int Staged(SaveData s,int world,string good)=>Row(s,world,good)?.units??0;
         public static void Stage(SaveData s,int world,string good,int delta)
-        {var row=s.dockCargo.Find(x=>x.world==world&&x.good==good);if(row==null){row=new DockCargo{world=world,good=good};s.dockCargo.Add(row);}row.units+=delta;}
+        {var row=Row(s,world,good);if(row==null){row=new DockCargo{world=world,settlement=Dock(s,world),good=good};s.dockCargo.Add(row);}row.units=Mathf.Max(0,row.units+delta);}
         public static bool Transfer(SaveData s,int world,string good,int capacity,bool load)
         {
             if(good!="ore"&&good!="organics"&&good!="crystal")return false;

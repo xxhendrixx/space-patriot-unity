@@ -10,8 +10,10 @@ import {buildCraft,buildCockpit,buildGun} from './visuals/craft.js';
 import {buildPort,buildStation,buildPlants} from './visuals/environment.js';
 import {CityStage} from './visuals/city-stage.js';
 import {HangarStage} from './visuals/hangar-stage.js';
-import {buildRefit} from './visuals/industrial-refit.js';
+import {productionRefit as buildRefit,productionCockpit,productionGun} from './visuals/production-art.js';
 import {alienPlant} from './visuals/alien-biology.js';
+import {buildCitizen} from './visuals/fauna.js';
+import {productionLayout} from './visuals/production-layout.js';
 
 const project=path.resolve(import.meta.dirname,'../..');
 const root=path.join(project,'Reference/Original');
@@ -66,8 +68,9 @@ function material(mat){
 }
 function exportModel(group,id,kind){
   group.updateMatrixWorld(true);const nodes=[];
+  const bones=new Map();for(const {leg,side} of group.userData.walkLegs||[])bones.set(leg,'Leg '+side);for(const {arm,side} of group.userData.arms||[])bones.set(arm,'Arm '+side);
   group.traverse(o=>{
-    if(!o.isMesh)return;
+    if(!o.isMesh||!o.visible)return;
     if(Array.isArray(o.material))throw Error('Unhandled submesh');
     const geo=o.geometry.clone().applyMatrix4(o.matrixWorld),p=geo.getAttribute('position'),n=geo.getAttribute('normal'),uv=geo.getAttribute('uv');
     let ix=geo.index?Array.from(geo.index.array):Array.from({length:p.count},(_,i)=>i);
@@ -79,9 +82,10 @@ function exportModel(group,id,kind){
     const file='mesh-'+digest(buffer)+'.bytes';
     if(!fs.existsSync(path.join(out,file)))fs.writeFileSync(path.join(out,file),buffer);
     let gear=false;for(let a=o;a;a=a.parent)gear||=!!a.userData.gear;
-    let door='',lift=false,platform=false;for(const [key,node] of group.userData.doors||[])for(let a=o;a;a=a.parent)if(a===node)door=key;
+    let door=o.userData.doorId||'',lift=false,platform=false;for(const [key,node] of group.userData.doors||[])for(let a=o;a;a=a.parent)if(a===node)door=key;
     for(let a=o;a;a=a.parent){lift||=!!a.userData.lift;platform||=a.name==='Hangar lift platform';}
-    nodes.push({file,material:material(o.material),gear,door,lift,liftFloor:o.userData.liftFloor??-1,liftSide:o.userData.liftSide??0,mfd:o.userData.mfdIndex??-1,button:group.userData.buttons?.indexOf(o)??-1,name:platform?'Hangar lift platform':o.name||'Original modeled surface'});
+    let bone='',pivot=[0,0,0];for(let a=o.parent;a;a=a.parent)if(bones.has(a)){bone=bones.get(a);const p=a.getWorldPosition(new T.Vector3());pivot=[p.x,p.y,-p.z];break;}
+    nodes.push({file,material:material(o.material),bone,pivot,gear,door,lift,liftFloor:o.userData.liftFloor??-1,liftSide:o.userData.liftSide??0,mfd:o.userData.mfdIndex??-1,button:o.userData.controlAction??group.userData.buttons?.indexOf(o)??-1,name:platform?'Hangar lift platform':o.name||'Original modeled surface'});
     geo.dispose();
   });
   manifest.models.push({id,kind,nodes,deck:group.userData.deckPlan||null});
@@ -89,8 +93,10 @@ function exportModel(group,id,kind){
 }
 for(let family=0;family<10;family++)exportModel(buildCraft(materials,crafts[family*10]),'hull-'+family,'hull');
 for(let family=0;family<10;family++)exportModel(buildRefit(materials,crafts[family*10]),'refit-'+family,'hull');
-for(const family of [0,7,9])exportModel(buildCockpit(materials,crafts[family*10]),'cabin-'+family,'cabin');
-exportModel(buildGun(materials,false),'rifle','weapon');exportModel(buildGun(materials,true),'sidearm','weapon');
+globalThis.LongwayCore.FACTIONS??=[{id:'union',color:'#7c8576'},{id:'helix',color:'#a68f6e'},{id:'redwake',color:'#8c6351'}];
+for(let i=0;i<3;i++)exportModel(buildCitizen(materials,{civilian:true,faction:['union','helix','redwake'][i]}),'citizen-'+i,'resident');
+for(const family of [0,1,2,3,4,5,6,7,8,9])exportModel(productionCockpit(materials,crafts[family*10]),'cabin-'+family,'cabin');
+exportModel(productionGun(materials,false),'rifle','weapon');exportModel(productionGun(materials,true),'sidearm','weapon');
 const body={id:'earth',name:'Earth',seed:715317,type:1,settlementStyle:0};
 exportModel(buildPort(materials,body,LongwayCore),'port','environment');
 exportModel(buildStation(materials),'station','environment');
@@ -106,5 +112,6 @@ fs.writeFileSync(path.join(project,'Assets/SpacePatriot/Resources/Buildings.json
 for(const [i,form] of ['forked-canopy','segmented-fronds','ribbed-crown'].entries())exportModel(alienPlant(materials,{plantForm:form,leafTile:[0,6,3][i],barkTile:[2,11,4][i]}),'alien-flora-'+i,'environment');
 exportModel(buildPlants(materials,[{position:[0,0,0],size:.01}],{plantFrame:{center:[0,0,0]},toLocal:p=>p},body,LongwayCore),'conifer','environment');
 fs.writeFileSync(path.join(out,'import.json'),JSON.stringify(manifest));
-fs.writeFileSync(path.join(project,'Assets/SpacePatriot/Resources/DeckPlans.json'),JSON.stringify({plans:[7,9].map(family=>({family,...LongwayCore.InteriorLayout(crafts[family*10])}))},null,2));
+fs.writeFileSync(path.join(project,'Assets/SpacePatriot/Resources/DeckPlans.json'),JSON.stringify({plans:Array.from({length:10},(_,family)=>productionLayout(crafts[family*10]))},null,2));
 console.log('Exported',crafts.length,'craft records;',manifest.models.length,'models;',manifest.materials.length,'materials. Original geometry and UVs retained.');
+

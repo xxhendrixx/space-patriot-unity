@@ -54,7 +54,8 @@ public static class RuntimeRestorationValidation
             Call("TickCargo",2.6f);Check(game.save.ore==1&&CargoHandling.Staged(game.save,game.save.world,"ore")==0,"Completed physical loading updates both inventories");
             Check((bool)Call("StartCargoTransfer","ore",false),"Unloading starts from a loaded hold");Call("TickCargo",2.6f);
             Check(game.save.ore==0&&CargoHandling.Staged(game.save,game.save.world,"ore")==1,"Completed physical unloading conserves inventory");
-            game.cargoDoor=false;game.walking=false;Call("Launch");Check(game.world.lift.Raising&&!game.flying,"Powered launch first raises the home hangar lift");
+            game.cargoDoor=false;game.walking=false;bool liftAlreadyReady=game.world.lift.Ready;Call("Launch");
+            Check(liftAlreadyReady?game.flying:game.world.lift.Raising&&!game.flying,liftAlreadyReady?"Powered launch uses an already cleared home platform":"Powered launch first raises the home hangar lift");
             game.world.lift.Advance(9);Set("inputNeutral",false);Frame();Check(game.flying&&game.world.lift.Ready,"Flight control transfers after the lift raises and roof clears");
             Call("RespawnShip");Check(game.ship.position.y>=game.world.Deck+26+game.StandHeight-.01f,"Respawn respects a raised hangar platform");
             File.WriteAllLines("Validation/runtime-restoration-tests.txt",lines);Debug.Log("RUNTIME_RESTORATION_PASS: "+lines.Count+" actual controller/cargo checks.");

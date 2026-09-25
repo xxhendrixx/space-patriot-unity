@@ -8,28 +8,37 @@ Open this folder in Unity 6000.3.25f1, then open `Assets/SpacePatriot/Scenes/Fro
 - Flight: hold Space to launch/ascend; Ctrl descends. W/S forward/reverse; A/D strafe. G retracts gear; X brakes.
 - Aim: hold right mouse and move, or use arrow keys. Q/E roll. V changes camera; U aligns the horizon.
 - Mouse wheel changes the speed limit. Shift boosts. T toggles assist. L requests landing assist.
+- Cockpit: click the physical softkeys; scroll over NAV/COMM/SENSOR/DRIVE knobs to change their settings.
+- Interior: F leaves the seat; WASD walks. E operates stations and bulkheads. At the service lift, E goes down and Shift+E goes up. Use the aft airlock to disembark.
+- Community jobs and the settlement directory are in the Operations overview. District terminals record deliveries, checkpoints and repairs.
 - Z/I changes cockpit instrument mode. Tab/M navigation; K fleet; Escape computer/menu.
 - Y arms weapons; 1/2/3 select ship weapons, 1/2 select ground weapons; R reloads; C selects a target.
 - Settings includes separate mouse/controller vertical inversion and mouse sensitivity. Normal mode means up looks up.
 - Cargo: buy at the freight exchange, approach the cargo ramp, open the hatch and load. Unload before selling or handing over freight contracts. Close the hatch before launch.
 
-The original source and artwork are retained under `Reference/Original`. The current fleet includes ten industrial refits using the original atlas textures, specifications and interiors. The Downloads originals are untouched.
+The original source and artwork are retained under `Reference/Original`. The current fleet includes ten revised Blender-built exteriors, original specifications and new connected multideck interiors. The Downloads originals are untouched.
 
 Grassworks, Spellworks, terrain, weather, ocean and fire behavior now have native Unity integrations. See [ENGINE_INTEGRATION.md](ENGINE_INTEGRATION.md) for exactly what runs and what remains incomplete. Rebuildable conversion tools are in [Tools/AssetPipeline](Tools/AssetPipeline).
 
-## Build
+## Development target
 
-Install Unity 6000.3.25f1 with Web Build Support, open this project and let its pinned packages import. Choose **Space Patriot > Build browser**. The build is written to a sibling `Browser` folder and requires an HTTP server that serves `.gz` files with the matching `Content-Encoding: gzip` and MIME type.
+**Deliverable: the Unity project. Eventual release: an installable Windows PC game.** Browser delivery has been dropped. An installer will be prepared when the game is complete; this revision does not ship one.
 
-From the project directory, run `python Tools/serve_game.py`, then open `http://127.0.0.1:8791`. This development server binds only to this computer.
+Use Unity Hub to open this folder with **Unity 6000.3.25f1** and let its pinned packages import. Open `Assets/SpacePatriot/Scenes/Frontier.unity`, then press **Play**. Windows x64 is the active development target. No web server is required.
 
-Unity caches, local settings, generated browser builds and credentials are excluded from version control. Public source availability does not grant a new license; existing asset and package terms still apply.
+The future standalone player has window/fullscreen controls (F11), Save & Quit, and local JSON campaign saves with a previous-generation backup under `Application.persistentDataPath/saves`. Editor Play mode retains its existing PlayerPrefs save. Browser saves are not automatically migrated into the editor or desktop player.
 
-Validation reports live under `Validation/`. Tests using virtual input devices exercise the running controller code, but do not replace hands-on testing. The WebGL build passed a browser startup, entry, boarding and launch smoke test; see [browser validation](Validation/browser-smoke-test.md) for its limits. Generated browser binaries are not committed.
+`Space Patriot > Build Windows desktop` is available for later developer builds. Packaging and native-player verification are deferred; the current verification is in the Unity Editor. Historical WebGL tools and reports are retained as source history, not a delivery requirement.
+
+Unity caches, local settings, generated builds and credentials are excluded from version control. Public source availability does not grant a new license; existing asset and package terms still apply.
+
+Validation reports live under `Validation/`. Virtual-device tests exercise the running flight controller, cargo, MFD controls and deck lifts. They do not establish physical controller feel, art quality, full game completion or sustained performance.
 
 ## Current visual revision
 
 Editor captures of the refitted chassis and continuous terrain. These are work in progress, not final artwork.
 
-![Ten industrial chassis refits](Validation/refit-fleet.png)
-![Continuous planetary terrain](Validation/continuous-planet.png)
+![Current Meridian exterior in Unity](ArtDirection/Renders/refit-9.png)
+![Current live cockpit in Unity](ArtDirection/Renders/live-cockpit.png)
+
+Editable fleet model: [SpacePatriot-Fleet.blend](ArtDirection/Production/SpacePatriot-Fleet.blend). See [society and art implementation](ArtDirection/DESIGN_AND_IMPLEMENTATION.md) for source references, rebuild order and remaining limits.

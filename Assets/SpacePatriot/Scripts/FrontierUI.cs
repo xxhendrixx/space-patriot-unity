@@ -49,7 +49,8 @@ namespace SpacePatriot
             GUI.matrix=Matrix4x4.TRS(new Vector3(ox,oy,0),Quaternion.identity,new Vector3(fit,fit,1));
             if(!started)TitleScreen();else
             {
-                FlightHud();WeaponsHud();
+                FlightHud();WeaponsHud();SocietyHud();
+                if(!menu&&cockpitHint!="")Prompt(cockpitHint);
                 if(menu)Computer();
                 if(reportText!="")Report();
                 if(dead)Recovery();
@@ -69,7 +70,8 @@ namespace SpacePatriot
             if(Button(HasSave?"CONTINUE SHIFT   →":"ENTER THE FRONTIER   →",58,563,410,57,true))StartGame();
             if(Button("FLIGHT MANUAL",58,635,197,45))page=page=="help"?"overview":"help";
             if(Button("SETTINGS",271,635,197,45))page=page=="settings"?"overview":"settings";
-            Text("UNITY REMAKE  /  DEVELOPMENT BUILD",58,802,450,24,11,muted,true);
+            if(Application.platform!=RuntimePlatform.WebGLPlayer&&Button(Application.isEditor?"STOP PLAY MODE":"QUIT TO DESKTOP",58,700,410,45))QuitToDesktop();
+            Text("WINDOWS DESKTOP  /  DEVELOPMENT BUILD",58,802,450,24,11,muted,true);
             Text("LOCAL SAVE  •  NO IN-GAME PURCHASES",58,829,450,24,11,muted);
             Fill(1001,715,384,108,new Color(.025f,.044f,.052f,.89f));Text(Spec.designation+" / "+Spec.role,1026,735,340,20,12,amber,true);Text(Spec.name,1026,765,340,42,32,paper,true);
             if(page=="help"||page=="settings")
@@ -77,6 +79,7 @@ namespace SpacePatriot
         }
         void FlightHud()
         {
+            if(cockpit&&!walking&&!aboard&&!menu&&!dead){Text("ESC  COMPUTER   |   F  LEAVE HELM   |   RIGHT MOUSE  STEER",31,867,780,20,11,muted,true);return;}
             Fill(0,0,1440,70,new Color(.025f,.045f,.05f,.88f));
             Text("SP / 07",31,23,140,25,17,amber,true);Text(CurrentWorld.name.ToUpperInvariant()+"  /  "+(walking?"ON FOOT":flying?"FLIGHT OPERATIONS":"DOCKED"),174,24,650,25,15,paper,true);
             Text(save.credits.ToString("N0")+" CR",1155,24,250,25,16,paper,true,TextAnchor.UpperRight);
@@ -135,10 +138,11 @@ namespace SpacePatriot
             string[] keys={"overview","navigation","cases","trade","cargo","contracts","hangar","systems","journal","help","controls","settings"};string[] names={"Operations","Navigation","The Long Debt","Freight exchange","Cargo handling","Freight contracts","Fleet & service","Vessel systems","Journal","Flight manual","Controls","Settings"};
             for(int i=0;i<keys.Length;i++)if(Button(names[i],109,291+i*34,233,30,page==keys[i]))page=keys[i];
             if(Button("RETURN TO SHIFT  →",109,719,233,43))menu=false;
+            if(Application.platform!=RuntimePlatform.WebGLPlayer&&Button(Application.isEditor?"SAVE & STOP":"SAVE & QUIT",109,767,233,25))QuitToDesktop();
             Fill(367,141,1,619,line);Text(PageTitle(),399,143,864,45,30,paper,true);Rule(399,203,918);
             switch(page)
             {
-                case "overview":Overview();break;case "navigation":Navigation();break;case "cases":Cases();break;case "trade":Trade();break;
+                case "community":SocietyJobsPanel();break;case "settlements":SettlementsPanel();break;case "overview":Overview();break;case "inventory":InventoryPanel();break;case "population":PopulationPanel();break;case "navigation":Navigation();break;case "cases":Cases();break;case "trade":Trade();break;
                 case "contracts":ContractsPanel();break;case "cargo":CargoPanel();break;case "systems":SystemsPanel();break;case "controls":ControlsPanel();break;case "hangar":Hangar();break;case "journal":Journal();break;case "help":Help(400,229);break;case "settings":Settings(400,236);break;case "reactor":Reactor();break;
             }
         }
@@ -153,6 +157,10 @@ namespace SpacePatriot
             {var p=Progression.Get(save,c.id);Text(c.title,400,398,865,44,29,paper,true);Text(p.step<c.steps.Length?c.steps[p.step].objective:"All evidence is collected. Choose what happens next in Cases.",400,457,795,100,22,muted);}
             if(Button("OPEN CASE FILES",400,622,276,49,true))page="cases";
             if(Button("PLAN ROUTE",695,622,276,49))page="navigation";
+            if(Button("SECTOR ACTIVITY",990,622,326,49))page="population";
+            if(Button("FIELD INVENTORY",400,678,276,32))page="inventory";
+            if(Button("COMMUNITY JOBS",695,678,276,32))page="community";
+            if(Button("CITIES & OUTPOSTS",990,678,326,32))page="settlements";
             Text("Progress saves locally after trading, landing, transit, and campaign decisions.",400,715,874,42,15,muted);
         }
         void Navigation()
@@ -228,7 +236,7 @@ namespace SpacePatriot
             {save.credits-=service;save.hull=Spec.health;save.fuel=100;shield=100;systemsHull=save.hull;Save();Toast("Hull repaired and fuel replenished. Component maintenance is available under Vessel systems.");}
             int rearm=0;for(int i=0;i<WeaponSpec.All.Length;i++){var w=WeaponSpec.All[i];if(i!=1)rearm+=Mathf.Max(0,w.mag+w.reserve-save.ammo[i].mag-save.ammo[i].reserve)*(i==2?12:1);}
             if(Button("REARM / "+rearm+" CR",851,666,456,42,false,AtPort&&rearm>0&&save.credits>=rearm)){save.credits-=rearm;save.ammo=System.Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));reloadRemaining=0;reloadWeapon=-1;Save();Toast("Magazines and reserve ammunition replenished.");}
-            Text("Vessel transfers require a port berth and sufficient hold capacity.",400,654,425,50,15,muted);
+            Text((spec.family==9?"4":spec.family==7?"3":spec.family==2||spec.family==5||spec.family==6?"2":"1")+" walkable decks · F leave helm · E stations / bulkheads. Service lift: E down, Shift+E up.",400,654,425,50,15,muted);
             if(AtPort&&save.fuel<12&&Button("PORT EMERGENCY FUEL / 12 UNITS",400,706,460,42))
             {save.fuel=12;Save();Toast("Safety reserve issued. No charge.");}
         }
@@ -262,10 +270,11 @@ namespace SpacePatriot
             float sensitivity=PlayerPrefs.GetFloat("sp.sensitivity",1);Text("MOUSE SENSITIVITY  "+sensitivity.ToString("0.0"),x,y+238,510,24,13,amber,true);
             float changed=GUI.HorizontalSlider(new Rect(x,y+272,500,20),sensitivity,.25f,2);if(changed!=sensitivity)PlayerPrefs.SetFloat("sp.sensitivity",changed);
             Text("Normal: move mouse/stick up to look up. Hold right mouse to steer. Arrow keys also steer.",x,y+305,started?870:610,38,15,muted);
+            if(Application.platform!=RuntimePlatform.WebGLPlayer&&Button("F11 / "+(Screen.fullScreen?"WINDOWED":"FULLSCREEN"),x+(started?370:0),y+345,started?300:350,46,false,!Application.isEditor))ToggleDesktopFullscreen();
             if(started&&Button(restartConfirm?"CONFIRM NEW SHIFT":"START A NEW SHIFT",x,y+345,350,46,false))
             {
-                if(!restartConfirm){restartConfirm=true;Toast("Press Confirm New Shift to replace this browser's saved progress.");}
-                else{PlayerPrefs.DeleteKey(SaveKey);UnityEngine.SceneManagement.SceneManager.LoadScene(0);}
+                if(!restartConfirm){restartConfirm=true;Toast("Press Confirm New Shift to replace this profile's saved progress.");}
+                else{CampaignStorage.Reset();UnityEngine.SceneManagement.SceneManager.LoadScene(0);}
             }
         }
         void SetQuality(bool high)
@@ -282,7 +291,7 @@ namespace SpacePatriot
             for(int i=0;i<3;i++){Text(labels[i],400,445+i*65,386,28,14,paper,true);values[i]=GUI.HorizontalSlider(new Rect(815,451+i*65,420,20),values[i],0,1);Text((values[i]*100).ToString("0")+"%",1242,445+i*65,80,30,16,aqua);}
             valveA=values[0];valveB=values[1];valveC=values[2];bool ready=Mathf.Abs(valveA-.45f)<.07f&&Mathf.Abs(valveB-.62f)<.07f&&Mathf.Abs(valveC-.38f)<.07f;
             if(Button(ready?"RECONNECT DISTRICT BUS":"FEEDS OUTSIDE TOLERANCE",400,677,904,50,ready,ready))
-            {Signal("power");menu=false;Toast("District bus online. Stable power restored.");}
+            {save.inventory.cityPower=1;CompleteDistrictRepair();Signal("power");menu=false;Toast("District bus online. Stable power restored.");}
         }
         void Report()
         {

@@ -43,7 +43,7 @@ public static class RestorationValidation
         Check(ShipSpec.Fleet[70].length>80&&ShipSpec.Fleet[90].length>210,"Large-ship dimensions are preserved");
         foreach(int family in new[]{0,1,2,3,4,5,6,7,8,9})Check(Resources.Load<GameObject>("OriginalShips/hull-"+family)!=null,"Original hull prefab "+family);
         foreach(var prefab in Resources.LoadAll<GameObject>("OriginalShips")){int missing=0;foreach(var node in prefab.GetComponentsInChildren<Transform>(true))missing+=GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(node.gameObject);Check(missing==0,"No missing script references: "+prefab.name);}
-        Check(Resources.Load<GameObject>("OriginalShips/cabin-0").GetComponentsInChildren<CockpitControl>().Length==15,"Twelve physical cockpit switches and three MFD click targets survive prefab serialization");
+        Check(Resources.Load<GameObject>("OriginalShips/cabin-0").GetComponentsInChildren<CockpitControl>().Length==37,"Six switches, four rotary controls, 24 MFD softkeys and three displays survive prefab serialization");
         Check(Resources.LoadAll<Material>("OriginalSurfaces").Length==128,"All 128 atlas cells available in Unity");
         var worlds=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text).worlds;
         var trade=new SaveData();FrontierEconomy.Ensure(trade,worlds);Check(trade.economy.markets.Count==19,"Every world has an independent persistent market");
@@ -61,7 +61,7 @@ public static class RestorationValidation
             var seen=new HashSet<Vector2Int>();var pending=new Queue<Vector2Int>();pending.Enqueue(new Vector2Int(0,0));
             while(pending.Count>0){var p=pending.Dequeue();if(seen.Contains(p)||!FrontierGame.DeckWalkable(plan,open,new Vector3(p.x*.2f,0,-p.y*.2f)))continue;seen.Add(p);
                 pending.Enqueue(p+Vector2Int.up);pending.Enqueue(p+Vector2Int.down);pending.Enqueue(p+Vector2Int.left);pending.Enqueue(p+Vector2Int.right);}
-            foreach(var room in plan.rooms){bool accessible=false;foreach(var p in seen)if(p.x*.2f>room.x0+.4f&&p.x*.2f<room.x1-.4f&&p.y*.2f>room.z0+.4f&&p.y*.2f<room.z1-.4f){accessible=true;break;}
+            foreach(var room in plan.rooms){if(room.deck!=0)continue;bool accessible=false;foreach(var p in seen)if(p.x*.2f>room.x0+.4f&&p.x*.2f<room.x1-.4f&&p.y*.2f>room.z0+.4f&&p.y*.2f<room.z1-.4f){accessible=true;break;}
                 Check(accessible,"Connected walkable "+room.name+" on family "+plan.family);}
         }
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/restoration-tests.txt",results);Debug.Log("RESTORATION_VALIDATION_PASS: "+results.Count+" checks. These do not certify gameplay or full feature parity.");

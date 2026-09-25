@@ -6,6 +6,7 @@ namespace SpacePatriot
     public partial class FrontierGame
     {
         FlightBindings bindings;
+        PilotInput pilot;
         public bool powered=true,flightAssist=true,gearDown=true,lightsOn=true,instruments,cruise,armed;
         public bool aboard;
         bool inputNeutral=true,focused=true;
@@ -13,6 +14,7 @@ namespace SpacePatriot
         TextMesh navigationDisplay;
         float lastForward=-10,tacticalUntil,tacticalReady;
         bool launchPending;
+        float launchClearance;
         public float StandHeight=>Spec.height*.3f+2;
         public float LoadedMass=>Spec.mass+save.organics*.5f+save.ore*1.5f+save.crystal*.8f;
         public float EngineAcceleration=>Spec.thrust*Spec.mass/LoadedMass*save.vessel.Factor("engines",powered);
@@ -22,22 +24,19 @@ namespace SpacePatriot
             inputNeutral=true;instruments=false;Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
             if(walking){if(Vector3.Distance(walkPosition,ship.position)>Spec.width*.7f+8){Toast("Move alongside your ship to board.");return;}
                 walking=false;aboard=false;cockpit=true;Toast("Space launches • WASD translates • Arrows / mouse steer • Q/E roll • X brakes • G gear • V camera");return;}
-            if(Spec.length>60){aboard=!aboard;deckPosition=new Vector3(0,0,-1.8f);walkYaw=walkPitch=0;cockpit=true;Toast(aboard?"Walk the deck. F returns to the helm; use the airlock to disembark.":"Pilot station occupied.");return;}
+            if(activeDeck!=null){aboard=!aboard;deckLevel=0;deckLiftMoving=false;if(deckLiftPlatform)deckLiftPlatform.localPosition=new Vector3(0,-1.7f,-5);deckPosition=new Vector3(0,0,-1.8f);walkYaw=walkPitch=0;cockpit=true;Toast(aboard?"Walk the deck. F returns to the helm; use the airlock to disembark.":"Pilot station occupied.");return;}
             if(flying){Toast("Land before opening the airlock.");return;}
             walking=true;walkPosition=ship.position+ship.right*(Spec.width*.6f+2);walkPosition.y=world.SurfaceAt(walkPosition)+1.75f;walkYaw=ship.eulerAngles.y;walkPitch=0;cockpit=false;
         }
         bool NeutralControls()
         {
-            var p=Gamepad.current;
-            bool sticks=p!=null&&(p.leftStick.ReadValue().sqrMagnitude>.03f||p.rightStick.ReadValue().sqrMagnitude>.03f||p.rightTrigger.ReadValue()>.15f||p.rightShoulder.isPressed||p.leftShoulder.isPressed);
-            var joy=Joystick.current;bool joystick=joy!=null&&(joy.stick.ReadValue().sqrMagnitude>.04f||joy.trigger.isPressed);
-            return !sticks&&!joystick&&!MouseButton(0);
+            return pilot.Neutral&&!MouseButton(0);
         }
         void Flight(float dt)
         {
-            var pad=Gamepad.current;
             if(!focused)return;
-            if(bindings.Down("Board / leave seat")||pad?.buttonEast.wasPressedThisFrame==true){BoardOrExit();return;}
+            if(bindings.Down("Board / leave seat")){BoardOrExit();return;}
+            if(pilot.Down("Interact")){if(flying)RequestLanding();else Launch();return;}
             if(bindings.Down("Instruments")||Down(Key.I)){instruments=!instruments;inputNeutral=true;Cursor.lockState=instruments?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=instruments;}
             if(bindings.Down("Gear"))ActivateCockpit(2);
             if(bindings.Down("Power"))ActivateCockpit(0);
@@ -47,18 +46,19 @@ namespace SpacePatriot
             
             if(bindings.Down("Horizon")){var forward=Vector3.ProjectOnPlane(ship.forward,Vector3.up);if(forward.sqrMagnitude>.01f)ship.rotation=Quaternion.LookRotation(forward,Vector3.up);angularVelocity=Vector3.zero;}
             if(bindings.Down("Jump"))BeginJump(selectedWorld);
-            if(pad?.selectButton.wasPressedThisFrame==true)cockpit=!cockpit;
-            if(pad?.leftStickButton.wasPressedThisFrame==true)ActivateCockpit(1);
-            if(pad?.rightStickButton.wasPressedThisFrame==true)armed=!armed;
-            if(pad?.dpad.down.wasPressedThisFrame==true)ActivateCockpit(2);
-            if(instruments){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;if(Mouse.current?.leftButton.wasPressedThisFrame==true)ClickCockpit();}
+            if(pilot.Down("Camera"))cockpit=!cockpit;
+            if(pilot.Down("Assist"))ActivateCockpit(1);
+            if(pilot.Down("Arm"))armed=!armed;
+            if(pilot.Down("Gear"))ActivateCockpit(2);
+            if(instruments){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
+            if(cockpit&&Cursor.lockState!=CursorLockMode.Locked&&!MouseButton(1))PointCockpit();else cockpitHint="";
             // Menu/focus recovery suppresses carried-over analog input, never keyboard thrust or simulation.
             if(inputNeutral&&NeutralControls())inputNeutral=false;
             bool analogReady=!inputNeutral;
             if(!flying)
             {
-                if(launchPending&&world.lift.Ready){launchPending=false;Launch();return;}
-                if(bindings.Held("Ascend")||bindings.Down("Landing")||pad?.rightShoulder.wasPressedThisFrame==true)Launch();
+                if(launchPending&&(world.lift==null||world.lift.Ready)){launchPending=false;Launch();return;}
+                if(bindings.Held("Ascend")||bindings.Down("Ascend")||bindings.Down("Landing")||pilot.Down("Ascend"))Launch();
                 return;
             }
             if(bindings.Held("Brake")){cruise=false;docking=false;tacticalUntil=0;}
@@ -71,15 +71,15 @@ namespace SpacePatriot
                 if(Vector3.Distance(ship.position,approach)<.05f){if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
             }
             if(bindings.Down("Forward")){if(Time.time-lastForward<.32f)TacticalBoost();lastForward=Time.time;}
-            if(Mouse.current!=null&&!instruments)throttle=Mathf.Clamp(throttle*Mathf.Exp(Mouse.current.scroll.ReadValue().y*.0013f),.05f,3);
+            if(Mouse.current!=null&&!instruments&&cockpitHint=="")throttle=Mathf.Clamp(throttle*Mathf.Exp(Mouse.current.scroll.ReadValue().y*.0013f),.05f,3);
             Vector3 translation=new Vector3(bindings.Axis("Strafe left","Strafe right"),bindings.Axis("Descend","Ascend"),bindings.Axis("Reverse","Forward"));
             Vector3 rates=new Vector3(bindings.Axis("Pitch up","Pitch down"),bindings.Axis("Yaw left","Yaw right"),-bindings.Axis("Roll left","Roll right"));
             rates.z-=Axis(Key.LeftBracket,Key.RightBracket);
             bool brake=bindings.Held("Brake"),boost=bindings.Held("Boost");
-            if(pad!=null&&analogReady){Vector2 move=pad.leftStick.ReadValue(),look=pad.rightStick.ReadValue();translation+=new Vector3(move.x,(pad.rightShoulder.isPressed?1:0)-(pad.leftShoulder.isPressed?1:0),move.y);rates+=new Vector3(-look.y*(PlayerPrefs.GetInt("sp.padInvert",0)==1?-1:1),look.x,(pad.dpad.left.isPressed?1:0)-(pad.dpad.right.isPressed?1:0));brake|=pad.leftTrigger.ReadValue()>.3f;boost|=pad.buttonSouth.isPressed;}
-            var joy=Joystick.current;if(joy!=null&&analogReady){var stick=joy.stick.ReadValue();rates+=new Vector3(-stick.y*(PlayerPrefs.GetInt("sp.padInvert",0)==1?-1:1),joy.twist?.ReadValue()??0,-stick.x);var hat=joy.hatswitch?.ReadValue()??Vector2.zero;translation.x+=hat.x;translation.y+=hat.y;}
+            if(launchClearance>0){if(brake||translation.y<0||ship.position.y>=launchClearance)launchClearance=0;else translation.y=Mathf.Max(translation.y,.55f);}
+            if(analogReady){translation+=pilot.Translation;rates+=pilot.Rotation;brake|=pilot.Held("Brake");boost|=pilot.Held("Boost");}
             Vector3 mouseDegrees=Vector3.zero;
-            if(instruments){translation=Vector3.zero;rates=Vector3.zero;boost=false;}
+            if(instruments){translation=launchClearance>0?Vector3.up*.55f:Vector3.zero;rates=Vector3.zero;boost=false;}
             else if(analogReady&&Mouse.current!=null&&(MouseButton(1)||Cursor.lockState==CursorLockMode.Locked))
             {var delta=Vector2.ClampMagnitude(Mouse.current.delta.ReadValue(),180)*PlayerPrefs.GetFloat("sp.sensitivity",1);mouseDegrees=new Vector3(delta.y*(PlayerPrefs.GetInt("sp.invert",0)==1?1:-1),delta.x,0)*.12f;}
             boost=boost&&save.fuel>0&&heat<90;
@@ -103,14 +103,16 @@ namespace SpacePatriot
             float load=translation.magnitude+(brake?1:0);if(powered)save.fuel=Mathf.Max(0,save.fuel-dt*(boost?.12f:.012f)*load);
             if(boost)heat=Mathf.Min(100,heat+dt*24);
             if(bindings.Down("Landing"))RequestLanding();
-            if(analogReady&&armed&&!instruments&&(MouseButton(0)||pad?.rightTrigger.ReadValue()>.3f||joy?.trigger.isPressed==true)&&Time.time>fireTime&&heat<88&&save.vessel.Factor("weapons",powered)>.05f)Fire();
+            if(analogReady&&armed&&!instruments&&cockpitHint==""&&(MouseButton(0)||pilot.Held("Fire"))&&Time.time>fireTime&&heat<88&&save.vessel.Factor("weapons",powered)>.05f)Fire();
         }
         void Launch()
         {
             if(!powered||save.fuel<=0){Toast("Start the engine bus and refuel before launching.");return;}
             if(cargoDoor||cargoTransfer!=null){Toast("Finish cargo handling and close the cargo hatch before launch.");return;}
             if(Mathf.Abs(ship.position.x)<65&&Mathf.Abs(ship.position.z)<110&&world.lift!=null&&!world.lift.Ready){world.lift.Raise();launchPending=true;Toast("Hangar lift raising. Roof opening; flight control transfers after clearance.");return;}
-            flying=true;velocity=Vector3.up*2;ship.position+=Vector3.up*1.5f;inputNeutral=false;Toast("WASD and Space/Ctrl thrust. Hold right mouse or use arrows to steer. G gear; X brake.");
+            // A tap starts an actual clearance climb; releasing Space while the lift
+            // moves must not immediately drop the ship back onto the platform.
+            launchPending=false;launchClearance=ship.position.y+14;flying=true;velocity=Vector3.up*5;ship.position+=Vector3.up*1.5f;inputNeutral=!pilot.Neutral;Toast("Launch climb engaged. WASD and Space/Ctrl thrust; arrows steer; G gear; X brake.");
         }
         void RequestLanding()
         {
@@ -138,9 +140,11 @@ namespace SpacePatriot
         }
         void UpdateInstruments()
         {
+            UpdateMfd();
             velocityDisplay.text="SCM / "+(flightAssist?"IFCS":"DECOUPLED")+"\n"+speed.ToString("000")+" m/s\nLIMIT "+(throttle*100).ToString("0")+"%\nGEAR "+(gearDown?"DOWN":"UP");
             serviceDisplay.text=(powered?"BUS ONLINE":"BUS OFFLINE")+"\nFUEL "+save.fuel.ToString("000")+"\nHULL "+HullPercent.ToString("000")+"\nHOLD "+Progression.Used(save)+" / "+Spec.capacity;
             navigationDisplay.text=CurrentWorld.name.ToUpperInvariant()+"\n"+(flying?"ALT "+Mathf.Max(0,ship.position.y-world.SurfaceAt(ship.position)-StandHeight).ToString("0"):"LANDED")+"\n"+(cruise?"CRUISE":armed?"WEAPONS ARMED":"WEAPONS SAFE")+"\nZ  INSTRUMENTS";
         }
     }
 }
+

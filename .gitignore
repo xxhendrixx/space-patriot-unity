@@ -18,3 +18,5 @@
 *.key
 Validation/*-status.txt
 /Assets/Resources/PerformanceTestRun*.json*
+
+*.blend1

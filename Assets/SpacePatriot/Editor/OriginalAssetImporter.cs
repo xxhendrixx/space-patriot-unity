@@ -11,11 +11,15 @@ public static class OriginalAssetImporter
     [Serializable] class Catalog {public MaterialRecord[] materials;public Model[] models;}
     [Serializable] class MaterialRecord {public string id,map,normal,emissiveMap;public float[] color,emission,repeat;public float metal,rough,opacity,intensity,alphaTest,normalScale;public bool transparent,doubleSided,unlit,paint;}
     [Serializable] class Model {public string id,kind;public Node[] nodes;}
-    [Serializable] class Node {public string file,material,name,door;public bool gear,lift;public int mfd,button,liftFloor,liftSide;}
+    [Serializable] class Node {public string file,material,name,door,bone;public float[] pivot;public bool gear,lift;public int mfd,button,liftFloor,liftSide;}
     static Color C(float[] values)=>new Color(values[0],values[1],values[2],1);
     static Texture2D Tex(string path)=>string.IsNullOrEmpty(path)?null:AssetDatabase.LoadAssetAtPath<Texture2D>(Source+path);
     [MenuItem("Space Patriot/Restore original modeled assets")]
     public static void Import()
+    { ImportInternal(false); }
+    public static void ImportProduction()
+    { ImportInternal(true); }
+    static void ImportInternal(bool productionOnly)
     {
         Directory.CreateDirectory(Dest);Directory.CreateDirectory(Prefabs);AssetDatabase.Refresh();
         var data=JsonUtility.FromJson<Catalog>(File.ReadAllText(Source+"import.json"));
@@ -38,13 +42,16 @@ public static class OriginalAssetImporter
         }
         foreach(var model in data.models)
         {
-            var root=new GameObject(model.id);var gears=new List<Transform>();
+            if(productionOnly&&!model.id.StartsWith("refit-")&&!model.id.StartsWith("cabin-")&&!model.id.StartsWith("citizen-")&&model.id!="rifle"&&model.id!="sidearm")continue;
+            var root=new GameObject(model.id);var gears=new List<Transform>();var bones=new Dictionary<string,Transform>();
             foreach(var row in model.nodes)
             {
                 if(!meshes.TryGetValue(row.file,out var mesh))
                 {
                     string path=Dest+Path.GetFileNameWithoutExtension(row.file)+".asset";mesh=AssetDatabase.LoadAssetAtPath<Mesh>(path);
-                    bool isNew=mesh==null;{using var r=new BinaryReader(File.OpenRead(Source+row.file));int count=r.ReadInt32(),indices=r.ReadInt32();
+                    // Content-hashed production meshes are immutable. The full
+                    // restoration import still rebuilds existing mesh data.
+                    bool isNew=mesh==null;if(isNew||!productionOnly){using var r=new BinaryReader(File.OpenRead(Source+row.file));int count=r.ReadInt32(),indices=r.ReadInt32();
                         var p=new Vector3[count];var n=new Vector3[count];var uv=new Vector2[count];var ix=new int[indices];
                         for(int i=0;i<count;i++){p[i]=new Vector3(r.ReadSingle(),r.ReadSingle(),r.ReadSingle());n[i]=new Vector3(r.ReadSingle(),r.ReadSingle(),r.ReadSingle());uv[i]=new Vector2(r.ReadSingle(),r.ReadSingle());}
                         for(int i=0;i<indices;i++)ix[i]=r.ReadInt32();
@@ -56,6 +63,7 @@ public static class OriginalAssetImporter
                     meshes.Add(row.file,mesh);
                 }
                 var go=new GameObject(row.name);go.transform.SetParent(root.transform,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=materials[row.material];
+                if(!string.IsNullOrEmpty(row.bone)){var pivot=new Vector3(row.pivot[0],row.pivot[1],row.pivot[2]);if(!bones.TryGetValue(row.bone,out var bone)){bone=new GameObject(row.bone).transform;bone.SetParent(root.transform,false);bone.localPosition=pivot;bones.Add(row.bone,bone);}go.transform.SetParent(bone,false);go.transform.localPosition=-pivot;}
                 if(row.gear){go.name="Landing gear";gears.Add(go.transform);}
                 if(!string.IsNullOrEmpty(row.door))go.AddComponent<OriginalDoorPart>().id=row.door;
                 if(row.lift||row.liftFloor>=0){var part=go.AddComponent<BuildingLiftPart>();part.cabin=row.lift;part.floor=row.liftFloor;part.side=row.liftSide;if(!row.lift){var collider=go.AddComponent<BoxCollider>();collider.center=mesh.bounds.center;collider.size=mesh.bounds.size;}}

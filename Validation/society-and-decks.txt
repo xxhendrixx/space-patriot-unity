@@ -1,0 +1,253 @@
+PASS All 420 original named settlements are addressable
+PASS Every settlement owns persistent service state and residents
+PASS Save migration is idempotent
+PASS Expanded resident IDs remain unique
+PASS Local failures create six distinct actionable job types
+PASS Repair cannot pay before the bus puzzle is completed
+PASS Repair consumes two real components and restores city power
+PASS Completed jobs cannot pay twice
+PASS Ship manifest alone cannot fulfil dock delivery
+PASS Unloaded job cargo is consumed exactly once
+PASS Two cities on the same world cannot share dock cargo
+PASS Cargo remains at the source settlement after regional travel
+PASS Original Vale side contract consumes alloy and delivers working ammunition
+PASS Named side contracts cannot pay twice
+PASS Courier cannot skip pickup
+PASS Courier must visit freight office then market
+PASS Absent settlement consumption continues without loaded actors
+PASS Settlement services and quest outcomes survive saving
+PASS Family 0 has 1 actual decks
+PASS Reachable family 0 deck 0 SERVICE PANEL
+PASS Reachable family 0 deck 0 AIRLOCK
+PASS Reachable family 0 deck 0 PILOT STATION
+PASS Enterable family 0 deck 0 corridor-0
+PASS Enterable family 0 deck 0 bridge
+PASS Family 1 has 1 actual decks
+PASS Reachable family 1 deck 0 SERVICE PANEL
+PASS Reachable family 1 deck 0 AIRLOCK
+PASS Reachable family 1 deck 0 PILOT STATION
+PASS Enterable family 1 deck 0 corridor-0
+PASS Enterable family 1 deck 0 bridge
+PASS Family 2 has 2 actual decks
+PASS Reachable family 2 deck 0 AFT AIRLOCK
+PASS Reachable family 2 deck 0 PILOT STATION
+PASS Enterable family 2 deck 0 corridor-0
+PASS Enterable family 2 deck 0 bridge
+PASS Enterable family 2 deck 0 quarters-0-0--1
+PASS Enterable family 2 deck 0 mess-0-0-1
+PASS Enterable family 2 deck 0 mess-0-1--1
+PASS Enterable family 2 deck 0 quarters-0-1-1
+PASS Reachable family 2 deck 1 CARGO
+PASS Reachable family 2 deck 1 CARGO
+PASS Reachable family 2 deck 1 CARGO
+PASS Reachable family 2 deck 1 WORKSHOP
+PASS Reachable family 2 deck 1 AFT AIRLOCK
+PASS Enterable family 2 deck 1 corridor-1
+PASS Enterable family 2 deck 1 cargo-1-0--1
+PASS Enterable family 2 deck 1 cargo-1-0-1
+PASS Enterable family 2 deck 1 cargo-1-1--1
+PASS Enterable family 2 deck 1 workshop-1-1-1
+PASS Family 3 has 1 actual decks
+PASS Reachable family 3 deck 0 SERVICE PANEL
+PASS Reachable family 3 deck 0 AIRLOCK
+PASS Reachable family 3 deck 0 PILOT STATION
+PASS Enterable family 3 deck 0 corridor-0
+PASS Enterable family 3 deck 0 bridge
+PASS Family 4 has 1 actual decks
+PASS Reachable family 4 deck 0 SERVICE PANEL
+PASS Reachable family 4 deck 0 AIRLOCK
+PASS Reachable family 4 deck 0 PILOT STATION
+PASS Enterable family 4 deck 0 corridor-0
+PASS Enterable family 4 deck 0 bridge
+PASS Family 5 has 2 actual decks
+PASS Reachable family 5 deck 0 AFT AIRLOCK
+PASS Reachable family 5 deck 0 PILOT STATION
+PASS Enterable family 5 deck 0 corridor-0
+PASS Enterable family 5 deck 0 bridge
+PASS Enterable family 5 deck 0 quarters-0-0--1
+PASS Enterable family 5 deck 0 mess-0-0-1
+PASS Enterable family 5 deck 0 mess-0-1--1
+PASS Enterable family 5 deck 0 quarters-0-1-1
+PASS Reachable family 5 deck 1 CARGO
+PASS Reachable family 5 deck 1 CARGO
+PASS Reachable family 5 deck 1 CARGO
+PASS Reachable family 5 deck 1 WORKSHOP
+PASS Reachable family 5 deck 1 AFT AIRLOCK
+PASS Enterable family 5 deck 1 corridor-1
+PASS Enterable family 5 deck 1 cargo-1-0--1
+PASS Enterable family 5 deck 1 cargo-1-0-1
+PASS Enterable family 5 deck 1 cargo-1-1--1
+PASS Enterable family 5 deck 1 workshop-1-1-1
+PASS Family 6 has 2 actual decks
+PASS Reachable family 6 deck 0 AFT AIRLOCK
+PASS Reachable family 6 deck 0 PILOT STATION
+PASS Enterable family 6 deck 0 corridor-0
+PASS Enterable family 6 deck 0 bridge
+PASS Enterable family 6 deck 0 quarters-0-0--1
+PASS Enterable family 6 deck 0 mess-0-0-1
+PASS Enterable family 6 deck 0 mess-0-1--1
+PASS Enterable family 6 deck 0 quarters-0-1-1
+PASS Reachable family 6 deck 1 CARGO
+PASS Reachable family 6 deck 1 CARGO
+PASS Reachable family 6 deck 1 CARGO
+PASS Reachable family 6 deck 1 WORKSHOP
+PASS Reachable family 6 deck 1 AFT AIRLOCK
+PASS Enterable family 6 deck 1 corridor-1
+PASS Enterable family 6 deck 1 cargo-1-0--1
+PASS Enterable family 6 deck 1 cargo-1-0-1
+PASS Enterable family 6 deck 1 cargo-1-1--1
+PASS Enterable family 6 deck 1 workshop-1-1-1
+PASS Family 7 has 3 actual decks
+PASS Reachable family 7 deck 0 OPERATIONS
+PASS Reachable family 7 deck 0 OPERATIONS
+PASS Reachable family 7 deck 0 AFT AIRLOCK
+PASS Reachable family 7 deck 0 PILOT STATION
+PASS Enterable family 7 deck 0 corridor-0
+PASS Enterable family 7 deck 0 bridge
+PASS Enterable family 7 deck 0 quarters-0-0--1
+PASS Enterable family 7 deck 0 mess-0-0-1
+PASS Enterable family 7 deck 0 mess-0-1--1
+PASS Enterable family 7 deck 0 quarters-0-1-1
+PASS Enterable family 7 deck 0 quarters-0-2--1
+PASS Enterable family 7 deck 0 operations-0-2-1
+PASS Enterable family 7 deck 0 operations-0-3--1
+PASS Enterable family 7 deck 0 briefing-0-3-1
+PASS Reachable family 7 deck 1 ENGINEERING / engineering-1-0--1
+PASS Reachable family 7 deck 1 WORKSHOP
+PASS Reachable family 7 deck 1 WORKSHOP
+PASS Reachable family 7 deck 1 ENGINEERING / life-support-1-1-1
+PASS Reachable family 7 deck 1 ENGINEERING / life-support-1-2--1
+PASS Reachable family 7 deck 1 ENGINEERING / engineering-1-2-1
+PASS Reachable family 7 deck 1 ENGINEERING / engineering-1-3--1
+PASS Reachable family 7 deck 1 STORAGE
+PASS Reachable family 7 deck 1 AFT AIRLOCK
+PASS Enterable family 7 deck 1 corridor-1
+PASS Enterable family 7 deck 1 engineering-1-0--1
+PASS Enterable family 7 deck 1 workshop-1-0-1
+PASS Enterable family 7 deck 1 workshop-1-1--1
+PASS Enterable family 7 deck 1 life-support-1-1-1
+PASS Enterable family 7 deck 1 life-support-1-2--1
+PASS Enterable family 7 deck 1 engineering-1-2-1
+PASS Enterable family 7 deck 1 engineering-1-3--1
+PASS Enterable family 7 deck 1 storage-1-3-1
+PASS Reachable family 7 deck 2 CARGO
+PASS Reachable family 7 deck 2 CARGO
+PASS Reachable family 7 deck 2 CARGO
+PASS Reachable family 7 deck 2 WORKSHOP
+PASS Reachable family 7 deck 2 WORKSHOP
+PASS Reachable family 7 deck 2 CARGO
+PASS Reachable family 7 deck 2 CARGO
+PASS Reachable family 7 deck 2 HANGAR
+PASS Reachable family 7 deck 2 AFT AIRLOCK
+PASS Enterable family 7 deck 2 corridor-2
+PASS Enterable family 7 deck 2 cargo-2-0--1
+PASS Enterable family 7 deck 2 cargo-2-0-1
+PASS Enterable family 7 deck 2 cargo-2-1--1
+PASS Enterable family 7 deck 2 workshop-2-1-1
+PASS Enterable family 7 deck 2 workshop-2-2--1
+PASS Enterable family 7 deck 2 cargo-2-2-1
+PASS Enterable family 7 deck 2 cargo-2-3--1
+PASS Enterable family 7 deck 2 hangar-2-3-1
+PASS Family 8 has 1 actual decks
+PASS Reachable family 8 deck 0 SERVICE PANEL
+PASS Reachable family 8 deck 0 AIRLOCK
+PASS Reachable family 8 deck 0 PILOT STATION
+PASS Enterable family 8 deck 0 corridor-0
+PASS Enterable family 8 deck 0 bridge
+PASS Family 9 has 4 actual decks
+PASS Reachable family 9 deck 0 OPERATIONS
+PASS Reachable family 9 deck 0 OPERATIONS
+PASS Reachable family 9 deck 0 AFT AIRLOCK
+PASS Reachable family 9 deck 0 PILOT STATION
+PASS Enterable family 9 deck 0 corridor-0
+PASS Enterable family 9 deck 0 bridge
+PASS Enterable family 9 deck 0 quarters-0-0--1
+PASS Enterable family 9 deck 0 mess-0-0-1
+PASS Enterable family 9 deck 0 mess-0-1--1
+PASS Enterable family 9 deck 0 quarters-0-1-1
+PASS Enterable family 9 deck 0 quarters-0-2--1
+PASS Enterable family 9 deck 0 operations-0-2-1
+PASS Enterable family 9 deck 0 operations-0-3--1
+PASS Enterable family 9 deck 0 briefing-0-3-1
+PASS Enterable family 9 deck 0 briefing-0-4--1
+PASS Enterable family 9 deck 0 observation-0-4-1
+PASS Enterable family 9 deck 0 observation-0-5--1
+PASS Enterable family 9 deck 0 quarters-0-5-1
+PASS Reachable family 9 deck 1 MEDICAL BAY
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 RESEARCH STATION
+PASS Reachable family 9 deck 1 MEDICAL BAY
+PASS Reachable family 9 deck 1 MEDICAL BAY
+PASS Reachable family 9 deck 1 STORAGE
+PASS Reachable family 9 deck 1 STORAGE
+PASS Reachable family 9 deck 1 MEDICAL BAY
+PASS Reachable family 9 deck 1 AFT AIRLOCK
+PASS Enterable family 9 deck 1 corridor-1
+PASS Enterable family 9 deck 1 medical-1-0--1
+PASS Enterable family 9 deck 1 science-1-0-1
+PASS Enterable family 9 deck 1 science-1-1--1
+PASS Enterable family 9 deck 1 hydroponics-1-1-1
+PASS Enterable family 9 deck 1 hydroponics-1-2--1
+PASS Enterable family 9 deck 1 science-1-2-1
+PASS Enterable family 9 deck 1 science-1-3--1
+PASS Enterable family 9 deck 1 medical-1-3-1
+PASS Enterable family 9 deck 1 medical-1-4--1
+PASS Enterable family 9 deck 1 storage-1-4-1
+PASS Enterable family 9 deck 1 storage-1-5--1
+PASS Enterable family 9 deck 1 medical-1-5-1
+PASS Reachable family 9 deck 2 ENGINEERING / engineering-2-0--1
+PASS Reachable family 9 deck 2 WORKSHOP
+PASS Reachable family 9 deck 2 WORKSHOP
+PASS Reachable family 9 deck 2 ENGINEERING / life-support-2-1-1
+PASS Reachable family 9 deck 2 ENGINEERING / life-support-2-2--1
+PASS Reachable family 9 deck 2 ENGINEERING / engineering-2-2-1
+PASS Reachable family 9 deck 2 ENGINEERING / engineering-2-3--1
+PASS Reachable family 9 deck 2 STORAGE
+PASS Reachable family 9 deck 2 STORAGE
+PASS Reachable family 9 deck 2 WORKSHOP
+PASS Reachable family 9 deck 2 WORKSHOP
+PASS Reachable family 9 deck 2 ENGINEERING / engineering-2-5-1
+PASS Reachable family 9 deck 2 AFT AIRLOCK
+PASS Enterable family 9 deck 2 corridor-2
+PASS Enterable family 9 deck 2 engineering-2-0--1
+PASS Enterable family 9 deck 2 workshop-2-0-1
+PASS Enterable family 9 deck 2 workshop-2-1--1
+PASS Enterable family 9 deck 2 life-support-2-1-1
+PASS Enterable family 9 deck 2 life-support-2-2--1
+PASS Enterable family 9 deck 2 engineering-2-2-1
+PASS Enterable family 9 deck 2 engineering-2-3--1
+PASS Enterable family 9 deck 2 storage-2-3-1
+PASS Enterable family 9 deck 2 storage-2-4--1
+PASS Enterable family 9 deck 2 workshop-2-4-1
+PASS Enterable family 9 deck 2 workshop-2-5--1
+PASS Enterable family 9 deck 2 engineering-2-5-1
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 WORKSHOP
+PASS Reachable family 9 deck 3 WORKSHOP
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 HANGAR
+PASS Reachable family 9 deck 3 HANGAR
+PASS Reachable family 9 deck 3 ENGINEERING / engineering-3-4-1
+PASS Reachable family 9 deck 3 ENGINEERING / engineering-3-5--1
+PASS Reachable family 9 deck 3 CARGO
+PASS Reachable family 9 deck 3 AFT AIRLOCK
+PASS Enterable family 9 deck 3 corridor-3
+PASS Enterable family 9 deck 3 cargo-3-0--1
+PASS Enterable family 9 deck 3 cargo-3-0-1
+PASS Enterable family 9 deck 3 cargo-3-1--1
+PASS Enterable family 9 deck 3 workshop-3-1-1
+PASS Enterable family 9 deck 3 workshop-3-2--1
+PASS Enterable family 9 deck 3 cargo-3-2-1
+PASS Enterable family 9 deck 3 cargo-3-3--1
+PASS Enterable family 9 deck 3 hangar-3-3-1
+PASS Enterable family 9 deck 3 hangar-3-4--1
+PASS Enterable family 9 deck 3 engineering-3-4-1
+PASS Enterable family 9 deck 3 engineering-3-5--1
+PASS Enterable family 9 deck 3 cargo-3-5-1

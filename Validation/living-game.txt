@@ -1,0 +1,31 @@
+PASS: Every world has persistent residents
+PASS: Resident identities are unique
+PASS: Every pilot owns a fleet vessel
+PASS: Absent-world pilots travel and finish jobs without actors or a player
+PASS: Residents meet one another and preserve relationships
+PASS: Background event log stays bounded
+PASS: Jobs, owned ships and world time survive save round trip
+PASS: Freighter loads actual source-market cargo
+PASS: Delivery conserves cargo and applies destination stock once
+PASS: Crafting away from a powered terminal is atomic and rejected
+PASS: Original six-alloy rifle recipe feeds real weapon reserve
+PASS: Missing ingredients do not create repair components
+PASS: Original sample analysis recipe consumes exactly one sample
+PASS: Cabin 0 has three independent MFD surfaces
+PASS: Cabin 0 has four operable rotary controls
+PASS: Cabin 0 has 24 independent MFD softkeys
+PASS: MFD 0 retains unmangled normalized UVs
+PASS: MFD 1 retains unmangled normalized UVs
+PASS: MFD 2 retains unmangled normalized UVs
+PASS: Cabin 7 has three independent MFD surfaces
+PASS: Cabin 7 has four operable rotary controls
+PASS: Cabin 7 has 24 independent MFD softkeys
+PASS: MFD 0 retains unmangled normalized UVs
+PASS: MFD 1 retains unmangled normalized UVs
+PASS: MFD 2 retains unmangled normalized UVs
+PASS: Cabin 9 has three independent MFD surfaces
+PASS: Cabin 9 has four operable rotary controls
+PASS: Cabin 9 has 24 independent MFD softkeys
+PASS: MFD 0 retains unmangled normalized UVs
+PASS: MFD 1 retains unmangled normalized UVs
+PASS: MFD 2 retains unmangled normalized UVs

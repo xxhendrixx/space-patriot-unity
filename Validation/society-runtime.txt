@@ -1,0 +1,12 @@
+PASS Raycast on physical DRIVE knob changes actual speed limit
+PASS Clicking a physical MFD softkey switches the live page
+PASS Three MFDs have independent live textures
+PASS Actual service lift reaches deck 2 aboard Mule Chalk
+PASS Actual service lift reaches deck 2 aboard Wayfarer Chalk
+PASS Actual service lift reaches deck 3 aboard Wayfarer Chalk
+PASS Actual service lift reaches deck 2 aboard Meridian Chalk
+PASS Actual service lift reaches deck 3 aboard Meridian Chalk
+PASS Actual service lift reaches deck 4 aboard Meridian Chalk
+PASS All seven city service terminals exist in the generated world
+PASS Open bulkheads retract within their lintels instead of occupying the deck above
+PASS Returning to the bridge resets the service platform to the embarkation deck

@@ -10,7 +10,7 @@ namespace SpacePatriot
     public sealed class FlightBindings
     {
         public List<KeyBinding> entries;
-        public FlightBindings()
+        public FlightBindings(bool useSaved=true)
         {
             entries=new List<KeyBinding>{new("Forward",Key.W),new("Reverse",Key.S),new("Strafe left",Key.A),new("Strafe right",Key.D),
                 new("Ascend",Key.Space),new("Descend",Key.LeftCtrl),new("Roll left",Key.Q),new("Roll right",Key.E),
@@ -18,6 +18,7 @@ namespace SpacePatriot
                 new("Boost",Key.LeftShift),new("Brake",Key.X),new("Board / leave seat",Key.F),new("Landing",Key.L),new("Gear",Key.G),
                 new("Camera",Key.V),new("Horizon",Key.U),new("Jump",Key.H),new("Instruments",Key.Z),new("Power",Key.P),new("Assist",Key.T),
                 new("Lights",Key.O),new("Cruise",Key.None),new("Arm weapons",Key.Y),new("Reload",Key.R),new("Target",Key.C),new("Shipyard",Key.K)};
+            if(!useSaved)return;
             try { var saved=JsonUtility.FromJson<BindingList>(PlayerPrefs.GetString("sp.bindings","{}"));
                 if(saved?.entries!=null)foreach(var row in saved.entries){var current=entries.Find(x=>x.action==row.action);if(current!=null&&row.key!=Key.None)current.key=row.key;}
             } catch { }

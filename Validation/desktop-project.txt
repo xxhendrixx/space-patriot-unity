@@ -1,0 +1,9 @@
+PASS Editor targets Windows x64
+PASS Desktop window is resizable
+PASS Standalone scripting backend configured
+PASS File save reads back progress
+PASS Second generation replaces the current save
+PASS Previous complete save is retained
+PASS Recovery reads previous generation after corruption
+PASS No pending write remains after successful saves
+NOT RUN: native player build and installer. Delivery remains the Unity project during development, by request.

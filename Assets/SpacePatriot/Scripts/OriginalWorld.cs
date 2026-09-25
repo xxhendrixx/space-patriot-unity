@@ -36,6 +36,7 @@ namespace SpacePatriot
             places.Add(new Place("Cargo receiving","delivery",new Vector3(14,Deck,-22),4));places.Add(new Place("City power bus","power",new Vector3(50,Deck,20),4));
             places.Add(new Place("Port 07 landing pad","landing",new Vector3(0,Deck+2.65f,0),62));
             places.Add(new Place("Capital ship apron","landing",new Vector3(165,Deck+2.65f,155),75));
+            Terminal(hangar,new Vector3(49,.5f,26),"FABRICATION",WarmLight);places.Add(new Place("Fabrication terminal","fabrication",new Vector3(49,Deck,26),4));
         }
         void OrbitalStation()
         {

@@ -38,8 +38,18 @@ PASS No missing script references: building-1
 PASS No missing script references: building-2
 PASS No missing script references: building-3
 PASS No missing script references: cabin-0
+PASS No missing script references: cabin-1
+PASS No missing script references: cabin-2
+PASS No missing script references: cabin-3
+PASS No missing script references: cabin-4
+PASS No missing script references: cabin-5
+PASS No missing script references: cabin-6
 PASS No missing script references: cabin-7
+PASS No missing script references: cabin-8
 PASS No missing script references: cabin-9
+PASS No missing script references: citizen-0
+PASS No missing script references: citizen-1
+PASS No missing script references: citizen-2
 PASS No missing script references: conifer
 PASS No missing script references: hangar
 PASS No missing script references: hull-0
@@ -54,10 +64,20 @@ PASS No missing script references: hull-8
 PASS No missing script references: hull-9
 PASS No missing script references: outpost
 PASS No missing script references: port
+PASS No missing script references: refit-0
+PASS No missing script references: refit-1
+PASS No missing script references: refit-2
+PASS No missing script references: refit-3
+PASS No missing script references: refit-4
+PASS No missing script references: refit-5
+PASS No missing script references: refit-6
+PASS No missing script references: refit-7
+PASS No missing script references: refit-8
+PASS No missing script references: refit-9
 PASS No missing script references: rifle
 PASS No missing script references: sidearm
 PASS No missing script references: station
-PASS Twelve physical cockpit switches and three MFD click targets survive prefab serialization
+PASS Six switches, four rotary controls, 24 MFD softkeys and three displays survive prefab serialization
 PASS All 128 atlas cells available in Unity
 PASS Every world has an independent persistent market
 PASS Background convoys depart and deliver goods
@@ -65,17 +85,55 @@ PASS Market and faction balances remain nonnegative during simulation
 PASS Freight cannot be delivered straight from the hold
 PASS Unloaded freight is consumed and paid exactly once
 PASS Completed freight contracts cannot pay twice
-PASS Connected walkable FLIGHT DECK on family 7
+PASS Connected walkable CENTRAL PASSAGE on family 0
+PASS Connected walkable FLIGHT DECK on family 0
+PASS Connected walkable CENTRAL PASSAGE on family 1
+PASS Connected walkable FLIGHT DECK on family 1
+PASS Connected walkable CENTRAL PASSAGE on family 2
+PASS Connected walkable FLIGHT DECK on family 2
+PASS Connected walkable QUARTERS on family 2
+PASS Connected walkable MESS on family 2
+PASS Connected walkable MESS on family 2
+PASS Connected walkable QUARTERS on family 2
+PASS Connected walkable CENTRAL PASSAGE on family 3
+PASS Connected walkable FLIGHT DECK on family 3
+PASS Connected walkable CENTRAL PASSAGE on family 4
+PASS Connected walkable FLIGHT DECK on family 4
+PASS Connected walkable CENTRAL PASSAGE on family 5
+PASS Connected walkable FLIGHT DECK on family 5
+PASS Connected walkable QUARTERS on family 5
+PASS Connected walkable MESS on family 5
+PASS Connected walkable MESS on family 5
+PASS Connected walkable QUARTERS on family 5
+PASS Connected walkable CENTRAL PASSAGE on family 6
+PASS Connected walkable FLIGHT DECK on family 6
+PASS Connected walkable QUARTERS on family 6
+PASS Connected walkable MESS on family 6
+PASS Connected walkable MESS on family 6
+PASS Connected walkable QUARTERS on family 6
 PASS Connected walkable CENTRAL PASSAGE on family 7
-PASS Connected walkable CREW QUARTERS on family 7
-PASS Connected walkable MESS / OBSERVATION on family 7
-PASS Connected walkable ENGINEERING on family 7
-PASS Connected walkable CARGO HOLD on family 7
-PASS Connected walkable AIRLOCK on family 7
-PASS Connected walkable FLIGHT DECK on family 9
+PASS Connected walkable FLIGHT DECK on family 7
+PASS Connected walkable QUARTERS on family 7
+PASS Connected walkable MESS on family 7
+PASS Connected walkable MESS on family 7
+PASS Connected walkable QUARTERS on family 7
+PASS Connected walkable QUARTERS on family 7
+PASS Connected walkable OPERATIONS on family 7
+PASS Connected walkable OPERATIONS on family 7
+PASS Connected walkable BRIEFING on family 7
+PASS Connected walkable CENTRAL PASSAGE on family 8
+PASS Connected walkable FLIGHT DECK on family 8
 PASS Connected walkable CENTRAL PASSAGE on family 9
-PASS Connected walkable CREW QUARTERS on family 9
-PASS Connected walkable MESS / OBSERVATION on family 9
-PASS Connected walkable ENGINEERING on family 9
-PASS Connected walkable CARGO HOLD on family 9
-PASS Connected walkable AIRLOCK on family 9
+PASS Connected walkable FLIGHT DECK on family 9
+PASS Connected walkable QUARTERS on family 9
+PASS Connected walkable MESS on family 9
+PASS Connected walkable MESS on family 9
+PASS Connected walkable QUARTERS on family 9
+PASS Connected walkable QUARTERS on family 9
+PASS Connected walkable OPERATIONS on family 9
+PASS Connected walkable OPERATIONS on family 9
+PASS Connected walkable BRIEFING on family 9
+PASS Connected walkable BRIEFING on family 9
+PASS Connected walkable OBSERVATION on family 9
+PASS Connected walkable OBSERVATION on family 9
+PASS Connected walkable QUARTERS on family 9

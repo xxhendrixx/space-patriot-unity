@@ -2,32 +2,32 @@
 
 This is an incomplete port. The initial Unity prototype dropped substantial parts of the original game and is not a completed or fully playable remake. Original source, documentation and art are retained in `Reference/Original`; original artwork is also imported under `Assets/SpacePatriot/Original`.
 
-The direction remains grounded industrial science fiction, browser first, premium with no in-game purchases. Preserving the original design and systems is required. The ten industrial chassis refits are a first revision; the full visual redesign remains unfinished. See ENGINE_INTEGRATION.md for the engine-by-engine implementation status.
+The direction remains grounded industrial science fiction, a Unity project targeting Windows PC, premium with no in-game purchases. Preserving the original design and systems is required. The ten industrial chassis refits are a first revision; the full visual redesign remains unfinished. See ENGINE_INTEGRATION.md for the engine-by-engine implementation status.
 
 | Area | Original game | Unity restoration status |
 | --- | --- | --- |
 | Artwork | 11 atlases, 128 cells, foliage, cockpit/UI/concept artwork | All originals preserved with SHA256 inventory. Cells extracted without atlas bleeding; original craft UVs/material assignments converted. |
-| Fleet | 10 chassis, 10 finishes each; proper dimensions and specifications | All 100 records restored. Ten industrial hull refits use the original textures, dimensions, finishes and interiors. Further art refinement remains. |
+| Fleet | 10 chassis, 10 finishes each; proper dimensions and specifications | All 100 original records retained. Ten revised Blender-built exteriors with armor sections, engine assemblies and role-specific modules. Editable Blender file included. Visual quality still falls short of the concepts. |
 | Flight | Six-axis translation/rotation, assist/decoupled, throttle limit, boost, brake | Controller rewritten around original bindings; isolated regression checks added. Input System checks cover actual keyboard, mouse and gamepad directions, focus/menu recovery, launch and relaunch. Physical hardware testing remains incomplete. |
 | Controls | Keyboard, pointer, gamepad, remappable controller | Keyboard remapping and standard gamepad flight added. The WebGL fallback now accepts large flight-stick reports and maps the trigger to its physical button. Full hardware mapping, dual-stick assignments, ground controls and menu/controller parity remain incomplete. |
-| Cockpit | Modeled flight deck, switches, three MFDs | Original modeled decks and switches imported, linked to flight functions; MFD content remains reduced. |
-| Large ships | Connected deck, quarters, mess, engineering, cargo, airlock | Original interior meshes/layouts imported; walking and room/fixture bounds restored. Turret station and moving shared crew validation pending. |
+| Cockpit | Modeled flight deck, switches, three MFDs | Three independent live MFDs, 24 clickable softkeys, four rotary controls and six linked switches. Knobs and switches move; displays show actual vessel, navigation, traffic and cargo state. Visual match remains unfinished. |
+| Large ships | Connected deck, quarters, mess, engineering, cargo, airlock | All ten families have connected rooms. Mule/Spur/Gannet: two decks; Wayfarer: three; Meridian: four. Working service lifts, doors, cargo/engineering/science/medical stations. NPC shared crew stations and multiplayer remain pending. |
 | Vessel systems | Reactor, engines, weapons, shields, cooler, life support, 12-point power bus, heat, repair | Native Unity system state and engineering controls added; basic integration is connected; broader balancing and failure testing remain pending. |
 | Cargo | Manifest/trading; manual handling had not been completed | New staged dock inventory, loading/unloading animation, hold capacity, saved inventory, hatch interlock and cargo mass. Actual transfer/interlock checks pass. Freight must be unloaded before contract payment. |
-| Economy | 19 background markets, production/consumption, convoys, contracts, faction accounts | 19 markets, background convoy accounting, faction balances and freight contracts implemented. Visible traffic, original event parity and balancing remain pending. |
+| Economy | 19 background markets, production/consumption, convoys, contracts, faction accounts | 19 background markets, convoy accounting and faction balances; owned NPC freighters move real market food stock. Settlement services consume resources and generate local work. Further balancing and event parity remain pending. |
 | Campaign | 9 cases, 27 milestones, 18 outcomes, 90 graph nodes | Case data and basic gates/rewards migrated. Full original Storyworks graph and event parity remain pending. |
 | Navigation | 5 systems, 19 worlds, measured/catalog data, orbital/sector travel | 19-world selector only. Original catalog/climate data preserved; detailed celestial/orbit simulation pending. |
-| Settlements | 420 named cities/outposts, interiors, lifts, terminals, residents | Original port and four furnished building types restored, with lift controls. Full 420-settlement placement, residents and city simulation remain pending. |
+| Settlements | 420 named cities/outposts, interiors, lifts, terminals, residents | All 420 names have persistent state and are selectable through regional approaches. Seven service districts, original furnished interiors, lifts and new street blocks. Seamless global placement, fully bespoke cities and complete tower interiors remain pending. |
 | Home hangar | Personal hangar, lift, roof clearance, city access | Original modeled hangar, moving launch lift and roof panels restored; launch waits for clearance. Runtime launch checks pass. |
 | Terrain | Terrainworks regional fields, geology blending, cliffs, water | Original Worldworks/Terrainworks cores generate fields for 14 solid worlds. Closed spherical terrain replaces the square patch; collision and walking heights agree. Full global exploration remains incomplete. |
 | Weather | Climate profiles, cloud fronts, wind/gusts, lightning | Wetness, snow, wind/gusts and local roof-occluded precipitation connected. Cloud fronts and lightning remain pending. |
 | Ecology | Grassworks, forests, articulated alien flora/fauna, IK and body hits | Original conifer and alien flora retained; Grassworks blades, wind, rooting and local streaming connected. Full forests, fauna animation/IK and ecology remain pending. |
 | Combat | Rifle/sidearm, kinetic/laser/missile weapons, targeting, seeker, reload, damage | Original weapon meshes/specifications, selection, reload, kinetic fire, red laser and seeker interlock restored. Encounters, infantry and full damage parity remain incomplete. |
-| Society | Factions, NPCs, patrols, settlement control, reputation | Case reputation counters only; full society simulation pending. |
-| Inventory/crafting | Inventoryworks, field inventory, equipment, consumables | Pending. |
-| Architecture/machinery | Building interiors/furniture, power machinery, pathways | Imported original furnished architecture, working lift/roof and native vessel power systems. Full original graphs and city/path simulation remain pending. |
+| Society | Factions, NPCs, patrols, settlement control, reputation | 4,052 persistent residents with jobs, needs, shifts, relationships and owned pilot ships; unloaded regions and bounded offline catch-up continue. Seven causal community job types plus original named inventory/reputation exchanges. Full faction warfare and richer social behavior remain pending. |
+| Inventory/crafting | Inventoryworks, field inventory, equipment, consumables | Field inventory, weight limits, original alloy-to-ammunition/component recipes and sample analysis connect to actual weapons and repairs. Complete original equipment/consumable parity remains pending. |
+| Architecture/machinery | Building interiors/furniture, power machinery, pathways | Original furnished architecture, working lifts/roof and vessel power systems; new city streets and service routes. Full Machineworks graph, obstacle-aware replanning and passenger transport remain pending. |
 | Multiplayer | Peer-hosted sessions, authority, shared ship stations, lifts | Pending. No multiplayer claim is made. |
-| Browser delivery | WebGL support installed | Browser build succeeds; startup, entry, boarding and launch smoke-tested. Full flight feel, complete missions and sustained performance remain unvalidated. |
+| Delivery | Original browser game | Active deliverable is the Unity project, targeting Windows x64. Browser delivery is dropped. Installer and native-player release testing are deferred until the game is complete. Historical WebGL reports remain for reference. |
 
 Validation files distinguish source preservation, isolated logic checks, and actual runtime tests. A passing logic check is not evidence of game completion or visual quality.
 
@@ -37,4 +37,14 @@ The conversion had reflected mesh positions and normals without correcting trian
 
 Keyboard commands no longer wait for every input to return to neutral after focus/menu transitions. Holding Space continues to provide thrust after launch. Landing retains the speed limit instead of setting it to zero. Mouse steering uses direct angular displacement instead of delayed stick-style acceleration; mouse and controller vertical inversion are separate settings.
 
-`Validation/direction-and-launch.txt` records 23 live controller checks using virtual Input System devices. This does not certify every physical controller or full gameplay parity. The original controls/cargo/weapons and progression checks were rerun as well. A browser startup/boarding/launch smoke test now passes; see Validation/browser-smoke-test.md for remaining limits.
+`Validation/direction-and-launch.txt` records 23 live controller checks using virtual Input System devices. This does not certify every physical controller or full gameplay parity. The original controls/cargo/weapons and progression checks were rerun as well. The historical browser smoke test is retained in Validation/browser-smoke-test.md; it does not validate this revision or the future Windows player.
+
+## Society and deck revision
+
+See [design and implementation notes](ArtDirection/DESIGN_AND_IMPLEMENTATION.md) for the reference study, actual simulation scope, production source and limitations. Dock cargo is now keyed to a settlement as well as a world; crates cannot be collected from a different city.
+
+`Validation/society-and-decks.txt` records settlement migration, job transactions, remote advancement and reachable deck stations. `Validation/society-runtime.txt` records actual MFD raycasts and service-lift movement. The concept overlay and actual Unity renders are under `ArtDirection/`. These checks do not establish that the visual targets or the full original game are complete.
+
+## Project delivery decision
+
+Development continues in Unity 6000.3.25f1 with Windows x64 as the target. No installer is included. Desktop build configuration, file-based saves with a backup, F11 display switching and exit controls are prepared for later standalone builds. The editor still uses its existing local save. `Validation/desktop-project.txt` records target configuration and isolated file-save checks; no native build or installer result is claimed.

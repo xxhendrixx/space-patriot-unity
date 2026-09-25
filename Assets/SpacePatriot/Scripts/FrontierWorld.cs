@@ -1,3 +1,5 @@
+using System;
+using Random=UnityEngine.Random;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -21,7 +23,7 @@ namespace SpacePatriot
         readonly List<UnityEngine.Object> generatedAssets=new List<UnityEngine.Object>();
         public void Generate(WorldInfo world)
         {
-            info=world;if(content!=null){content.gameObject.SetActive(false);Destroy(content.gameObject);}places.Clear();
+            info=world;var data=FrontierGame.Instance.save;settlement=Array.Find(SocietyEconomy.Catalog,c=>c.id==data.settlement&&c.world==world.id)??Array.Find(SocietyEconomy.Catalog,c=>c.primary&&c.world==world.id);data.settlement=settlement.id;if(content!=null){content.gameObject.SetActive(false);Destroy(content.gameObject);}places.Clear();
             foreach(var asset in generatedAssets)if(asset!=null)Destroy(asset);generatedAssets.Clear();
             content=Root(world.name+" / frontier",transform);Random.InitState(world.seed);
             RenderSettings.ambientMode=AmbientMode.Trilight;RenderSettings.ambientSkyColor=new Color(.68f,.72f,.77f);
@@ -46,8 +48,9 @@ namespace SpacePatriot
                 if(p.magnitude<110||Vector3.Distance(new Vector3(p.x,0,p.z),new Vector3(outpost.x,0,outpost.z))<65)continue;
                 p.y=Height(p.x,p.z);Rock(p,Random.Range(.8f,4));
             }
+            CityDistricts();BiomePopulation();
             // One combined static set avoids issuing a draw for every bolt and beam.
-            var staticObjects=new List<GameObject>();foreach(var renderer in content.GetComponentsInChildren<MeshRenderer>()){renderer.gameObject.isStatic=renderer.GetComponentInParent<HangarLift>()==null&&renderer.GetComponent<BuildingLiftPart>()==null;if(renderer.gameObject.isStatic&&renderer.gameObject.name!="Continuous spherical terrain")staticObjects.Add(renderer.gameObject);}
+            var staticObjects=new List<GameObject>();foreach(var renderer in content.GetComponentsInChildren<MeshRenderer>()){renderer.gameObject.isStatic=renderer.GetComponentInParent<HangarLift>()==null&&renderer.GetComponent<BuildingLiftPart>()==null&&renderer.GetComponentInParent<DistrictShuttle>()==null;if(renderer.gameObject.isStatic&&renderer.gameObject.name!="Continuous spherical terrain")staticObjects.Add(renderer.gameObject);}
             StaticBatchingUtility.Combine(staticObjects.ToArray(),content.gameObject);
             BuildOrbit();
             grass=new GameObject("Grassworks / regional vegetation").AddComponent<Grassworks>();grass.transform.SetParent(content);grass.Initialize(this);
@@ -57,7 +60,7 @@ namespace SpacePatriot
         void Rock(Vector3 p,float scale)
         {
             var go=GameObject.CreatePrimitive(PrimitiveType.Sphere);go.name="Eroded outcrop";go.transform.SetParent(content);go.transform.position=p;go.transform.localScale=new Vector3(scale*3,scale*1.7f,scale*2.1f);go.transform.rotation=Random.rotation;
-            Object.Destroy(go.GetComponent<Collider>());go.GetComponent<Renderer>().sharedMaterial=Metal(info.id+" stone",info.Surface*.71f,.05f,.94f);
+            UnityEngine.Object.Destroy(go.GetComponent<Collider>());go.GetComponent<Renderer>().sharedMaterial=Metal(info.id+" stone",info.Surface*.71f,.05f,.94f);
             var rockMesh=UnityEngine.Object.Instantiate(go.GetComponent<MeshFilter>().sharedMesh);var rockVertices=rockMesh.vertices;
             for(int v=0;v<rockVertices.Length;v++){var a=rockVertices[v];float f=.75f+Mathf.PerlinNoise(a.x*7+6,a.y*6+a.z*3+9)*.55f;rockVertices[v]=a*f;}
             rockMesh.vertices=rockVertices;rockMesh.RecalculateNormals();rockMesh.RecalculateBounds();go.GetComponent<MeshFilter>().sharedMesh=rockMesh;generatedAssets.Add(rockMesh);
@@ -112,4 +115,5 @@ namespace SpacePatriot
         }
     }
 }
+
 

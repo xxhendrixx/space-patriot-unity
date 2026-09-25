@@ -56,7 +56,7 @@ namespace SpacePatriot
     public partial class FrontierGame
     {
         float marketAccumulator;
-        void TickEconomy(float dt){if(!started||menu||dead)return;marketAccumulator+=dt;if(marketAccumulator<.5f)return;FrontierEconomy.Tick(save,worlds,marketAccumulator);marketAccumulator=0;}
+        void TickEconomy(float dt){if(!started)return;marketAccumulator+=dt;if(marketAccumulator<.5f)return;FrontierEconomy.Tick(save,worlds,marketAccumulator);marketAccumulator=0;}
         void ContractsPanel()
         {
             Text("FREIGHT CONTRACTS / "+CurrentWorld.name.ToUpperInvariant(),400,235,910,29,17,amber,true);

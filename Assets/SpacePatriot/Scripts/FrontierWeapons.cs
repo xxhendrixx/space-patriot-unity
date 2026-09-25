@@ -65,7 +65,7 @@ namespace SpacePatriot
         {if(r.dead)return;r.hp-=amount;Sound(impactClip,.25f);if(r.hp>0)return;r.dead=true;Burst(r.body.position);Destroy(r.body.gameObject);save.kills++;save.credits+=90;Signal("combat");Save();Toast("Hostile disabled. Recovery contract +90 cr.");}
         void WeaponsHud()
         {
-            if(!started||menu)return;string ammo=Weapon.id=="laser"?capacitor.ToString("0")+"%":Ammo.mag+" / "+Ammo.reserve;
+            if(!started||menu||cockpit&&!walking&&!aboard&&!armed)return;string ammo=Weapon.id=="laser"?capacitor.ToString("0")+"%":Ammo.mag+" / "+Ammo.reserve;
             Text(Weapon.name+"   "+ammo+"   "+(reloadRemaining>0?"RELOADING":armed?"ARMED":"SAFE"),465,794,510,30,14,amber,true,TextAnchor.UpperCenter);
             if(selectedTarget!=null&&!selectedTarget.dead){Marker("TARGET / "+selectedTarget.hp.ToString("0")+"%",selectedTarget.body.position,amber);if(Weapon.id=="missile")Text("SEEKER  "+(lockProgress*100).ToString("0")+"%",500,600,440,30,16,amber,true,TextAnchor.MiddleCenter);}
         }

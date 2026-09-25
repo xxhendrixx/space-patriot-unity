@@ -21,16 +21,8 @@ public static class FrontierBuild
         pipeline.renderScale=.9f;pipeline.msaaSampleCount=2;pipeline.shadowDistance=180;
         GraphicsSettings.defaultRenderPipeline=pipeline;QualitySettings.renderPipeline=pipeline;EditorUtility.SetDirty(pipeline);
         QualitySettings.shadowDistance=180;QualitySettings.shadowResolution=UnityEngine.ShadowResolution.High;QualitySettings.antiAliasing=2;
-        PlayerSettings.companyName="Space Patriot";PlayerSettings.productName="Space Patriot";PlayerSettings.bundleVersion="0.1.0";
-        PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
-        PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Gzip;
-        PlayerSettings.WebGL.decompressionFallback=false;
-        PlayerSettings.WebGL.dataCaching=true;PlayerSettings.WebGL.initialMemorySize=256;PlayerSettings.WebGL.maximumMemorySize=1024;
-        PlayerSettings.WebGL.exceptionSupport=WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
-        PlayerSettings.WebGL.template="PROJECT:SpacePatriot";
-        PlayerSettings.defaultWebScreenWidth=1440;PlayerSettings.defaultWebScreenHeight=900;
-        PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.WebGL,ScriptingImplementation.IL2CPP);
-        PlayerSettings.SetManagedStrippingLevel(UnityEditor.Build.NamedBuildTarget.WebGL,ManagedStrippingLevel.Low);
+        ConfigureDesktopTarget();
+        PlayerSettings.colorSpace=ColorSpace.Linear;
         foreach(var file in Directory.GetFiles("Assets/SpacePatriot/Resources/Surfaces","*.jpg"))
         {
             var importer=AssetImporter.GetAtPath(file.Replace('\\','/')) as TextureImporter;
@@ -99,6 +91,27 @@ public static class FrontierBuild
         Directory.CreateDirectory("Validation");File.WriteAllText("Validation/progression.txt",report);Debug.Log("SPACE_PATRIOT_VALIDATION_PASS "+passed);
     }
     static void Assert(bool condition,string message){if(!condition)throw new Exception("Validation failed: "+message);}
+    [MenuItem("Space Patriot/Build Windows desktop")]
+    public static void BuildWindows()
+    {
+        Validate();
+        ConfigureDesktopTarget();
+        Directory.CreateDirectory("../Windows/SpacePatriot");
+        var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName="../Windows/SpacePatriot/SpacePatriot.exe",target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
+        if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Windows build failed: "+report.summary.result);
+        File.WriteAllText("Validation/windows-build.txt","PASS: Windows x64 desktop player / Mono / Direct3D 11. Total output bytes: "+report.summary.totalSize+"\n");
+        AssetDatabase.SaveAssets();Debug.Log("SPACE_PATRIOT_WINDOWS_BUILD_SUCCESS bytes="+report.summary.totalSize);
+    }
+    public static void ConfigureDesktopTarget()
+    {
+        PlayerSettings.companyName="Space Patriot";PlayerSettings.productName="Space Patriot";PlayerSettings.bundleVersion="0.2.0";
+        PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Standalone,ScriptingImplementation.Mono2x);
+        PlayerSettings.SetManagedStrippingLevel(UnityEditor.Build.NamedBuildTarget.Standalone,ManagedStrippingLevel.Disabled);
+        PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.defaultScreenWidth=1440;PlayerSettings.defaultScreenHeight=900;
+        PlayerSettings.resizableWindow=true;PlayerSettings.runInBackground=true;
+        PlayerSettings.usePlayerLog=true;PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.StandaloneWindows64,false);
+        PlayerSettings.SetGraphicsAPIs(BuildTarget.StandaloneWindows64,new[]{GraphicsDeviceType.Direct3D11});
+    }
     [MenuItem("Space Patriot/Build browser")]
     public static void BuildWeb()
     {
