@@ -21,6 +21,15 @@ Grassworks, Spellworks, terrain, weather, ocean and fire behavior now have nativ
 
 Install Unity 6000.3.25f1 with Web Build Support, open this project and let its pinned packages import. Choose **Space Patriot > Build browser**. The build is written to a sibling `Browser` folder and requires an HTTP server that serves `.gz` files with the matching `Content-Encoding: gzip` and MIME type.
 
+From the project directory, run `python Tools/serve_game.py`, then open `http://127.0.0.1:8791`. This development server binds only to this computer.
+
 Unity caches, local settings, generated browser builds and credentials are excluded from version control. Public source availability does not grant a new license; existing asset and package terms still apply.
 
 Validation reports live under `Validation/`. Tests using virtual input devices exercise the running controller code, but do not replace hands-on testing. No validated WebGL build is included yet.
+
+## Current visual revision
+
+Editor captures of the refitted chassis and continuous terrain. These are work in progress, not final artwork.
+
+![Ten industrial chassis refits](Validation/refit-fleet.png)
+![Continuous planetary terrain](Validation/continuous-planet.png)
