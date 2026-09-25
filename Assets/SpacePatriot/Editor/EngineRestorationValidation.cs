@@ -8,6 +8,20 @@ using Object=UnityEngine.Object;
 public static class EngineRestorationValidation
 {
     static void Check(bool ok,string message,List<string> lines){if(!ok)throw new Exception(message);lines.Add("PASS: "+message);}
+    public static void SourceWorldFields()
+    {
+        var catalog=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text);var lines=new List<string>();int solids=0;
+        foreach(var w in catalog.worlds)
+        {
+            var field=new WorldworksTerrain(w.id);
+            if(w.biome=="gas"){Check(field.resolution==0,"Gas world has no solid-terrain field: "+w.id,lines);continue;}
+            Check(field.resolution==129&&field.size==5760&&field.seed==unchecked((uint)w.seed),"Source-seeded 129 x 129 Worldworks/Terrainworks field: "+w.id,lines);solids++;
+        }
+        Check(solids==13,"13 solid worlds have source terrain fields",lines);
+        string[,] families={{"trappist-1-b","volcanic"},{"trappist-1-f","ice"},{"trappist-1-g","ice"},{"wasp-76-b","gas"},{"trappist-1-h","rock"}};
+        for(int i=0;i<families.GetLength(0);i++){var w=Array.Find(catalog.worlds,x=>x.id==families[i,0]);Check(w!=null&&w.biome==families[i,1],"Original biome family restored: "+families[i,0]+" / "+families[i,1],lines);}
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/source-world-fields.txt",lines);Debug.Log("SOURCE_WORLD_FIELDS_PASS "+lines.Count);
+    }
     public static void Streaming()
     {
         var g=FrontierGame.Instance;if(g==null)throw new Exception("Enter Play mode first");var lines=new List<string>();
@@ -25,7 +39,7 @@ public static class EngineRestorationValidation
         var g=FrontierGame.Instance;if(g==null)throw new Exception("Enter Play mode first");var lines=new List<string>();
         int worlds=0;foreach(var w in g.worlds){if(w.biome=="gas")continue;var field=new WorldworksTerrain(w.id);Check(field.resolution==129&&field.size==5760,"Original terrain field loaded: "+w.id,lines);worlds++;}
         for(int i=0;i<8;i++)g.combustion.Ignite(g.ship.position+Vector3.forward*30);Check(g.combustion.ActiveCount==6,"Fireworks recycles six causal emitter slots",lines);
-        Check(worlds==14,"14 solid worlds use compiled original engine fields",lines);
+        Check(worlds==13,"13 solid worlds use compiled original engine fields",lines);
         var ground=GameObject.Find("Continuous spherical terrain").GetComponent<MeshFilter>().sharedMesh;
         var v=ground.vertices;var ix=ground.triangles;var edges=new Dictionary<ulong,int>();
         void Edge(int a,int b){uint lo=(uint)Math.Min(a,b),hi=(uint)Math.Max(a,b);ulong k=((ulong)lo<<32)|hi;edges[k]=edges.GetValueOrDefault(k)+1;}
