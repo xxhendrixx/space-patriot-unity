@@ -36,6 +36,12 @@ Validation reports live under `Validation/`. Virtual-device tests exercise the r
 
 ## Current visual revision
 
+The first **locally generated mesh** is available in the art lab: [Kestrel drive trial](ArtDirection/Generated/KestrelDrive/VISUAL_REVIEW.md), [editable Blender file](ArtDirection/Generated/KestrelDrive/Kestrel_Drive.blend), and [artwork/mesh comparison](ArtDirection/local-mesh-review.html). TripoSG generated the geometry locally on an RTX 5060 Ti; Blender cleanup, three LODs, a mechanical rig and Unity animation import are verified. It remains an untextured candidate with softened details and an invented rear assembly. It has not replaced the live fleet.
+
+The working tools and pinned Windows environment are in [Tools/LocalMeshes](Tools/LocalMeshes). The installed neural model is an offline asset-authoring tool; it is not included in the game or this repository.
+
+![Locally generated Kestrel engine after Blender cleanup](ArtDirection/Generated/KestrelDrive/quarter.png)
+
 Editor captures of the refitted chassis and continuous terrain. These are work in progress, not final artwork.
 
 ![Current Meridian exterior in Unity](ArtDirection/Renders/refit-9.png)

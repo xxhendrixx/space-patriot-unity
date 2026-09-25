@@ -1,0 +1,17 @@
+{
+  "source": "raw.glb",
+  "source_faces": 1563453,
+  "lod_faces": [
+    44999,
+    15000,
+    4999
+  ],
+  "nominal_metres": 6.0,
+  "clips": [
+    "Flight",
+    "Landing"
+  ],
+  "rig": "Rigid DriveGimbal under Mount",
+  "materials": "Inspection clay; production UVs and materials pending",
+  "status": "Candidate for visual review"
+}

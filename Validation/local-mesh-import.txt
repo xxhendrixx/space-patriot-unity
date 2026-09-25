@@ -1,0 +1,5 @@
+PASS: actual local model FBX imported.
+LOD triangles: 44999, 15000, 4999
+Longest extent: 5.999561 metres
+Flight and Landing clips present; hinge travel: 90.00001 degrees
+Inspection material only; candidate is not yet installed in the live fleet.

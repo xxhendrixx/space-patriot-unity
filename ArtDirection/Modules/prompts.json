@@ -1,0 +1,19 @@
+{
+  "tool": "built-in image_gen",
+  "purpose": "Isolated reference for local artwork-to-mesh generation",
+  "references": [
+    "../fleet-target.png"
+  ],
+  "concepts": [
+    {
+      "file": "kestrel-drive-reference.png",
+      "prompt": "Create one production reference image for local image-to-3D reconstruction. Reference: the TOP LEFT KESTREL courier ship on the supplied Space Patriot fleet concept sheet; ignore all other ships. Isolate and faithfully reproduce ONE of Kestrel's large upper engine nacelles as a complete standalone component, detached from the ship, with all of its casing visible, including front inlet, side panel surfaces, underside mounting saddle and rear nozzle. Maintain the reference's grounded industrial design: worn ivory enamel over metal, mustard maintenance band, black segmented heat-resistant rear casing, deep round dark intake in a rounded rectangular pod, protective bolted rim, layered service covers, exposed side conduits, compact industrial turbine structure. Intricate functional hard-surface detail with legible hierarchy. The nacelle is one connected mechanical module, not an exploded view. Clean three-quarter front-and-side view with minimal perspective, centered and occupying 80% of a square frame, showing its full silhouette with wide clearance around it. Soft neutral studio light, NO glow, NO fire, NO surrounding ship, NO floor or ground shadow, NO labels or writing, NO graphic layout, NO logos. Genuinely transparent background with alpha. This is an asset reference matching the existing ship, not a redesign.",
+      "status": "RGB checkerboard output; superseded by v2 for model input"
+    },
+    {
+      "file": "kestrel-drive-reference-v2.png",
+      "reference": "kestrel-drive-reference.png",
+      "prompt": "Keep this exact industrial spacecraft engine nacelle unchanged in geometry, proportions, camera angle, worn ivory and mustard paint, black casing, and intricate surface detail. Replace the entire visible checkerboard background with a completely uniform PURE WHITE background (#FFFFFF). No checkerboard, no gray squares, no transparency preview pattern, no ground shadow, no floor, no extra objects, no labels. Preserve the full nacelle and all of its contours. A single isolated mechanical engine module on solid white, for image-to-3D reconstruction."
+    }
+  ]
+}

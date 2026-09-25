@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Space Patriot — local mesh review</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#14191b;color:#e7e4d7;font:16px/1.5 system-ui}main{max-width:1500px;margin:auto;padding:28px}h1{font-size:26px;margin:0 0 8px}p{max-width:850px;color:#b9c4c4}nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,a{color:inherit}button{padding:10px 16px;border:1px solid #526161;background:#243031;cursor:pointer}button[aria-pressed=true]{border-color:#dbb65b;background:#494330}section{display:grid;grid-template-columns:1fr 1fr;gap:20px}figure{margin:0;background:#20272a;border:1px solid #394648;overflow:hidden}img{width:100%;aspect-ratio:1.254;object-fit:contain;display:block}figure:first-child img{background:white}figcaption{padding:16px;font-size:14px}footer{margin-top:22px;color:#b9c4c4;font-size:14px}@media(max-width:800px){section{grid-template-columns:1fr}}
+</style>
+<main>
+<h1>Kestrel drive / artwork-to-mesh review</h1>
+<p>One isolated engine module generated locally with TripoSG, then cleaned and rigged in Blender. Inspect the shape from multiple directions before approving it for a ship. The neutral material exposes geometry; this is not a finished textured asset.</p>
+<nav aria-label="Inspection view">
+<button data-file="quarter.png" aria-pressed="true">Blender quarter</button>
+<button data-file="front.png" aria-pressed="false">Blender front</button>
+<button data-file="rear.png" aria-pressed="false">Blender rear</button>
+<button data-file="unity-0.png" aria-pressed="false">Unity view 1</button>
+<button data-file="unity-1.png" aria-pressed="false">Unity view 2</button>
+</nav>
+<section>
+<figure><img src="Modules/kestrel-drive-reference-v2.png" alt="Worn ivory and ochre engine concept with layered black casing"><figcaption>Input artwork — single module, isolated background.</figcaption></figure>
+<figure><img id="mesh" src="Generated/KestrelDrive/quarter.png" alt="Actual generated mesh inspection render"><figcaption id="caption">Blender quarter — actual mesh, neutral inspection material.</figcaption></figure>
+</section>
+<footer>Views use different camera angles; they are a visual inspection, not a registered pixel comparison. Check intake depth, casing profile, mounting saddle and rear structure. <a href="Generated/KestrelDrive/raw.generation.json">Generation measurements</a> · <a href="Generated/KestrelDrive/blender-report.json">Blender report</a> · <a href="Generated/KestrelDrive/Kestrel_Drive.blend">Editable Blender source</a></footer>
+</main>
+<script>
+for(const button of document.querySelectorAll('button'))button.addEventListener('click',()=>{
+ document.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+ document.querySelector('#mesh').src='Generated/KestrelDrive/'+button.dataset.file;
+ document.querySelector('#caption').textContent=button.textContent+' — actual mesh, neutral inspection material.';
+});
+</script>
+</html>

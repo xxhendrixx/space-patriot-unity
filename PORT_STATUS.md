@@ -31,6 +31,10 @@ The direction remains grounded industrial science fiction, a Unity project targe
 
 Validation files distinguish source preservation, isolated logic checks, and actual runtime tests. A passing logic check is not evidence of game completion or visual quality.
 
+## Local mesh authoring trial
+
+TripoSG now runs locally on the development GPU. An isolated Kestrel engine reference produced a real mesh in 66.95 seconds using 5.68 GiB of allocated GPU memory. Blender cleanup, three LODs, editable rig and Flight/Landing FBX clips are imported and checked in Unity (`Validation/local-mesh-import.txt`). The asset remains in `Assets/SpacePatriot/ArtLab/KestrelDrive`, outside the live fleet. See [visual findings](ArtDirection/Generated/KestrelDrive/VISUAL_REVIEW.md): crisp mechanical edges, correct rear exhaust, separate moving internals, production materials and collision proxies still need work. This proves the modular asset workflow; it does not complete the visual remake.
+
 ## Inversion and controls correction
 
 The conversion had reflected mesh positions and normals without correcting triangle winding. The importer now reconciles each triangle with its transformed normals and replaces existing mesh data. Validation covers 1,246 unique meshes and 760,862 nondegenerate triangles. The cockpit and imported hull were visually inspected after correction; terminal label orientation was corrected in code.
