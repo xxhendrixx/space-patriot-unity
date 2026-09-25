@@ -1,0 +1,4 @@
+# Keep the supplied original files byte-for-byte on every checkout.
+Reference/Original/** -text
+Assets/SpacePatriot/Original/** -text
+*.bytes binary
