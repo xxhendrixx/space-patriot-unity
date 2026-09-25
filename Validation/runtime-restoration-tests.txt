@@ -1,0 +1,24 @@
+PASS Actual A key creates lateral flight thrust
+PASS Actual S key reverses
+PASS Actual Space key creates upward flight thrust
+PASS Actual Ctrl key descends without firing
+PASS Actual decoupled flight preserves lateral motion while accelerating forward
+PASS Actual X key brakes the ship
+PASS Gamepad left stick supplies strafe through actual flight controller
+PASS Gamepad shoulder supplies upward thrust
+PASS Safe weapon cannot expend ammunition
+PASS Actual Y key arms weapons
+PASS Kinetic firing expends one round
+PASS Reload does not grant ammunition immediately
+PASS Reload transfers only the available reserve after its duration
+PASS Actual 2 key selects pulse laser and firing drains capacitor
+PASS Missile launch requires seeker lock
+PASS Open cargo hatch blocks launch
+PASS Loading starts at physical cargo access
+PASS Cargo is not credited before the physical transfer completes
+PASS Completed physical loading updates both inventories
+PASS Unloading starts from a loaded hold
+PASS Completed physical unloading conserves inventory
+PASS Powered launch first raises the home hangar lift
+PASS Flight control transfers after the lift raises and roof clears
+PASS Respawn respects a raised hangar platform

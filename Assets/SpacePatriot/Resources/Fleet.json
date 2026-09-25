@@ -1,0 +1,3404 @@
+{
+  "crafts": [
+    {
+      "id": "LW-S001",
+      "index": 0,
+      "family": 0,
+      "variant": 0,
+      "name": "Strider Chalk",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        21.847619504770265,
+        14.413710616622122,
+        4.669629318197258
+      ],
+      "speed": 248.6065652022138,
+      "acceleration": 33.52039564010687,
+      "turn": 0.955929030869156,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 27.77375939548559,
+      "hyperSpeed": 23.809550023637712,
+      "sweep": 0.48043571807211266,
+      "engineSize": 1.1658372680307365,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.7070212536724284
+    },
+    {
+      "id": "LW-S002",
+      "index": 1,
+      "family": 0,
+      "variant": 1,
+      "name": "Strider Graphite",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        21.846058902884835,
+        14.30865062419325,
+        4.9823916224529965
+      ],
+      "speed": 268.9618862049654,
+      "acceleration": 36.58214382180013,
+      "turn": 0.9794272501021624,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 29.255290978258323,
+      "hyperSpeed": 24.071631720289588,
+      "sweep": 0.39996001602848996,
+      "engineSize": 1.0010237258742563,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.7257986976997927
+    },
+    {
+      "id": "LW-S003",
+      "index": 2,
+      "family": 0,
+      "variant": 2,
+      "name": "Strider Ochre",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        19.75037352247629,
+        15.321828385442497,
+        4.741975053399802
+      ],
+      "speed": 245.29427080545574,
+      "acceleration": 32.1872070853319,
+      "turn": 1.021496592843905,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 30.904789098732486,
+      "hyperSpeed": 25.081857157871127,
+      "sweep": 0.3343289381591603,
+      "engineSize": 1.1516415888210758,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9644821738358587
+    },
+    {
+      "id": "LW-S004",
+      "index": 3,
+      "family": 0,
+      "variant": 3,
+      "name": "Strider Glacier",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        20.44158566790633,
+        15.289486822951586,
+        4.839258664287627
+      ],
+      "speed": 264.1661198657006,
+      "acceleration": 35.559516769591724,
+      "turn": 0.9459279034286737,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 31.914854302497893,
+      "hyperSpeed": 21.3836815264076,
+      "sweep": 0.6867482058471068,
+      "engineSize": 0.9744829198811202,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8293574532261118
+    },
+    {
+      "id": "LW-S005",
+      "index": 4,
+      "family": 0,
+      "variant": 4,
+      "name": "Strider Oxide",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        19.873426582524555,
+        12.726465143635869,
+        5.156315939500928
+      ],
+      "speed": 256.01941240876914,
+      "acceleration": 33.070148364324126,
+      "turn": 0.991142338104546,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 28.97678280969073,
+      "hyperSpeed": 21.078858077526093,
+      "sweep": 0.7469019527197815,
+      "engineSize": 0.9460190476733259,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8927068947581573
+    },
+    {
+      "id": "LW-S006",
+      "index": 5,
+      "family": 0,
+      "variant": 5,
+      "name": "Strider Olive",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        24.18568176276982,
+        14.874360471870748,
+        4.9855241264216605
+      ],
+      "speed": 255.96511217635123,
+      "acceleration": 32.12794254466891,
+      "turn": 0.9980071015749126,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 30.841704801190645,
+      "hyperSpeed": 19.602619789540768,
+      "sweep": 0.6656289534643293,
+      "engineSize": 1.1472481717704794,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.982597440178506
+    },
+    {
+      "id": "LW-S007",
+      "index": 6,
+      "family": 0,
+      "variant": 6,
+      "name": "Strider Titanium",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        22.12151464488357,
+        12.618363889306783,
+        5.004189263633453
+      ],
+      "speed": 274.130647643283,
+      "acceleration": 35.69988132508472,
+      "turn": 1.0378281123097985,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 29.376249267564468,
+      "hyperSpeed": 26.62233926076442,
+      "sweep": 0.3597227512509562,
+      "engineSize": 0.9645864422200248,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9330126003595068
+    },
+    {
+      "id": "LW-S008",
+      "index": 7,
+      "family": 0,
+      "variant": 7,
+      "name": "Strider Cobalt",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        21.902720930408684,
+        13.497625787090511,
+        5.142715674475768
+      ],
+      "speed": 274.00403963625433,
+      "acceleration": 35.96170814706013,
+      "turn": 0.965464490475133,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 26.081744682664674,
+      "hyperSpeed": 25.443036536686122,
+      "sweep": 0.2625688754953444,
+      "engineSize": 1.19128217297839,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8652345556998625
+    },
+    {
+      "id": "LW-S009",
+      "index": 8,
+      "family": 0,
+      "variant": 8,
+      "name": "Strider Bone",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        23.8252928004507,
+        14.407588468119501,
+        4.785399542283267
+      ],
+      "speed": 269.07778647206726,
+      "acceleration": 31.846774987559765,
+      "turn": 1.02216278209351,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 28.807151669908006,
+      "hyperSpeed": 16.560681199654937,
+      "sweep": 0.338347305636853,
+      "engineSize": 1.0334671024698765,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.7366473075933754
+    },
+    {
+      "id": "LW-S010",
+      "index": 9,
+      "family": 0,
+      "variant": 9,
+      "name": "Strider Obsidian",
+      "className": "Survey ship",
+      "description": "A balanced survey vessel. Twin nacelles, a panoramic flight deck, and stable low-altitude handling.",
+      "dimensions": [
+        24.54200419184286,
+        12.639658926334233,
+        5.142506888881327
+      ],
+      "speed": 255.39287133589386,
+      "acceleration": 32.252777352957054,
+      "turn": 0.9570769118890166,
+      "capacity": 32,
+      "engines": 2,
+      "mass": 29.35331718421852,
+      "hyperSpeed": 23.45256366673857,
+      "sweep": 0.30463063401402907,
+      "engineSize": 1.014536607824266,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9870565750170499
+    },
+    {
+      "id": "LW-S011",
+      "index": 10,
+      "family": 1,
+      "variant": 0,
+      "name": "Kite Chalk",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        18.35286884135101,
+        17.351139561831953,
+        4.009102885548957
+      ],
+      "speed": 397.3464216719381,
+      "acceleration": 59.01752807133366,
+      "turn": 1.3066841646395624,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 20.30014623612631,
+      "hyperSpeed": 18.985211395844818,
+      "sweep": 0.6899003018741496,
+      "engineSize": 1.1274688380304725,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.7960129561601207
+    },
+    {
+      "id": "LW-S012",
+      "index": 11,
+      "family": 1,
+      "variant": 1,
+      "name": "Kite Graphite",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        16.174070911512246,
+        17.757136834971607,
+        4.046490296536125
+      ],
+      "speed": 396.9744589012116,
+      "acceleration": 57.72700201268308,
+      "turn": 1.4100440565221943,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 19.568700659202875,
+      "hyperSpeed": 17.84100968502462,
+      "sweep": 0.2770995735423639,
+      "engineSize": 0.9213353911880403,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8582043577218428
+    },
+    {
+      "id": "LW-S013",
+      "index": 12,
+      "family": 1,
+      "variant": 2,
+      "name": "Kite Ochre",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        18.953677809331566,
+        17.64050553403795,
+        3.6355553700532766
+      ],
+      "speed": 381.30570488814266,
+      "acceleration": 57.4127588863438,
+      "turn": 1.3914445155467836,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 23.31148455727729,
+      "hyperSpeed": 22.199388378486038,
+      "sweep": 0.3420983325340785,
+      "engineSize": 1.0192072816658766,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9416060698451474
+    },
+    {
+      "id": "LW-S014",
+      "index": 13,
+      "family": 1,
+      "variant": 3,
+      "name": "Kite Glacier",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        15.60037256601965,
+        19.32637228583917,
+        3.9744663069788366
+      ],
+      "speed": 413.1348375384695,
+      "acceleration": 63.55705095421523,
+      "turn": 1.3543259581667373,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 20.724203471821966,
+      "hyperSpeed": 18.378544203191996,
+      "sweep": 0.4415107518900186,
+      "engineSize": 1.154330816003494,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9095189977902919
+    },
+    {
+      "id": "LW-S015",
+      "index": 14,
+      "family": 1,
+      "variant": 4,
+      "name": "Kite Oxide",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        18.77571887729224,
+        18.367637837771326,
+        4.022813691347838
+      ],
+      "speed": 409.09987237527963,
+      "acceleration": 58.90618888923433,
+      "turn": 1.3578525225101037,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 21.752481340578523,
+      "hyperSpeed": 28.709610107541085,
+      "sweep": 0.4467486989102326,
+      "engineSize": 1.1491617989959195,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8653244095155969
+    },
+    {
+      "id": "LW-S016",
+      "index": 15,
+      "family": 1,
+      "variant": 5,
+      "name": "Kite Olive",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        17.658521401851903,
+        18.73997462829575,
+        3.7059750275090337
+      ],
+      "speed": 373.70548105901105,
+      "acceleration": 59.83976355331484,
+      "turn": 1.42896664764639,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 19.926612067110835,
+      "hyperSpeed": 23.45133710205555,
+      "sweep": 0.43258124437415973,
+      "engineSize": 0.913650150259491,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.8448578706942498
+    },
+    {
+      "id": "LW-S017",
+      "index": 16,
+      "family": 1,
+      "variant": 6,
+      "name": "Kite Titanium",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        18.785095894306433,
+        17.783181958738716,
+        3.912679359231144
+      ],
+      "speed": 410.8698881023563,
+      "acceleration": 55.08763914091047,
+      "turn": 1.3685685103274883,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 23.749277877537533,
+      "hyperSpeed": 22.565571451745928,
+      "sweep": 0.7131202334654518,
+      "engineSize": 1.0619973720982672,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.7601505846716463
+    },
+    {
+      "id": "LW-S018",
+      "index": 17,
+      "family": 1,
+      "variant": 7,
+      "name": "Kite Cobalt",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        17.523021289205644,
+        19.76436849022284,
+        4.060662163428963
+      ],
+      "speed": 370.9864319602959,
+      "acceleration": 63.81487625473644,
+      "turn": 1.28676747106947,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 22.583138208881717,
+      "hyperSpeed": 22.27327860724181,
+      "sweep": 0.2535596449044533,
+      "engineSize": 0.9075159271946177,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0011502928100526
+    },
+    {
+      "id": "LW-S019",
+      "index": 18,
+      "family": 1,
+      "variant": 8,
+      "name": "Kite Bone",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        17.651668471556622,
+        18.51783585716039,
+        3.685370902033523
+      ],
+      "speed": 373.23617240292947,
+      "acceleration": 58.68484890001826,
+      "turn": 1.309073034489993,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 21.564577542732003,
+      "hyperSpeed": 20.264538281783462,
+      "sweep": 0.5288735414505936,
+      "engineSize": 1.183407640340738,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9459194688824937
+    },
+    {
+      "id": "LW-S020",
+      "index": 19,
+      "family": 1,
+      "variant": 9,
+      "name": "Kite Obsidian",
+      "className": "Interceptor",
+      "description": "Swept wings and a narrow spine. Fast response and strong braking; a small cargo hold.",
+      "dimensions": [
+        15.17954864833271,
+        17.53066115146503,
+        3.9337023766450585
+      ],
+      "speed": 394.1019321799278,
+      "acceleration": 63.6108489037538,
+      "turn": 1.3678754929262211,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 22.27016564395744,
+      "hyperSpeed": 21.949905112572015,
+      "sweep": 0.5795433945138939,
+      "engineSize": 0.8536237785476259,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9198147329501807
+    },
+    {
+      "id": "LW-S021",
+      "index": 20,
+      "family": 2,
+      "variant": 0,
+      "name": "Mule Chalk",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        34.09256804665318,
+        22.4067589469254,
+        7.53174953722395
+      ],
+      "speed": 173.96547784539868,
+      "acceleration": 20.477525976393373,
+      "turn": 0.6259069329961203,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 105.72535089318174,
+      "hyperSpeed": 20.04593707472086,
+      "sweep": 0.37800467993365605,
+      "engineSize": 0.9896586773684248,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8442382063250988
+    },
+    {
+      "id": "LW-S022",
+      "index": 21,
+      "family": 2,
+      "variant": 1,
+      "name": "Mule Graphite",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        35.13328412616625,
+        23.67947164364159,
+        7.472709860872477
+      ],
+      "speed": 183.27323084836823,
+      "acceleration": 21.705117120966317,
+      "turn": 0.6307785425081849,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 104.1288076607487,
+      "hyperSpeed": 23.34467858672142,
+      "sweep": 0.4925755970878527,
+      "engineSize": 1.1078731229412369,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.7664666819153354
+    },
+    {
+      "id": "LW-S023",
+      "index": 22,
+      "family": 2,
+      "variant": 2,
+      "name": "Mule Ochre",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        29.88211430126801,
+        21.25996043747291,
+        7.691095758186653
+      ],
+      "speed": 180.1243163361214,
+      "acceleration": 18.730247012432667,
+      "turn": 0.6654088402002118,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 93.83849486244841,
+      "hyperSpeed": 19.904689140059055,
+      "sweep": 0.6578557048342191,
+      "engineSize": 1.0319584496784955,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9128064051037654
+    },
+    {
+      "id": "LW-S024",
+      "index": 23,
+      "family": 2,
+      "variant": 3,
+      "name": "Mule Glacier",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        34.99623753722291,
+        21.771751733869316,
+        7.740427144927905
+      ],
+      "speed": 175.85035750456154,
+      "acceleration": 21.379601105116308,
+      "turn": 0.6190362565384246,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 98.94134801468113,
+      "hyperSpeed": 30.01614480596036,
+      "sweep": 0.5127174853696488,
+      "engineSize": 1.0972130159032532,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.006513597466983
+    },
+    {
+      "id": "LW-S025",
+      "index": 24,
+      "family": 2,
+      "variant": 4,
+      "name": "Mule Oxide",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        34.88282448322512,
+        22.641027394216508,
+        7.278645837388933
+      ],
+      "speed": 164.69603598420508,
+      "acceleration": 18.7159273439087,
+      "turn": 0.6306271152944304,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 101.84131064683432,
+      "hyperSpeed": 19.728505282104017,
+      "sweep": 0.6117761234636419,
+      "engineSize": 1.0066821053624153,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0137547466671095
+    },
+    {
+      "id": "LW-S026",
+      "index": 25,
+      "family": 2,
+      "variant": 5,
+      "name": "Mule Olive",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        30.43024165604962,
+        20.753320509754122,
+        7.320393712868914
+      ],
+      "speed": 177.98151689348742,
+      "acceleration": 18.787030100636184,
+      "turn": 0.6491229311359115,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 98.88903754066675,
+      "hyperSpeed": 26.487452653609218,
+      "sweep": 0.42743686158210037,
+      "engineSize": 1.1128335076384246,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.8451249560108408
+    },
+    {
+      "id": "LW-S027",
+      "index": 26,
+      "family": 2,
+      "variant": 6,
+      "name": "Mule Titanium",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        31.12250443277182,
+        24.130114739108834,
+        7.205093627363443
+      ],
+      "speed": 174.04748252616264,
+      "acceleration": 21.309304036200047,
+      "turn": 0.5922947327138856,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 106.83745360884349,
+      "hyperSpeed": 23.325421686656775,
+      "sweep": 0.4568693716893904,
+      "engineSize": 1.115636716550216,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9693831733195111
+    },
+    {
+      "id": "LW-S028",
+      "index": 27,
+      "family": 2,
+      "variant": 7,
+      "name": "Mule Cobalt",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        34.282967659465506,
+        21.66108866715804,
+        7.632362010795623
+      ],
+      "speed": 176.17838108283468,
+      "acceleration": 20.595216407906264,
+      "turn": 0.6281710974175483,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 109.50001642816234,
+      "hyperSpeed": 22.25889027528465,
+      "sweep": 0.26146145979873836,
+      "engineSize": 0.9900973650044761,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0039851347682998
+    },
+    {
+      "id": "LW-S029",
+      "index": 28,
+      "family": 2,
+      "variant": 8,
+      "name": "Mule Bone",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        30.458218759289014,
+        21.694747456442567,
+        7.679233144493774
+      ],
+      "speed": 183.3002979324665,
+      "acceleration": 20.892604005616157,
+      "turn": 0.6518020917247049,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 108.16183525212807,
+      "hyperSpeed": 19.850260033644737,
+      "sweep": 0.7552122714114375,
+      "engineSize": 0.9697172248386777,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9844343611272052
+    },
+    {
+      "id": "LW-S030",
+      "index": 29,
+      "family": 2,
+      "variant": 9,
+      "name": "Mule Obsidian",
+      "className": "Freighter",
+      "description": "A heavy modular cargo frame. Four engines compensate for mass; plan your braking distance.",
+      "dimensions": [
+        30.396431627855637,
+        20.32388710426167,
+        7.10732664911449
+      ],
+      "speed": 176.14572837669402,
+      "acceleration": 20.900000730901954,
+      "turn": 0.6560119127548298,
+      "capacity": 64,
+      "engines": 4,
+      "mass": 109.61005976019426,
+      "hyperSpeed": 24.52030860669911,
+      "sweep": 0.7154366804054006,
+      "engineSize": 0.9621568567119538,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8191958899609745
+    },
+    {
+      "id": "LW-S031",
+      "index": 30,
+      "family": 3,
+      "variant": 0,
+      "name": "Wisp Chalk",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        22.04017094708979,
+        11.181218789238482,
+        4.3860627363352105
+      ],
+      "speed": 360.05392243205563,
+      "acceleration": 49.302438885145826,
+      "turn": 1.2989831538056023,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 15.49340828359127,
+      "hyperSpeed": 26.322875475138424,
+      "sweep": 0.33415653444826604,
+      "engineSize": 1.066555246070493,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9766929414821788
+    },
+    {
+      "id": "LW-S032",
+      "index": 31,
+      "family": 3,
+      "variant": 1,
+      "name": "Wisp Graphite",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        21.641182733140884,
+        11.07111117374152,
+        4.000989615906962
+      ],
+      "speed": 345.1406306777149,
+      "acceleration": 46.24253839384299,
+      "turn": 1.234153918211814,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 17.579818245570642,
+      "hyperSpeed": 25.930276202596723,
+      "sweep": 0.6511712026200258,
+      "engineSize": 1.1522342222975568,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.82333757316228
+    },
+    {
+      "id": "LW-S033",
+      "index": 32,
+      "family": 3,
+      "variant": 2,
+      "name": "Wisp Ochre",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        21.37648845477961,
+        9.91669907886535,
+        4.189990965745412
+      ],
+      "speed": 347.4180177346803,
+      "acceleration": 45.99882923297584,
+      "turn": 1.2155069379135965,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 18.569447655975818,
+      "hyperSpeed": 26.55749726630747,
+      "sweep": 0.7311838254681788,
+      "engineSize": 1.0310716550564394,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9865646376274525
+    },
+    {
+      "id": "LW-S034",
+      "index": 33,
+      "family": 3,
+      "variant": 3,
+      "name": "Wisp Glacier",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        18.8669954567682,
+        10.58107236600481,
+        3.935670970014297
+      ],
+      "speed": 356.7016431175638,
+      "acceleration": 52.16655414187815,
+      "turn": 1.2597581158042883,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 17.582847989164293,
+      "hyperSpeed": 23.958815151453017,
+      "sweep": 0.5906546038342639,
+      "engineSize": 1.1624236402101813,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8390480971895158
+    },
+    {
+      "id": "LW-S035",
+      "index": 34,
+      "family": 3,
+      "variant": 4,
+      "name": "Wisp Oxide",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        18.24540850832127,
+        9.940231185918675,
+        4.294708400267177
+      ],
+      "speed": 371.92144240061754,
+      "acceleration": 49.6174683371,
+      "turn": 1.3099497354240155,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 18.409774512588047,
+      "hyperSpeed": 26.04284255262464,
+      "sweep": 0.32802244684426113,
+      "engineSize": 1.0390165071818047,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8464846551651134
+    },
+    {
+      "id": "LW-S036",
+      "index": 35,
+      "family": 3,
+      "variant": 5,
+      "name": "Wisp Olive",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        21.41971291685477,
+        11.915043324418367,
+        4.46579581817519
+      ],
+      "speed": 338.04696989031504,
+      "acceleration": 46.691302969418466,
+      "turn": 1.254063330264762,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 17.779603058774956,
+      "hyperSpeed": 25.855799676477908,
+      "sweep": 0.6176576312165707,
+      "engineSize": 0.8734338667243718,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.010656945523806
+    },
+    {
+      "id": "LW-S037",
+      "index": 36,
+      "family": 3,
+      "variant": 6,
+      "name": "Wisp Titanium",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        21.67508483706042,
+        11.048810816882177,
+        4.057982052139007
+      ],
+      "speed": 344.46602307944556,
+      "acceleration": 48.16292578031775,
+      "turn": 1.2719707761891186,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 17.411773674632425,
+      "hyperSpeed": 23.854254575073718,
+      "sweep": 0.3822588011040352,
+      "engineSize": 1.0915493470150976,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.944993027159944
+    },
+    {
+      "id": "LW-S038",
+      "index": 37,
+      "family": 3,
+      "variant": 7,
+      "name": "Wisp Cobalt",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        19.85921342531219,
+        10.288582047400997,
+        3.978992037101649
+      ],
+      "speed": 368.3498999505304,
+      "acceleration": 50.91064467662946,
+      "turn": 1.2657917269621974,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 17.80022723375587,
+      "hyperSpeed": 31.444793769717215,
+      "sweep": 0.7934978334582411,
+      "engineSize": 1.1755957122193648,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.02395019356627
+    },
+    {
+      "id": "LW-S039",
+      "index": 38,
+      "family": 3,
+      "variant": 8,
+      "name": "Wisp Bone",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        17.903316651750355,
+        10.689731355756521,
+        4.026063966678456
+      ],
+      "speed": 344.17276519387957,
+      "acceleration": 47.978573361174206,
+      "turn": 1.1800442019477486,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 16.7323192747077,
+      "hyperSpeed": 25.36401990018785,
+      "sweep": 0.43124585559125994,
+      "engineSize": 1.1365440722904168,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.8285094319144263
+    },
+    {
+      "id": "LW-S040",
+      "index": 39,
+      "family": 3,
+      "variant": 9,
+      "name": "Wisp Obsidian",
+      "className": "Courier",
+      "description": "A compact twin-boom courier with quick acceleration and economical cruise.",
+      "dimensions": [
+        19.678313570283354,
+        10.664131042407826,
+        4.091307058034466
+      ],
+      "speed": 337.6700679291971,
+      "acceleration": 46.14873529978097,
+      "turn": 1.2882999696768822,
+      "capacity": 28,
+      "engines": 2,
+      "mass": 15.639812470809558,
+      "hyperSpeed": 28.694204294681548,
+      "sweep": 0.27049190633697434,
+      "engineSize": 0.9260193560039625,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9767563540721311
+    },
+    {
+      "id": "LW-S041",
+      "index": 40,
+      "family": 4,
+      "variant": 0,
+      "name": "Manta Chalk",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        24.608224119138903,
+        36.150029616337264,
+        5.460370905106888
+      ],
+      "speed": 242.20006702700627,
+      "acceleration": 29.226938336919993,
+      "turn": 0.8142241121488623,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 98.40578698984814,
+      "hyperSpeed": 30.319976378977298,
+      "sweep": 0.5887202015845105,
+      "engineSize": 1.147974328044802,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8542834866326302
+    },
+    {
+      "id": "LW-S042",
+      "index": 41,
+      "family": 4,
+      "variant": 1,
+      "name": "Manta Graphite",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        24.289197865622118,
+        34.241858752537524,
+        5.145947742421181
+      ],
+      "speed": 263.745707757771,
+      "acceleration": 30.274277316965165,
+      "turn": 0.8658330863052978,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 81.61218444625615,
+      "hyperSpeed": 29.13540033418685,
+      "sweep": 0.42284314656862987,
+      "engineSize": 0.9540601552580483,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9379336966201662
+    },
+    {
+      "id": "LW-S043",
+      "index": 42,
+      "family": 4,
+      "variant": 2,
+      "name": "Manta Ochre",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        28.511901228495407,
+        31.76815393390134,
+        4.868172998990864
+      ],
+      "speed": 257.98736666794866,
+      "acceleration": 32.94262454486918,
+      "turn": 0.876763454647269,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 89.37065052945866,
+      "hyperSpeed": 29.7052829105407,
+      "sweep": 0.4396019795793109,
+      "engineSize": 0.9502569743082858,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.935380740603432
+    },
+    {
+      "id": "LW-S044",
+      "index": 43,
+      "family": 4,
+      "variant": 3,
+      "name": "Manta Glacier",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        24.36366943802219,
+        35.062394273839885,
+        4.960342611001805
+      ],
+      "speed": 235.73728673160073,
+      "acceleration": 30.891017790758053,
+      "turn": 0.8395972156780772,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 86.06311447512125,
+      "hyperSpeed": 32.47559697348625,
+      "sweep": 0.7228812525514514,
+      "engineSize": 1.1595418595708906,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.835451753786765
+    },
+    {
+      "id": "LW-S045",
+      "index": 44,
+      "family": 4,
+      "variant": 4,
+      "name": "Manta Oxide",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        29.15469057452632,
+        31.509454708267004,
+        5.0608744350411
+      ],
+      "speed": 241.49742395151404,
+      "acceleration": 31.548075035535735,
+      "turn": 0.8682919975360855,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 95.85808988881298,
+      "hyperSpeed": 24.24298940580338,
+      "sweep": 0.7318069035070949,
+      "engineSize": 0.9859665230498649,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8462918993551284
+    },
+    {
+      "id": "LW-S046",
+      "index": 45,
+      "family": 4,
+      "variant": 5,
+      "name": "Manta Olive",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        26.991354864144235,
+        33.380433144047856,
+        5.366102622954175
+      ],
+      "speed": 258.20032254559914,
+      "acceleration": 29.072040262809022,
+      "turn": 0.8522067783726378,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 93.95704236300895,
+      "hyperSpeed": 25.57394876219332,
+      "sweep": 0.3778616023948416,
+      "engineSize": 0.9924373389920219,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.8899443999864161
+    },
+    {
+      "id": "LW-S047",
+      "index": 46,
+      "family": 4,
+      "variant": 6,
+      "name": "Manta Titanium",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        26.338462317720985,
+        31.559744474571197,
+        5.02349056407623
+      ],
+      "speed": 252.22942777676505,
+      "acceleration": 29.550628534997816,
+      "turn": 0.8719281705492176,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 90.00288719153731,
+      "hyperSpeed": 24.429594578966498,
+      "sweep": 0.49726091923657806,
+      "engineSize": 1.1977470104349777,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.060115278069861
+    },
+    {
+      "id": "LW-S048",
+      "index": 47,
+      "family": 4,
+      "variant": 7,
+      "name": "Manta Cobalt",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        25.184016002048736,
+        35.881622918602076,
+        5.274965766556562
+      ],
+      "speed": 251.06225920142606,
+      "acceleration": 28.409553185869008,
+      "turn": 0.862391043853946,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 79.60816647701199,
+      "hyperSpeed": 28.372009042464196,
+      "sweep": 0.4908226807252504,
+      "engineSize": 1.0611569309490734,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9628512641414999
+    },
+    {
+      "id": "LW-S049",
+      "index": 48,
+      "family": 4,
+      "variant": 8,
+      "name": "Manta Bone",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        28.42865173329134,
+        34.17102746106684,
+        5.179920516207814
+      ],
+      "speed": 236.7346226866357,
+      "acceleration": 31.520752485459674,
+      "turn": 0.809194839078933,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 95.33256078187377,
+      "hyperSpeed": 23.641331196576356,
+      "sweep": 0.6707110815448687,
+      "engineSize": 1.180539260280784,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0590912302955984
+    },
+    {
+      "id": "LW-S050",
+      "index": 49,
+      "family": 4,
+      "variant": 9,
+      "name": "Manta Obsidian",
+      "className": "Pathfinder",
+      "description": "A wide lifting body with recessed nacelles and a broad view over the planetary horizon.",
+      "dimensions": [
+        26.81758384474553,
+        30.7406932217069,
+        5.404681452048942
+      ],
+      "speed": 235.0552655267529,
+      "acceleration": 31.06268765111919,
+      "turn": 0.8797721016407013,
+      "capacity": 40,
+      "engines": 2,
+      "mass": 99.09492561485851,
+      "hyperSpeed": 28.902895311638712,
+      "sweep": 0.671736041305121,
+      "engineSize": 1.1038364563137293,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9402948879636823
+    },
+    {
+      "id": "LW-S051",
+      "index": 50,
+      "family": 5,
+      "variant": 0,
+      "name": "Spur Chalk",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        31.22985945999855,
+        19.93584974068217,
+        6.65104615534097
+      ],
+      "speed": 208.0059827454388,
+      "acceleration": 25.740932692661882,
+      "turn": 0.817756177611649,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 75.15948451450792,
+      "hyperSpeed": 30.39729487989098,
+      "sweep": 0.3521396550117061,
+      "engineSize": 1.0172690347069875,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8918399719521403
+    },
+    {
+      "id": "LW-S052",
+      "index": 51,
+      "family": 5,
+      "variant": 1,
+      "name": "Spur Graphite",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        31.38390958639095,
+        17.22181803630665,
+        7.025675757036544
+      ],
+      "speed": 225.79799490701404,
+      "acceleration": 24.58662730603479,
+      "turn": 0.8073580594211816,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 62.08347363047418,
+      "hyperSpeed": 33.439671653322875,
+      "sweep": 0.31977652295026926,
+      "engineSize": 0.8709402499604039,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8519889486953616
+    },
+    {
+      "id": "LW-S053",
+      "index": 52,
+      "family": 5,
+      "variant": 2,
+      "name": "Spur Ochre",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        31.736513029912018,
+        19.21687688464299,
+        6.7107017340827735
+      ],
+      "speed": 207.06209275014697,
+      "acceleration": 27.787443365817893,
+      "turn": 0.7769294412806631,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 61.15491965253721,
+      "hyperSpeed": 29.106014017015696,
+      "sweep": 0.448809775384143,
+      "engineSize": 0.9607356319786049,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0708369999425484
+    },
+    {
+      "id": "LW-S054",
+      "index": 53,
+      "family": 5,
+      "variant": 3,
+      "name": "Spur Glacier",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        28.901865443999416,
+        18.9068190746475,
+        6.853143291634507
+      ],
+      "speed": 227.8551979202777,
+      "acceleration": 26.59178046504967,
+      "turn": 0.8355306621491909,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 72.67070161045297,
+      "hyperSpeed": 31.422374770976603,
+      "sweep": 0.33637355151586235,
+      "engineSize": 1.1692903665360062,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0107715269550681
+    },
+    {
+      "id": "LW-S055",
+      "index": 54,
+      "family": 5,
+      "variant": 4,
+      "name": "Spur Oxide",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        32.47101836740272,
+        17.521912383660673,
+        6.494730895902961
+      ],
+      "speed": 232.4655394002795,
+      "acceleration": 24.905574421687053,
+      "turn": 0.7865972477346659,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 64.18642070169328,
+      "hyperSpeed": 31.128854108974338,
+      "sweep": 0.7927608909783885,
+      "engineSize": 1.0547643415397032,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.04542919062078
+    },
+    {
+      "id": "LW-S056",
+      "index": 55,
+      "family": 5,
+      "variant": 5,
+      "name": "Spur Olive",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        29.79589872475248,
+        19.66055108290166,
+        6.796546170372516
+      ],
+      "speed": 229.48755439240483,
+      "acceleration": 26.57505471070297,
+      "turn": 0.7829134704470634,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 68.25320484922558,
+      "hyperSpeed": 30.34094497654587,
+      "sweep": 0.27009556371485816,
+      "engineSize": 1.0362316331942565,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0087313397321849
+    },
+    {
+      "id": "LW-S057",
+      "index": 56,
+      "family": 5,
+      "variant": 6,
+      "name": "Spur Titanium",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        28.476495271639433,
+        17.50698568774387,
+        6.476014384291135
+      ],
+      "speed": 219.67283606510608,
+      "acceleration": 25.419880908867345,
+      "turn": 0.8147666240334511,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 67.08320369300141,
+      "hyperSpeed": 25.936186491511762,
+      "sweep": 0.6515689496416599,
+      "engineSize": 0.9598495727288536,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0322032861411572
+    },
+    {
+      "id": "LW-S058",
+      "index": 57,
+      "family": 5,
+      "variant": 7,
+      "name": "Spur Cobalt",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        28.45038709638873,
+        19.37639329866506,
+        6.634118388396687
+      ],
+      "speed": 218.09516458828,
+      "acceleration": 27.825923825055362,
+      "turn": 0.8396655106842519,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 67.00368188903084,
+      "hyperSpeed": 35.148444331251085,
+      "sweep": 0.667629659199156,
+      "engineSize": 1.015813432703726,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.8564755141502246
+    },
+    {
+      "id": "LW-S059",
+      "index": 58,
+      "family": 5,
+      "variant": 8,
+      "name": "Spur Bone",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        27.43157808247255,
+        19.005088017554954,
+        6.91688533763867
+      ],
+      "speed": 226.46333518885075,
+      "acceleration": 27.39872733913362,
+      "turn": 0.8467823134288193,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 63.08221510143136,
+      "hyperSpeed": 35.361823270097375,
+      "sweep": 0.6847796651767567,
+      "engineSize": 0.9669249126221984,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0028120201546697
+    },
+    {
+      "id": "LW-S060",
+      "index": 59,
+      "family": 5,
+      "variant": 9,
+      "name": "Spur Obsidian",
+      "className": "Salvage craft",
+      "description": "An asymmetric working vessel with a service boom, protected cabin and exposed machinery.",
+      "dimensions": [
+        28.1139593879343,
+        17.69944407483563,
+        6.380417850600556
+      ],
+      "speed": 226.94588511344045,
+      "acceleration": 27.61049242575653,
+      "turn": 0.7589201834574342,
+      "capacity": 48,
+      "engines": 3,
+      "mass": 66.35185291106231,
+      "hyperSpeed": 28.958879879675806,
+      "sweep": 0.7992379953851924,
+      "engineSize": 0.8774893813417293,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0102967983810232
+    },
+    {
+      "id": "LW-S061",
+      "index": 60,
+      "family": 6,
+      "variant": 0,
+      "name": "Gannet Chalk",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        28.840564458221195,
+        21.98483187891543,
+        7.222982284076512
+      ],
+      "speed": 249.04813145338554,
+      "acceleration": 28.521230892022142,
+      "turn": 0.829514982632175,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 64.06300827798744,
+      "hyperSpeed": 30.90337976925075,
+      "sweep": 0.5128082553972491,
+      "engineSize": 0.9351171489339322,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9029215668560937
+    },
+    {
+      "id": "LW-S062",
+      "index": 61,
+      "family": 6,
+      "variant": 1,
+      "name": "Gannet Graphite",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        25.40982645617798,
+        21.501454164274037,
+        6.34203150227666
+      ],
+      "speed": 232.85127794160508,
+      "acceleration": 28.121106550423427,
+      "turn": 0.8457865553200244,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 73.01218068407228,
+      "hyperSpeed": 27.16123996321112,
+      "sweep": 0.3098146747332066,
+      "engineSize": 1.0253500723396427,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0359611748484894
+    },
+    {
+      "id": "LW-S063",
+      "index": 62,
+      "family": 6,
+      "variant": 2,
+      "name": "Gannet Ochre",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        27.70616003740579,
+        21.61235373094678,
+        6.434571828179061
+      ],
+      "speed": 248.24447923246768,
+      "acceleration": 27.058692830679938,
+      "turn": 0.8379367832973598,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 71.19740259110307,
+      "hyperSpeed": 28.317771266400815,
+      "sweep": 0.5513974717468955,
+      "engineSize": 0.9734771069139242,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.853857302176766
+    },
+    {
+      "id": "LW-S064",
+      "index": 63,
+      "family": 6,
+      "variant": 3,
+      "name": "Gannet Glacier",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        30.681397665403782,
+        18.54669054225087,
+        7.2667315262909975
+      ],
+      "speed": 235.92943140300918,
+      "acceleration": 26.862272739950566,
+      "turn": 0.8557730289110912,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 76.825158965153,
+      "hyperSpeed": 35.37477055676281,
+      "sweep": 0.7588578347815201,
+      "engineSize": 1.1830683606327512,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.933854726748541
+    },
+    {
+      "id": "LW-S065",
+      "index": 64,
+      "family": 6,
+      "variant": 4,
+      "name": "Gannet Oxide",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        29.16890960567631,
+        20.748361117206514,
+        7.266073966128752
+      ],
+      "speed": 225.39195137834176,
+      "acceleration": 28.331887638955376,
+      "turn": 0.7962926593851297,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 77.73960195866724,
+      "hyperSpeed": 32.02634497284889,
+      "sweep": 0.3308129361830652,
+      "engineSize": 1.0437012130743824,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9877582785440608
+    },
+    {
+      "id": "LW-S066",
+      "index": 65,
+      "family": 6,
+      "variant": 5,
+      "name": "Gannet Olive",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        27.97798474598676,
+        18.651020059362054,
+        6.499002934252844
+      ],
+      "speed": 243.51442360556683,
+      "acceleration": 31.246166537841784,
+      "turn": 0.8167867434419691,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 76.46366256199157,
+      "hyperSpeed": 36.253925260342655,
+      "sweep": 0.5784524542279541,
+      "engineSize": 0.8930788697674871,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0103575077606366
+    },
+    {
+      "id": "LW-S067",
+      "index": 66,
+      "family": 6,
+      "variant": 6,
+      "name": "Gannet Titanium",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        29.344789997376502,
+        21.475066262297332,
+        7.182529582520948
+      ],
+      "speed": 237.86718151597304,
+      "acceleration": 29.243424370703288,
+      "turn": 0.7813417630404234,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 65.25843987204135,
+      "hyperSpeed": 26.810763014666737,
+      "sweep": 0.42116422990802677,
+      "engineSize": 1.015735754033085,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9165900455322117
+    },
+    {
+      "id": "LW-S068",
+      "index": 67,
+      "family": 6,
+      "variant": 7,
+      "name": "Gannet Cobalt",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        27.329798025274652,
+        18.713305455632508,
+        6.797036181995645
+      ],
+      "speed": 235.16606479417533,
+      "acceleration": 29.191257225913,
+      "turn": 0.8604273621281608,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 71.11041694252441,
+      "hyperSpeed": 30.37837108615786,
+      "sweep": 0.6146803648094648,
+      "engineSize": 0.933232259331271,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9643024352379143
+    },
+    {
+      "id": "LW-S069",
+      "index": 68,
+      "family": 6,
+      "variant": 8,
+      "name": "Gannet Bone",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        29.537190633779396,
+        20.095012333244085,
+        7.168470243491232
+      ],
+      "speed": 221.22544230301864,
+      "acceleration": 28.048948392602615,
+      "turn": 0.8119166626758872,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 63.90375824167083,
+      "hyperSpeed": 38.78376175854355,
+      "sweep": 0.7648946314468049,
+      "engineSize": 0.8796948910690844,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.8716310078511015
+    },
+    {
+      "id": "LW-S070",
+      "index": 69,
+      "family": 6,
+      "variant": 9,
+      "name": "Gannet Obsidian",
+      "className": "Shuttle",
+      "description": "A long pressure hull, ventral landing struts and four maneuvering pods.",
+      "dimensions": [
+        29.653165401443843,
+        21.79149463865906,
+        7.2717223665528
+      ],
+      "speed": 221.94484849991275,
+      "acceleration": 28.100549150318837,
+      "turn": 0.811754197013378,
+      "capacity": 44,
+      "engines": 4,
+      "mass": 72.55269846009712,
+      "hyperSpeed": 30.380766298808158,
+      "sweep": 0.6696215679403394,
+      "engineSize": 1.0711189826484768,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8503824802115559
+    },
+    {
+      "id": "LW-S071",
+      "index": 70,
+      "family": 7,
+      "variant": 0,
+      "name": "Wayfarer Chalk",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        99.98033429570495,
+        58.73095948537812,
+        17.48431459955871
+      ],
+      "speed": 198.59346051709724,
+      "acceleration": 11.016949980072678,
+      "turn": 0.33588667914867404,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1695.4252242028713,
+      "hyperSpeed": 29.52773711681366,
+      "sweep": 0.7886319800862112,
+      "engineSize": 1.1318840616731904,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9452610170235858
+    },
+    {
+      "id": "LW-S072",
+      "index": 71,
+      "family": 7,
+      "variant": 1,
+      "name": "Wayfarer Graphite",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        103.59776362493633,
+        52.60632035611197,
+        17.716782179251314
+      ],
+      "speed": 189.86511493152938,
+      "acceleration": 11.315653586704284,
+      "turn": 0.3241822911709547,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1619.337138236314,
+      "hyperSpeed": 36.503778057545425,
+      "sweep": 0.7195408907951788,
+      "engineSize": 1.1953765396843665,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.1483473618282005
+    },
+    {
+      "id": "LW-S073",
+      "index": 72,
+      "family": 7,
+      "variant": 2,
+      "name": "Wayfarer Ochre",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        98.70315642066299,
+        49.51633626893163,
+        19.11187375263311
+      ],
+      "speed": 190.96527003175578,
+      "acceleration": 11.133639748971909,
+      "turn": 0.3079498299330473,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1724.706676362455,
+      "hyperSpeed": 37.72669501733035,
+      "sweep": 0.5586354584782385,
+      "engineSize": 1.041498363041319,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.1343415781157091
+    },
+    {
+      "id": "LW-S074",
+      "index": 73,
+      "family": 7,
+      "variant": 3,
+      "name": "Wayfarer Glacier",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        96.60044368766249,
+        55.97897872980684,
+        17.856516251675785
+      ],
+      "speed": 206.54825042746958,
+      "acceleration": 11.32385681167245,
+      "turn": 0.32166205026209355,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1668.846120994538,
+      "hyperSpeed": 31.168093423731627,
+      "sweep": 0.38585082403151316,
+      "engineSize": 1.1816321665421128,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9711016564397141
+    },
+    {
+      "id": "LW-S075",
+      "index": 74,
+      "family": 7,
+      "variant": 4,
+      "name": "Wayfarer Oxide",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        87.35078989125789,
+        50.24020903492347,
+        18.763236909080295
+      ],
+      "speed": 193.63335100896657,
+      "acceleration": 12.832178088817745,
+      "turn": 0.3259784671097994,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1733.2003668040038,
+      "hyperSpeed": 36.334990966506304,
+      "sweep": 0.2569731714320369,
+      "engineSize": 1.008299822243862,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9755264825420454
+    },
+    {
+      "id": "LW-S076",
+      "index": 75,
+      "family": 7,
+      "variant": 5,
+      "name": "Wayfarer Olive",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        100.50762873440982,
+        57.68962278049439,
+        19.08794441669248
+      ],
+      "speed": 205.29449843731706,
+      "acceleration": 11.33341373378411,
+      "turn": 0.3202978993564844,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1620.738875020668,
+      "hyperSpeed": 37.3757919523865,
+      "sweep": 0.5008000722271391,
+      "engineSize": 1.00468693387229,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9621502100722864
+    },
+    {
+      "id": "LW-S077",
+      "index": 76,
+      "family": 7,
+      "variant": 6,
+      "name": "Wayfarer Titanium",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        87.385729117468,
+        51.63227214412764,
+        18.949145889803766
+      ],
+      "speed": 198.3703754659742,
+      "acceleration": 11.66036857271567,
+      "turn": 0.315972874173522,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1891.4142947629095,
+      "hyperSpeed": 34.0265625551343,
+      "sweep": 0.7668922296259553,
+      "engineSize": 1.040035520424135,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.8755541728809476
+    },
+    {
+      "id": "LW-S078",
+      "index": 77,
+      "family": 7,
+      "variant": 7,
+      "name": "Wayfarer Cobalt",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        91.40221587516368,
+        54.73509478066117,
+        17.792655454427006
+      ],
+      "speed": 187.4088154662866,
+      "acceleration": 11.201943160425873,
+      "turn": 0.3052786190479994,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1603.7336181633175,
+      "hyperSpeed": 30.72224471382797,
+      "sweep": 0.49645182978129015,
+      "engineSize": 1.016251258412376,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9192936678882688
+    },
+    {
+      "id": "LW-S079",
+      "index": 78,
+      "family": 7,
+      "variant": 8,
+      "name": "Wayfarer Bone",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        95.07459980741143,
+        53.03087537074462,
+        18.71543224775232
+      ],
+      "speed": 185.90134566854684,
+      "acceleration": 11.21318983398378,
+      "turn": 0.3360043977081776,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1680.068372586742,
+      "hyperSpeed": 33.72519939336926,
+      "sweep": 0.3374822003999725,
+      "engineSize": 1.161363570555113,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.0328497370472178
+    },
+    {
+      "id": "LW-S080",
+      "index": 79,
+      "family": 7,
+      "variant": 9,
+      "name": "Wayfarer Obsidian",
+      "className": "Exploration corvette",
+      "description": "A long-range corvette with a dual station bridge, engineering compartment and 160-unit cargo capacity. Plan ahead: this hull has substantial inertia.",
+      "dimensions": [
+        103.24187435947358,
+        57.25738433338702,
+        17.326054146364335
+      ],
+      "speed": 198.88356647891925,
+      "acceleration": 12.965568372141568,
+      "turn": 0.3193510195374489,
+      "capacity": 160,
+      "engines": 4,
+      "mass": 1560.3626489136368,
+      "hyperSpeed": 37.97341601587832,
+      "sweep": 0.422787723178044,
+      "engineSize": 1.0610805078060366,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0007855026051402
+    },
+    {
+      "id": "LW-S081",
+      "index": 80,
+      "family": 8,
+      "variant": 0,
+      "name": "Peregrine Chalk",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        18.190618547312916,
+        12.352320995740591,
+        3.368036728659645
+      ],
+      "speed": 456.5818036690354,
+      "acceleration": 66.6261987766251,
+      "turn": 1.5368528453959152,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 15.192975619062782,
+      "hyperSpeed": 38.375872963666914,
+      "sweep": 0.4437107146019116,
+      "engineSize": 1.1699940604623407,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9345293007558211
+    },
+    {
+      "id": "LW-S082",
+      "index": 81,
+      "family": 8,
+      "variant": 1,
+      "name": "Peregrine Graphite",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        20.158824188634753,
+        10.840398552641272,
+        3.3670323859546336
+      ],
+      "speed": 443.88273624107245,
+      "acceleration": 68.56234379388393,
+      "turn": 1.502943993243389,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 14.072104495950045,
+      "hyperSpeed": 31.62541929874569,
+      "sweep": 0.6098657311056741,
+      "engineSize": 0.880560550338123,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 0.9997665895381942
+    },
+    {
+      "id": "LW-S083",
+      "index": 82,
+      "family": 8,
+      "variant": 2,
+      "name": "Peregrine Ochre",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        18.29096704311669,
+        11.551636397838593,
+        3.675735660301522
+      ],
+      "speed": 450.2780436623841,
+      "acceleration": 72.56130483113229,
+      "turn": 1.556838657078333,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 15.384102239292115,
+      "hyperSpeed": 33.38238405026495,
+      "sweep": 0.6791759456507862,
+      "engineSize": 1.158750713709742,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.1865026594605297
+    },
+    {
+      "id": "LW-S084",
+      "index": 83,
+      "family": 8,
+      "variant": 3,
+      "name": "Peregrine Glacier",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        19.80794984954875,
+        10.881965330243112,
+        3.4096037057731303
+      ],
+      "speed": 431.4620564803481,
+      "acceleration": 70.03764153711498,
+      "turn": 1.4677906914521008,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 13.54263786116615,
+      "hyperSpeed": 33.70314556788653,
+      "sweep": 0.48726968133123594,
+      "engineSize": 1.0944416248006745,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0626321387011557
+    },
+    {
+      "id": "LW-S085",
+      "index": 84,
+      "family": 8,
+      "variant": 4,
+      "name": "Peregrine Oxide",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        16.454449809961954,
+        11.77953420728445,
+        3.4905741706620903
+      ],
+      "speed": 420.1652049038559,
+      "acceleration": 69.11037664208561,
+      "turn": 1.500550851635635,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 15.064660421116278,
+      "hyperSpeed": 32.12797709330916,
+      "sweep": 0.7146730259060861,
+      "engineSize": 1.1076407987507992,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.1027977658668533
+    },
+    {
+      "id": "LW-S086",
+      "index": 85,
+      "family": 8,
+      "variant": 5,
+      "name": "Peregrine Olive",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        18.119176950724796,
+        11.096952738426626,
+        3.5594896683990958
+      ],
+      "speed": 464.7646205235272,
+      "acceleration": 74.28325269699097,
+      "turn": 1.5415906714042649,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 14.14075720519759,
+      "hyperSpeed": 39.62126549389213,
+      "sweep": 0.6819859673734754,
+      "engineSize": 1.1575696621090175,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.083064626948908
+    },
+    {
+      "id": "LW-S087",
+      "index": 86,
+      "family": 8,
+      "variant": 6,
+      "name": "Peregrine Titanium",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        19.030008882349357,
+        12.08039411790669,
+        3.6751077316012237
+      ],
+      "speed": 455.8705290719867,
+      "acceleration": 70.57843364305795,
+      "turn": 1.5619659002730624,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 14.727252115448938,
+      "hyperSpeed": 32.690192399173974,
+      "sweep": 0.2635726107284427,
+      "engineSize": 1.1254656546982005,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9728030465310439
+    },
+    {
+      "id": "LW-S088",
+      "index": 87,
+      "family": 8,
+      "variant": 7,
+      "name": "Peregrine Cobalt",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        19.377851879750377,
+        11.540523739345371,
+        3.572865090988577
+      ],
+      "speed": 413.9292049009353,
+      "acceleration": 66.5722465768084,
+      "turn": 1.4707966342102736,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 13.77225934275426,
+      "hyperSpeed": 40.62116694692522,
+      "sweep": 0.32577436049468816,
+      "engineSize": 1.1809485745849089,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0895254858536645
+    },
+    {
+      "id": "LW-S089",
+      "index": 88,
+      "family": 8,
+      "variant": 8,
+      "name": "Peregrine Bone",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        19.977577675287613,
+        11.42162670493126,
+        3.4228634336069232
+      ],
+      "speed": 466.32905322462324,
+      "acceleration": 68.71699969008566,
+      "turn": 1.528877301039174,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 14.104437396163123,
+      "hyperSpeed": 34.20794771481305,
+      "sweep": 0.6140462615876459,
+      "engineSize": 0.8924788031144999,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9470113876741378
+    },
+    {
+      "id": "LW-S090",
+      "index": 89,
+      "family": 8,
+      "variant": 9,
+      "name": "Peregrine Obsidian",
+      "className": "Racer",
+      "description": "A needle cockpit between long engine nacelles. Highest acceleration, lowest cargo capacity.",
+      "dimensions": [
+        17.113851388650946,
+        12.067997885495423,
+        3.5270190798696133
+      ],
+      "speed": 459.477982051298,
+      "acceleration": 71.85041582342238,
+      "turn": 1.43992626784835,
+      "capacity": 24,
+      "engines": 2,
+      "mass": 15.133537237476558,
+      "hyperSpeed": 42.238847037404774,
+      "sweep": 0.6849646728835068,
+      "engineSize": 0.8886466188007034,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.162028574035503
+    },
+    {
+      "id": "LW-S091",
+      "index": 90,
+      "family": 9,
+      "variant": 0,
+      "name": "Meridian Chalk",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        220.16135111488404,
+        117.20642000436783,
+        51.51130004031584
+      ],
+      "speed": 155.185053197667,
+      "acceleration": 6.348859896138311,
+      "turn": 0.18724333370514212,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 28858.95293455571,
+      "hyperSpeed": 43.15179616753012,
+      "sweep": 0.5260791883803904,
+      "engineSize": 1.0845724305603652,
+      "paint": [
+        0.58,
+        0.64,
+        0.63
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9255197739694266
+    },
+    {
+      "id": "LW-S092",
+      "index": 91,
+      "family": 9,
+      "variant": 1,
+      "name": "Meridian Graphite",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        231.43672152757645,
+        116.1721871526912,
+        54.13815562168137
+      ],
+      "speed": 153.48061161534858,
+      "acceleration": 5.741338830068708,
+      "turn": 0.1781118265159428,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 27635.466324087232,
+      "hyperSpeed": 39.98710013255477,
+      "sweep": 0.3542102015460841,
+      "engineSize": 0.9811753520509228,
+      "paint": [
+        0.15,
+        0.19,
+        0.23
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0562286421423777
+    },
+    {
+      "id": "LW-S093",
+      "index": 92,
+      "family": 9,
+      "variant": 2,
+      "name": "Meridian Ochre",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        217.73674030657858,
+        118.12751556672157,
+        48.4763855156675
+      ],
+      "speed": 147.62293317681178,
+      "acceleration": 5.559238603496924,
+      "turn": 0.18991801372077313,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 25812.779095690697,
+      "hyperSpeed": 38.85791519638151,
+      "sweep": 0.27678696973016487,
+      "engineSize": 0.9116514591034501,
+      "paint": [
+        0.57,
+        0.36,
+        0.14
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.067050332785584
+    },
+    {
+      "id": "LW-S094",
+      "index": 93,
+      "family": 9,
+      "variant": 3,
+      "name": "Meridian Glacier",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        244.79522023759782,
+        112.39902284294368,
+        49.96038565604017
+      ],
+      "speed": 154.63505123136565,
+      "acceleration": 6.136828457443045,
+      "turn": 0.1825915494063869,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 25974.314429674298,
+      "hyperSpeed": 41.29493799787015,
+      "sweep": 0.45375964224804194,
+      "engineSize": 1.0746369268279523,
+      "paint": [
+        0.34,
+        0.51,
+        0.59
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0726462664548306
+    },
+    {
+      "id": "LW-S095",
+      "index": 94,
+      "family": 9,
+      "variant": 4,
+      "name": "Meridian Oxide",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        266.938526632078,
+        114.8310114119202,
+        54.7318155441247
+      ],
+      "speed": 154.71004784479737,
+      "acceleration": 6.214877027766779,
+      "turn": 0.1709594955107197,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 29777.96604751423,
+      "hyperSpeed": 36.553549342602494,
+      "sweep": 0.649291831906885,
+      "engineSize": 1.0194238882511855,
+      "paint": [
+        0.43,
+        0.19,
+        0.12
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.2061406721826642
+    },
+    {
+      "id": "LW-S096",
+      "index": 95,
+      "family": 9,
+      "variant": 5,
+      "name": "Meridian Olive",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        223.92780587095768,
+        119.41512745544316,
+        50.48052597332746
+      ],
+      "speed": 146.74932446144518,
+      "acceleration": 6.131550581725314,
+      "turn": 0.17972019150964913,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 28020.035309121013,
+      "hyperSpeed": 44.03688568323851,
+      "sweep": 0.7738523498876021,
+      "engineSize": 0.992273420561105,
+      "paint": [
+        0.29,
+        0.34,
+        0.22
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 1.1524369771592318
+    },
+    {
+      "id": "LW-S097",
+      "index": 96,
+      "family": 9,
+      "variant": 6,
+      "name": "Meridian Titanium",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        217.40072457790373,
+        117.0469341589138,
+        49.81473891947419
+      ],
+      "speed": 143.52224786113948,
+      "acceleration": 5.952160804895684,
+      "turn": 0.18937358072530477,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 29383.434418272227,
+      "hyperSpeed": 33.65548434369266,
+      "sweep": 0.40564323478611186,
+      "engineSize": 1.1708723608171567,
+      "paint": [
+        0.4,
+        0.43,
+        0.46
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 1.0443269245559348
+    },
+    {
+      "id": "LW-S098",
+      "index": 97,
+      "family": 9,
+      "variant": 7,
+      "name": "Meridian Cobalt",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        230.39432987384498,
+        117.31930593121797,
+        51.22691351426766
+      ],
+      "speed": 154.8423175709322,
+      "acceleration": 5.782725749267266,
+      "turn": 0.19050687198322266,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 26203.281746651977,
+      "hyperSpeed": 38.502515516988936,
+      "sweep": 0.7803754561580718,
+      "engineSize": 0.8967900502146221,
+      "paint": [
+        0.12,
+        0.24,
+        0.39
+      ],
+      "accent": [
+        0.48,
+        0.73,
+        0.74
+      ],
+      "fuelRate": 1.0762728691101073
+    },
+    {
+      "id": "LW-S099",
+      "index": 98,
+      "family": 9,
+      "variant": 8,
+      "name": "Meridian Bone",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        249.32945656031367,
+        130.11416602097452,
+        48.86329019421712
+      ],
+      "speed": 146.92539367591962,
+      "acceleration": 5.78520310582593,
+      "turn": 0.17437165398448704,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 27072.993386972696,
+      "hyperSpeed": 41.5058477928862,
+      "sweep": 0.47876454206416386,
+      "engineSize": 1.1503497453639282,
+      "paint": [
+        0.66,
+        0.6,
+        0.47
+      ],
+      "accent": [
+        0.75,
+        0.77,
+        0.68
+      ],
+      "fuelRate": 0.9516220103483647
+    },
+    {
+      "id": "LW-S100",
+      "index": 99,
+      "family": 9,
+      "variant": 9,
+      "name": "Meridian Obsidian",
+      "className": "Expedition carrier",
+      "description": "A capital exploration hull with a command bridge, six main engines, defensive batteries and a 640-unit hold. Deliberate acceleration and long braking distances.",
+      "dimensions": [
+        215.9501979427412,
+        127.16513691935688,
+        53.16497993117199
+      ],
+      "speed": 145.3945798650384,
+      "acceleration": 6.437229321766646,
+      "turn": 0.17997915277853604,
+      "capacity": 640,
+      "engines": 6,
+      "mass": 31341.72451404482,
+      "hyperSpeed": 41.24532749112696,
+      "sweep": 0.5043256013770587,
+      "engineSize": 0.8811127503984607,
+      "paint": [
+        0.1,
+        0.13,
+        0.16
+      ],
+      "accent": [
+        0.93,
+        0.5,
+        0.16
+      ],
+      "fuelRate": 0.9821211537579074
+    }
+  ]
+}

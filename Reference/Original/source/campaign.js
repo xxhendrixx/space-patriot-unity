@@ -1,0 +1,22 @@
+(function(root){const C=root.LongwayCore;
+class Campaign{
+ constructor(app){this.app=app;this.engine=new StoryworksCore.StoryEngine(SpacePatriotCampaign.project(),{sessionId:'long-debt-'+app.world.seed});this.claimed=new Set();this.selected='water';this.sequence=0;this.remote=null;
+  this.bridge=new StoryworksCore.WorldworksStoryBridge({engine:this.engine,handlers:{'campaign.reward':p=>{if(this.claimed.has(p.key))return true;this.claimed.add(p.key);app.flight.ship.credits+=p.credits;app.society.reputation[p.faction]=C.clamp(app.society.reputation[p.faction]+p.standing,-100,100);const b=app.world.catalog.find(b=>b.name===p.market.world),market=app.economy?.markets.get(b?.id);if(market)market.stock[p.market.good]=C.clamp(market.stock[p.market.good]+p.market.stock,0,2000);app.society.say(p.faction.toUpperCase(),SpacePatriotCampaign.arcs.find(a=>a.id===p.key).title+' resolved. Frontier supply and standing updated.');return true;}}});
+ }
+ get authority(){return this.app.combat.authority;}
+ start(id){if(!this.authority)return false;const ok=this.engine.startQuest(id);if(ok){this.selected=id;this.persist?.();}return ok;}
+ choose(id,choice){if(!this.authority)return false;this.engine.choose(id,choice);this.persist?.();return true;}
+ signal(kind,world){if(!this.authority)return false;this.bridge.emit('gameplay.signal',{kind,world},'campaign-'+(++this.sequence));this.persist?.();return true;}
+ update(dt){if(!this.authority)return;this.engine.update(C.clamp(dt,0,.5));const A=this.app,F=A.flight;for(const q of this.engine.project.quests){const n=this.engine.current(q.id);if(this.engine.state.quests[q.id].status!=='active'||n?.type!=='objective')continue;const loc=n.location,b=A.world.catalog.find(b=>b.name===loc.world);if(loc.kind==='station'&&C.length(C.sub(F.position,A.world.station(b).center))<.8)this.signal('station',b.name);}}
+ deliver(id){if(!this.authority)return false;const A=this.app,n=this.engine.current(id),l=n?.location;if(this.engine.state.quests[id]?.status!=='active'||l?.kind!=='delivery')return false;const b=A.world.catalog.find(b=>b.name===l.world),reserved=A.economy.jobs.filter(j=>j.status==='in transit'&&j.good===l.good).reduce((v,j)=>v+j.units,0);if(!A.economy.inPort(b.id)||A.flight.ship.cargo[l.good]-reserved<l.units)return false;A.flight.ship.cargo[l.good]-=l.units;A.economy.markets.get(b.id).stock[l.good]+=l.units;this.signal('delivery',l.world);return true;}
+ navigate(id){const n=this.current(id),l=n?.location,A=this.app,F=A.flight;if(!l)return false;const b=A.world.catalog.find(b=>b.name===l.world);if(F.walking||F.bridgeWalk){F.message='Board your ship and sit at the helm before setting the story route';return false;}if(l.kind==='station'||l.kind==='terminal'&&b.type===3)F.toStation(b);else if(l.kind==='sample')F.toSurvey(b);else A.outposts.route(b.id+':city:0');return !!F.route;}
+ readStation(id){const n=this.current(id),A=this.app,l=n?.location;if(!this.authority||l?.kind!=='terminal')return false;const b=A.world.catalog.find(b=>b.name===l.world);if(b.type!==3||C.length(C.sub(A.flight.position,A.world.station(b).center))>.8)return false;return this.signal('terminal',b.name);}
+ current(id=this.selected){if(!this.authority&&this.remote){const state=this.remote.quests.find(q=>q.id===id);return this.engine.project.nodes.find(n=>n.id===state?.nodeId)||null;}return this.engine.current(id);}
+ summaries(){return !this.authority&&this.remote?this.remote.quests:this.engine.project.quests.map(q=>({id:q.id,title:q.title,...this.engine.state.quests[q.id],available:this.engine.test(q.requires)}));}
+ save(){return {version:1,engine:this.engine.serialize(),claimed:[...this.claimed],sequence:this.sequence,selected:this.selected};}
+ load(v){if(v?.version!==1||!Array.isArray(v.claimed)||v.claimed.some(id=>!this.engine.project.quests.some(q=>q.id===id)))return false;this.engine.loadSave(v.engine);this.claimed=new Set(v.claimed);this.sequence=Number.isSafeInteger(v.sequence)?v.sequence:0;this.selected=this.engine.state.quests[v.selected]?v.selected:'water';this.bridge.flush();return true;}
+ snapshot(){return {quests:this.summaries().map(q=>({id:q.id,title:q.title,status:q.status,nodeId:q.nodeId,progress:q.progress,available:q.available}))};}
+ acceptSnapshot(v){if(!this.authority&&Array.isArray(v?.quests)&&v.quests.length===9&&v.quests.every(q=>this.engine.state.quests[q.id]&&['available','active','completed'].includes(q.status)&&(!q.nodeId||this.engine.nodes.has(q.nodeId))))this.remote=v;}
+}
+C.Campaign=Campaign;
+})(globalThis);

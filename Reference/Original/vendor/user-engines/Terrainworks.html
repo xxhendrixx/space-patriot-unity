@@ -1,0 +1,6160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1">
+
+<title>Terrainworks</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background: #090b0b;
+  color: #e8eee9;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+canvas {
+  display: block;
+
+  position: fixed;
+  inset: 0;
+
+  z-index: 0;
+}
+
+#loading {
+  position: fixed;
+  inset: 0;
+
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  background: #090b0b;
+
+  transition: opacity .35s;
+}
+
+#loadingTitle {
+  font-size: 13px;
+  letter-spacing: .20em;
+}
+
+#loadingStage {
+  color: #829086;
+
+  font-size: 10px;
+  letter-spacing: .10em;
+}
+
+#error {
+  display: none;
+
+  position: fixed;
+  inset: 20px;
+
+  z-index: 200;
+
+  padding: 20px;
+
+  overflow: auto;
+
+  background: #171a18;
+  color: white;
+
+  white-space: pre-wrap;
+
+  font-family: monospace;
+}
+
+#ui {
+  position: fixed;
+
+  z-index: 20;
+
+  top: 14px;
+  left: 14px;
+
+  width: 325px;
+
+  max-height: calc(100% - 28px);
+
+  overflow-y: auto;
+
+  padding: 15px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.14);
+
+  border-radius: 12px;
+
+  background:
+    rgba(8,12,9,.82);
+
+  backdrop-filter: blur(16px);
+}
+
+#ui::-webkit-scrollbar {
+  width: 5px;
+}
+
+#ui::-webkit-scrollbar-thumb {
+  background:
+    rgba(255,255,255,.20);
+
+  border-radius: 10px;
+}
+
+h1 {
+  margin: 0;
+
+  font-size: 16px;
+  letter-spacing: .17em;
+}
+
+.subtitle {
+  margin: 4px 0 13px;
+
+  color: #8da092;
+
+  font-size: 9px;
+  letter-spacing: .15em;
+}
+
+.stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 6px;
+
+  margin-bottom: 14px;
+}
+
+.stat {
+  padding: 8px;
+
+  border-radius: 7px;
+
+  background:
+    rgba(255,255,255,.045);
+}
+
+.stat b {
+  display: block;
+
+  font-size: 14px;
+}
+
+.stat small {
+  color: #829086;
+
+  font-size: 8px;
+}
+
+.group {
+  margin-top: 11px;
+  padding-top: 11px;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.08);
+}
+
+.groupTitle {
+  margin-bottom: 10px;
+
+  color: #96a799;
+
+  font-size: 9px;
+  letter-spacing: .15em;
+}
+
+.row {
+  margin-bottom: 9px;
+}
+
+.label {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 4px;
+
+  font-size: 10px;
+}
+
+.value {
+  color: #a8d69e;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+input[type=range] {
+  width: 100%;
+
+  accent-color: #79ad6e;
+}
+
+input[type=number] {
+  width: 100%;
+
+  padding: 7px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  border-radius: 6px;
+
+  background:
+    rgba(255,255,255,.05);
+
+  color: white;
+}
+
+.toggle {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 8px 0;
+
+  font-size: 10px;
+}
+
+input[type=checkbox] {
+  accent-color: #79ad6e;
+}
+
+.buttons {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 6px;
+}
+
+button {
+  min-height: 32px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.13);
+
+  border-radius: 6px;
+
+  background:
+    rgba(255,255,255,.05);
+
+  color: #e4ebe5;
+
+  cursor: pointer;
+
+  font-size: 9px;
+}
+
+button:hover {
+  background:
+    rgba(255,255,255,.10);
+}
+
+button.active {
+  border-color: #89bd7e;
+
+  background:
+    rgba(85,135,72,.25);
+
+  color: #bfe5b5;
+}
+
+#tip {
+  position: fixed;
+
+  right: 15px;
+  bottom: 13px;
+
+  z-index: 10;
+
+  color:
+    rgba(255,255,255,.52);
+
+  font-size: 9px;
+  letter-spacing: .10em;
+
+  pointer-events: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- ====================================================== -->
+<!-- STARTUP                                                -->
+<!-- ====================================================== -->
+
+<div id="loading">
+
+  <div id="loadingTitle">
+    GENERATING TERRAIN...
+  </div>
+
+  <div id="loadingStage">
+    starting module
+  </div>
+
+</div>
+
+<div id="error"></div>
+
+
+<!-- ====================================================== -->
+<!-- UI                                                     -->
+<!-- ====================================================== -->
+
+<div id="ui">
+
+<h1>TERRAINWORKS</h1>
+
+<div class="subtitle">
+  PROCEDURAL WORLD LABORATORY
+</div>
+
+
+<!-- ====================================================== -->
+<!-- STATS                                                  -->
+<!-- ====================================================== -->
+
+<div class="stats">
+
+  <div class="stat">
+    <b id="fps">--</b>
+    <small>FPS</small>
+  </div>
+
+  <div class="stat">
+    <b id="vertices">--</b>
+    <small>VERTICES</small>
+  </div>
+
+  <div class="stat">
+    <b id="rockCount">--</b>
+    <small>GEOLOGY</small>
+  </div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- PRESETS                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WORLD TYPE
+</div>
+
+<div class="buttons">
+
+  <button
+    class="preset active"
+    data-state="alpine">
+    ALPINE
+  </button>
+
+  <button
+    class="preset"
+    data-state="highlands">
+    HIGHLANDS
+  </button>
+
+  <button
+    class="preset"
+    data-state="desert">
+    DESERT
+  </button>
+
+  <button
+    class="preset"
+    data-state="badlands">
+    BADLANDS
+  </button>
+
+  <button
+    class="preset"
+    data-state="volcanic">
+    VOLCANIC
+  </button>
+
+  <button
+    class="preset"
+    data-state="islands">
+    ISLANDS
+  </button>
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- SEED                                                   -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WORLD SEED
+</div>
+
+<div class="row">
+
+  <div class="label">
+
+    Seed
+
+    <span
+      id="seedVal"
+      class="value">
+      1337
+    </span>
+
+  </div>
+
+  <input
+    id="seed"
+    type="number"
+    min="0"
+    max="999999999"
+    value="1337">
+
+</div>
+
+<div class="buttons">
+
+  <button id="newSeed">
+    NEW SEED
+  </button>
+
+  <button id="regenerate">
+    REGENERATE
+  </button>
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- LANDMASS                                               -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  LANDMASS
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Terrain Size
+    <span id="sizeVal" class="value"></span>
+  </div>
+
+  <input
+    id="terrainSize"
+    type="range"
+    min="50"
+    max="400"
+    step="10"
+    value="180">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Base Elevation
+    <span id="baseVal" class="value"></span>
+  </div>
+
+  <input
+    id="baseElevation"
+    type="range"
+    min="-5"
+    max="10"
+    step=".1"
+    value="0">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Continental Scale
+    <span id="continentVal" class="value"></span>
+  </div>
+
+  <input
+    id="continentScale"
+    type="range"
+    min=".1"
+    max="3"
+    step=".05"
+    value=".8">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Landmass Strength
+    <span id="landmassVal" class="value"></span>
+  </div>
+
+  <input
+    id="landmass"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value="1.2">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Domain Warp
+    <span id="warpVal" class="value"></span>
+  </div>
+
+  <input
+    id="warp"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value=".65">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- MOUNTAINS                                              -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  MOUNTAINS
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Mountain Height
+    <span id="mountainVal" class="value"></span>
+  </div>
+
+  <input
+    id="mountainHeight"
+    type="range"
+    min="0"
+    max="30"
+    step=".25"
+    value="13">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Ridge Frequency
+    <span id="ridgeVal" class="value"></span>
+  </div>
+
+  <input
+    id="ridgeFrequency"
+    type="range"
+    min=".2"
+    max="5"
+    step=".05"
+    value="1.3">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Ridge Sharpness
+    <span id="sharpVal" class="value"></span>
+  </div>
+
+  <input
+    id="ridgeSharpness"
+    type="range"
+    min=".2"
+    max="5"
+    step=".05"
+    value="2">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Rolling Hills
+    <span id="hillsVal" class="value"></span>
+  </div>
+
+  <input
+    id="hills"
+    type="range"
+    min="0"
+    max="10"
+    step=".1"
+    value="2.5">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- EROSION                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  EROSION & VALLEYS
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Valley Depth
+    <span id="valleyVal" class="value"></span>
+  </div>
+
+  <input
+    id="valleyDepth"
+    type="range"
+    min="0"
+    max="15"
+    step=".1"
+    value="4">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Erosion
+    <span id="erosionVal" class="value"></span>
+  </div>
+
+  <input
+    id="erosion"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".65">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Erosion Scale
+    <span id="erosionScaleVal" class="value"></span>
+  </div>
+
+  <input
+    id="erosionScale"
+    type="range"
+    min=".1"
+    max="5"
+    step=".05"
+    value="1.1">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Terracing
+    <span id="terraceVal" class="value"></span>
+  </div>
+
+  <input
+    id="terracing"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".08">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Fine Detail
+    <span id="detailVal" class="value"></span>
+  </div>
+
+  <input
+    id="detail"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value=".75">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- CLIFFS                                                 -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  CLIFFS & GEOLOGY
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Cliff Threshold
+    <span id="cliffThresholdVal" class="value"></span>
+  </div>
+
+  <input
+    id="cliffThreshold"
+    type="range"
+    min=".05"
+    max=".9"
+    step=".01"
+    value=".42">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Cliff Strength
+    <span id="cliffStrengthVal" class="value"></span>
+  </div>
+
+  <input
+    id="cliffStrength"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value="1">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Strata
+    <span id="strataVal" class="value"></span>
+  </div>
+
+  <input
+    id="strata"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value=".5">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- BIOMES                                                 -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  BIOMES
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Moisture
+    <span id="moistureVal" class="value"></span>
+  </div>
+
+  <input
+    id="moisture"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".58">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Temperature
+    <span id="temperatureVal" class="value"></span>
+  </div>
+
+  <input
+    id="temperature"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".45">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Biome Scale
+    <span id="biomeScaleVal" class="value"></span>
+  </div>
+
+  <input
+    id="biomeScale"
+    type="range"
+    min=".1"
+    max="5"
+    step=".05"
+    value=".8">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Snowline
+    <span id="snowVal" class="value"></span>
+  </div>
+
+  <input
+    id="snowline"
+    type="range"
+    min="0"
+    max="25"
+    step=".25"
+    value="11">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Rock Exposure
+    <span id="rockExposureVal" class="value"></span>
+  </div>
+
+  <input
+    id="rockExposure"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".58">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ROCKS                                                  -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  ROCKS & BOULDERS
+</div>
+
+<div class="row">
+
+  <div class="label">
+    Rock Density
+    <span id="rockDensityVal" class="value"></span>
+  </div>
+
+  <input
+    id="rockDensity"
+    type="range"
+    min="0"
+    max="12000"
+    step="250"
+    value="3500">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Rock Size
+    <span id="rockSizeVal" class="value"></span>
+  </div>
+
+  <input
+    id="rockSize"
+    type="range"
+    min=".1"
+    max="5"
+    step=".05"
+    value="1.2">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Boulder Chance
+    <span id="boulderVal" class="value"></span>
+  </div>
+
+  <input
+    id="boulders"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".18">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Scree
+    <span id="screeVal" class="value"></span>
+  </div>
+
+  <input
+    id="scree"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".55">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Rock Clustering
+    <span id="rockClusterVal" class="value"></span>
+  </div>
+
+  <input
+    id="rockCluster"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".52">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Cliff Rocks
+    <span id="cliffRocksVal" class="value"></span>
+  </div>
+
+  <input
+    id="cliffRocks"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".72">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- WATER                                                  -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WATER & COAST
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Water Level
+    <span id="waterVal" class="value"></span>
+  </div>
+
+  <input
+    id="waterLevel"
+    type="range"
+    min="-8"
+    max="12"
+    step=".1"
+    value="-1">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Coast Width
+    <span id="coastVal" class="value"></span>
+  </div>
+
+  <input
+    id="coastWidth"
+    type="range"
+    min=".1"
+    max="8"
+    step=".1"
+    value="2">
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Water
+  </span>
+
+  <input
+    id="waterToggle"
+    type="checkbox"
+    checked>
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ATMOSPHERE                                             -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  ATMOSPHERE
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Sun Elevation
+    <span id="sunElevationVal" class="value"></span>
+  </div>
+
+  <input
+    id="sunElevation"
+    type="range"
+    min="2"
+    max="85"
+    step="1"
+    value="32">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Sun Azimuth
+    <span id="sunAzimuthVal" class="value"></span>
+  </div>
+
+  <input
+    id="sunAzimuth"
+    type="range"
+    min="0"
+    max="360"
+    step="1"
+    value="225">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Sun Intensity
+    <span id="sunIntensityVal" class="value"></span>
+  </div>
+
+  <input
+    id="sunIntensity"
+    type="range"
+    min="0"
+    max="6"
+    step=".1"
+    value="2.8">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Ambience
+    <span id="ambientVal" class="value"></span>
+  </div>
+
+  <input
+    id="ambient"
+    type="range"
+    min=".1"
+    max="3"
+    step=".05"
+    value=".9">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Haze
+    <span id="hazeVal" class="value"></span>
+  </div>
+
+  <input
+    id="haze"
+    type="range"
+    min=".0001"
+    max=".02"
+    step=".0001"
+    value=".0028">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Exposure
+    <span id="exposureVal" class="value"></span>
+  </div>
+
+  <input
+    id="exposure"
+    type="range"
+    min=".3"
+    max="2"
+    step=".05"
+    value="1">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- PERFORMANCE                                            -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  PERFORMANCE
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Terrain Resolution
+    <span id="resolutionVal" class="value"></span>
+  </div>
+
+  <input
+    id="resolution"
+    type="range"
+    min="64"
+    max="320"
+    step="64"
+    value="128">
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Rocks & Cliffs
+  </span>
+
+  <input
+    id="rocksToggle"
+    type="checkbox"
+    checked>
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Biome Geometry
+  </span>
+
+  <input
+    id="biomesToggle"
+    type="checkbox"
+    checked>
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Snow
+  </span>
+
+  <input
+    id="snowToggle"
+    type="checkbox"
+    checked>
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Cliff Strata
+  </span>
+
+  <input
+    id="strataToggle"
+    type="checkbox"
+    checked>
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Wireframe
+  </span>
+
+  <input
+    id="wireframe"
+    type="checkbox">
+
+</div>
+
+
+<div class="toggle">
+
+  <span>
+    Camera Drift
+  </span>
+
+  <input
+    id="drift"
+    type="checkbox">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ACTIONS                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="buttons">
+
+  <button id="randomize">
+    RANDOMIZE WORLD
+  </button>
+
+  <button id="reset">
+    RESET
+  </button>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- CAMERA HELP                                            -->
+<!-- ====================================================== -->
+
+<div id="tip">
+  LEFT DRAG: ORBIT · WHEEL: ZOOM
+</div>
+
+
+<!--
+==============================================================
+END OF PART 1
+
+Part 2 begins the JavaScript module.
+
+Do not add anything else between this comment and Part 2.
+==============================================================
+-->
+
+<script type="module">
+
+// ============================================================
+// STARTUP DIAGNOSTICS
+// ============================================================
+
+const loadingStage =
+  document.getElementById("loadingStage");
+
+const errorBox =
+  document.getElementById("error");
+
+
+function stage(text) {
+
+  if (loadingStage) {
+    loadingStage.textContent = text;
+  }
+
+}
+
+
+function fatal(error) {
+
+  console.error(error);
+
+  const loading =
+    document.getElementById("loading");
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+  if (errorBox) {
+
+    errorBox.style.display =
+      "block";
+
+    errorBox.textContent =
+      "TERRAINWORKS FAILED TO START\n\n" +
+      (
+        error.stack ||
+        error.message ||
+        String(error)
+      );
+
+  }
+
+}
+
+
+// ============================================================
+// LOAD THREE.JS
+//
+// One direct module dependency.
+// No import map.
+// No OrbitControls.
+// ============================================================
+
+stage("loading Three.js");
+
+
+let THREE;
+
+
+try {
+
+  THREE = await import(
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+  );
+
+} catch (error) {
+
+  fatal(error);
+
+  throw error;
+
+}
+
+
+stage("Three.js loaded");
+
+
+// ============================================================
+// MAIN INITIALIZATION
+//
+// This try remains open until Part 8.
+// Individual sections will still end at clean statement/
+// function boundaries.
+// ============================================================
+
+try {
+
+
+const $ =
+  id => document.getElementById(id);
+
+
+// ============================================================
+// INPUT REFERENCES
+// ============================================================
+
+const inputs = {
+
+  // ----------------------------------------------------------
+  // WORLD
+  // ----------------------------------------------------------
+
+  seed:
+    $("seed"),
+
+  terrainSize:
+    $("terrainSize"),
+
+  baseElevation:
+    $("baseElevation"),
+
+  continentScale:
+    $("continentScale"),
+
+  landmass:
+    $("landmass"),
+
+  warp:
+    $("warp"),
+
+
+  // ----------------------------------------------------------
+  // MOUNTAINS
+  // ----------------------------------------------------------
+
+  mountainHeight:
+    $("mountainHeight"),
+
+  ridgeFrequency:
+    $("ridgeFrequency"),
+
+  ridgeSharpness:
+    $("ridgeSharpness"),
+
+  hills:
+    $("hills"),
+
+
+  // ----------------------------------------------------------
+  // EROSION
+  // ----------------------------------------------------------
+
+  valleyDepth:
+    $("valleyDepth"),
+
+  erosion:
+    $("erosion"),
+
+  erosionScale:
+    $("erosionScale"),
+
+  terracing:
+    $("terracing"),
+
+  detail:
+    $("detail"),
+
+
+  // ----------------------------------------------------------
+  // CLIFFS
+  // ----------------------------------------------------------
+
+  cliffThreshold:
+    $("cliffThreshold"),
+
+  cliffStrength:
+    $("cliffStrength"),
+
+  strata:
+    $("strata"),
+
+
+  // ----------------------------------------------------------
+  // BIOMES
+  // ----------------------------------------------------------
+
+  moisture:
+    $("moisture"),
+
+  temperature:
+    $("temperature"),
+
+  biomeScale:
+    $("biomeScale"),
+
+  snowline:
+    $("snowline"),
+
+  rockExposure:
+    $("rockExposure"),
+
+
+  // ----------------------------------------------------------
+  // ROCKS
+  // ----------------------------------------------------------
+
+  rockDensity:
+    $("rockDensity"),
+
+  rockSize:
+    $("rockSize"),
+
+  boulders:
+    $("boulders"),
+
+  scree:
+    $("scree"),
+
+  rockCluster:
+    $("rockCluster"),
+
+  cliffRocks:
+    $("cliffRocks"),
+
+
+  // ----------------------------------------------------------
+  // WATER
+  // ----------------------------------------------------------
+
+  waterLevel:
+    $("waterLevel"),
+
+  coastWidth:
+    $("coastWidth"),
+
+
+  // ----------------------------------------------------------
+  // ATMOSPHERE
+  // ----------------------------------------------------------
+
+  sunElevation:
+    $("sunElevation"),
+
+  sunAzimuth:
+    $("sunAzimuth"),
+
+  sunIntensity:
+    $("sunIntensity"),
+
+  ambient:
+    $("ambient"),
+
+  haze:
+    $("haze"),
+
+  exposure:
+    $("exposure"),
+
+
+  // ----------------------------------------------------------
+  // PERFORMANCE
+  // ----------------------------------------------------------
+
+  resolution:
+    $("resolution")
+
+};
+
+
+// ============================================================
+// VERIFY UI
+//
+// Fail explicitly if a control is missing rather than getting
+// a vague null-reference error later.
+// ============================================================
+
+for (
+  const [name, element]
+  of Object.entries(inputs)
+) {
+
+  if (!element) {
+
+    throw new Error(
+      "Missing UI control: " + name
+    );
+
+  }
+
+}
+
+
+// ============================================================
+// WORLD SEED
+// ============================================================
+
+function getSeed() {
+
+  let seed =
+    Number(inputs.seed.value);
+
+  if (!Number.isFinite(seed)) {
+    seed = 1337;
+  }
+
+  seed =
+    Math.floor(
+      Math.max(
+        0,
+        seed
+      )
+    );
+
+  return seed;
+
+}
+
+
+// ============================================================
+// SEEDED RANDOM GENERATOR
+// ============================================================
+
+function mulberry32(seed) {
+
+  let a =
+    seed >>> 0;
+
+
+  return function() {
+
+    a |= 0;
+
+    a =
+      a +
+      0x6D2B79F5 |
+      0;
+
+
+    let t =
+      Math.imul(
+        a ^ a >>> 15,
+        1 | a
+      );
+
+
+    t =
+      t +
+      Math.imul(
+        t ^ t >>> 7,
+        61 | t
+      )
+      ^
+      t;
+
+
+    return (
+      (
+        t ^
+        t >>> 14
+      )
+      >>>
+      0
+    )
+    /
+    4294967296;
+
+  };
+
+}
+
+
+let random =
+  mulberry32(
+    getSeed()
+  );
+
+
+function resetRandom(
+  offset = 0
+) {
+
+  random =
+    mulberry32(
+      getSeed() +
+      offset
+    );
+
+}
+
+
+// ============================================================
+// RENDERER
+// ============================================================
+
+stage("creating renderer");
+
+
+const renderer =
+  new THREE.WebGLRenderer({
+
+    antialias: true,
+
+    powerPreference:
+      "high-performance"
+
+  });
+
+
+renderer.setPixelRatio(
+
+  Math.min(
+    window.devicePixelRatio,
+    1.5
+  )
+
+);
+
+
+renderer.setSize(
+
+  window.innerWidth,
+
+  window.innerHeight
+
+);
+
+
+renderer.outputColorSpace =
+  THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+  THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+  Number(
+    inputs.exposure.value
+  );
+
+
+renderer.domElement.style.position =
+  "fixed";
+
+renderer.domElement.style.inset =
+  "0";
+
+renderer.domElement.style.zIndex =
+  "0";
+
+
+document.body.prepend(
+  renderer.domElement
+);
+
+
+stage("renderer ready");
+
+
+// ============================================================
+// SCENE
+// ============================================================
+
+const scene =
+  new THREE.Scene();
+
+
+const fogColor =
+  new THREE.Color(
+    0xa7b5ae
+  );
+
+
+scene.background =
+  fogColor.clone();
+
+
+scene.fog =
+  new THREE.FogExp2(
+
+    fogColor,
+
+    Number(
+      inputs.haze.value
+    )
+
+  );
+
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+const camera =
+  new THREE.PerspectiveCamera(
+
+    50,
+
+    window.innerWidth /
+    window.innerHeight,
+
+    0.1,
+
+    1200
+
+  );
+
+
+// ============================================================
+// CUSTOM ORBIT CAMERA
+// ============================================================
+
+let cameraRadius =
+  165;
+
+
+let cameraTheta =
+  THREE.MathUtils.degToRad(
+    42
+  );
+
+
+let cameraPhi =
+  THREE.MathUtils.degToRad(
+    64
+  );
+
+
+const cameraTarget =
+  new THREE.Vector3(
+    0,
+    3,
+    0
+  );
+
+
+function updateCamera() {
+
+  cameraPhi =
+    THREE.MathUtils.clamp(
+
+      cameraPhi,
+
+      0.10,
+
+      Math.PI / 2 -
+      0.025
+
+    );
+
+
+  cameraRadius =
+    THREE.MathUtils.clamp(
+
+      cameraRadius,
+
+      20,
+
+      700
+
+    );
+
+
+  camera.position.set(
+
+    cameraTarget.x +
+
+    cameraRadius *
+    Math.sin(cameraPhi) *
+    Math.cos(cameraTheta),
+
+
+    cameraTarget.y +
+
+    cameraRadius *
+    Math.cos(cameraPhi),
+
+
+    cameraTarget.z +
+
+    cameraRadius *
+    Math.sin(cameraPhi) *
+    Math.sin(cameraTheta)
+
+  );
+
+
+  camera.lookAt(
+    cameraTarget
+  );
+
+}
+
+
+updateCamera();
+
+
+// ============================================================
+// POINTER ORBIT
+// ============================================================
+
+let dragging =
+  false;
+
+
+let previousX =
+  0;
+
+
+let previousY =
+  0;
+
+
+renderer.domElement.addEventListener(
+  "pointerdown",
+  event => {
+
+    if (event.button !== 0) {
+      return;
+    }
+
+
+    dragging =
+      true;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    renderer.domElement
+      .setPointerCapture(
+        event.pointerId
+      );
+
+  }
+);
+
+
+renderer.domElement.addEventListener(
+  "pointermove",
+  event => {
+
+    if (!dragging) {
+      return;
+    }
+
+
+    const dx =
+      event.clientX -
+      previousX;
+
+
+    const dy =
+      event.clientY -
+      previousY;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    cameraTheta -=
+      dx * 0.005;
+
+
+    cameraPhi -=
+      dy * 0.005;
+
+
+    updateCamera();
+
+  }
+);
+
+
+function releasePointer(event) {
+
+  dragging =
+    false;
+
+
+  if (
+    renderer.domElement
+      .hasPointerCapture(
+        event.pointerId
+      )
+  ) {
+
+    renderer.domElement
+      .releasePointerCapture(
+        event.pointerId
+      );
+
+  }
+
+}
+
+
+renderer.domElement.addEventListener(
+  "pointerup",
+  releasePointer
+);
+
+
+renderer.domElement.addEventListener(
+  "pointercancel",
+  releasePointer
+);
+
+
+// ============================================================
+// WHEEL ZOOM
+// ============================================================
+
+renderer.domElement.addEventListener(
+  "wheel",
+  event => {
+
+    event.preventDefault();
+
+
+    cameraRadius *=
+      Math.exp(
+        event.deltaY *
+        0.001
+      );
+
+
+    updateCamera();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+stage("camera ready");
+
+
+// ============================================================
+// LIGHTING
+// ============================================================
+
+const hemisphere =
+  new THREE.HemisphereLight(
+
+    0xdbe8ea,
+
+    0x34412e,
+
+    Number(
+      inputs.ambient.value
+    )
+
+  );
+
+
+scene.add(
+  hemisphere
+);
+
+
+const sun =
+  new THREE.DirectionalLight(
+
+    0xffe0ae,
+
+    Number(
+      inputs.sunIntensity.value
+    )
+
+  );
+
+
+scene.add(
+  sun
+);
+
+
+// ============================================================
+// WORLD OBJECT STATE
+// ============================================================
+
+let terrain =
+  null;
+
+
+let terrainMaterial =
+  null;
+
+
+let water =
+  null;
+
+
+let waterMaterial =
+  null;
+
+
+let sky =
+  null;
+
+
+let skyMaterial =
+  null;
+
+
+// Basic geology.
+
+let rockField =
+  null;
+
+
+let boulderField =
+  null;
+
+
+let screeField =
+  null;
+
+
+// Cliff geology.
+
+let cliffOutcrops =
+  null;
+
+
+let cliffLedges =
+  null;
+
+
+let talusField =
+  null;
+
+
+// Biome geometry.
+
+let treeField =
+  null;
+
+
+let shrubField =
+  null;
+
+
+let grassField =
+  null;
+
+
+// ============================================================
+// SHARED TEMP OBJECTS
+// ============================================================
+
+const dummy =
+  new THREE.Object3D();
+
+
+const upVector =
+  new THREE.Vector3(
+    0,
+    1,
+    0
+  );
+
+
+// ============================================================
+// SUN POSITION
+// ============================================================
+
+function updateSun() {
+
+  const elevation =
+    THREE.MathUtils.degToRad(
+      Number(
+        inputs.sunElevation.value
+      )
+    );
+
+
+  const azimuth =
+    THREE.MathUtils.degToRad(
+      Number(
+        inputs.sunAzimuth.value
+      )
+    );
+
+
+  const radius =
+    400;
+
+
+  sun.position.set(
+
+    Math.cos(elevation) *
+    Math.cos(azimuth) *
+    radius,
+
+
+    Math.sin(elevation) *
+    radius,
+
+
+    Math.cos(elevation) *
+    Math.sin(azimuth) *
+    radius
+
+  );
+
+
+  if (terrainMaterial) {
+
+    terrainMaterial.uniforms
+      .uSunDirection.value
+      .copy(
+        sun.position
+      )
+      .normalize();
+
+  }
+
+
+  if (waterMaterial) {
+
+    waterMaterial.uniforms
+      .uSunDirection.value
+      .copy(
+        sun.position
+      )
+      .normalize();
+
+  }
+
+
+  if (skyMaterial) {
+
+    skyMaterial.uniforms
+      .uSunDirection.value
+      .copy(
+        sun.position
+      )
+      .normalize();
+
+  }
+
+}
+
+
+updateSun();
+
+
+// ============================================================
+// ENGINE READY
+// ============================================================
+
+stage("engine ready");
+
+// ============================================================
+// TERRAIN MATHEMATICS
+// ============================================================
+
+stage("building terrain math");
+
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function clamp01(value) {
+
+  return Math.max(
+    0,
+    Math.min(
+      1,
+      value
+    )
+  );
+
+}
+
+
+function lerp(
+  a,
+  b,
+  t
+) {
+
+  return (
+    a +
+    (b-a)*t
+  );
+
+}
+
+
+function smoothValue(t) {
+
+  return (
+    t *
+    t *
+    (
+      3 -
+      2*t
+    )
+  );
+
+}
+
+
+// ============================================================
+// DETERMINISTIC 2D HASH
+// ============================================================
+
+function hash2(
+  x,
+  z,
+  seedOffset = 0
+) {
+
+  const xi =
+    Math.floor(x);
+
+
+  const zi =
+    Math.floor(z);
+
+
+  let h =
+
+    Math.imul(
+      xi,
+      374761393
+    )
+
+    +
+
+    Math.imul(
+      zi,
+      668265263
+    )
+
+    +
+
+    Math.imul(
+      getSeed() + seedOffset,
+      1442695041
+    );
+
+
+  h =
+    h ^
+    (h >>> 13);
+
+
+  h =
+    Math.imul(
+      h,
+      1274126177
+    );
+
+
+  h =
+    h ^
+    (h >>> 16);
+
+
+  return (
+    h >>> 0
+  ) / 4294967295;
+
+}
+
+
+// ============================================================
+// VALUE NOISE
+// ============================================================
+
+function noise2(
+  x,
+  z,
+  seedOffset = 0
+) {
+
+  const xi =
+    Math.floor(x);
+
+
+  const zi =
+    Math.floor(z);
+
+
+  const xf =
+    x-xi;
+
+
+  const zf =
+    z-zi;
+
+
+  const u =
+    smoothValue(xf);
+
+
+  const v =
+    smoothValue(zf);
+
+
+  const a =
+    hash2(
+      xi,
+      zi,
+      seedOffset
+    );
+
+
+  const b =
+    hash2(
+      xi+1,
+      zi,
+      seedOffset
+    );
+
+
+  const c =
+    hash2(
+      xi,
+      zi+1,
+      seedOffset
+    );
+
+
+  const d =
+    hash2(
+      xi+1,
+      zi+1,
+      seedOffset
+    );
+
+
+  const x1 =
+    lerp(
+      a,
+      b,
+      u
+    );
+
+
+  const x2 =
+    lerp(
+      c,
+      d,
+      u
+    );
+
+
+  return (
+    lerp(
+      x1,
+      x2,
+      v
+    ) *
+    2 -
+    1
+  );
+
+}
+
+
+// ============================================================
+// FRACTAL BROWNIAN MOTION
+// ============================================================
+
+function fbm(
+  x,
+  z,
+  octaves = 5,
+  seedOffset = 0
+) {
+
+  let value =
+    0;
+
+
+  let amplitude =
+    .5;
+
+
+  let frequency =
+    1;
+
+
+  let normalization =
+    0;
+
+
+  for (
+    let octave=0;
+    octave<octaves;
+    octave++
+  ) {
+
+    value +=
+
+      noise2(
+
+        x*frequency,
+
+        z*frequency,
+
+        seedOffset +
+        octave*101
+
+      )
+
+      *
+
+      amplitude;
+
+
+    normalization +=
+      amplitude;
+
+
+    amplitude *=
+      .5;
+
+
+    frequency *=
+      2.03;
+
+  }
+
+
+  return (
+    value /
+    Math.max(
+      normalization,
+      .0001
+    )
+  );
+
+}
+
+
+// ============================================================
+// RIDGED MULTIFRACTAL
+// ============================================================
+
+function ridgedFBM(
+  x,
+  z,
+  octaves = 5,
+  seedOffset = 500
+) {
+
+  let value =
+    0;
+
+
+  let amplitude =
+    .55;
+
+
+  let frequency =
+    1;
+
+
+  let normalization =
+    0;
+
+
+  for (
+    let octave=0;
+    octave<octaves;
+    octave++
+  ) {
+
+    let n =
+
+      noise2(
+
+        x*frequency,
+
+        z*frequency,
+
+        seedOffset +
+        octave*173
+
+      );
+
+
+    n =
+      1 -
+      Math.abs(n);
+
+
+    // Concentrate energy along ridge centers.
+
+    n *=
+      n;
+
+
+    value +=
+
+      n *
+      amplitude;
+
+
+    normalization +=
+      amplitude;
+
+
+    amplitude *=
+      .52;
+
+
+    frequency *=
+      2.08;
+
+  }
+
+
+  return (
+    value /
+    Math.max(
+      normalization,
+      .0001
+    )
+  );
+
+}
+
+
+// ============================================================
+// DOMAIN WARP
+//
+// Low-frequency noise bends subsequent terrain coordinates,
+// creating curved mountain chains instead of obvious noise
+// islands.
+// ============================================================
+
+function domainWarp(
+  x,
+  z
+) {
+
+  const amount =
+    Number(
+      inputs.warp.value
+    );
+
+
+  if (amount <= .001) {
+
+    return {
+      x,
+      z
+    };
+
+  }
+
+
+  const qx =
+
+    fbm(
+
+      x*.018,
+
+      z*.018,
+
+      4,
+
+      1800
+
+    );
+
+
+  const qz =
+
+    fbm(
+
+      x*.018 + 17.3,
+
+      z*.018 - 11.7,
+
+      4,
+
+      2400
+
+    );
+
+
+  return {
+
+    x:
+      x +
+      qx *
+      amount *
+      18,
+
+    z:
+      z +
+      qz *
+      amount *
+      18
+
+  };
+
+}
+
+
+// ============================================================
+// CONTINENTAL FIELD
+// ============================================================
+
+function continentalField(
+  x,
+  z
+) {
+
+  const scale =
+    Number(
+      inputs.continentScale.value
+    );
+
+
+  const frequency =
+    .0045 *
+    scale;
+
+
+  const primary =
+
+    fbm(
+
+      x*frequency,
+
+      z*frequency,
+
+      5,
+
+      3100
+
+    );
+
+
+  const secondary =
+
+    fbm(
+
+      x*frequency*.42 + 30,
+
+      z*frequency*.42 - 17,
+
+      3,
+
+      3600
+
+    );
+
+
+  return (
+    primary +
+    secondary*.42
+  );
+
+}
+
+
+// ============================================================
+// MOUNTAIN FIELD
+// ============================================================
+
+function mountainField(
+  x,
+  z
+) {
+
+  const frequency =
+    Number(
+      inputs.ridgeFrequency.value
+    );
+
+
+  const sharpness =
+    Number(
+      inputs.ridgeSharpness.value
+    );
+
+
+  let ridge =
+
+    ridgedFBM(
+
+      x*.012*frequency,
+
+      z*.012*frequency,
+
+      6,
+
+      5100
+
+    );
+
+
+  ridge =
+
+    Math.pow(
+
+      Math.max(
+        ridge,
+        0
+      ),
+
+      sharpness
+
+    );
+
+
+  // Broad mountain-range mask.
+
+  const rangeNoise =
+
+    fbm(
+
+      x*.0045,
+
+      z*.0045,
+
+      4,
+
+      5900
+
+    );
+
+
+  const rangeMask =
+
+    smoothValue(
+
+      clamp01(
+
+        rangeNoise*.75 +
+        .52
+
+      )
+
+    );
+
+
+  return (
+    ridge *
+    rangeMask
+  );
+
+}
+
+
+// ============================================================
+// ROLLING HILLS
+// ============================================================
+
+function hillField(
+  x,
+  z
+) {
+
+  return fbm(
+
+    x*.018,
+
+    z*.018,
+
+    5,
+
+    7100
+
+  );
+
+}
+
+
+// ============================================================
+// VALLEY / DRAINAGE FIELD
+//
+// Noise zero-crossings become long drainage channels.
+// ============================================================
+
+function valleyField(
+  x,
+  z
+) {
+
+  const n =
+
+    fbm(
+
+      x*.011,
+
+      z*.011,
+
+      4,
+
+      8200
+
+    );
+
+
+  let channel =
+
+    1 -
+
+    Math.min(
+      1,
+      Math.abs(n)*5
+    );
+
+
+  channel *=
+    channel;
+
+
+  return channel;
+
+}
+
+
+// ============================================================
+// EROSION-LIKE CHANNEL FIELD
+//
+// This is not a full hydraulic erosion simulation. Multiple
+// anisotropic drainage fields carve convincing gullies and
+// runoff channels without a costly simulation.
+// ============================================================
+
+function erosionField(
+  x,
+  z
+) {
+
+  const scale =
+    Number(
+      inputs.erosionScale.value
+    );
+
+
+  const e1 =
+
+    fbm(
+
+      x*.018*scale,
+
+      z*.006*scale,
+
+      4,
+
+      9100
+
+    );
+
+
+  const e2 =
+
+    fbm(
+
+      x*.007*scale + 12,
+
+      z*.021*scale - 9,
+
+      4,
+
+      9600
+
+    );
+
+
+  const e3 =
+
+    fbm(
+
+      x*.012*scale - 23,
+
+      z*.013*scale + 31,
+
+      3,
+
+      10100
+
+    );
+
+
+  const channel1 =
+
+    1 -
+
+    Math.min(
+      1,
+      Math.abs(e1)*6
+    );
+
+
+  const channel2 =
+
+    1 -
+
+    Math.min(
+      1,
+      Math.abs(e2)*7
+    );
+
+
+  const channel3 =
+
+    1 -
+
+    Math.min(
+      1,
+      Math.abs(e3)*8
+    );
+
+
+  return Math.max(
+
+    channel1,
+
+    channel2*.82,
+
+    channel3*.62
+
+  );
+
+}
+
+
+// ============================================================
+// FINE GEOLOGICAL DETAIL
+// ============================================================
+
+function detailField(
+  x,
+  z
+) {
+
+  const broad =
+
+    fbm(
+
+      x*.075,
+
+      z*.075,
+
+      4,
+
+      11200
+
+    );
+
+
+  const fine =
+
+    fbm(
+
+      x*.17,
+
+      z*.17,
+
+      3,
+
+      11800
+
+    );
+
+
+  return (
+    broad*.78 +
+    fine*.22
+  );
+
+}
+
+
+// ============================================================
+// TERRACING
+// ============================================================
+
+function applyTerracing(
+  height
+) {
+
+  const amount =
+    Number(
+      inputs.terracing.value
+    );
+
+
+  if (amount <= .001) {
+
+    return height;
+
+  }
+
+
+  const stepSize =
+    1.45;
+
+
+  const lower =
+
+    Math.floor(
+      height /
+      stepSize
+    )
+
+    *
+    stepSize;
+
+
+  const upper =
+    lower +
+    stepSize;
+
+
+  const local =
+
+    (
+      height -
+      lower
+    )
+    /
+    stepSize;
+
+
+  // Keep terrace transitions slightly rounded.
+
+  const terraceBlend =
+
+    smoothValue(
+      clamp01(
+        local*1.8
+      )
+    );
+
+
+  const shaped =
+
+    lerp(
+      lower,
+      upper,
+      terraceBlend
+    );
+
+
+  return lerp(
+
+    height,
+
+    shaped,
+
+    amount*.88
+
+  );
+
+}
+
+
+// ============================================================
+// CLIFF FIELD
+//
+// We use changes in the mountain field to identify locations
+// where the terrain can be sharpened into exposed faces.
+// ============================================================
+
+function cliffField(
+  x,
+  z
+) {
+
+  const e =
+    1.15;
+
+
+  const center =
+    mountainField(
+      x,
+      z
+    );
+
+
+  const dx =
+
+    mountainField(
+      x+e,
+      z
+    )
+
+    -
+
+    mountainField(
+      x-e,
+      z
+    );
+
+
+  const dz =
+
+    mountainField(
+      x,
+      z+e
+    )
+
+    -
+
+    mountainField(
+      x,
+      z-e
+    );
+
+
+  const gradient =
+
+    Math.sqrt(
+      dx*dx +
+      dz*dz
+    );
+
+
+  const threshold =
+    Number(
+      inputs.cliffThreshold.value
+    );
+
+
+  const strength =
+    Number(
+      inputs.cliffStrength.value
+    );
+
+
+  const cliff =
+
+    Math.max(
+
+      0,
+
+      gradient -
+      threshold*.10
+
+    );
+
+
+  return (
+
+    cliff *
+    strength *
+    center *
+    5
+
+  );
+
+}
+
+
+// ============================================================
+// COMPLETE TERRAIN HEIGHT
+//
+// This is the authoritative world surface.
+//
+// Terrain mesh, rocks, cliffs, water relationships and biome
+// geometry all query this same function.
+// ============================================================
+
+function terrainHeight(
+  originalX,
+  originalZ
+) {
+
+  const warped =
+    domainWarp(
+      originalX,
+      originalZ
+    );
+
+
+  const x =
+    warped.x;
+
+
+  const z =
+    warped.z;
+
+
+  const base =
+    Number(
+      inputs.baseElevation.value
+    );
+
+
+  const landmassStrength =
+    Number(
+      inputs.landmass.value
+    );
+
+
+  const mountainStrength =
+    Number(
+      inputs.mountainHeight.value
+    );
+
+
+  const hillStrength =
+    Number(
+      inputs.hills.value
+    );
+
+
+  const valleyStrength =
+    Number(
+      inputs.valleyDepth.value
+    );
+
+
+  const erosionStrength =
+    Number(
+      inputs.erosion.value
+    );
+
+
+  const detailStrength =
+    Number(
+      inputs.detail.value
+    );
+
+
+  const continent =
+    continentalField(
+      x,
+      z
+    );
+
+
+  const mountains =
+    mountainField(
+      x,
+      z
+    );
+
+
+  let height =
+    base;
+
+
+  // ----------------------------------------------------------
+  // CONTINENTAL FOUNDATION
+  // ----------------------------------------------------------
+
+  height +=
+
+    continent *
+    landmassStrength *
+    6;
+
+
+  // ----------------------------------------------------------
+  // HILLS
+  // ----------------------------------------------------------
+
+  height +=
+
+    hillField(
+      x,
+      z
+    )
+
+    *
+    hillStrength;
+
+
+  // ----------------------------------------------------------
+  // MOUNTAIN RANGES
+  // ----------------------------------------------------------
+
+  height +=
+
+    mountains *
+    mountainStrength;
+
+
+  // ----------------------------------------------------------
+  // VALLEYS
+  // ----------------------------------------------------------
+
+  height -=
+
+    valleyField(
+      x,
+      z
+    )
+
+    *
+
+    valleyStrength
+
+    *
+
+    (
+      .35 +
+      mountains*.65
+    );
+
+
+  // ----------------------------------------------------------
+  // EROSION CHANNELS
+  // ----------------------------------------------------------
+
+  height -=
+
+    erosionField(
+      x,
+      z
+    )
+
+    *
+
+    erosionStrength
+
+    *
+
+    2.8
+
+    *
+
+    (
+      .30 +
+      mountains*.70
+    );
+
+
+  // ----------------------------------------------------------
+  // FINE DETAIL
+  // ----------------------------------------------------------
+
+  height +=
+
+    detailField(
+      x,
+      z
+    )
+
+    *
+    detailStrength;
+
+
+  // ----------------------------------------------------------
+  // CLIFF SHARPENING
+  // ----------------------------------------------------------
+
+  height +=
+
+    cliffField(
+      x,
+      z
+    );
+
+
+  // ----------------------------------------------------------
+  // TERRACES
+  // ----------------------------------------------------------
+
+  height =
+    applyTerracing(
+      height
+    );
+
+
+  return height;
+
+}
+
+
+// ============================================================
+// TERRAIN NORMAL
+// ============================================================
+
+function terrainNormal(
+  x,
+  z
+) {
+
+  const e =
+    .75;
+
+
+  const left =
+    terrainHeight(
+      x-e,
+      z
+    );
+
+
+  const right =
+    terrainHeight(
+      x+e,
+      z
+    );
+
+
+  const back =
+    terrainHeight(
+      x,
+      z-e
+    );
+
+
+  const front =
+    terrainHeight(
+      x,
+      z+e
+    );
+
+
+  const normal =
+    new THREE.Vector3(
+
+      left-right,
+
+      e*2,
+
+      back-front
+
+    );
+
+
+  normal.normalize();
+
+
+  return normal;
+
+}
+
+
+// ============================================================
+// TERRAIN SLOPE
+//
+// 0 = flat.
+// Increasing toward 1 = very steep.
+// ============================================================
+
+function terrainSlope(
+  x,
+  z
+) {
+
+  const normal =
+    terrainNormal(
+      x,
+      z
+    );
+
+
+  return (
+    1 -
+    clamp01(
+      normal.y
+    )
+  );
+
+}
+
+
+// ============================================================
+// LOCAL MOISTURE
+// ============================================================
+
+function moistureField(
+  x,
+  z
+) {
+
+  const scale =
+    Number(
+      inputs.biomeScale.value
+    );
+
+
+  const globalMoisture =
+    Number(
+      inputs.moisture.value
+    );
+
+
+  const broad =
+
+    fbm(
+
+      x*.008*scale,
+
+      z*.008*scale,
+
+      5,
+
+      13100
+
+    );
+
+
+  const local =
+
+    fbm(
+
+      x*.022*scale + 37,
+
+      z*.022*scale - 19,
+
+      3,
+
+      13600
+
+    );
+
+
+  return clamp01(
+
+    globalMoisture +
+
+    broad*.30 +
+
+    local*.08
+
+  );
+
+}
+
+
+// ============================================================
+// LOCAL TEMPERATURE
+// ============================================================
+
+function temperatureField(
+  x,
+  z,
+  elevation
+) {
+
+  const scale =
+    Number(
+      inputs.biomeScale.value
+    );
+
+
+  const globalTemperature =
+    Number(
+      inputs.temperature.value
+    );
+
+
+  const climateNoise =
+
+    fbm(
+
+      x*.006*scale + 40,
+
+      z*.006*scale - 25,
+
+      4,
+
+      14200
+
+    );
+
+
+  const altitudeCooling =
+
+    Math.max(
+      elevation,
+      0
+    )
+
+    *
+    .018;
+
+
+  return clamp01(
+
+    globalTemperature +
+
+    climateNoise*.20 -
+
+    altitudeCooling
+
+  );
+
+}
+
+
+// ============================================================
+// ROCK CLUSTER FIELD
+// ============================================================
+
+function rockClusterField(
+  x,
+  z
+) {
+
+  const clustering =
+    Number(
+      inputs.rockCluster.value
+    );
+
+
+  if (clustering <= .001) {
+
+    return 1;
+
+  }
+
+
+  const field =
+
+    fbm(
+
+      x*.025,
+
+      z*.025,
+
+      4,
+
+      16300
+
+    );
+
+
+  const normalized =
+    clamp01(
+      field*.5+.5
+    );
+
+
+  return lerp(
+
+    1,
+
+    normalized,
+
+    clustering
+
+  );
+
+}
+
+
+// ============================================================
+// COMPLETE BIOME CLASSIFICATION
+// ============================================================
+
+function classifyBiome(x, z) {
+  const height = terrainHeight(x, z);
+  const slope = terrainSlope(x, z);
+  const moisture = moistureField(x, z);
+  const temperature = temperatureField(x, z, height);
+
+  const waterLevel = Number(inputs.waterLevel.value);
+  const snowline = Number(inputs.snowline.value);
+
+  if (height < waterLevel) {
+    return "underwater";
+  }
+
+  if (slope > 0.58) {
+    return "cliff";
+  }
+
+  if (height > snowline && temperature < 0.52) {
+    return "snow";
+  }
+
+  if (temperature > 0.67 && moisture < 0.34) {
+    return "desert";
+  }
+
+  if (moisture > 0.72 && height < waterLevel + 3) {
+    return "wetland";
+  }
+
+  if (height > snowline * 0.72) {
+    return "alpine";
+  }
+
+  if (moisture > 0.60) {
+    return "forest";
+  }
+
+  if (moisture < 0.30) {
+    return "scrub";
+  }
+
+  return "grassland";
+}
+
+stage("terrain math ready");
+
+// END OF PART 3 OF 8
+
+// ============================================================
+// PART 4 OF 8: TERRAIN RENDERING
+// ============================================================
+
+stage("preparing terrain renderer");
+
+// Later geology and vegetation sections will use this cache.
+let terrainGrid = null;
+
+// Report shader failures instead of silently showing a blank mesh.
+renderer.debug.checkShaderErrors = true;
+
+renderer.debug.onShaderError = (gl, program, vertex, fragment) => {
+  throw new Error([
+    "Terrainworks shader compilation failed.",
+    gl.getProgramInfoLog(program),
+    gl.getShaderInfoLog(vertex),
+    gl.getShaderInfoLog(fragment)
+  ].filter(Boolean).join("\n\n"));
+};
+
+// ============================================================
+// TERRAIN MATERIAL
+// ============================================================
+
+function createTerrainMaterial() {
+  const value = name => Number(inputs[name].value);
+
+  return new THREE.ShaderMaterial({
+    side: THREE.FrontSide,
+    fog: true,
+    wireframe: $("wireframe").checked,
+
+    uniforms: THREE.UniformsUtils.merge([
+      THREE.UniformsLib.fog,
+
+      {
+        uSunDirection: {
+          value: sun.position.clone().normalize()
+        },
+
+        uSunIntensity: { value: value("sunIntensity") },
+        uAmbient: { value: value("ambient") },
+
+        uWaterLevel: { value: value("waterLevel") },
+        uCoastWidth: { value: value("coastWidth") },
+
+        uWaterEnabled: {
+          value: $("waterToggle").checked ? 1 : 0
+        },
+
+        uSnowline: { value: value("snowline") },
+        uRockExposure: { value: value("rockExposure") },
+        uCliffThreshold: { value: value("cliffThreshold") },
+        uStrata: { value: value("strata") },
+
+        uMoisture: { value: value("moisture") },
+        uTemperature: { value: value("temperature") },
+
+        uBiomes: { value: 1 },
+
+        uSnow: {
+          value: $("snowToggle").checked ? 1 : 0
+        },
+
+        uStrataEnabled: {
+          value: $("strataToggle").checked ? 1 : 0
+        },
+
+        // 0 = mixed geology, 1 = sandstone, 2 = basalt.
+        uGeology: { value: 0 }
+      }
+    ]),
+
+    // --------------------------------------------------------
+    // COMPLETE VERTEX SHADER
+    // --------------------------------------------------------
+
+    vertexShader: `
+      attribute vec2 aClimate;
+
+      varying vec3 vWorldPosition;
+      varying vec3 vWorldNormal;
+      varying vec2 vClimate;
+
+      #include <fog_pars_vertex>
+
+      void main() {
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vec4 mvPosition = viewMatrix * world;
+
+        vWorldPosition = world.xyz;
+        vWorldNormal = normalize(mat3(modelMatrix) * normal);
+        vClimate = aClimate;
+
+        gl_Position = projectionMatrix * mvPosition;
+
+        #include <fog_vertex>
+      }
+    `,
+
+    // --------------------------------------------------------
+    // COMPLETE FRAGMENT SHADER
+    // --------------------------------------------------------
+
+    fragmentShader: `
+      uniform vec3 uSunDirection;
+
+      uniform float uSunIntensity;
+      uniform float uAmbient;
+
+      uniform float uWaterLevel;
+      uniform float uCoastWidth;
+      uniform float uWaterEnabled;
+
+      uniform float uSnowline;
+      uniform float uRockExposure;
+      uniform float uCliffThreshold;
+      uniform float uStrata;
+
+      uniform float uMoisture;
+      uniform float uTemperature;
+
+      uniform float uBiomes;
+      uniform float uSnow;
+      uniform float uStrataEnabled;
+      uniform float uGeology;
+
+      varying vec3 vWorldPosition;
+      varying vec3 vWorldNormal;
+      varying vec2 vClimate;
+
+      #include <fog_pars_fragment>
+
+      void main() {
+        vec3 p = vWorldPosition;
+        vec3 N = normalize(vWorldNormal);
+
+        float slope = 1.0 - clamp(N.y, 0.0, 1.0);
+
+        float moisture = clamp(
+          uMoisture + vClimate.x, 0.0, 1.0
+        );
+
+        float temperature = clamp(
+          uTemperature + vClimate.y, 0.0, 1.0
+        );
+
+        float snowline = max(uSnowline, 0.1);
+
+        // Linear-light material colors.
+
+        vec3 grass = vec3(0.085, 0.19, 0.045);
+        vec3 forest = vec3(0.035, 0.095, 0.025);
+        vec3 scrub = vec3(0.25, 0.22, 0.095);
+        vec3 sand = vec3(0.48, 0.31, 0.15);
+
+        vec3 granite = vec3(0.24, 0.25, 0.23);
+        vec3 sandstone = vec3(0.37, 0.18, 0.075);
+        vec3 basalt = vec3(0.065, 0.07, 0.075);
+
+        vec3 snow = vec3(0.80, 0.85, 0.88);
+
+        // ----------------------------------------------------
+        // CLIMATE-BASED BIOMES
+        // ----------------------------------------------------
+
+        float dry = 1.0 - smoothstep(
+          0.23, 0.48, moisture
+        );
+
+        float desert = dry * smoothstep(
+          0.55, 0.78, temperature
+        );
+
+        float forestMask = smoothstep(
+          0.54, 0.78, moisture
+        );
+
+        vec3 color = grass;
+
+        if (uBiomes > 0.5) {
+          color = mix(color, forest, forestMask * 0.75);
+          color = mix(color, scrub, dry * 0.8);
+          color = mix(color, sand, desert);
+
+          float alpine = smoothstep(
+            snowline * 0.55, snowline, p.y
+          );
+
+          color = mix(
+            color,
+            vec3(0.21, 0.25, 0.17),
+            alpine * 0.55
+          );
+        }
+
+        // ----------------------------------------------------
+        // COASTLINE AND WETLAND TRANSITIONS
+        // ----------------------------------------------------
+
+        float coast = 1.0 - smoothstep(
+          uWaterLevel + 0.1,
+          uWaterLevel + max(uCoastWidth, 0.2),
+          p.y
+        );
+
+        coast *= 1.0 - smoothstep(0.12, 0.4, slope);
+        coast *= uWaterEnabled;
+
+        vec3 coastColor = mix(
+          vec3(0.42, 0.36, 0.21),
+          vec3(0.07, 0.13, 0.075),
+          smoothstep(0.63, 0.88, moisture)
+        );
+
+        color = mix(color, coastColor, coast * 0.9);
+
+        // ----------------------------------------------------
+        // GEOLOGY PALETTES
+        // ----------------------------------------------------
+
+        vec3 rock = mix(granite, sandstone, desert);
+
+        if (uGeology > 1.5) {
+          rock = basalt;
+          color = mix(color, basalt, 0.82);
+        } else if (uGeology > 0.5) {
+          rock = sandstone;
+          color = mix(color, sand, 0.55);
+        }
+
+        // ----------------------------------------------------
+        // EXPOSED ROCK
+        // ----------------------------------------------------
+
+        float threshold = clamp(
+          uCliffThreshold, 0.05, 0.9
+        );
+
+        float slopeRock = smoothstep(
+          threshold * 0.35, threshold, slope
+        );
+
+        float highRock = smoothstep(
+          snowline * 0.4, snowline, p.y
+        );
+
+        float exposed = max(
+          slopeRock,
+          highRock * uRockExposure * 0.65
+        );
+
+        color = mix(
+          color, rock, clamp(exposed, 0.0, 1.0)
+        );
+
+        // ----------------------------------------------------
+        // CLIFF STRATA
+        // ----------------------------------------------------
+
+        float cliff = smoothstep(
+          threshold,
+          min(threshold + 0.2, 1.0),
+          slope
+        );
+
+        float strata = sin(
+          p.y * (2.0 + uStrata * 3.0)
+          + sin(p.x * 0.06)
+          + sin(p.z * 0.075)
+        );
+
+        float bands = 1.0
+          + strata * 0.18
+          * clamp(uStrata, 0.0, 1.0)
+          * uStrataEnabled;
+
+        color = mix(
+          color, rock * bands * 0.85, cliff
+        );
+
+        // Subtle surface variation without external textures.
+
+        float grain =
+          sin(p.x * 2.9 + sin(p.z * 1.7))
+          * sin(p.z * 3.7 + p.y * 2.0);
+
+        color *= 0.95 + grain * 0.05;
+
+        // ----------------------------------------------------
+        // SNOW RETENTION
+        // ----------------------------------------------------
+
+        float snowHeight = smoothstep(
+          snowline, snowline + 3.5, p.y
+        );
+
+        float cold = 1.0 - smoothstep(
+          0.40, 0.62, temperature
+        );
+
+        float retention = 1.0 - smoothstep(
+          0.22, 0.58, slope
+        );
+
+        float snowMask =
+          snowHeight * cold * retention * uSnow;
+
+        color = mix(
+          color, snow, clamp(snowMask, 0.0, 1.0)
+        );
+
+        // ----------------------------------------------------
+        // SUBMERGED GROUND
+        // ----------------------------------------------------
+
+        float submerged = 1.0 - smoothstep(
+          uWaterLevel - 0.7,
+          uWaterLevel + 0.05,
+          p.y
+        );
+
+        color = mix(
+          color,
+          vec3(0.055, 0.06, 0.035),
+          submerged * 0.65 * uWaterEnabled
+        );
+
+        // ----------------------------------------------------
+        // LIGHTING
+        // ----------------------------------------------------
+
+        float diffuse = max(
+          dot(N, normalize(uSunDirection)), 0.0
+        );
+
+        vec3 ambient = mix(
+          vec3(0.16, 0.14, 0.11),
+          vec3(0.40, 0.48, 0.55),
+          clamp(N.y, 0.0, 1.0)
+        );
+
+        vec3 light =
+          ambient * uAmbient
+          + vec3(1.0, 0.86, 0.67)
+          * diffuse * uSunIntensity * 0.4;
+
+        gl_FragColor = vec4(color * light, 1.0);
+
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+        #include <fog_fragment>
+      }
+    `
+  });
+}
+
+// ============================================================
+// CLIMATE DATA
+//
+// Same seeded formulas used by the CPU climate functions.
+// Store offsets so moisture/temperature sliders can adjust
+// the rendered material without regenerating terrain heights.
+// ============================================================
+
+function terrainClimateOffsets(x, z, elevation) {
+  const scale = Number(inputs.biomeScale.value);
+
+  const moisture =
+    fbm(
+      x * 0.008 * scale,
+      z * 0.008 * scale,
+      5,
+      13100
+    ) * 0.30
+    +
+    fbm(
+      x * 0.022 * scale + 37,
+      z * 0.022 * scale - 19,
+      3,
+      13600
+    ) * 0.08;
+
+  const temperature =
+    fbm(
+      x * 0.006 * scale + 40,
+      z * 0.006 * scale - 25,
+      4,
+      14200
+    ) * 0.20
+    -
+    Math.max(elevation, 0) * 0.018;
+
+  return [moisture, temperature];
+}
+
+// ============================================================
+// BUILD TERRAIN
+//
+// This function is asynchronous. Rebuild callers must await it.
+// The previous terrain remains until its replacement is ready.
+// ============================================================
+
+async function rebuildTerrain() {
+  const size = Number(inputs.terrainSize.value);
+  const resolution = Math.round(
+    Number(inputs.resolution.value)
+  );
+
+  if (
+    !Number.isFinite(size) ||
+    size <= 0 ||
+    !Number.isFinite(resolution) ||
+    resolution < 2 ||
+    resolution > 320
+  ) {
+    throw new Error("Invalid terrain size or resolution.");
+  }
+
+  const geometry = new THREE.PlaneGeometry(
+    size, size, resolution, resolution
+  );
+
+  geometry.rotateX(-Math.PI / 2);
+
+  const positions = geometry.attributes.position;
+  const climate = new Float32Array(positions.count * 2);
+
+  let nextYield = performance.now();
+
+  try {
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const z = positions.getZ(i);
+      const height = terrainHeight(x, z);
+
+      if (!Number.isFinite(height)) {
+        throw new Error(
+          "Non-finite terrain height at vertex " + i
+        );
+      }
+
+      positions.setY(i, height);
+
+      const localClimate = terrainClimateOffsets(
+        x, z, height
+      );
+
+      climate[i * 2] = localClimate[0];
+      climate[i * 2 + 1] = localClimate[1];
+
+      // Yield periodically so startup progress can repaint.
+      if (
+        (i & 63) === 0 &&
+        performance.now() >= nextYield
+      ) {
+        const percent = Math.round(
+          i / positions.count * 100
+        );
+
+        stage("terrain " + percent + "%");
+
+        await new Promise(resolve => {
+          setTimeout(resolve, 0);
+        });
+
+        nextYield = performance.now() + 12;
+      }
+    }
+
+    geometry.setAttribute(
+      "aClimate",
+      new THREE.BufferAttribute(climate, 2)
+    );
+
+    positions.needsUpdate = true;
+
+    geometry.computeVertexNormals();
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+  } catch (error) {
+    geometry.dispose();
+    throw error;
+  }
+
+  const previous = terrain;
+
+  terrainMaterial = createTerrainMaterial();
+  terrain = new THREE.Mesh(geometry, terrainMaterial);
+  terrain.name = "Terrainworks landscape";
+
+  scene.add(terrain);
+
+  if (previous) {
+    scene.remove(previous);
+    previous.geometry.dispose();
+    previous.material.dispose();
+  }
+
+  // Retain the actual mesh data for later placement queries.
+  terrainGrid = {
+    size,
+    resolution,
+    positions: positions.array,
+    normals: geometry.attributes.normal.array,
+    climate
+  };
+
+  $("vertices").textContent =
+    (positions.count / 1000).toFixed(1) + "K";
+
+  stage("terrain mesh ready");
+}
+
+// ============================================================
+// INITIAL BUILD
+// ============================================================
+
+await rebuildTerrain();
+
+renderer.render(scene, camera);
+
+stage("terrain rendering ready");
+
+// END OF PART 4 OF 8
+
+// ============================================================
+// PART 5 OF 8: WATER AND ATMOSPHERE
+// ============================================================
+
+stage("preparing water and atmosphere");
+
+let waterHeightTexture = null;
+
+// Shared sky colors keep the water reflection consistent.
+function makeAtmosphereUniforms() {
+  return {
+    uSunDirection: { value: sun.position.clone().normalize() },
+    uSunIntensity: { value: Number(inputs.sunIntensity.value) },
+    uAmbient: { value: Number(inputs.ambient.value) },
+    uSunColor: { value: sun.color.clone() },
+    uHorizon: { value: fogColor.clone() },
+    uZenith: { value: new THREE.Color(0x497da6) }
+  };
+}
+
+const atmosphereGLSL = `
+  uniform vec3 uSunDirection;
+  uniform vec3 uSunColor;
+  uniform vec3 uHorizon;
+  uniform vec3 uZenith;
+  uniform float uSunIntensity;
+  uniform float uAmbient;
+
+  vec3 skyRadiance(vec3 ray) {
+    ray = normalize(ray);
+    float altitude = pow(clamp(ray.y, 0.0, 1.0), 0.55);
+    vec3 color = mix(uHorizon, uZenith, altitude);
+    color *= 0.35 + 0.65 * uAmbient;
+
+    float facingSun = max(dot(ray, uSunDirection), 0.0);
+
+    color += uSunColor * pow(facingSun, 24.0)
+      * uSunIntensity * 0.055;
+
+    return color;
+  }
+`;
+
+// ============================================================
+// SKY
+// ============================================================
+
+function buildSky() {
+  if (sky) {
+    scene.remove(sky);
+    sky.geometry.dispose();
+    sky.material.dispose();
+  }
+
+  skyMaterial = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    depthWrite: false,
+    fog: false,
+
+    uniforms: makeAtmosphereUniforms(),
+
+    vertexShader: `
+      varying vec3 vDirection;
+
+      void main() {
+        vDirection = position;
+
+        gl_Position = projectionMatrix * modelViewMatrix
+          * vec4(position, 1.0);
+      }
+    `,
+
+    fragmentShader: `
+      varying vec3 vDirection;
+
+      ${atmosphereGLSL}
+
+      void main() {
+        vec3 ray = normalize(vDirection);
+        vec3 color = skyRadiance(ray);
+
+        float alignment = dot(ray, uSunDirection);
+        float disc = smoothstep(0.99990, 0.99997, alignment);
+
+        color += uSunColor * disc * uSunIntensity * 3.0;
+
+        gl_FragColor = vec4(color, 1.0);
+
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `
+  });
+
+  sky = new THREE.Mesh(
+    new THREE.SphereGeometry(900, 32, 16),
+    skyMaterial
+  );
+
+  sky.name = "Terrainworks sky";
+  sky.renderOrder = -1000;
+  sky.frustumCulled = false;
+
+  // Keep the sky centered on the orbit camera.
+  sky.onBeforeRender = (_renderer, _scene, activeCamera) => {
+    sky.position.copy(activeCamera.position);
+    sky.updateMatrixWorld();
+  };
+
+  scene.add(sky);
+}
+
+// ============================================================
+// HEIGHT TEXTURE FROM THE ACTUAL TERRAIN MESH
+// ============================================================
+
+function createWaterHeightTexture() {
+  if (!terrainGrid) {
+    throw new Error(
+      "Build Part 4 terrain before creating water."
+    );
+  }
+
+  const side = terrainGrid.resolution + 1;
+  const heights = new Float32Array(side * side);
+
+  for (let i = 0; i < heights.length; i++) {
+    heights[i] = terrainGrid.positions[i * 3 + 1];
+  }
+
+  const texture = new THREE.DataTexture(
+    heights,
+    side,
+    side,
+    THREE.RedFormat,
+    THREE.FloatType
+  );
+
+  // Interpolate manually to match the terrain triangles.
+  texture.minFilter = THREE.NearestFilter;
+  texture.magFilter = THREE.NearestFilter;
+  texture.generateMipmaps = false;
+  texture.flipY = false;
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.needsUpdate = true;
+
+  return texture;
+}
+
+const waterHeightGLSL = `
+  uniform sampler2D uTerrainHeight;
+  uniform float uTerrainSize;
+  uniform float uGridResolution;
+  uniform float uWaterLevel;
+
+  float heightAtCell(vec2 cell) {
+    vec2 uv = (cell + 0.5) / (uGridResolution + 1.0);
+    return texture2D(uTerrainHeight, uv).r;
+  }
+
+  float groundHeight(vec2 worldXZ) {
+    vec2 uv = worldXZ / uTerrainSize + 0.5;
+
+    if (
+      uv.x < 0.0 || uv.x > 1.0 ||
+      uv.y < 0.0 || uv.y > 1.0
+    ) {
+      return uWaterLevel - 20.0;
+    }
+
+    vec2 grid = uv * uGridResolution;
+
+    vec2 cell = min(
+      floor(grid),
+      vec2(uGridResolution - 1.0)
+    );
+
+    vec2 f = grid - cell;
+
+    float a = heightAtCell(cell);
+    float b = heightAtCell(cell + vec2(1.0, 0.0));
+    float c = heightAtCell(cell + vec2(0.0, 1.0));
+    float d = heightAtCell(cell + vec2(1.0, 1.0));
+
+    if (f.x + f.y <= 1.0) {
+      return a + (b - a) * f.x + (c - a) * f.y;
+    }
+
+    return d + (c - d) * (1.0 - f.x)
+      + (b - d) * (1.0 - f.y);
+  }
+`;
+
+// ============================================================
+// COMPLETE WATER MATERIAL
+// ============================================================
+
+function createWaterMaterial(heightTexture) {
+  const uniforms = THREE.UniformsUtils.clone(
+    THREE.UniformsLib.fog
+  );
+
+  Object.assign(uniforms, makeAtmosphereUniforms(), {
+    uTime: { value: 0 },
+
+    uTerrainHeight: {
+      value: heightTexture
+    },
+
+    uTerrainSize: {
+      value: terrainGrid.size
+    },
+
+    uGridResolution: {
+      value: terrainGrid.resolution
+    },
+
+    uWaterLevel: {
+      value: Number(inputs.waterLevel.value)
+    }
+  });
+
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.FrontSide,
+    fog: true,
+    uniforms,
+
+    // --------------------------------------------------------
+    // WATER VERTEX SHADER
+    // --------------------------------------------------------
+
+    vertexShader: `
+      uniform float uTime;
+
+      varying vec3 vWaterPosition;
+
+      ${waterHeightGLSL}
+
+      #include <fog_pars_vertex>
+
+      void main() {
+        vec3 p = position;
+
+        float depth = uWaterLevel - groundHeight(p.xz);
+        float shoreFade = smoothstep(0.0, 1.0, depth);
+
+        float wave =
+          sin(p.x * 0.24 + p.z * 0.15 - uTime) * 0.06
+          +
+          sin(
+            p.x * -0.13 + p.z * 0.31 - uTime * 1.3
+          ) * 0.035;
+
+        p.y += wave * shoreFade;
+
+        vec4 world = modelMatrix * vec4(p, 1.0);
+        vec4 mvPosition = viewMatrix * world;
+
+        vWaterPosition = world.xyz;
+        gl_Position = projectionMatrix * mvPosition;
+
+        #include <fog_vertex>
+      }
+    `,
+
+    // --------------------------------------------------------
+    // WATER FRAGMENT SHADER
+    // --------------------------------------------------------
+
+    fragmentShader: `
+      uniform float uTime;
+
+      varying vec3 vWaterPosition;
+
+      ${atmosphereGLSL}
+      ${waterHeightGLSL}
+
+      #include <fog_pars_fragment>
+
+      void main() {
+        vec3 p = vWaterPosition;
+
+        float depth = p.y - groundHeight(p.xz);
+
+        // Do not draw water over exposed terrain.
+        if (depth <= 0.015) discard;
+
+        // ----------------------------------------------------
+        // ANALYTIC RIPPLE NORMALS
+        // ----------------------------------------------------
+
+        float a = p.x * 0.24 + p.z * 0.15 - uTime;
+
+        float b =
+          p.x * -0.13 + p.z * 0.31 - uTime * 1.3;
+
+        vec2 gradient =
+          cos(a) * vec2(0.24, 0.15) * 0.06
+          +
+          cos(b) * vec2(-0.13, 0.31) * 0.035;
+
+        float ripple =
+          p.x * 2.8 + p.z * 2.1 - uTime * 2.2;
+
+        // Fade fine detail when it becomes smaller than pixels.
+        float pixelFootprint = fwidth(ripple);
+
+        float detailFade =
+          1.0 - smoothstep(0.5, 2.0, pixelFootprint);
+
+        gradient +=
+          cos(ripple) * vec2(2.8, 2.1)
+          * 0.008 * detailFade;
+
+        gradient *= smoothstep(0.0, 0.8, depth);
+
+        vec3 N = normalize(
+          vec3(-gradient.x, 1.0, -gradient.y)
+        );
+
+        vec3 V = normalize(cameraPosition - p);
+
+        // ----------------------------------------------------
+        // WATER COLOR AND REFLECTION
+        // ----------------------------------------------------
+
+        float fresnel =
+          0.025 + 0.975
+          * pow(
+            1.0 - max(dot(N, V), 0.0),
+            5.0
+          );
+
+        // Depth tint: a visual effect, not fluid simulation.
+        vec3 body = mix(
+          vec3(0.025, 0.19, 0.16),
+          vec3(0.006, 0.042, 0.065),
+          1.0 - exp(-depth * 0.16)
+        );
+
+        body *= 0.3 + uAmbient * 0.6;
+
+        vec3 reflected = skyRadiance(
+          reflect(-V, N)
+        );
+
+        vec3 color = mix(body, reflected, fresnel);
+
+        // ----------------------------------------------------
+        // SUN REFLECTION
+        // ----------------------------------------------------
+
+        vec3 H = normalize(V + uSunDirection);
+
+        float specular = pow(
+          max(dot(N, H), 0.0),
+          150.0
+        );
+
+        color +=
+          uSunColor * specular * uSunIntensity * 1.4;
+
+        // ----------------------------------------------------
+        // SHORELINE FOAM
+        // ----------------------------------------------------
+
+        float shore =
+          (1.0 - smoothstep(0.10, 0.65, depth))
+          * smoothstep(0.02, 0.10, depth);
+
+        float foamPattern =
+          0.5 + 0.5
+          * sin(
+            p.x * 1.8
+            + sin(p.z * 2.2)
+            - uTime * 1.2
+          );
+
+        float foam =
+          shore * smoothstep(0.45, 0.9, foamPattern);
+
+        color = mix(
+          color,
+          vec3(0.5, 0.57, 0.53),
+          foam * 0.45
+        );
+
+        // ----------------------------------------------------
+        // DEPTH-BASED TRANSPARENCY
+        // ----------------------------------------------------
+
+        float alpha = mix(
+          0.50,
+          0.97,
+          1.0 - exp(-depth * 0.3)
+        );
+
+        alpha *= smoothstep(0.015, 0.15, depth);
+
+        gl_FragColor = vec4(color, alpha);
+
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+        #include <fog_fragment>
+      }
+    `
+  });
+}
+
+// ============================================================
+// WATER REBUILD
+// ============================================================
+
+function rebuildWater() {
+  stage("building water");
+
+  const nextTexture = createWaterHeightTexture();
+  const material = createWaterMaterial(nextTexture);
+
+  const geometry = new THREE.PlaneGeometry(
+    terrainGrid.size * 1.6,
+    terrainGrid.size * 1.6,
+    128,
+    128
+  );
+
+  geometry.rotateX(-Math.PI / 2);
+
+  if (water) {
+    scene.remove(water);
+    water.geometry.dispose();
+    water.material.dispose();
+  }
+
+  if (waterHeightTexture) {
+    waterHeightTexture.dispose();
+  }
+
+  waterHeightTexture = nextTexture;
+  waterMaterial = material;
+
+  water = new THREE.Mesh(
+    geometry,
+    waterMaterial
+  );
+
+  water.name = "Terrainworks water";
+
+  water.position.y = Number(
+    inputs.waterLevel.value
+  );
+
+  water.visible = $("waterToggle").checked;
+  water.frustumCulled = false;
+
+  scene.add(water);
+}
+
+// ============================================================
+// ENVIRONMENT SYNCHRONIZATION
+// ============================================================
+
+function updateEnvironment() {
+  updateSun();
+
+  const elevation = Number(
+    inputs.sunElevation.value
+  );
+
+  const daylight = THREE.MathUtils.clamp(
+    (elevation - 2) / 45,
+    0,
+    1
+  );
+
+  sun.color.set(0xffb578).lerp(
+    new THREE.Color(0xfff1dc),
+    daylight
+  );
+
+  sun.intensity = Number(
+    inputs.sunIntensity.value
+  );
+
+  hemisphere.intensity = Number(
+    inputs.ambient.value
+  );
+
+  scene.fog.density = Number(
+    inputs.haze.value
+  );
+
+  renderer.toneMappingExposure = Number(
+    inputs.exposure.value
+  );
+
+  for (const material of [skyMaterial, waterMaterial]) {
+    if (!material) continue;
+
+    const u = material.uniforms;
+
+    u.uSunDirection.value.copy(
+      sun.position
+    ).normalize();
+
+    u.uSunIntensity.value = sun.intensity;
+    u.uAmbient.value = hemisphere.intensity;
+
+    u.uSunColor.value.copy(sun.color);
+    u.uHorizon.value.copy(fogColor);
+  }
+
+  if (water) {
+    water.visible = $("waterToggle").checked;
+
+    water.position.y = Number(
+      inputs.waterLevel.value
+    );
+
+    waterMaterial.uniforms.uWaterLevel.value =
+      water.position.y;
+  }
+
+  if (terrainMaterial) {
+    const u = terrainMaterial.uniforms;
+
+    u.uAmbient.value = hemisphere.intensity;
+    u.uSunIntensity.value = sun.intensity;
+
+    u.uWaterLevel.value = Number(
+      inputs.waterLevel.value
+    );
+
+    u.uCoastWidth.value = Number(
+      inputs.coastWidth.value
+    );
+
+    u.uWaterEnabled.value =
+      $("waterToggle").checked ? 1 : 0;
+  }
+}
+
+// ============================================================
+// WATER ANIMATION HOOK
+// ============================================================
+
+function updateWater(time) {
+  if (waterMaterial) {
+    waterMaterial.uniforms.uTime.value = time;
+  }
+}
+
+// Part 8 will call updateWater() from the animation loop.
+
+buildSky();
+rebuildWater();
+updateEnvironment();
+
+renderer.render(scene, camera);
+
+stage("water and atmosphere ready");
+
+// END OF PART 5 OF 8
+
+// ============================================================
+// PART 6 OF 8: ROCKS, BOULDERS, CLIFFS AND TALUS
+// ============================================================
+
+stage("preparing geology");
+
+// Shared with later presets: 0 = mixed, 1 = sandstone, 2 = basalt.
+let geologyStyle = 0;
+let geologyBuildVersion = 0;
+
+function setGeologyStyle(style) {
+  geologyStyle = Math.max(0, Math.min(2, Math.round(style)));
+  if (terrainMaterial) {
+    terrainMaterial.uniforms.uGeology.value = geologyStyle;
+  }
+}
+
+// ============================================================
+// SAMPLE THE RENDERED TERRAIN, NOT A SECOND NOISE SURFACE
+//
+// Part 4 retained the mesh vertices, normals and climate data.
+// Triangle interpolation matches the water sampler in Part 5.
+// Part 7 will also use this for vegetation placement.
+// ============================================================
+
+function sampleTerrainSurface(x, z) {
+  if (!terrainGrid || !Number.isFinite(x + z)) return null;
+
+  const g = terrainGrid;
+  const n = g.resolution;
+  const gx = (x / g.size + 0.5) * n;
+  const gz = (z / g.size + 0.5) * n;
+  if (gx < 0 || gz < 0 || gx > n || gz > n) return null;
+
+  const ix = Math.min(n - 1, Math.floor(gx));
+  const iz = Math.min(n - 1, Math.floor(gz));
+  const fx = gx - ix;
+  const fz = gz - iz;
+  const a = iz * (n + 1) + ix;
+  const b = a + 1;
+  const c = a + n + 1;
+  const d = c + 1;
+
+  const lower = fx + fz <= 1;
+  const ids = lower ? [a, b, c] : [d, c, b];
+  const weights = lower
+    ? [1 - fx - fz, fx, fz]
+    : [fx + fz - 1, 1 - fx, 1 - fz];
+
+  let height = 0;
+  let moistureOffset = 0;
+  let temperatureOffset = 0;
+  const normal = new THREE.Vector3();
+
+  for (let k = 0; k < 3; k++) {
+    const i = ids[k];
+    const w = weights[k];
+    height += g.positions[i * 3 + 1] * w;
+    normal.x += g.normals[i * 3] * w;
+    normal.y += g.normals[i * 3 + 1] * w;
+    normal.z += g.normals[i * 3 + 2] * w;
+    moistureOffset += g.climate[i * 2] * w;
+    temperatureOffset += g.climate[i * 2 + 1] * w;
+  }
+  normal.normalize();
+
+  const h = i => g.positions[i * 3 + 1];
+  const spacing = g.size / n;
+  const dx = (lower ? h(b) - h(a) : h(d) - h(c)) / spacing;
+  const dz = (lower ? h(c) - h(a) : h(d) - h(b)) / spacing;
+
+  return {
+    height,
+    normal,
+    slope: 1 - clamp01(normal.y),
+    faceSlope: 1 - 1 / Math.sqrt(1 + dx * dx + dz * dz),
+    downhill: new THREE.Vector3(-dx, 0, -dz).normalize(),
+    moisture: clamp01(Number(inputs.moisture.value) + moistureOffset),
+    temperature: clamp01(Number(inputs.temperature.value) + temperatureOffset)
+  };
+}
+
+function biomeForSurface(surface) {
+  const s = surface;
+  const sea = Number(inputs.waterLevel.value);
+  const snow = Number(inputs.snowline.value);
+
+  if ($("waterToggle").checked && s.height < sea) return "underwater";
+  if (s.slope > 0.58) return "cliff";
+  if (s.height > snow && s.temperature < 0.52) return "snow";
+  if (s.temperature > 0.67 && s.moisture < 0.34) return "desert";
+  if (s.moisture > 0.72 && s.height < sea + 3) return "wetland";
+  if (s.height > snow * 0.72) return "alpine";
+  if (s.moisture > 0.60) return "forest";
+  if (s.moisture < 0.30) return "scrub";
+  return "grassland";
+}
+
+// ============================================================
+// CLOSED, ANGULAR GEOMETRY
+//
+// Deformation depends on coordinates, not vertex index: duplicate
+// vertices at triangle boundaries receive identical deformation.
+// ============================================================
+
+function makeGeologyGeometry(kind, seed) {
+  const geometry = kind === "ledge"
+    ? new THREE.BoxGeometry(2, 2, 2)
+    : new THREE.IcosahedronGeometry(
+        1, kind === "scree" || kind === "talus" ? 0 : 1
+      );
+
+  const p = geometry.attributes.position;
+  const phase = seed * 0.37;
+
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i);
+    const y = p.getY(i);
+    const z = p.getZ(i);
+    const distortion = 0.91
+      + Math.sin(x * 3.7 + y * 2.1 + phase)
+      * Math.cos(z * 4.3 - y + phase) * 0.12;
+
+    p.setXYZ(
+      i,
+      x * distortion + y * 0.08,
+      Math.max(-0.42, y * distortion),
+      z * distortion - y * 0.05
+    );
+  }
+
+  p.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
+const geologyKinds = [
+  "rock", "boulder", "scree", "outcrop", "ledge", "talus"
+];
+
+const geologyGeometries = Object.fromEntries(
+  geologyKinds.map((kind, i) => [
+    kind, makeGeologyGeometry(kind, 811 + i * 127)
+  ])
+);
+
+// White base color preserves each instance's chosen color.
+const geologyMaterial = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  roughness: 0.98,
+  metalness: 0,
+  flatShading: true,
+  fog: true
+});
+
+function geologyColorFor(surface, variation, settings) {
+  const desert = surface.temperature > 0.60 && surface.moisture < 0.38;
+  const rgb = settings.style === 2
+    ? [0.065, 0.07, 0.075]
+    : settings.style === 1 || desert
+      ? [0.37, 0.18, 0.075]
+      : [0.24, 0.25, 0.23];
+
+  const color = new THREE.Color().setRGB(...rgb);
+  const band = 1 + Math.sin(surface.height * 3.8)
+    * 0.12 * Math.min(settings.strata, 1) * settings.bands;
+
+  return color.multiplyScalar((0.78 + variation * 0.44) * band);
+}
+
+function geologyMeshes() {
+  return [
+    rockField, boulderField, screeField,
+    cliffOutcrops, cliffLedges, talusField
+  ];
+}
+
+function clearGeology() {
+  for (const mesh of geologyMeshes()) {
+    if (!mesh) continue;
+    scene.remove(mesh);
+    mesh.dispose();
+  }
+  // Shared geometry and material remain available for rebuilding.
+  rockField = boulderField = screeField = null;
+  cliffOutcrops = cliffLedges = talusField = null;
+}
+
+function updateGeologyCounter() {
+  const count = geologyMeshes().reduce(
+    (sum, mesh) => sum + (mesh ? mesh.count : 0), 0
+  );
+  $("rockCount").textContent = count >= 1000
+    ? (count / 1000).toFixed(1) + "K"
+    : String(count);
+}
+
+// ============================================================
+// COMBINED GEOLOGY REBUILD
+//
+// One call creates all six categories. The density slider is a
+// total budget, not six separate particle/instance budgets.
+// Call with: await rebuildRocks();
+// ============================================================
+
+async function rebuildRocks() {
+  const version = ++geologyBuildVersion;
+  const settings = Object.fromEntries(
+    Object.entries(inputs).map(([key, input]) => [key, Number(input.value)])
+  );
+  settings.style = geologyStyle;
+  settings.bands = $("strataToggle").checked ? 1 : 0;
+  const wet = $("waterToggle").checked;
+  const budget = Math.max(0, Math.min(12000, Math.floor(settings.rockDensity)));
+
+  if (!$("rocksToggle").checked || budget === 0) {
+    clearGeology();
+    updateGeologyCounter();
+    stage("geology disabled");
+    return;
+  }
+  if (!terrainGrid) throw new Error("Terrain must exist before geology.");
+
+  setGeologyStyle(settings.style);
+  const rng = mulberry32(getSeed() + 60371);
+  const buckets = Object.fromEntries(geologyKinds.map(kind => [kind, []]));
+  const span = terrainGrid.size * 0.96;
+  const attempts = budget * 10;
+  let placed = 0;
+
+  for (let attempt = 0; attempt < attempts && placed < budget; attempt++) {
+    if (attempt % 256 === 0) {
+      stage("placing geology: " + placed + " / " + budget);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      if (version !== geologyBuildVersion) return;
+    }
+
+    let x = (rng() - 0.5) * span;
+    let z = (rng() - 0.5) * span;
+    let surface = sampleTerrainSurface(x, z);
+    if (!surface || (wet && surface.height < settings.waterLevel + 0.08)) continue;
+
+    const slope = Math.max(surface.slope, surface.faceSlope);
+    const cliff = clamp01((slope - settings.cliffThreshold * 0.65) / 0.25);
+    const cluster = lerp(
+      1,
+      clamp01(fbm(x * 0.025, z * 0.025, 4, 16300) * 0.5 + 0.5),
+      settings.rockCluster
+    );
+    const acceptance = clamp01(
+      0.12 + slope * 1.3 + settings.rockExposure * 0.18
+    ) * cluster;
+    if (rng() > acceptance) continue;
+
+    let kind = "rock";
+    const cliffChance = cliff * settings.cliffRocks
+      * Math.min(settings.cliffStrength, 1);
+
+    if (cliff > 0.05 && rng() < cliffChance) {
+      kind = rng() < 0.6 ? "outcrop" : "ledge";
+      if (rng() < settings.scree * 0.55) kind = "talus";
+    } else if (rng() < settings.boulders) {
+      kind = "boulder";
+    } else if (rng() < settings.scree * Math.min(1, slope * 3)) {
+      kind = "scree";
+    }
+
+    // Talus takes several downhill steps on the sampled mesh.
+    // This is decorative debris placement, not a rockfall simulation.
+    if (kind === "talus") {
+      const step = settings.rockSize * (0.7 + rng());
+      for (let j = 0; j < 5; j++) {
+        const tx = x + surface.downhill.x * step;
+        const tz = z + surface.downhill.z * step;
+        const next = sampleTerrainSurface(tx, tz);
+        if (!next || next.height >= surface.height - 0.01) break;
+        if (wet && next.height < settings.waterLevel + 0.08) break;
+        x = tx;
+        z = tz;
+        surface = next;
+        if (surface.slope < 0.06) break;
+      }
+    }
+
+    const factor = {
+      rock: 0.55, boulder: 1.8, scree: 0.18,
+      outcrop: 1.9, ledge: 1.6, talus: 0.22
+    }[kind];
+    const size = settings.rockSize * factor * (0.6 + rng() * 0.8);
+    const tall = kind === "outcrop";
+    const slab = kind === "ledge";
+    const debris = kind === "scree" || kind === "talus";
+
+    const axis = upVector.clone().lerp(
+      surface.normal, slab ? 0 : tall ? 0.2 : 0.85
+    ).normalize();
+
+    dummy.quaternion.setFromUnitVectors(upVector, axis);
+    dummy.rotateY(rng() * Math.PI * 2);
+    dummy.scale.set(
+      size * (slab ? 2.0 : 0.75 + rng() * 0.5),
+      size * (slab ? 0.16 : tall ? 1.8 : debris ? 0.35 : 0.8),
+      size * (0.65 + rng() * 0.6)
+    );
+
+    // Embed the center slightly rather than leaving a floating base.
+    dummy.position.set(x, surface.height, z);
+    dummy.position.addScaledVector(surface.normal, -size * 0.06);
+    dummy.updateMatrix();
+
+    buckets[kind].push({
+      matrix: dummy.matrix.clone(),
+      color: geologyColorFor(surface, rng(), settings)
+    });
+    placed++;
+  }
+
+  // Construct replacements before removing the previous geology.
+  const nextMeshes = {};
+  try {
+    for (const kind of geologyKinds) {
+      const records = buckets[kind];
+      if (!records.length) continue;
+      const mesh = new THREE.InstancedMesh(
+        geologyGeometries[kind], geologyMaterial, records.length
+      );
+      nextMeshes[kind] = mesh;
+      mesh.name = "Terrainworks " + kind;
+
+      records.forEach((record, i) => {
+        mesh.setMatrixAt(i, record.matrix);
+        mesh.setColorAt(i, record.color);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.instanceColor.needsUpdate = true;
+      mesh.computeBoundingBox();
+      mesh.computeBoundingSphere();
+    }
+  } catch (error) {
+    Object.values(nextMeshes).forEach(mesh => mesh.dispose());
+    throw error;
+  }
+
+  clearGeology();
+  rockField = nextMeshes.rock || null;
+  boulderField = nextMeshes.boulder || null;
+  screeField = nextMeshes.scree || null;
+  cliffOutcrops = nextMeshes.outcrop || null;
+  cliffLedges = nextMeshes.ledge || null;
+  talusField = nextMeshes.talus || null;
+
+  Object.values(nextMeshes).forEach(mesh => scene.add(mesh));
+  updateGeologyCounter();
+  stage("geology ready");
+}
+
+await rebuildRocks();
+renderer.render(scene, camera);
+stage("rocks and cliffs ready");
+
+// END OF PART 6 OF 8
+
+// ============================================================
+// PART 7 OF 8: BIOME VEGETATION
+// ============================================================
+
+stage("preparing biome vegetation");
+
+let broadleafField = null;
+let reedField = null;
+let cactusField = null;
+let vegetationBuildVersion = 0;
+const vegetationTime = { value: 0 };
+
+// ============================================================
+// COMBINE PLANT PARTS WITHOUT ANOTHER LIBRARY
+//
+// Every part supplies its own vertex color. Tree trunks therefore
+// keep their bark color instead of sharing the canopy color.
+// ============================================================
+
+function combinePlantParts(parts) {
+  const positions = [];
+  const normals = [];
+  const colors = [];
+
+  for (const [source, hexColor] of parts) {
+    const g = source.index ? source.toNonIndexed() : source;
+    if (!g.attributes.normal) g.computeVertexNormals();
+    const color = new THREE.Color(hexColor);
+
+    positions.push(...g.attributes.position.array);
+    normals.push(...g.attributes.normal.array);
+
+    for (let i = 0; i < g.attributes.position.count; i++) {
+      colors.push(color.r, color.g, color.b);
+    }
+
+    if (g !== source) g.dispose();
+    source.dispose();
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
+function makePlantGeometry(kind) {
+  const parts = [];
+  const add = (geometry, color) => parts.push([geometry, color]);
+
+  if (kind === "pine") {
+    add(new THREE.CylinderGeometry(0.09, 0.16, 1.8, 6)
+      .translate(0, 0.9, 0), 0x66503c);
+
+    for (let i = 0; i < 3; i++) {
+      add(new THREE.ConeGeometry(1.0 - i * 0.25, 1.75, 7)
+        .translate(0, 1.65 + i * 0.65, 0),
+        [0x35563b, 0x426b44, 0x527b4b][i]);
+    }
+  } else if (kind === "broadleaf") {
+    add(new THREE.CylinderGeometry(0.09, 0.17, 2.4, 6)
+      .translate(0, 1.2, 0), 0x75553b);
+
+    for (let i = 0; i < 3; i++) {
+      const angle = i * Math.PI * 2 / 3;
+      add(new THREE.IcosahedronGeometry(1, 1)
+        .scale(0.95, 0.85, 0.9)
+        .translate(Math.cos(angle) * 0.48, 2.45 + i * 0.12,
+          Math.sin(angle) * 0.48),
+        [0x52783c, 0x658b45, 0x436833][i]);
+    }
+  } else if (kind === "shrub") {
+    add(new THREE.IcosahedronGeometry(1, 1)
+      .scale(0.65, 0.46, 0.58)
+      .translate(0, 0.44, 0), 0xffffff);
+  } else if (kind === "grass") {
+    // Five actual tapered blades, not a cone standing in for grass.
+    for (let i = 0; i < 5; i++) {
+      const height = 0.5 + i * 0.055;
+      const blade = new THREE.BufferGeometry();
+      blade.setAttribute("position", new THREE.Float32BufferAttribute([
+        -0.09, 0, 0, 0.09, 0, 0,
+        0.04, height, 0.14
+      ], 3));
+      blade.computeVertexNormals();
+      blade.rotateY(i * 2.4);
+      blade.translate(Math.cos(i * 2.4) * 0.12, 0,
+        Math.sin(i * 2.4) * 0.12);
+      add(blade, 0xffffff);
+    }
+  } else if (kind === "reed") {
+    for (let i = 0; i < 3; i++) {
+      const x = (i - 1) * 0.16;
+      const height = 1.0 + i * 0.18;
+      add(new THREE.CylinderGeometry(0.018, 0.026, height, 4)
+        .translate(x, height / 2, 0), 0x82904d);
+      add(new THREE.CylinderGeometry(0.045, 0.05, 0.24, 5)
+        .translate(x, height, 0), 0x655039);
+    }
+  } else if (kind === "cactus") {
+    add(new THREE.CylinderGeometry(0.13, 0.16, 1.65, 7)
+      .translate(0, 0.825, 0), 0x648258);
+    for (const side of [-1, 1]) {
+      add(new THREE.CylinderGeometry(0.075, 0.09, 0.42, 6)
+        .rotateZ(Math.PI / 2)
+        .translate(side * 0.24, 0.75, 0), 0x58774e);
+      add(new THREE.CylinderGeometry(0.07, 0.085, 0.55, 6)
+        .translate(side * 0.44, 1.0, 0), 0x719063);
+    }
+  }
+
+  return combinePlantParts(parts);
+}
+
+const plantKinds = ["pine", "broadleaf", "shrub", "grass", "reed", "cactus"];
+const plantGeometries = Object.fromEntries(
+  plantKinds.map(kind => [kind, makePlantGeometry(kind)])
+);
+
+// ============================================================
+// SHARED MATERIAL AND ROOT-ANCHORED BREEZE
+// ============================================================
+
+const plantMaterial = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  vertexColors: true,
+  roughness: 1,
+  flatShading: true,
+  side: THREE.DoubleSide,
+  fog: true
+});
+
+plantMaterial.onBeforeCompile = shader => {
+  shader.uniforms.uVegetationTime = vegetationTime;
+  shader.vertexShader = "uniform float uVegetationTime;\n" + shader.vertexShader;
+  shader.vertexShader = shader.vertexShader.replace(
+    "#include <begin_vertex>",
+    `#include <begin_vertex>
+     vec2 plantOrigin = vec2(0.0);
+     #ifdef USE_INSTANCING
+       plantOrigin = instanceMatrix[3].xz;
+     #endif
+     float plantHeight = max(position.y, 0.0);
+     float breeze = sin(uVegetationTime * 1.1
+       + plantOrigin.x * 0.055 + plantOrigin.y * 0.07);
+     transformed.x += breeze * plantHeight * plantHeight * 0.012;
+     transformed.z += cos(uVegetationTime * 0.9
+       + plantOrigin.y * 0.08) * plantHeight * 0.018;`
+  );
+};
+
+plantMaterial.customProgramCacheKey = () => "terrainworks-plants-v1";
+
+function updateVegetation(time) {
+  if (Number.isFinite(time)) vegetationTime.value = time;
+}
+
+function vegetationMeshes() {
+  return [treeField, broadleafField, shrubField, grassField, reedField, cactusField];
+}
+
+function clearVegetation() {
+  for (const mesh of vegetationMeshes()) {
+    if (!mesh) continue;
+    scene.remove(mesh);
+    mesh.dispose();
+  }
+  treeField = broadleafField = shrubField = grassField = reedField = cactusField = null;
+  scene.userData.vegetationCount = 0;
+}
+
+// ============================================================
+// REPRODUCIBLE SCATTER USING PART 6'S MESH SAMPLER
+//
+// Vegetation is stylized biome dressing, not an ecology model.
+// A separate random stream leaves the geology seed unchanged.
+// ============================================================
+
+async function rebuildVegetation() {
+  const version = ++vegetationBuildVersion;
+  if (!$('biomesToggle').checked) {
+    clearVegetation();
+    stage("vegetation disabled");
+    return;
+  }
+  if (!terrainGrid) throw new Error("Build terrain before vegetation.");
+
+  const grid = terrainGrid;
+  const rng = mulberry32(getSeed() + 184831);
+  const wet = $("waterToggle").checked;
+  const sea = Number(inputs.waterLevel.value);
+  const volcanic = geologyStyle === 2;
+  const budget = Math.max(400, Math.min(10000,
+    Math.round(4800 * (grid.size / 180) ** 2)));
+  const treeLimit = Math.min(1600, Math.floor(budget * 0.22));
+  const buckets = Object.fromEntries(plantKinds.map(kind => [kind, []]));
+  const occupiedTreeCells = new Set();
+  let placed = 0;
+  let trees = 0;
+
+  for (let attempt = 0; attempt < budget * 8 && placed < budget; attempt++) {
+    if (attempt % 256 === 0) {
+      stage("growing biomes: " + placed + " plants");
+      await new Promise(resolve => setTimeout(resolve, 0));
+      if (version !== vegetationBuildVersion || terrainGrid !== grid) return;
+    }
+
+    const x = (rng() - 0.5) * grid.size * 0.96;
+    const z = (rng() - 0.5) * grid.size * 0.96;
+    const surface = sampleTerrainSurface(x, z);
+    if (!surface) continue;
+    if (wet && surface.height < sea + 0.16) continue;
+
+    const slope = Math.max(surface.slope, surface.faceSlope);
+    if (slope > 0.38) continue;
+
+    const biome = biomeForSurface(surface);
+    if (["underwater", "cliff", "snow"].includes(biome)) continue;
+
+    const density = {
+      forest: 0.85, grassland: 0.80, wetland: 0.90,
+      alpine: 0.30, scrub: 0.38, desert: 0.07
+    }[biome] || 0;
+
+    // Warm, dry and bare-rock areas remain comparatively sparse.
+    if (rng() > density * (1 - slope * 1.7)) continue;
+    if (volcanic && rng() > 0.04) continue;
+
+    const pick = rng();
+    let kind = "grass";
+    if (biome === "forest") {
+      kind = pick < 0.38
+        ? (surface.temperature < 0.43 ? "pine" : "broadleaf")
+        : pick < 0.63 ? "shrub" : "grass";
+    } else if (biome === "wetland") {
+      kind = pick < 0.75 ? "reed" : "shrub";
+    } else if (biome === "scrub") {
+      kind = pick < 0.70 ? "shrub" : "grass";
+    } else if (biome === "desert") {
+      kind = pick < 0.10 ? "cactus" : "shrub";
+    } else if (biome === "alpine") {
+      kind = pick < 0.05 && surface.temperature > 0.12
+        ? "pine" : pick < 0.2 ? "shrub" : "grass";
+    } else {
+      kind = pick < 0.045 ? "broadleaf" : pick < 0.18 ? "shrub" : "grass";
+    }
+    if (volcanic) kind = "shrub";
+
+    const isTree = kind === "pine" || kind === "broadleaf";
+    if (isTree) {
+      if (trees >= treeLimit || slope > 0.20) continue;
+      const cell = Math.floor(x / 3.5) + ":" + Math.floor(z / 3.5);
+      if (occupiedTreeCells.has(cell)) continue;
+      occupiedTreeCells.add(cell);
+      trees++;
+    }
+
+    const size = isTree ? 0.65 + rng() * 1.2
+      : kind === "cactus" ? 0.65 + rng() * 0.9 : 0.65 + rng() * 0.7;
+    const axis = isTree || kind === "cactus" || kind === "reed"
+      ? upVector : upVector.clone().lerp(surface.normal, 0.65).normalize();
+
+    dummy.quaternion.setFromUnitVectors(upVector, axis);
+    dummy.rotateY(rng() * Math.PI * 2);
+    dummy.scale.set(size, size * (0.85 + rng() * 0.3), size);
+    dummy.position.set(x, surface.height - 0.035, z);
+    dummy.updateMatrix();
+
+    let tint = new THREE.Color(0xffffff);
+    if (kind === "grass" || kind === "shrub") {
+      tint.set(biome === "desert" || biome === "scrub"
+        ? 0xa29762 : biome === "alpine" ? 0x83905e : 0x648b47);
+    }
+    tint.multiplyScalar(0.78 + rng() * 0.35);
+    buckets[kind].push({ matrix: dummy.matrix.clone(), color: tint });
+    placed++;
+  }
+
+  // Prepare replacements first, then remove the old vegetation.
+  const nextMeshes = {};
+  try {
+    for (const kind of plantKinds) {
+      const records = buckets[kind];
+      if (!records.length) continue;
+      const mesh = new THREE.InstancedMesh(
+        plantGeometries[kind], plantMaterial, records.length
+      );
+      nextMeshes[kind] = mesh;
+      mesh.name = "Terrainworks " + kind;
+      records.forEach((record, i) => {
+        mesh.setMatrixAt(i, record.matrix);
+        mesh.setColorAt(i, record.color);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.instanceColor.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      mesh.boundingSphere.radius += 2; // Allow for animated sway.
+    }
+  } catch (error) {
+    Object.values(nextMeshes).forEach(mesh => mesh.dispose());
+    throw error;
+  }
+
+  clearVegetation();
+  treeField = nextMeshes.pine || null;
+  broadleafField = nextMeshes.broadleaf || null;
+  shrubField = nextMeshes.shrub || null;
+  grassField = nextMeshes.grass || null;
+  reedField = nextMeshes.reed || null;
+  cactusField = nextMeshes.cactus || null;
+  Object.values(nextMeshes).forEach(mesh => scene.add(mesh));
+  scene.userData.vegetationCount = placed;
+  stage("biome vegetation ready");
+}
+
+await rebuildVegetation();
+renderer.render(scene, camera);
+stage("vegetation ready");
+
+// END OF PART 7 OF 8
+
+// ============================================================
+// PART 8 OF 8: CONTROLS, PRESETS, REBUILD QUEUE AND ANIMATION
+// ============================================================
+
+stage("connecting controls");
+
+const loadingPanel = $("loading");
+const uiControls = [...document.querySelectorAll("#ui input, #ui button")];
+const initialSettings = Object.fromEntries(
+  Object.entries(inputs).map(([name, input]) => [name, Number(input.defaultValue)])
+);
+
+let buildingWorld = false;
+let pendingBuild = 0;
+let animationFrame = 0;
+let stopped = false;
+let simulationTime = 0;
+let previousFrame = performance.now();
+let fpsStart = previousFrame;
+let fpsFrames = 0;
+
+// Build flags: terrain, climate data, geology, vegetation.
+const BUILD = { TERRAIN: 1, CLIMATE: 2, ROCKS: 4, PLANTS: 8 };
+
+function failRuntime(error) {
+  stopped = true;
+  cancelAnimationFrame(animationFrame);
+  fatal(error instanceof Error ? error : new Error(String(error)));
+}
+
+function listen(element, event, callback) {
+  if (!element) throw new Error("Missing event target for " + event);
+  element.addEventListener(event, e => {
+    try {
+      const result = callback(e);
+      if (result && typeof result.catch === "function") result.catch(failRuntime);
+    } catch (error) {
+      failRuntime(error);
+    }
+  });
+}
+
+// ============================================================
+// LABELS AND VALIDATED VALUES
+// ============================================================
+
+const labelIds = {
+  seed: "seedVal", terrainSize: "sizeVal", baseElevation: "baseVal",
+  continentScale: "continentVal", landmass: "landmassVal", warp: "warpVal",
+  mountainHeight: "mountainVal", ridgeFrequency: "ridgeVal",
+  ridgeSharpness: "sharpVal", hills: "hillsVal", valleyDepth: "valleyVal",
+  erosion: "erosionVal", erosionScale: "erosionScaleVal",
+  terracing: "terraceVal", detail: "detailVal",
+  cliffThreshold: "cliffThresholdVal", cliffStrength: "cliffStrengthVal",
+  strata: "strataVal", moisture: "moistureVal", temperature: "temperatureVal",
+  biomeScale: "biomeScaleVal", snowline: "snowVal", rockExposure: "rockExposureVal",
+  rockDensity: "rockDensityVal", rockSize: "rockSizeVal", boulders: "boulderVal",
+  scree: "screeVal", rockCluster: "rockClusterVal", cliffRocks: "cliffRocksVal",
+  waterLevel: "waterVal", coastWidth: "coastVal",
+  sunElevation: "sunElevationVal", sunAzimuth: "sunAzimuthVal",
+  sunIntensity: "sunIntensityVal", ambient: "ambientVal",
+  haze: "hazeVal", exposure: "exposureVal", resolution: "resolutionVal"
+};
+
+function updateLabels() {
+  for (const [name, id] of Object.entries(labelIds)) {
+    const label = $(id);
+    if (!label) throw new Error("Missing HUD label: " + id);
+    const input = inputs[name];
+    const value = Number(input.value);
+    const decimals = (input.step.split(".")[1] || "").length;
+    let text = Number.isFinite(value) ? value.toFixed(decimals) : "--";
+    if (name === "seed" || name === "rockDensity") text = value.toLocaleString();
+    if (name === "terrainSize") text += " m";
+    if (name === "sunElevation" || name === "sunAzimuth") text += "°";
+    if (name === "resolution") text = value + " × " + value;
+    label.textContent = text;
+  }
+}
+
+function setValue(name, value) {
+  const input = inputs[name];
+  if (!input) throw new Error("Unknown setting: " + name);
+  let number = Number(value);
+  if (!Number.isFinite(number)) number = initialSettings[name];
+  const min = input.min === "" ? -Infinity : Number(input.min);
+  const max = input.max === "" ? Infinity : Number(input.max);
+  const step = Number(input.step) || 1;
+  number = Math.max(min, Math.min(max, number));
+  const base = Number.isFinite(min) ? min : 0;
+  number = base + Math.round((number - base) / step) * step;
+  input.value = String(Number(Math.max(min, Math.min(max, number)).toFixed(6)));
+}
+
+function highlightPreset(name = "") {
+  document.querySelectorAll(".preset").forEach(button => {
+    button.classList.toggle("active", button.dataset.state === name);
+  });
+}
+
+// ============================================================
+// SYNCHRONIZE EXISTING MATERIALS; NO GEOMETRY ALLOCATION
+// ============================================================
+
+function syncWorldSettings() {
+  updateEnvironment();
+  if (terrainMaterial) {
+    const u = terrainMaterial.uniforms;
+    const names = {
+      uSnowline: "snowline", uRockExposure: "rockExposure",
+      uCliffThreshold: "cliffThreshold", uStrata: "strata",
+      uMoisture: "moisture", uTemperature: "temperature"
+    };
+    for (const [uniform, name] of Object.entries(names)) {
+      u[uniform].value = Number(inputs[name].value);
+    }
+    u.uSnow.value = $("snowToggle").checked ? 1 : 0;
+    u.uStrataEnabled.value = $("strataToggle").checked ? 1 : 0;
+    u.uBiomes.value = 1; // The checkbox controls plant geometry, not terrain colors.
+    terrainMaterial.wireframe = $("wireframe").checked;
+  }
+  setGeologyStyle(geologyStyle);
+  updateLabels();
+}
+
+// Biome Scale changes climate samples, not terrain elevations.
+async function refreshClimateData() {
+  if (!terrain || !terrainGrid) return;
+  const positions = terrain.geometry.attributes.position;
+  const values = new Float32Array(positions.count * 2);
+
+  for (let i = 0; i < positions.count; i++) {
+    const climate = terrainClimateOffsets(
+      positions.getX(i), positions.getZ(i), positions.getY(i)
+    );
+    values[i * 2] = climate[0];
+    values[i * 2 + 1] = climate[1];
+    if (i % 512 === 0) {
+      stage("updating climate: " + Math.round(i / positions.count * 100) + "%");
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+  }
+
+  const attribute = terrain.geometry.attributes.aClimate;
+  attribute.array.set(values);
+  attribute.needsUpdate = true;
+  terrainGrid.climate = attribute.array;
+}
+
+// ============================================================
+// SERIALIZED REBUILD QUEUE
+//
+// Disable controls during generation so the terrain functions
+// cannot read changing slider values halfway through a build.
+// Part 6 already builds ALL geology; no extra cliff rebuild.
+// ============================================================
+
+function requestWorldBuild(mask = BUILD.TERRAIN) {
+  if (stopped) return;
+  pendingBuild |= mask;
+  if (!buildingWorld) void processWorldBuilds();
+}
+
+async function processWorldBuilds() {
+  buildingWorld = true;
+  const savedDisabled = uiControls.map(control => control.disabled);
+  uiControls.forEach(control => { control.disabled = true; });
+  loadingPanel.style.display = "flex";
+  loadingPanel.style.opacity = "1";
+  $("loadingTitle").textContent = "UPDATING TERRAINWORKS...";
+
+  try {
+    while (pendingBuild) {
+      const mask = pendingBuild;
+      pendingBuild = 0;
+      stage("preparing world update");
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      if (mask & BUILD.TERRAIN) {
+        await rebuildTerrain();
+        rebuildWater();
+      } else if (mask & BUILD.CLIMATE) {
+        await refreshClimateData();
+      }
+
+      syncWorldSettings();
+      if (mask & (BUILD.TERRAIN | BUILD.CLIMATE | BUILD.ROCKS)) {
+        await rebuildRocks();
+      }
+      if (mask & (BUILD.TERRAIN | BUILD.CLIMATE | BUILD.PLANTS)) {
+        await rebuildVegetation();
+      }
+    }
+
+    syncWorldSettings();
+    updateWater(simulationTime);
+    updateVegetation(simulationTime);
+    updateGeologyCounter();
+    renderer.render(scene, camera);
+    stage("ready");
+  } catch (error) {
+    pendingBuild = 0;
+    failRuntime(error);
+  } finally {
+    buildingWorld = false;
+    uiControls.forEach((control, i) => { control.disabled = savedDisabled[i]; });
+    previousFrame = fpsStart = performance.now();
+    fpsFrames = 0;
+    if (!stopped) loadingPanel.style.display = "none";
+  }
+}
+
+// ============================================================
+// SLIDERS AND TOGGLES
+// ============================================================
+
+const terrainControls = new Set([
+  "terrainSize", "baseElevation", "continentScale", "landmass", "warp",
+  "mountainHeight", "ridgeFrequency", "ridgeSharpness", "hills",
+  "valleyDepth", "erosion", "erosionScale", "terracing", "detail",
+  "cliffThreshold", "cliffStrength", "resolution"
+]);
+const geologyControls = new Set([
+  "rockDensity", "rockSize", "boulders", "scree", "rockCluster", "cliffRocks", "strata"
+]);
+const placementControls = new Set([
+  "waterLevel", "moisture", "temperature", "snowline", "rockExposure"
+]);
+
+for (const [name, input] of Object.entries(inputs)) {
+  listen(input, "input", () => {
+    if (buildingWorld) return;
+    updateLabels();
+    if (!["seed", "terrainSize", "resolution", "rockDensity"].includes(name)) {
+      highlightPreset();
+    }
+    if (!terrainControls.has(name) && name !== "seed") syncWorldSettings();
+  });
+
+  listen(input, "change", () => {
+    if (buildingWorld) return;
+    setValue(name, input.value === "" ? initialSettings[name] : input.value);
+    if (name === "seed" || terrainControls.has(name)) {
+      requestWorldBuild(BUILD.TERRAIN);
+    } else if (name === "biomeScale") {
+      requestWorldBuild(BUILD.CLIMATE);
+    } else if (placementControls.has(name)) {
+      requestWorldBuild(BUILD.ROCKS | BUILD.PLANTS);
+    } else if (geologyControls.has(name)) {
+      requestWorldBuild(BUILD.ROCKS);
+    } else {
+      syncWorldSettings();
+    }
+  });
+}
+
+for (const [id, mask] of [
+  ["waterToggle", BUILD.ROCKS | BUILD.PLANTS],
+  ["rocksToggle", BUILD.ROCKS],
+  ["biomesToggle", BUILD.PLANTS],
+  ["strataToggle", BUILD.ROCKS],
+  ["snowToggle", 0], ["wireframe", 0]
+]) {
+  listen($(id), "change", () => {
+    syncWorldSettings();
+    if (mask) requestWorldBuild(mask);
+  });
+}
+
+listen($("regenerate"), "click", () => requestWorldBuild());
+listen($("newSeed"), "click", () => {
+  setValue("seed", Math.floor(Math.random() * 1000000000));
+  requestWorldBuild();
+});
+
+// ============================================================
+// COMPLETE PRESETS: RESET UNSPECIFIED VALUES, NOT JUST A SUBSET
+//
+// Preserve the user's seed, area and performance budget when
+// changing world type. Reset restores the original HTML defaults.
+// ============================================================
+
+const worldPresets = {
+  alpine: { style: 0, values: {} },
+  highlands: { style: 0, values: {
+    mountainHeight: 8.5, ridgeFrequency: 0.9, ridgeSharpness: 1.45,
+    hills: 4.8, warp: 0.8, moisture: 0.68, temperature: 0.48,
+    snowline: 16, cliffStrength: 0.7, rockExposure: 0.42,
+    rockSize: 0.95, boulders: 0.13, sunElevation: 37
+  } },
+  desert: { style: 1, values: {
+    baseElevation: 2, mountainHeight: 7, ridgeFrequency: 0.75,
+    hills: 3.2, valleyDepth: 2.4, erosion: 0.48, terracing: 0.12,
+    moisture: 0.12, temperature: 0.92, snowline: 25,
+    strata: 1.15, waterLevel: -6, rockCluster: 0.68,
+    sunElevation: 48, sunIntensity: 3.6, ambient: 1.1
+  } },
+  badlands: { style: 1, values: {
+    mountainHeight: 12, warp: 1.05, ridgeFrequency: 1.4,
+    ridgeSharpness: 2.6, valleyDepth: 6.5, erosion: 1.24,
+    erosionScale: 1.7, terracing: 0.48, detail: 1,
+    cliffThreshold: 0.26, cliffStrength: 1.8, strata: 2.1,
+    moisture: 0.10, temperature: 0.90, snowline: 25,
+    rockExposure: 0.78, scree: 0.75, cliffRocks: 0.90,
+    waterLevel: -6, sunElevation: 27, sunAzimuth: 235
+  } },
+  volcanic: { style: 2, values: {
+    mountainHeight: 20, warp: 1.2, ridgeSharpness: 2.8,
+    hills: 1.6, valleyDepth: 3.2, erosion: 0.44, detail: 1.25,
+    cliffThreshold: 0.25, cliffStrength: 1.8,
+    moisture: 0.18, temperature: 0.65, snowline: 20,
+    rockExposure: 0.92, boulders: 0.30, scree: 0.82,
+    rockSize: 1.4, cliffRocks: 0.95, waterLevel: -2,
+    sunElevation: 19, sunIntensity: 1.9, ambient: 0.55, haze: 0.006
+  } },
+  islands: { style: 0, values: {
+    continentScale: 1.8, landmass: 1.5, warp: 1.35,
+    mountainHeight: 8, ridgeSharpness: 1.7, hills: 2.8,
+    valleyDepth: 2.5, moisture: 0.78, temperature: 0.8,
+    snowline: 25, waterLevel: 1.5, coastWidth: 3.5,
+    rockSize: 0.9, boulders: 0.14,
+    sunElevation: 41, sunIntensity: 3, ambient: 1.05
+  } }
+};
+
+function loadPreset(name) {
+  const preset = worldPresets[name];
+  if (!preset) throw new Error("Unknown world preset: " + name);
+  const preserved = {};
+  for (const key of ["seed", "terrainSize", "resolution", "rockDensity"]) {
+    preserved[key] = Number(inputs[key].value);
+  }
+  for (const [key, value] of Object.entries({
+    ...initialSettings, ...preset.values, ...preserved
+  })) setValue(key, value);
+  setGeologyStyle(preset.style);
+  highlightPreset(name);
+  updateLabels();
+}
+
+for (const button of document.querySelectorAll(".preset")) {
+  listen(button, "click", () => {
+    loadPreset(button.dataset.state);
+    requestWorldBuild();
+  });
+}
+
+listen($("randomize"), "click", () => {
+  const names = Object.keys(worldPresets);
+  loadPreset(names[Math.floor(Math.random() * names.length)]);
+  setValue("seed", Math.floor(Math.random() * 1000000000));
+  for (const key of ["continentScale", "landmass", "warp", "mountainHeight", "hills"]) {
+    setValue(key, Number(inputs[key].value) * (0.8 + Math.random() * 0.4));
+  }
+  setValue("waterLevel", Number(inputs.waterLevel.value) + Math.random() * 2 - 1);
+  setValue("sunAzimuth", Math.random() * 360);
+  highlightPreset();
+  requestWorldBuild();
+});
+
+listen($("reset"), "click", () => {
+  for (const [name, value] of Object.entries(initialSettings)) setValue(name, value);
+  for (const input of document.querySelectorAll('#ui input[type="checkbox"]')) {
+    input.checked = input.defaultChecked;
+  }
+  setGeologyStyle(0);
+  highlightPreset("alpine");
+  cameraRadius = 165;
+  cameraTheta = THREE.MathUtils.degToRad(42);
+  cameraPhi = THREE.MathUtils.degToRad(64);
+  cameraTarget.set(0, 3, 0);
+  updateCamera();
+  requestWorldBuild();
+});
+
+// ============================================================
+// ANIMATION, RESIZE AND CONTEXT LOSS
+// ============================================================
+
+listen(window, "resize", () => {
+  camera.aspect = innerWidth / Math.max(innerHeight, 1);
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+listen(renderer.domElement, "webglcontextlost", event => {
+  event.preventDefault();
+  failRuntime(new Error("WebGL context lost. Reload the page to restart the renderer."));
+});
+
+function animateWorld(now) {
+  if (stopped) return;
+  try {
+    const delta = Math.min(0.05, Math.max(0, (now - previousFrame) / 1000));
+    previousFrame = now;
+
+    if (!document.hidden && !buildingWorld) {
+      simulationTime += delta;
+      updateWater(simulationTime);
+      updateVegetation(simulationTime);
+      if ($("drift").checked && !dragging) {
+        cameraTheta += delta * 0.035;
+        updateCamera();
+      }
+      renderer.render(scene, camera);
+      fpsFrames++;
+      if (now - fpsStart >= 500) {
+        $("fps").textContent = Math.round(fpsFrames * 1000 / (now - fpsStart));
+        fpsFrames = 0;
+        fpsStart = now;
+      }
+    } else {
+      fpsFrames = 0;
+      fpsStart = now;
+    }
+    animationFrame = requestAnimationFrame(animateWorld);
+  } catch (error) {
+    failRuntime(error);
+  }
+}
+
+// Parts 4-7 have already built the initial world. Do not rebuild it again.
+syncWorldSettings();
+updateGeologyCounter();
+renderer.render(scene, camera);
+stage("ready");
+loadingPanel.style.display = "none";
+window.__terrainworksReady = true;
+animationFrame = requestAnimationFrame(animateWorld);
+
+// Close the outer try from Part 2.
+} catch (error) {
+  fatal(error);
+}
+
+// END OF PART 8 OF 8
+</script>
+
+<!-- Independent startup diagnostics, outside the main module. -->
+<script>
+(() => {
+  function showStartupError(message) {
+    if (window.__terrainworksReady) return;
+    const box = document.getElementById("error");
+    const loading = document.getElementById("loading");
+    if (!box || box.style.display === "block") return;
+    if (loading) loading.style.display = "none";
+    box.style.display = "block";
+    box.textContent = "TERRAINWORKS STARTUP ERROR\n\n" + message;
+  }
+  window.addEventListener("error", event => {
+    if (event.message) showStartupError(
+      event.message + "\nLine: " + (event.lineno || "unknown")
+    );
+  });
+  window.addEventListener("unhandledrejection", event => {
+    showStartupError(String(event.reason?.message || event.reason));
+  });
+  setTimeout(() => {
+    if (window.__terrainworksReady) return;
+    const text = document.getElementById("loadingStage")?.textContent.trim() || "";
+    if (/^(starting module|loading Three\.js)$/i.test(text)) {
+      showStartupError("Startup has not progressed past: " + text +
+        "\nCheck the Console for a syntax error or a blocked CDN request.");
+    }
+  }, 60000);
+})();
+</script>
+</body>
+</html>
+
+

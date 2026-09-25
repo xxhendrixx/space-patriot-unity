@@ -1,0 +1,1549 @@
+:root {
+  --accent: #a6ddd4;
+  --amber: #d9b77b;
+  --glass: #09131bed;
+  --muted: #84969c;
+  --line: #b2d5d527;
+  --sans: "Avenir Next", Inter, system-ui, sans-serif;
+  --mono: "SFMono-Regular", Consolas, monospace;
+}
+button {
+  border-radius: 3px;
+}
+.panel {
+  border-radius: 4px;
+  border-color: #bed1d02c;
+  background: linear-gradient(130deg, #101c24f2, #07121af2);
+}
+.topbar {
+  top: 22px;
+  left: 27px;
+  right: 27px;
+}
+.brand strong {
+  font-size: 17px;
+  letter-spacing: 3px;
+}
+.brand small {
+  letter-spacing: 2px;
+}
+.top-actions {
+  gap: 4px;
+}
+.top-actions button {
+  border-radius: 2px;
+  font-size: 9px;
+  padding: 9px 10px;
+  background: #071119c9;
+}
+.orbit-logo {
+  border-radius: 2px;
+  transform: rotate(-30deg);
+  width: 27px;
+  height: 27px;
+}
+.orbit-logo:before {
+  border-radius: 2px;
+  inset: 7px -6px;
+}
+.performance-strip {
+  top: auto;
+  bottom: 10px;
+  left: 26px;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: 8px;
+  opacity: 0.6;
+  gap: 12px;
+}
+.performance-strip b {
+  font-size: 9px;
+}
+.performance-strip .tech-label {
+  display: none;
+}
+.telemetry,
+.ship-status,
+#driveTelemetry,
+#driveShortcuts,
+.controls-strip,
+#interactionHint {
+  display: none !important;
+}
+.coordinates {
+  display: none;
+}
+.route-status {
+  bottom: 284px;
+  font-size: 9px;
+}
+.environment-strip {
+  top: 166px !important;
+  left: 27px !important;
+  font-size: 7px !important;
+  color: #77949b !important;
+  opacity: 0.8;
+}
+.citizen-menu-open #pauseBanner {
+  display: none !important;
+}
+#vehicleControls {
+  left: 26px !important;
+  bottom: 270px !important;
+  width: 264px !important;
+  padding: 9px 11px !important;
+  transform: none !important;
+  border-radius: 3px;
+  background: #08131bdc;
+  opacity: 1 !important;
+}
+.vehicle-instruments {
+  display: none;
+}
+.vehicle-heading {
+  margin-bottom: 8px;
+  font-size: 7px;
+}
+.vehicle-heading strong {
+  font-size: 8px;
+}
+.vehicle-buttons {
+  gap: 3px;
+}
+.vehicle-buttons button {
+  font-size: 7px;
+  padding: 7px 2px;
+}
+.vehicle-hint {
+  display: none;
+}
+.intro {
+  top: 24%;
+  left: 7%;
+  max-width: 480px;
+}
+.intro h1 {
+  font-size: clamp(44px, 5.5vw, 78px);
+  font-weight: 450;
+  letter-spacing: -3.5px;
+  line-height: 1.05;
+}
+.intro p {
+  max-width: 390px;
+  color: #b7c7ce;
+}
+.intro:before {
+  background: radial-gradient(ellipse at 40% 40%, #050b12ee, transparent 74%);
+  inset: -90px -180px -100px -70px;
+}
+.intro .eyebrow {
+  font-size: 8px;
+  letter-spacing: 3px;
+}
+.intro-actions button {
+  border-radius: 3px;
+}
+#tacticalOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+#citizenHUD {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  color: #b7d1d0;
+  font-family: var(--mono);
+}
+#citizenHUD button {
+  pointer-events: auto;
+}
+.citizen-rail {
+  position: absolute;
+  left: 26px;
+  top: 93px;
+  display: flex;
+  gap: 5px;
+}
+.citizen-rail button {
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+  background: #09141acc;
+  border-color: #b0ccca25;
+  padding: 9px 11px;
+}
+.citizen-rail kbd {
+  font-size: 7px;
+}
+.citizen-rail #crewDot {
+  color: #a6ddd4;
+  margin-left: 8px;
+}
+#combatStrip {
+  position: absolute;
+  top: 143px;
+  left: 27px;
+  right: 27px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+}
+#combatStrip b {
+  font-weight: 500;
+  color: #d5e6df;
+}
+#combatMessage {
+  color: #899ca6;
+  letter-spacing: 0.4px;
+}
+#linkStatus {
+  margin-left: auto;
+  color: #abcfc8;
+}
+.signal-light {
+  width: 4px;
+  height: 4px;
+  background: #a6ddd4;
+  border-radius: 50%;
+}
+.avionics {
+  position: absolute;
+  bottom: 47px;
+  width: 264px;
+  border: 1px solid #8cacae42;
+  border-radius: 3px;
+  background: linear-gradient(115deg, #09171eee, #08131cdc);
+  box-shadow: 0 8px 32px #0005;
+  padding: 13px;
+  backdrop-filter: blur(12px);
+}
+.avionics:before,
+.avionics:after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border: 1px solid #6b8589;
+  top: 5px;
+}
+.avionics:before {
+  left: 5px;
+}
+.avionics:after {
+  right: 5px;
+}
+.avionics-heading {
+  font-size: 8px;
+  letter-spacing: 1.4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #a1c4c51c;
+  padding-bottom: 10px;
+}
+.avionics-heading button {
+  font-size: 7px;
+  padding: 4px 6px;
+  background: #8dadad09;
+  border-color: #8dadad24;
+  color: #a6ddd4;
+}
+.avionics-heading button kbd {
+  font-size: 6px;
+  margin-left: 3px;
+}
+#radarPanel {
+  left: 26px;
+}
+#radar {
+  display: block;
+  width: 100%;
+  height: 147px;
+  margin: 6px 0 4px;
+}
+.radar-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 6px;
+  letter-spacing: 0.7px;
+  color: #839ea2;
+}
+.radar-caption i {
+  width: 3px;
+  height: 3px;
+  display: inline-block;
+  margin-right: 3px;
+}
+.hostile-dot {
+  background: #e1a18e;
+}
+.friendly-dot {
+  background: #a6ddd4;
+}
+.radar-caption b {
+  font-weight: 400;
+}
+#weaponsPanel {
+  right: 26px;
+  min-height: 218px;
+}
+.weapon-name {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #d2dfdd;
+  margin-top: 14px;
+}
+.ammo-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 9px 0;
+}
+.ammo-row strong {
+  font-family: var(--sans);
+  font-size: 38px;
+  font-weight: 400;
+  letter-spacing: -2px;
+  color: #eef4ec;
+  line-height: 1;
+}
+.ammo-row span {
+  font-size: 11px;
+  color: #859fa6;
+}
+.ammo-row b {
+  font-weight: 400;
+}
+.ammo-row small {
+  display: block;
+  font-size: 6px;
+  letter-spacing: 0.8px;
+  margin-top: 6px;
+}
+.ammo-row button {
+  margin-left: auto;
+  padding: 6px;
+  font: 6px var(--mono);
+}
+.weapon-select {
+  display: flex;
+  gap: 3px;
+  margin: 12px 0;
+}
+.weapon-select button {
+  font: 6px var(--mono);
+  padding: 6px 5px;
+  flex: 1;
+  border-color: #7b9c9c27;
+  color: #8ca1a5;
+}
+.weapon-select button.selected {
+  border-color: #a6ddd478;
+  color: #c2e9df;
+  background: #a6ddd414;
+}
+.weapon-meter {
+  display: flex;
+  align-items: center;
+  margin: 7px 0;
+  gap: 10px;
+}
+.weapon-meter span {
+  font: 6px var(--mono);
+  width: 80px;
+  color: #9dafb2;
+  display: flex;
+  justify-content: space-between;
+}
+.weapon-meter b {
+  font-weight: 400;
+}
+.weapon-meter > i {
+  flex: 1;
+  height: 3px;
+  background: #a6ddd411;
+}
+.weapon-meter em {
+  display: block;
+  height: 100%;
+  background: #91bfb6;
+  width: 100%;
+  transition: width 0.13s;
+}
+#combatHeatFill {
+  background: #d9b77b;
+  width: 0;
+}
+#targetReadout {
+  font: 6px var(--mono);
+  letter-spacing: 0.7px;
+  border-top: 1px solid #a1c4c51c;
+  padding-top: 9px;
+  margin-top: 12px;
+  color: #b5c9c4;
+}
+#combatControls {
+  position: absolute;
+  bottom: 17px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 13px;
+  white-space: nowrap;
+  font: 6px var(--mono);
+  color: #90a4a9;
+}
+#combatControls kbd {
+  font-size: 6px;
+  background: #09151bbb;
+  border-color: #91aaaa33;
+  margin-right: 3px;
+}
+#touchFire {
+  display: none;
+}
+.citizen-modal {
+  position: absolute;
+  inset: 0;
+  background: #030910ae;
+  backdrop-filter: blur(12px);
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  pointer-events: auto;
+}
+.citizen-dialog {
+  width: 760px;
+  max-width: 100%;
+  max-height: 92vh;
+  overflow: auto;
+  padding: 30px 34px;
+  background: linear-gradient(130deg, #142128f5, #071019fa);
+  border: 1px solid #a9c4c439;
+  border-radius: 5px;
+  box-shadow: 0 30px 100px #0009;
+}
+.dialog-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #a7cccc25;
+  padding-bottom: 14px;
+  font: 8px var(--mono);
+  letter-spacing: 2px;
+  color: #a1b7ba;
+}
+.dialog-top button {
+  padding: 0;
+  width: 23px;
+  height: 23px;
+  border: 0;
+  background: none;
+  font-size: 22px;
+  color: #bdcccb;
+}
+.citizen-dialog > .eyebrow {
+  margin-top: 27px;
+  font-size: 8px;
+  letter-spacing: 2px;
+}
+.citizen-dialog h2 {
+  font-size: 42px;
+  letter-spacing: -1.8px;
+  margin: 14px 0;
+  font-weight: 450;
+  color: #ecede4;
+}
+.citizen-dialog > p {
+  font-size: 12px;
+  max-width: 600px;
+}
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 27px 0;
+}
+.mission-grid button {
+  text-align: left;
+  background: #b3d6cd07;
+  padding: 21px 19px;
+  border-color: #a6c5c533;
+}
+.mission-grid button:hover {
+  background: #a6ddd415;
+  border-color: #a6ddd499;
+}
+.mission-grid span {
+  display: block;
+  font: 7px var(--mono);
+  letter-spacing: 2px;
+  color: #99b9b2;
+}
+.mission-grid strong {
+  display: block;
+  font: 19px var(--sans);
+  font-weight: 500;
+  margin: 20px 0 9px;
+}
+.mission-grid small {
+  font-size: 9px;
+  color: #889fa7;
+}
+.loadout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  border-top: 1px solid #a7cccc25;
+  padding-top: 24px;
+}
+.loadout-grid small {
+  font: 7px var(--mono);
+  letter-spacing: 1px;
+  color: #76959c;
+  display: block;
+}
+.loadout-grid b {
+  display: block;
+  margin-top: 12px;
+  font: 13px var(--mono);
+  color: #c6d9d3;
+}
+.loadout-grid p {
+  font-size: 10px;
+}
+.dialog-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.dialog-actions button {
+  font: 8px var(--mono);
+  padding: 11px 14px;
+}
+.help-note {
+  font-size: 9px !important;
+  color: #728d97 !important;
+  line-height: 1.8;
+}
+.crew-dialog {
+  width: 600px;
+}
+.citizen-field {
+  display: block;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+  color: #8ca9b0;
+  margin: 22px 0 16px;
+}
+.citizen-field input {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+}
+input {
+  border: 1px solid #a1c4c533;
+  background: #050f17;
+  color: #cce2d9;
+  border-radius: 2px;
+  padding: 11px 13px;
+  font: 11px var(--mono);
+}
+.crew-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.crew-actions button {
+  font: 9px var(--mono);
+  padding: 12px;
+}
+.crew-actions span {
+  color: #657d86;
+  font-size: 10px;
+}
+.crew-actions input {
+  width: 125px;
+  text-transform: uppercase;
+}
+.room-ticket {
+  margin: 24px 0;
+  background: #a5d6cd06;
+  border: 1px solid #a5d6cd30;
+  padding: 19px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.room-ticket span {
+  font: 7px var(--mono);
+  color: #829f9e;
+}
+.room-ticket strong {
+  font: 24px var(--mono);
+  letter-spacing: 4px;
+  color: #c6e6d8;
+}
+.room-ticket button {
+  margin-left: auto;
+  font-size: 8px;
+  padding: 7px;
+}
+.crew-connection {
+  display: flex;
+  justify-content: space-between;
+  font: 8px var(--mono);
+  color: #98bcb5;
+  margin-bottom: 16px;
+}
+.crew-member {
+  padding: 12px;
+  border-top: 1px solid #a7cccc20;
+  display: flex;
+  justify-content: space-between;
+  font: 10px var(--mono);
+}
+.crew-member small {
+  color: #80a49e;
+  font-size: 8px;
+}
+.crew-dialog details p {
+  font-size: 10px;
+}
+.crew-dialog details input {
+  padding: 8px;
+}
+.art-dialog {
+  width: 1200px;
+}
+.art-dialog img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #a5d6cd30;
+  display: block;
+  margin-top: 20px;
+}
+.art-dialog a {
+  display: block;
+  font: 9px var(--mono);
+  letter-spacing: 1px;
+  color: #b6ded2;
+  margin-top: 18px;
+  text-decoration: none;
+}
+.rendering-options {
+  border-top: 1px solid #a7cccc25;
+  padding-top: 10px;
+  margin-top: 18px;
+}
+.rendering-options label {
+  display: flex;
+  justify-content: space-between;
+  font: 9px var(--mono);
+  margin: 12px 0;
+}
+.rendering-options input {
+  accent-color: #9fcfc1;
+}
+.rendering-options select {
+  width: 100%;
+  background: #0b1822;
+  color: #c1d6d0;
+  padding: 8px;
+  font-size: 10px;
+  border: 1px solid #a5d6cd30;
+}
+.probe-state {
+  font: 8px var(--mono);
+  color: #739490;
+  line-height: 1.8;
+}
+.intro-open #citizenHUD,
+.intro-open #tacticalOverlay {
+  display: none;
+}
+.citizen-menu-open #tacticalOverlay {
+  opacity: 0.3;
+}
+.cockpit-active:not(.touch-mode) #vehicleControls {
+  opacity: 1 !important;
+}
+.instrument-active #radarPanel,
+.instrument-active #weaponsPanel,
+.instrument-active .citizen-rail,
+.instrument-active #combatControls {
+  display: none;
+}
+.instrument-active #combatStrip {
+  top: 120px;
+}
+@media (min-width: 1500px) {
+  .avionics {
+    width: 295px;
+  }
+  #radar {
+    height: 169px;
+  }
+  #vehicleControls {
+    width: 295px !important;
+    bottom: 294px !important;
+  }
+  .avionics-heading {
+    font-size: 9px;
+  }
+  .weapon-name {
+    font-size: 10px;
+  }
+}
+@media (max-height: 680px) {
+  #combatStrip {
+    top: 130px;
+  }
+  .avionics {
+    bottom: 37px;
+    width: 228px;
+    padding: 10px;
+  }
+  #radar {
+    height: 120px;
+  }
+  #weaponsPanel {
+    min-height: 0;
+  }
+  .ammo-row strong {
+    font-size: 29px;
+  }
+  .weapon-name {
+    font-size: 8px;
+  }
+  .weapon-select {
+    margin: 8px 0;
+  }
+  #vehicleControls {
+    bottom: 240px !important;
+    width: 228px !important;
+  }
+  #combatControls {
+    bottom: 12px;
+  }
+  .citizen-rail {
+    top: 82px;
+  }
+  .performance-strip {
+    display: none;
+  }
+  .citizen-dialog {
+    padding: 20px 26px;
+  }
+  .citizen-dialog h2 {
+    font-size: 32px;
+  }
+}
+@media (max-width: 900px) {
+  .topbar {
+    left: 16px;
+    right: 16px;
+    align-items: flex-start;
+  }
+  .brand strong {
+    font-size: 12px;
+  }
+  .brand small {
+    font-size: 6px;
+  }
+  .top-actions {
+    max-width: 480px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .top-actions button {
+    font-size: 8px;
+    padding: 7px;
+  }
+  .avionics {
+    width: 216px;
+  }
+  .citizen-rail {
+    left: 16px;
+  }
+  #radarPanel {
+    left: 16px;
+  }
+  #weaponsPanel {
+    right: 16px;
+  }
+  #vehicleControls {
+    left: 16px !important;
+    width: 216px !important;
+  }
+  #combatMessage {
+    display: none;
+  }
+  #combatControls {
+    gap: 7px;
+    font-size: 5px;
+  }
+  .crew-actions {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 600px) {
+  .topbar {
+    top: 13px;
+  }
+  .brand {
+    max-width: 130px;
+  }
+  .top-actions {
+    max-width: 220px;
+    gap: 3px;
+  }
+  .top-actions kbd {
+    display: none;
+  }
+  .top-actions button {
+    font-size: 7px;
+    padding: 6px;
+  }
+  .citizen-rail {
+    top: 96px;
+    gap: 3px;
+  }
+  .citizen-rail button {
+    font-size: 6px;
+    padding: 7px;
+  }
+  #combatStrip {
+    top: 138px;
+    left: 16px;
+    right: 16px;
+    font-size: 6px;
+  }
+  .avionics {
+    width: 165px;
+    bottom: 103px;
+    padding: 9px;
+  }
+  #radar {
+    height: 94px;
+  }
+  .avionics-heading {
+    font-size: 6px;
+  }
+  .avionics-heading button {
+    font-size: 6px;
+  }
+  .ammo-row strong {
+    font-size: 26px;
+  }
+  .ammo-row span {
+    font-size: 8px;
+  }
+  .ammo-row button {
+    display: none;
+  }
+  .weapon-name {
+    font-size: 6px;
+  }
+  .weapon-select button {
+    font-size: 5px;
+    padding: 5px 2px;
+  }
+  .weapon-meter span {
+    font-size: 5px;
+    width: 60px;
+  }
+  .radar-caption {
+    font-size: 5px;
+  }
+  .radar-caption span {
+    display: none;
+  }
+  #targetReadout {
+    font-size: 5px;
+  }
+  .ammo-row small {
+    font-size: 5px;
+  }
+  #weaponsPanel {
+    min-height: 0;
+  }
+  #vehicleControls {
+    display: none !important;
+  }
+  #combatControls {
+    display: none;
+  }
+  .citizen-modal {
+    padding: 12px;
+  }
+  .citizen-dialog {
+    padding: 20px;
+  }
+  .citizen-dialog h2 {
+    font-size: 32px;
+  }
+  .mission-grid,
+  .loadout-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .mission-grid button {
+    padding: 15px;
+  }
+  .mission-grid strong {
+    margin-top: 10px;
+  }
+  .citizen-field input {
+    width: 100%;
+  }
+  .room-ticket {
+    gap: 8px;
+    padding: 12px;
+  }
+  .room-ticket strong {
+    font-size: 20px;
+  }
+  .room-ticket span {
+    font-size: 6px;
+  }
+  #touchFire {
+    display: block;
+    position: absolute;
+    right: 20px;
+    bottom: 28px;
+    width: 64px;
+    height: 54px;
+    border-color: #a6ddd44d;
+    background: #132b32bd;
+    font: 10px var(--mono);
+  }
+  .intro {
+    left: 7%;
+    top: 25% !important;
+  }
+  .intro h1 {
+    font-size: 48px;
+  }
+  .intro p {
+    font-size: 11px;
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 901px) and (min-height: 681px) {
+  .avionics-heading {
+    font-size: 10px;
+  }
+  .weapon-name {
+    font-size: 11px;
+  }
+  .ammo-row small,
+  .weapon-meter span,
+  .radar-caption,
+  #targetReadout {
+    font-size: 8px;
+  }
+  .weapon-select button {
+    font-size: 8px;
+  }
+  .citizen-rail button {
+    font-size: 9px;
+  }
+  .top-actions button {
+    font-size: 10px;
+  }
+  #combatStrip {
+    font-size: 9px;
+  }
+  #combatControls,
+  #combatControls kbd {
+    font-size: 8px;
+  }
+  .avionics {
+    padding: 14px;
+  }
+  #radarPanel {
+    min-height: 230px;
+  }
+  #vehicleControls {
+    bottom: 290px !important;
+  }
+}
+
+/* Keep controls above both render layers. The physical MFDs own cockpit telemetry. */
+#hud {
+  z-index: 4;
+}
+.mesh-cockpit .avionics {
+  bottom: 50px;
+  transform: scale(0.78);
+  transform-origin: bottom left;
+  opacity: 0.85;
+}
+.mesh-cockpit .avionics.fire-control {
+  transform-origin: bottom right;
+}
+.mesh-cockpit:not(.weapons-armed) .avionics {
+  display: none;
+}
+.mesh-cockpit #vehicleControls {
+  top: 186px !important;
+  bottom: auto !important;
+  background: #08101885;
+  width: 248px !important;
+}
+#detailScene {
+  image-rendering: auto;
+}
+#engineeringDialog {
+  z-index: 55;
+}
+.controller-settings { margin-top:24px; border-top:1px solid #315450; padding-top:16px; }
+.controller-settings .field { margin-bottom:12px; }
+.controller-settings output { min-width:3em; text-align:right; }
+#controllerStatus { font:11px monospace; color:#b7ded3; overflow-wrap:anywhere; line-height:1.6; }
+.systems-dialog {
+  max-width: 920px !important;
+  max-height: 90vh;
+  overflow: auto;
+}
+.system-modes,
+.power-presets,
+.system-footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.system-modes button,
+.power-presets button,
+.component-row button,
+.system-footer button {
+  font: 10px var(--mono);
+}
+.system-modes .selected,
+.power-presets .selected {
+  border-color: #b5d2bb;
+  color: #cbe0c6;
+  background: #1a3437;
+}
+#systemWarning {
+  margin-left: auto;
+  font: 10px var(--mono);
+  color: #d2b986;
+}
+.power-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.power-grid > div {
+  border: 1px solid #aaccc337;
+  padding: 18px;
+}
+.power-grid span {
+  display: block;
+  font: 11px var(--mono);
+  letter-spacing: 2px;
+}
+.power-grid strong {
+  display: block;
+  font: 30px var(--mono);
+  margin: 16px 0;
+}
+.power-grid button {
+  width: 44px;
+  padding: 8px;
+  margin-right: 6px;
+}
+.power-pips {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 18px;
+}
+.power-pips i {
+  height: 25px;
+  flex: 1;
+  background: #24353a;
+}
+.power-pips i.on {
+  background: #a4c0ae;
+}
+.system-explainer {
+  font-size: 12px !important;
+  color: #a4b4b4;
+}
+.component-table {
+  border-top: 1px solid #b1cdc82e;
+}
+.component-row {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1fr 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #b1cdc817;
+  font: 11px var(--mono);
+}
+.component-head {
+  color: #71868c;
+  font-size: 9px;
+}
+.component-row .selected {
+  color: #b7d4be;
+}
+.system-footer {
+  font: 10px var(--mono);
+  justify-content: space-between;
+}
+#flightTapes {
+  position: absolute;
+  left: 19%;
+  right: 19%;
+  top: 34%;
+  height: 22%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  color: #b6d2c3;
+  text-shadow: 0 1px 3px #000;
+  font: 10px var(--mono);
+  opacity: 0.72;
+}
+#flightTapes > div {
+  width: 100px;
+}
+#flightTapes > div:last-child {
+  text-align: right;
+}
+#flightTapes small {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+#flightTapes b {
+  display: block;
+  margin: 9px 0;
+  padding: 5px;
+  font-size: 22px;
+  font-weight: 400;
+  border: 1px solid #94bcb374;
+  background: #0a202438;
+}
+.tape-scale {
+  display: block;
+  height: 65px;
+  width: 16px;
+  border-left: 1px solid #a2ccc282;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 10px,
+    #a2ccc27a 10px,
+    #a2ccc27a 11px
+  );
+  margin-bottom: 8px;
+}
+#flightTapes > div:last-child .tape-scale {
+  margin-left: auto;
+  border-left: 0;
+  border-right: 1px solid #a2ccc282;
+}
+@media (max-width: 750px) {
+  .power-grid {
+    gap: 6px;
+  }
+  .power-grid > div {
+    padding: 9px;
+  }
+  .power-grid strong {
+    font-size: 20px;
+  }
+  .component-row {
+    gap: 5px;
+    font-size: 8px;
+  }
+  .component-row button {
+    font-size: 8px;
+    padding: 7px 4px;
+  }
+  #flightTapes {
+    left: 12%;
+    right: 12%;
+    top: 35%;
+  }
+  .citizen-rail {
+    gap: 3px;
+  }
+  .citizen-rail button {
+    font-size: 6px;
+    padding: 7px;
+  }
+}
+/* The generated artwork is used directly for cockpit hardware and interface skins. */
+#illustratedCockpit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+#cockpitArtwork {
+  pointer-events: none;
+  user-select: none;
+}
+.art-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 640px;
+  height: 380px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: #071115;
+  transform-origin: 0 0;
+  pointer-events: auto;
+  box-shadow: 0 0 9px #94cfb413;
+  overflow: hidden;
+  transition: none;
+}
+.art-screen canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.art-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg,#c1e5ec0d,transparent 38%,#00000018);
+  box-shadow: inset 0 10px 14px #000b,inset 8px 0 10px #0006,inset 0 -2px 2px #d3e8da25;
+}
+.art-screen:hover {
+  outline: 2px solid #bfd8bd86;
+  outline-offset: -2px;
+}
+.art-screen:active {
+  filter: brightness(1.12);
+}
+#artSwitchRow {
+  position: absolute;
+  bottom: 5.5%;
+  left: 23%;
+  right: 23%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  pointer-events: auto;
+}
+.art-switch {
+  font: 8px var(--mono);
+  letter-spacing: 0.6px;
+  padding: 7px 3px;
+  color: #bacab9;
+  background: #121819;
+  border: 7px solid transparent;
+  border-image: var(--hud-frame) 85 fill stretch;
+  min-height: 29px;
+}
+.illustrated-flight-deck .avionics,
+.illustrated-flight-deck #vehicleControls,
+.illustrated-flight-deck #cockpitLabels,
+.illustrated-flight-deck #cockpitTooltip,
+.illustrated-flight-deck #instrumentBanner {
+  display: none !important;
+}
+.illustrated-flight-deck #flightTapes {
+  top: 29%;
+  left: 22%;
+  right: 22%;
+}
+.illustrated-flight-deck .environment-strip {
+  display: none !important;
+}
+.citizen-dialog,
+.panel {
+  border: 23px solid transparent;
+  border-image: var(--hud-frame) 90 fill stretch;
+  border-radius: 0;
+  box-shadow: 0 20px 90px #0009;
+  background: #081215;
+}
+.avionics {
+  border: 12px solid transparent;
+  border-image: var(--hud-frame) 85 fill stretch;
+  backdrop-filter: none;
+  background: #081215;
+}
+.avionics:before,
+.avionics:after {
+  display: none;
+}
+.top-actions button,
+.citizen-rail button {
+  border: 6px solid transparent;
+  border-image: var(--hud-frame) 82 fill stretch;
+  background: #091416;
+  padding: 6px 9px;
+}
+.topbar {
+  left: 22px;
+  right: 22px;
+  top: 20px;
+}
+.top-actions {
+  gap: 2px;
+}
+.top-actions button {
+  font-size: 8px;
+}
+.top-actions kbd {
+  font-size: 7px;
+  margin-left: 4px;
+}
+.citizen-rail {
+  top: 92px;
+  left: 23px;
+  gap: 4px;
+}
+.brand strong {
+  font-size: 16px;
+}
+.brand small {
+  font-size: 7px;
+}
+#combatStrip {
+  top: 142px;
+}
+.controls-footer {
+  opacity: 0.65;
+}
+@media (max-width: 900px) {
+  .top-actions button {
+    padding: 5px 3px;
+    font-size: 7px;
+  }
+  .top-actions kbd {
+    display: none;
+  }
+  .brand strong {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+  }
+  .topbar {
+    left: 12px;
+    right: 12px;
+    gap: 8px;
+  }
+  .citizen-rail {
+    left: 12px;
+    top: 80px;
+  }
+  .citizen-rail button {
+    padding: 5px 4px;
+    font-size: 6px;
+  }
+  #combatStrip {
+    top: 130px;
+  }
+  #artSwitchRow {
+    left: 10%;
+    right: 10%;
+    bottom: 1.5%;
+    gap: 3px;
+  }
+  .art-switch {
+    font-size: 6px;
+    min-height: 25px;
+    padding: 3px;
+    border-width: 5px;
+  }
+  .citizen-dialog,
+  .panel {
+    border-width: 14px;
+  }
+}
+#illustratedWeapon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right bottom;
+  z-index: 2;
+  pointer-events: none;
+  transform-origin: 80% 100%;
+  will-change: transform;
+}
+.top-actions button {
+  font-size: 9px;
+}
+.art-switch {
+  font-size: 9px;
+}
+#interiorHint {
+  position: absolute;
+  z-index: 6;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  font: 10px var(--mono);
+  letter-spacing: 1px;
+  color: #d4dac9;
+  background: #081416e6;
+  border: 10px solid transparent;
+  border-image: var(--hud-frame) 85 fill stretch;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  .topbar {
+    top: 12px;
+    display: block;
+  }
+  .brand {
+    max-width: none;
+    width: auto;
+    margin-bottom: 10px;
+  }
+  .brand strong {
+    white-space: nowrap;
+    font-size: 15px;
+  }
+  .top-actions {
+    display: flex;
+    max-width: none;
+    justify-content: flex-start;
+    gap: 2px;
+  }
+  .top-actions button {
+    flex: 0 0 auto;
+    font-size: 8px;
+    padding: 5px;
+    border-width: 4px;
+  }
+  .citizen-rail {
+    top: 144px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .citizen-rail button {
+    font-size: 7px;
+    padding: 5px;
+    border-width: 4px;
+  }
+  #combatStrip {
+    top: 209px;
+    font-size: 6px;
+  }
+  .illustrated-flight-deck #flightTapes {
+    top: 33%;
+    left: 10%;
+    right: 10%;
+  }
+  #artSwitchRow {
+    bottom: 4px;
+    left: 7px;
+    right: 7px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .art-switch {
+    font-size: 6px !important;
+    min-height: 24px;
+    padding: 2px !important;
+    letter-spacing: 0;
+  }
+  .illustrated-flight-deck .art-screen {
+    pointer-events: none;
+  }
+  .illustrated-flight-deck #touchFire {
+    bottom: 120px;
+    width: 48px;
+    height: 40px;
+    right: 12px;
+  }
+  .illustrated-flight-deck #artSwitchRow {
+    bottom: 3px;
+  }
+  #interiorHint {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    white-space: normal;
+    font-size: 8px;
+    bottom: 12px;
+  }
+}
+/* Walking aboard uses the nearby physical displays and interior controls. */
+.interior-walk #vehicleControls,.interior-walk .ship-status,.interior-walk #combatControls,.interior-walk #radarPanel,.interior-walk #weaponsPanel{display:none!important}
+/* Frontier 10: a quiet flight view and a single tabbed command terminal. */
+#terminalToggle{position:fixed;right:20px;top:18px;z-index:32;border:1px solid #65858366;background:#081418c9;padding:9px 14px;color:#becdca;font:10px monospace;letter-spacing:1.4px;cursor:pointer}
+#terminalToggle kbd{margin-left:12px;color:#73c4c1}body:not(.started) #terminalToggle{display:none}
+#pauseDeck{position:fixed;inset:0;z-index:100;background:#02070cce;display:grid;place-items:center;padding:3vh 3vw;backdrop-filter:blur(8px)}
+#pauseDeck[hidden]{display:none}.pause-terminal{position:relative;width:min(1320px,94vw);height:min(880px,92vh);padding:3.6% 3%;background:#0b1217 url('assets/ui/pause-terminal-v10.png') center/100% 100% no-repeat;box-shadow:0 30px 120px #000b;display:flex;flex-direction:column;color:#d1e3df}
+.pause-terminal header{height:9%;min-height:58px;display:flex;align-items:center;gap:20px;padding:0 12px}.pause-terminal h1{font-size:clamp(18px,2.2vw,30px);letter-spacing:.05em;margin:3px 0;font-weight:400}.pause-terminal small{display:block;font:9px monospace;letter-spacing:2px;color:#7caaaa}#pauseClock{margin-left:auto;font:9px monospace;color:#9ab4af}#deckResume{font:11px monospace;white-space:nowrap;border:1px solid #5e8684;background:#102225;padding:10px;color:#ddf2ed}.pause-tabs{display:flex;min-height:48px;margin:1% 0 1.2%;gap:3px}.pause-tabs button{flex:1;border:0;background:transparent;color:#809995;font:clamp(9px,1vw,12px) monospace;text-transform:uppercase;letter-spacing:1px;cursor:pointer}.pause-tabs button[aria-selected=true]{color:#bde9e2;border-bottom:2px solid #8bc9c3;background:#35646525}.pause-subtabs{width:61%;display:flex;gap:5px;flex-wrap:wrap;padding:7px 8px}.pause-subtabs button{background:transparent;border:1px solid #324a4b;color:#94a8a5;padding:7px 12px;font:10px monospace;cursor:pointer}.pause-subtabs .selected{background:#204344;color:#e5f9ec}.pause-content{overflow:auto;width:61%;flex:1;min-height:0;padding:7px 10px 20px;scrollbar-width:thin;scrollbar-color:#526f6d transparent}.pause-content > :is(.panel,.modal,.citizen-dialog,section,div,aside){position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;max-height:none!important;height:auto!important;margin:0!important;padding:14px!important;background:#091216e8!important;border:1px solid #355052!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important}.pause-content [hidden]{display:none!important}.pause-content .panel-head,.pause-content .dialog-header{position:relative!important}.pause-content h2{font-size:19px!important}.pause-content .dialog-grid{grid-template-columns:1fr!important}.pause-content .art-grid{display:block}.pause-content img{max-width:100%}.pause-caption{position:absolute;left:66%;top:28%;right:6%;font:11px monospace;letter-spacing:2px;color:#b1cfcc}.pause-caption small{margin-top:12px;line-height:1.8;color:#859e9c;letter-spacing:.7px}.pause-deck-open :is(#illustratedCockpit,#weaponView,#tacticalOverlay,#pauseBanner,#terminalToggle){visibility:hidden!important}
+body:has(#intro[hidden]) :is(.topbar,.rail,#telemetry,.environment-strip,#performance,#vehicleControls,#flightTapes,#instrumentBanner,#cockpitLabels,#cockpitTooltip){display:none!important}
+#artSwitchRow{bottom:9px!important;gap:4px!important;left:50%!important;transform:translateX(-50%)!important;justify-content:center;flex-wrap:nowrap!important;width:auto!important;padding:0!important}
+.art-switch{width:58px!important;min-height:39px!important;padding:6px 3px 4px!important;border:1px solid #3e565a!important;border-image:none!important;background:linear-gradient(#263238,#0b1318)!important;font:8px monospace!important;letter-spacing:.6px!important;color:#b9cbc8!important;box-shadow:inset 0 1px #71818166,0 2px 3px #000b;display:flex;flex-direction:column;align-items:center;gap:4px}.art-switch:before{content:'';width:15px;height:6px;border-radius:2px;background:#65736f;box-shadow:0 0 0 2px #03080a}.art-switch[aria-pressed=true]:before{background:#97e4cd;box-shadow:0 0 6px #6eceb6}.art-switch:hover{border-color:#98c6bd!important}
+#weaponView{position:fixed;right:0;bottom:0;z-index:7;pointer-events:none;transform-origin:80% 100%}#weaponView[hidden]{display:none}#weaponView #illustratedWeapon,#muzzleFlash{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none!important;max-width:none}#muzzleFlash{z-index:1}
+@media(max-width:850px){.pause-terminal{width:98vw;height:96vh;padding:4% 3%}.pause-content,.pause-subtabs{width:100%}.pause-caption{display:none}.pause-terminal{background-size:160% 100%;background-position:left center}.pause-terminal header{gap:7px}#pauseClock{display:none}.pause-tabs{gap:0}.pause-tabs button{font-size:8px;letter-spacing:0}.art-switch{width:42px!important;font-size:7px!important}#artSwitchRow{gap:2px!important}#terminalToggle{right:10px;top:10px}}
+.mfd-bezel-button{position:absolute;pointer-events:auto;z-index:4;transform:translate(-50%,-50%);padding:0;border:1px solid #6b8782;border-radius:2px;background:#233237;box-shadow:0 0 0 2px #060b0c,0 1px 2px #000;cursor:pointer}.mfd-bezel-button:after{content:'';position:absolute;inset:30% 20%;background:#a5d8b2;box-shadow:0 0 4px #b3e6c28c}.mfd-bezel-button:hover,.mfd-bezel-button:focus-visible{outline:2px solid #bef8df}
+.pause-content :is(#shipboardPanel,#scenarioPanel,#economyPanel,#cityTerminal) button{padding:10px 14px;margin:5px;border:1px solid #46615d;background:#17312f;color:#cce4da;font:11px monospace;cursor:pointer}.pause-content :is(#shipboardPanel,#scenarioPanel,#economyPanel,#cityTerminal) p{font-size:12px;line-height:1.8;color:#93aaa7}.pause-content h3{font-size:13px;font-weight:400;margin-top:24px;color:#b4d0c8}.pause-content select{padding:10px;border:1px solid #4b6b69;background:#0b1a20;color:#b7dcd1;max-width:100%}#tradeTraffic,#factionBalances{white-space:pre-line;font:11px/2 monospace;color:#a1c1b8}.market-row{border-bottom:1px solid #2a4140;padding:10px 0;font-size:12px}.market-row span{display:block}#deliveryJobs button,#encounterList button{display:block;width:95%;text-align:left}
+#cityInteract{position:fixed;left:50%;bottom:12%;transform:translateX(-50%);z-index:25;padding:12px 22px;background:#102227eb;color:#dcf4e9;border:1px solid #8cb6aa;letter-spacing:1px;font:12px monospace;cursor:pointer}#cityInteract[hidden]{display:none}#cityPanel{top:auto!important;bottom:78px!important;right:18px!important;width:230px!important;max-height:calc(100vh - 125px);overflow:auto;padding:12px!important;border-width:1px!important;border-image:none!important;background:#081419eb!important}.pause-deck-open :is(#cityPanel,#cityInteract,#interiorHint,#fieldContract){visibility:hidden}
+body:not(.intro-open) :is(.citizen-rail,.performance-strip,.footer,.footer-brand,#combatStrip,#driveTelemetry,#driveShortcuts,#citizenHUD>.avionics,.combat-help){display:none!important}
+body:not(.intro-open) #terminalToggle{display:block}
+.pause-content .avionics{position:relative!important;inset:auto!important;display:block!important;width:100%!important;max-width:100%!important;border:1px solid #315450!important;border-image:none!important;margin:16px 0!important;padding:18px!important;background:#09171a!important}
+#fieldStatus{position:fixed;bottom:22px;right:22px;z-index:25;background:#061419cc;border:1px solid #46635f;color:#bad9c9;padding:12px 16px;font:11px monospace;letter-spacing:1px;cursor:pointer}.pause-deck-open #fieldStatus{visibility:hidden}
+#terminalToggle{display:block!important}.intro-open #terminalToggle{display:none!important}
+
+body:not(.intro-open) .bottom-tag, body:not(.intro-open) #combatKeys{display:none!important}
+#fieldContract{display:none!important}
+@media(max-width:700px){.art-switch-bank{max-width:96vw;grid-template-columns:repeat(5,1fr)}.art-switch{min-width:0!important;width:42px!important}.pause-tabs{overflow-x:auto;justify-content:flex-start!important}}
+
+@media(max-width:700px){#artSwitchRow{display:grid!important;grid-template-columns:repeat(5,42px)!important;bottom:3px!important}}
+
+/* Controls are invisible click targets on the illustrated physical switches. */
+.art-control-hotspot{position:absolute;z-index:5;pointer-events:auto;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;border-radius:3px;box-shadow:none!important;color:transparent;font-size:0;cursor:pointer}
+.art-control-hotspot:hover,.art-control-hotspot:focus-visible{outline:1px solid #c0e6d8;box-shadow:0 0 8px #a3ead644!important}
+.mfd-bezel-button{background:transparent!important;border:0!important;box-shadow:none!important}.mfd-bezel-button:after{display:none}
+#combatControls{display:none!important}
+@media(min-width:851px){.pause-terminal{padding-top:3%}.pause-terminal header{height:8%;flex-shrink:0}.pause-tabs{min-height:38px;height:38px;flex-shrink:0;margin:0 0 2%}.pause-tabs button{padding:2px}.pause-tabs button:focus-visible{outline-offset:-2px}}
+
+/* Calibrated to the seven etched tabs in the generated 1536×1024 terminal. */
+@media(min-width:851px){.pause-terminal header{position:absolute;left:3%;right:3%;top:4.6%;height:7.8%;min-height:0}.pause-tabs{position:absolute;left:3%;right:3%;top:13%;height:4.4%;min-height:0;margin:0;gap:3px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.pause-tabs button{font-size:11px;line-height:1;letter-spacing:1px;text-align:center;display:flex;align-items:center;justify-content:center;white-space:nowrap}.pause-subtabs{margin-top:12.8%;flex-shrink:0}.pause-content{width:61%}}
+
+/* Only the selected MFD menu is visible inside the pause terminal. */
+body.pause-deck-open #pauseDeck .pause-content .avionics:not([hidden]){display:block!important}
+body #pauseDeck .pause-content > [hidden]{display:none!important}
+#jumpReticle{position:fixed;left:50%;top:calc(50% + 22px);transform:translateX(-50%);z-index:14;pointer-events:none;font:10px monospace;letter-spacing:1px;color:#b9ded7;text-align:center;text-shadow:0 1px 5px #000;background:#05141780;padding:5px 9px;border-radius:3px;max-width:300px}
+#jumpReticle[hidden]{display:none}.pause-deck-open #jumpReticle{display:none}
+body.hud-cursor #scene{cursor:default!important}
+
+body.pause-deck-open #pauseDeck #fieldContract:not([hidden]){display:block!important;visibility:visible;pointer-events:auto!important}
+
+/* One weapon layer; no visibility changes from weapon-menu refreshes. */
+#weaponView{will-change:transform;contain:layout style;isolation:isolate}
+#weaponView #adsWeapon{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+#weaponView #muzzleFlash{inset:auto;z-index:4;max-width:none;transform:none!important;pointer-events:none}
+#adsDot{position:fixed;left:50%;top:50%;width:4px;height:4px;transform:translate(-50%,-50%);border-radius:50%;background:#ff3324;box-shadow:0 0 4px 1px #fa3217;pointer-events:none;z-index:10}
+#adsDot[hidden]{display:none}
+#visionStatus{position:fixed;left:24px;bottom:22px;color:#9aac9e;font:10px monospace;letter-spacing:1px;pointer-events:none;z-index:8}
+body.night-vision :is(#scene,#detailScene,#weaponView){filter:grayscale(1) sepia(1) hue-rotate(58deg) saturate(2.2) brightness(1.2)}
+body.night-vision #visionStatus{color:#b8fda5}

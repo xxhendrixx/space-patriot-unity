@@ -35,27 +35,36 @@ namespace SpacePatriot
     [Serializable] public class StockChange { public string world, good; public int units; }
     [Serializable] public class SaveData
     {
-        public int version=1, world=2, ship, credits=1800, organics=4, ore, crystal;
+        public int version=2, world=2, ship, credits=1800, organics=4, ore, crystal;
         public int union, helix, redwake, kills;
         public float hull=100, fuel=100;
         public bool striderOwned, wayfarerOwned;
+        public List<int> ownedShips=new List<int>{0};
+        public List<DockCargo> dockCargo=new List<DockCargo>();
+        public VesselState vessel=new VesselState();
+        public EconomyState economy=new EconomyState();
+        public WeaponAmmo[] ammo=Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));
         public List<CaseProgress> cases=new List<CaseProgress>();
         public List<StockChange> stock=new List<StockChange>();
         public List<string> journal=new List<string>();
     }
+    [Serializable] public class FleetCatalog { public OriginalCraft[] crafts; }
+    [Serializable] public class OriginalCraft
+    {
+        public string id,name,className,description; public int index,family,variant,capacity,engines;
+        public float speed,acceleration,turn,mass,hyperSpeed,fuelRate; public float[] dimensions,paint,accent;
+    }
     public sealed class ShipSpec
     {
-        public string name, designation, role, description;
-        public float speed, thrust, turn, health;
-        public int capacity, price;
+        public string name,designation,role,description;
+        public float speed,thrust,turn,health=100,mass,length,width,height;
+        public int capacity,price,family,variant;
         public Color paint;
-        public ShipSpec(string n,string d,string r,string b,float s,float a,float t,float hp,int c,int p,Color col)
-        { name=n;designation=d;role=r;description=b;speed=s;thrust=a;turn=t;health=hp;capacity=c;price=p;paint=col; }
-        public static readonly ShipSpec[] Fleet={
-            new ShipSpec("MERIDIAN","MC–12","UTILITY CUTTER","A patched courier with honest handling. Twin ducted drives, a compact pressure cabin, and room for the cargo that keeps a district alive.",105,32,62,100,24,0,new Color(.64f,.59f,.43f)),
-            new ShipSpec("STRIDER","SR–08","INTERCEPTOR","Narrow fuselage, split outriggers, generous cooling. Trades cargo space for acceleration and a quicker firing cycle.",155,49,86,80,12,2500,new Color(.32f,.41f,.43f)),
-            new ShipSpec("WAYFARER","WF–40","FREIGHT HAULER","A broad working deck between four thrust nacelles. Heavy armor and a large hold; plan the braking distance before committing to an approach.",78,22,43,155,56,5200,new Color(.49f,.39f,.29f))
-        };
+        public ShipSpec(OriginalCraft c){name=c.name;designation=c.id;role=c.className;description=c.description;
+            speed=c.speed;thrust=c.acceleration;turn=c.turn*70;capacity=c.capacity;price=Mathf.RoundToInt(c.dimensions[0]*8);
+            family=c.family;variant=c.variant;mass=c.mass;length=c.dimensions[0];width=c.dimensions[1];height=c.dimensions[2];paint=new Color(c.paint[0],c.paint[1],c.paint[2]);}
+        static ShipSpec[] fleet;
+        public static ShipSpec[] Fleet { get { if(fleet==null){var records=JsonUtility.FromJson<FleetCatalog>(Resources.Load<TextAsset>("Fleet").text).crafts;fleet=Array.ConvertAll(records,c=>new ShipSpec(c));}return fleet; } }
     }
     public static class Progression
     {
@@ -74,12 +83,7 @@ namespace SpacePatriot
         { if(good=="ore")s.ore+=amount;else if(good=="crystal")s.crystal+=amount;else s.organics+=amount; }
         public static int Used(SaveData s)=>s.organics+s.ore+s.crystal;
         public static int Price(SaveData s,WorldInfo w,string good)
-        {
-            int basis=good=="organics"?42:good=="ore"?65:110;
-            int scarcity=good=="organics" && w.biome!="temperate"?27:good=="ore" && w.biome=="rock"?-16:0;
-            int help=0;foreach(var c in s.stock)if(c.world==w.name&&c.good==good)help+=c.units;
-            return Mathf.Max(12,basis+scarcity+(w.seed%19)-Mathf.Min(30,help/3));
-        }
+            =>FrontierEconomy.Price(s,w,good);
         public static bool CompleteStep(SaveData save,CaseFile file,string world,string kind,out string report)
         {
             report=null;var p=Get(save,file.id);

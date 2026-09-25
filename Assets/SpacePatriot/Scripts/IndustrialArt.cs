@@ -188,8 +188,8 @@ namespace SpacePatriot
             Box("Bolted pedestal",root,new Vector3(0,.7f,0),new Vector3(.72f,1.4f,.55f),Steel,true);
             var panel=Box("Service terminal",root,new Vector3(0,1.5f,0),new Vector3(1.3f,.8f,.25f),Steel);
             Box("Inset screen",root,new Vector3(0,1.52f,-.15f),new Vector3(1.1f,.51f,.03f),color);
-            Label(root,"PORT 07 / SERVICE\n"+title+"\nREADY",new Vector3(0,1.52f,-.18f),.032f,new Color(.045f,.08f,.075f),new Vector3(0,180,0));
-            Label(root,title,new Vector3(0,2.2f,0),.09f,new Color(.86f,.83f,.72f),new Vector3(0,180,0));
+            Label(root,"PORT 07 / SERVICE\n"+title+"\nREADY",new Vector3(0,1.52f,-.18f),.006f,new Color(.045f,.08f,.075f),Vector3.zero);
+            Label(root,title,new Vector3(0,2.2f,0),.014f,new Color(.86f,.83f,.72f),Vector3.zero);
         }
     }
 }

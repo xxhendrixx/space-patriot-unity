@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>Storyworks — Narrative engine for Worldworks</title>
+<style>
+:root{--bg:#101116;--panel:#17181f;--panel2:#1c1e27;--line:#2c2e3c;--text:#ebeaf1;--muted:#9394aa;--faint:#62677d;--purple:#b7a0f6;--teal:#7acebd;--amber:#eac086;--red:#ed98a7;--blue:#8ebbe9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:#21232d;padding:7px 11px;transition:background .12s,border-color .12s}button:hover{background:#2c2e3c;border-color:#5c5774}button:disabled{opacity:.38;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--purple);outline-offset:2px}button.primary{background:var(--purple);color:#231e34;border-color:var(--purple);font-weight:650}button.primary:hover{background:#ccbafa}.ghost{border-color:transparent;background:transparent;color:var(--muted)}.small{font-size:10px;padding:5px 8px}.muted{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.eyebrow{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}.row{display:flex;gap:7px;align-items:center}.spacer{flex:1}.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block}.hidden,[hidden]{display:none!important}.icon{width:16px;height:16px;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}header{height:68px;display:flex;align-items:center;padding:0 21px;gap:23px;background:#15161d;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;min-width:200px}.brandLogo{width:33px;height:37px;color:var(--purple)}.brand strong{font-size:15px;letter-spacing:.17em;line-height:1.25;display:block}.brand small{font-size:8px;letter-spacing:.18em;color:var(--muted)}.projectBadge{border-left:1px solid var(--line);padding-left:23px}.projectBadge strong{display:block;font-size:12px;font-weight:500}.projectBadge small{color:var(--muted);font-size:9px}header .right{margin-left:auto;display:flex;align-items:center;gap:7px}.badge{font-size:9px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 6px;letter-spacing:.04em}.local{display:flex;align-items:center;gap:6px;margin-right:10px;font-size:10px;color:var(--teal)}#shell{height:calc(100dvh - 95px);display:grid;grid-template-columns:219px minmax(350px,1fr) 308px}.sidebar{background:#16171e;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}.sideTop{padding:22px 17px 12px}.sideTop .row{margin-bottom:15px}h1,h2,h3,p{margin:0}h2{font-size:19px;font-weight:550;letter-spacing:-.025em}.searchWrap{position:relative}.searchWrap .icon{position:absolute;left:9px;top:8px;color:var(--faint);width:14px}#search{padding-left:30px;width:100%;font-size:10px;background:#111219}input,textarea,select{border:1px solid var(--line);border-radius:5px;background:#12131b;padding:8px 9px;min-width:0}input[type=checkbox]{accent-color:var(--purple)}textarea{resize:vertical;line-height:1.6;min-height:72px}input[type=number]{font-variant-numeric:tabular-nums}#questList{padding:0 9px;overflow:auto;flex:1}.questCard{width:100%;display:block;text-align:left;background:transparent;border:1px solid transparent;margin:5px 0;padding:13px 10px;position:relative}.questCard.selected{border-color:#45405c;background:#252332}.questCard.selected:before{content:"";position:absolute;left:-1px;top:12px;bottom:12px;width:2px;background:var(--purple)}.questCard .chapter{color:var(--faint);font-size:8px;letter-spacing:.1em}.questCard.selected .chapter{color:var(--purple)}.questCard .qTitle{font-size:12px;font-weight:550;margin:5px 0 7px}.questCard .qMeta{font-size:9px;color:var(--muted);display:flex;justify-content:space-between}.qStatus{color:var(--teal)}.questCard .bar{height:2px;background:#383642;margin-top:11px;border-radius:4px;overflow:hidden}.questCard .bar i{display:block;height:100%;background:var(--purple)}.sideSection{padding:16px 17px;border-top:1px solid var(--line)}.sideSection p{font-size:10px;color:var(--muted);line-height:1.7;margin:7px 0 12px}.summaryStat{display:flex;justify-content:space-between;font-size:10px;margin:8px 0;color:var(--muted)}.summaryStat b{font-weight:500;color:var(--text)}.sideNote{margin:0 12px 13px;padding:12px;border-radius:7px;border:1px solid #3c384f;background:linear-gradient(120deg,#262333,#1b1b24)}.sideNote .eyebrow{color:var(--purple)}.sideNote p{font-size:10px;margin-top:5px;color:var(--muted)}.workspace{min-width:0;min-height:0;display:flex;flex-direction:column}.viewbar{height:48px;min-height:48px;display:flex;gap:1px;align-items:center;padding:0 12px;background:#17181f;border-bottom:1px solid var(--line)}.viewTab{border:0;border-radius:0;background:transparent;color:var(--muted);height:48px;font-size:11px;padding:0 12px;border-bottom:2px solid transparent;white-space:nowrap}.viewTab.active{color:var(--purple);border-bottom-color:var(--purple)}.viewTab .icon{width:13px;margin-right:5px}.viewbar .small{margin-left:7px}#stage{position:relative;flex:1;min-height:250px;overflow:hidden;background:#101118}#graph{position:absolute;inset:0;overflow:hidden;background-image:radial-gradient(#383442 1px,transparent 1px);background-size:24px 24px;cursor:grab;touch-action:none}#graph:active{cursor:grabbing}#graphWorld{position:absolute;left:0;top:0;transform-origin:0 0;width:1px;height:1px}#edges{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}.edge{fill:none;stroke:#5e5478;stroke-width:2;opacity:.7}.edge.past{stroke:var(--purple);opacity:.85}.edge-label{fill:#aaa0c1;font:10px ui-monospace,monospace}.node{position:absolute;width:232px;border:1px solid #393743;border-radius:9px;background:#1a1b25;box-shadow:0 7px 22px #0003;user-select:none;cursor:default;overflow:visible;transition:box-shadow .15s}.node.selected{border-color:var(--purple);box-shadow:0 0 0 1px #b7a0f633,0 8px 32px #0004}.node.live{border-color:var(--amber);box-shadow:0 0 28px #eac08615}.node.visited{background:#211e2b}.nodeTop{padding:10px 12px;display:flex;align-items:center;border-bottom:1px solid #ffffff09;gap:7px;cursor:grab;color:var(--node)}.typeMark{display:grid;place-items:center;width:22px;height:22px;border-radius:5px;background:color-mix(in srgb,var(--node) 12%,transparent);font-size:13px}.nodeTop .typeLabel{font-size:8px;text-transform:uppercase;letter-spacing:.14em}.nodeTop .nodeNum{margin-left:auto;font-size:8px;color:#646379}.nodeMain{padding:11px 13px 10px}.nodeTitle{font-size:12px;font-weight:550;letter-spacing:-.01em}.nodeSub{font-size:10px;color:#a1a0b4;margin-top:6px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:30px}.nodeFoot{border-top:1px solid #ffffff08;padding:7px 12px;font:8px/1.5 ui-monospace,monospace;color:#918caa;display:flex;gap:7px;justify-content:space-between}.nodeFoot .liveLabel{color:var(--amber)}.port{position:absolute;width:11px;height:11px;border:2px solid #9185ad;border-radius:50%;background:#191922;cursor:crosshair;z-index:5;padding:0}.port.in{left:-6px;top:71px}.port.out{right:-6px;top:71px;border-color:var(--node)}.port:hover{background:var(--purple);box-shadow:0 0 0 4px #b7a0f633}.branchRow{display:flex;align-items:center;position:relative;height:24px;padding:0 13px;font-size:9px;color:#b4adc7;border-top:1px solid #ffffff08;white-space:nowrap}.branchRow span{overflow:hidden;text-overflow:ellipsis;max-width:200px}.branchRow .port{top:7px}.graphOverlay{position:absolute;left:19px;top:19px;pointer-events:none}.graphOverlay .eyebrow{font-size:8px;letter-spacing:.14em;color:#767487}.graphOverlay h2{font-size:16px;font-weight:450;margin-top:4px}.graphOverlay p{font-size:9px;color:#7e7d91;margin-top:4px}.graphTools{position:absolute;bottom:17px;left:18px;display:flex;align-items:center;gap:2px;border:1px solid #3a3647;border-radius:6px;background:#1b1924e8;box-shadow:0 4px 16px #0004;overflow:hidden}.graphTools button{border:0;background:transparent;border-radius:0;padding:6px 9px;font-size:11px}.graphTools span{font:10px ui-monospace,monospace;min-width:42px;text-align:center;color:#a8a1ba}.graphHint{position:absolute;left:18px;bottom:58px;color:#706b82;font-size:9px;pointer-events:none}#mini{position:absolute;right:15px;bottom:16px;width:132px;height:72px;background:#171620e8;border:1px solid #383340;border-radius:5px;cursor:crosshair}#connectHint{position:absolute;top:18px;right:18px;max-width:280px;background:#332e44;border:1px solid #796394;padding:9px 13px;border-radius:6px;font-size:11px;color:#dac8ff;z-index:6}#worldView{position:absolute;inset:0;background:#111a20}#worldMap{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none}.mapTag{position:absolute;top:17px;left:19px;pointer-events:none}.mapTag h2{font-size:16px}.mapTag p{font-size:10px;color:#a9bbba;max-width:320px;margin-top:5px}.mapActions{position:absolute;bottom:17px;left:17px;display:flex;gap:6px}.mapLegend{position:absolute;bottom:17px;right:18px;color:#b0beb8;font-size:9px;text-align:right}.mapLegend span{display:block;margin-top:4px}#hooksView{position:absolute;inset:0;overflow:auto;padding:24px;background:linear-gradient(140deg,#1b1828,#14171f)}#hooksView h2{font-size:23px;margin-bottom:7px}#hooksView>p{max-width:640px;color:var(--muted);font-size:11px;line-height:1.8}.hookGroups{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:23px}.hookGroup h3{font-size:9px;letter-spacing:.15em;color:var(--purple);margin-bottom:12px}.hookItem{padding:9px 0;border-top:1px solid #ffffff10;font:10px/1.5 ui-monospace,monospace}.hookItem small{display:block;font:9px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--muted);margin-top:4px}.hookItem i{float:right;background:#7acebd;width:5px;height:5px;border-radius:50%;margin-top:5px}.hookCode{margin-top:20px;border:1px solid var(--line);border-radius:7px;background:#111219;padding:13px;font:10px/1.8 ui-monospace,monospace;white-space:pre-wrap;color:#b7c7d5}#dock{height:280px;min-height:230px;border-top:1px solid var(--line);background:#181922;display:flex;flex-direction:column}.dockbar{height:39px;min-height:39px;display:flex;align-items:center;padding:0 12px;gap:3px;border-bottom:1px solid var(--line);background:#191a23}.dockTab{font-size:10px;padding:6px 9px;background:transparent;border:0;color:var(--muted)}.dockTab.active{color:var(--purple);background:#2b263a}.dockbar .badge{font-size:8px;padding:2px 5px}#dockContent{flex:1;overflow:auto;min-height:0}.playGrid{display:grid;grid-template-columns:minmax(210px,1.3fr) minmax(180px,1fr);height:100%}.dialogue{padding:17px 20px;overflow:auto;position:relative}.speaker{display:flex;align-items:center;gap:9px;margin-bottom:10px}.portrait{width:28px;height:28px;border-radius:7px;background:linear-gradient(130deg,#61516e,#2a2538);border:1px solid #92819955;display:grid;place-items:center;color:#dcd0e6;font:10px ui-monospace,monospace}.speaker strong{font-size:11px;font-weight:550}.speaker .eyebrow{font-size:7px;margin-top:1px}.dialogueText{font-size:11px;color:#c1bdce;line-height:1.8;white-space:pre-wrap;margin-bottom:12px}.choices{display:flex;flex-direction:column;gap:5px}.choice{display:flex;text-align:left;align-items:center;gap:10px;font-size:10px;border:1px solid #3c354f;background:#24212e;padding:8px 10px;color:#ddd3ed}.choice b{font-size:9px;font-weight:400;color:#9b86c1;border-right:1px solid #494055;padding-right:9px}.choice:disabled{opacity:.5}.choice:hover{background:#342a45}.simulator{border-left:1px solid var(--line);padding:17px 17px;overflow:auto;background:#15161e}.simulator .eyebrow{font-size:8px;display:flex;align-items:center;gap:6px;letter-spacing:.12em}.simButtons{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:12px}.simButtons button{padding:7px 6px;font-size:9px;text-align:left;color:#b8c5ca;border-color:#353946;background:#20242d}.simButtons button:hover{background:#2b323c}.simButtons button.relevant{border-color:#7c6b98;color:#d5c3f1;background:#302a3e}.simState{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;font-size:8px;color:#878ea3}.objectiveBar{margin-top:12px;height:4px;background:#32303e;border-radius:4px;overflow:hidden}.objectiveBar i{height:100%;display:block;background:var(--teal)}.objectiveMeta{display:flex;justify-content:space-between;margin-top:6px;font:9px ui-monospace,monospace;color:var(--teal)}.endTag{color:var(--teal);font-size:8px;letter-spacing:.15em;margin-bottom:8px}.stateTable{width:100%;border-collapse:collapse;font-size:11px}.stateTable td,.stateTable th{padding:9px 15px;text-align:left;border-bottom:1px solid var(--line);font-weight:400}.stateTable th{font-size:8px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}.stateTable td:first-child{color:var(--purple);font:10px ui-monospace,monospace}.eventLine{padding:7px 16px;border-bottom:1px solid #ffffff06;display:grid;grid-template-columns:42px 170px 1fr;gap:10px;font:9px/1.6 ui-monospace,monospace}.eventLine time{color:#686e83}.eventLine b{font-weight:400;color:#bba3e8}.eventLine span{color:#999db1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.journalEntry{padding:14px 20px;border-bottom:1px solid var(--line);font-size:11px;color:#c6c0d3}.journalEntry small{display:block;font:8px ui-monospace,monospace;color:var(--faint);margin-bottom:5px}.inspector{background:#181920;border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}.inspectorTitle{height:48px;min-height:48px;padding:0 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:7px}.inspectorTitle .eyebrow{font-size:8px}.inspectorTitle .icon{width:13px;color:var(--muted)}#inspectorBody{padding:20px 18px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:#4a405a transparent}.nodeIdentity{display:flex;gap:10px;align-items:center;margin-bottom:19px}.nodeIdentity .typeMark{width:34px;height:34px;font-size:17px;color:var(--node)}.nodeIdentity strong{font-weight:500;font-size:13px;display:block}.nodeIdentity small{font:8px ui-monospace,monospace;color:var(--muted)}.field{display:block;margin:13px 0}.field>span{display:block;font-size:9px;color:var(--muted);margin-bottom:6px}.field input,.field textarea,.field select{display:block;width:100%;font-size:11px}.field .help{font-size:9px;color:var(--faint);line-height:1.7;margin-top:6px}.field textarea.code{font:10px/1.6 ui-monospace,monospace;min-height:108px;color:#c1b6d5}.sectionHeading{margin:21px 0 10px;border-top:1px solid var(--line);padding-top:15px;color:var(--faint);font-size:8px;letter-spacing:.15em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}.choiceEditor{padding:10px;border:1px solid #383244;border-radius:6px;background:#201d29;margin:9px 0}.choiceEditor .choiceTitle{font-size:8px;color:var(--purple);display:flex;justify-content:space-between;align-items:center}.choiceEditor .field{margin:8px 0}.choiceEditor .field input,.choiceEditor .field select{font-size:10px}.twoCols{display:grid;grid-template-columns:1fr 1fr;gap:8px}details{margin-top:15px}summary{font-size:9px;color:var(--muted);cursor:pointer}.notice{font-size:9px;line-height:1.8;color:#aaa1b9;padding:11px;border:1px solid #3a324a;border-radius:5px;background:#211e2b;margin-top:15px}.notice b{color:#d2c3e9;font-weight:500}.inspectorFooter{padding:12px 17px;border-top:1px solid var(--line);display:flex;gap:8px}.danger{color:var(--red)}footer{height:27px;padding:0 15px;display:flex;align-items:center;gap:19px;border-top:1px solid var(--line);background:#14151c;color:var(--faint);font-size:9px}footer .accent{color:var(--purple)}footer .valid{color:var(--teal)}#toast{position:fixed;bottom:42px;left:50%;transform:translateX(-50%);max-width:700px;padding:12px 19px;background:#2a2439;border:1px solid #78688f;border-radius:7px;box-shadow:0 8px 40px #0007;z-index:100;font-size:12px}dialog{background:#1b1a25;color:var(--text);border:1px solid #4b3e63;border-radius:12px;padding:25px;max-width:660px;width:calc(100vw - 40px);max-height:85vh;overflow:auto;box-shadow:0 20px 90px #0008}dialog::backdrop{background:#07080ccc;backdrop-filter:blur(5px)}dialog h2{font-size:23px}dialog p{font-size:12px;line-height:1.9;color:var(--muted);margin-top:10px}dialog .close{float:right}.nodePalette{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:20px}.paletteItem{text-align:left;padding:14px;display:flex;gap:12px;align-items:center}.paletteItem b{font-size:12px;font-weight:500;display:block}.paletteItem small{color:var(--muted);font-size:10px;display:block;margin-top:4px}.paletteItem .typeMark{width:32px;height:32px;color:var(--node);font-size:18px}.shortcutTable{width:100%;border-collapse:collapse;margin:18px 0}.shortcutTable td{padding:8px;border-bottom:1px solid var(--line);font-size:11px}.shortcutTable td:first-child{color:var(--purple);width:160px}.wideButton{width:100%;margin-top:10px}.eventDialogGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}#jsonDialog textarea{width:100%;height:290px;margin:15px 0;font:11px/1.6 ui-monospace,monospace}.empty{padding:25px;color:var(--muted);font-size:11px;line-height:1.8}.errorList{color:var(--red);font-size:11px;white-space:pre-wrap;margin-top:16px}#narrowWarning{display:none}
+@media(min-width:1700px){#shell{grid-template-columns:240px minmax(600px,1fr) 330px}#dock{height:300px}.dialogueText{font-size:12px}.simButtons button{font-size:10px;padding:9px}}
+@media(max-width:1100px){#shell{grid-template-columns:175px minmax(330px,1fr) 260px}.brand{min-width:175px}.sideTop{padding:19px 12px 12px}.sideSection{padding:13px}.projectBadge{display:none}.local{display:none}.viewTab{padding:0 8px;font-size:10px}.viewbar{padding:0 6px}.viewTab .icon{display:none}.playGrid{grid-template-columns:1.2fr 1fr}.dialogue{padding:13px}.simulator{padding:13px 10px}.simButtons{grid-template-columns:1fr 1fr}.dockbar .badge{display:none}#inspectorBody{padding:17px 13px}#dock{height:290px}.simButtons button{font-size:8px}}
+@media(max-width:820px){#shell{grid-template-columns:150px minmax(300px,1fr)}.inspector{position:fixed;right:0;top:68px;bottom:27px;width:275px;z-index:30;box-shadow:-10px 0 40px #0006;display:none}body.showInspector .inspector{display:flex}#closeInspector{display:inline-block!important}header{padding:0 12px;gap:5px}header .brand{min-width:160px}header .right .optional{display:none}#inspectToggle{display:inline-block!important}.sideNote{display:none}.sideSection{padding:10px}.sidebar .sideTop{padding:15px 10px}.brand strong{font-size:12px}.brand small{font-size:7px}.questCard{padding:10px 7px}.questCard .qTitle{font-size:11px}.questCard .qMeta{font-size:8px}.dockbar{padding:0 5px}.dockTab{font-size:9px;padding:6px}.graphHint{display:none}#mini{width:100px;height:57px}footer{gap:9px;font-size:8px}footer .optional{display:none}}
+@media(max-width:520px){.mapLegend{display:none}#shell{display:flex;flex-direction:column}.sidebar{display:none}.workspace{flex:1}header .brandLogo{width:26px}header .brand{min-width:145px}header .right button{font-size:9px;padding:6px}#stage{min-height:190px}#dock{height:300px}.playGrid{grid-template-columns:1fr}.simulator{border-left:0;border-top:1px solid var(--line);padding:9px}.simulator .eyebrow,.simState{display:none}.simButtons{grid-template-columns:repeat(3,1fr);margin-top:0}.dialogue{padding:12px}.playGrid{height:auto;min-height:100%}.hookGroups{grid-template-columns:1fr}.viewTab{font-size:9px}#mini{display:none}}
+</style></head>
+<body>
+<header><div class="brand"><svg class="brandLogo" viewBox="0 0 36 40" fill="none"><path d="M18 8 3 2v28l15 7 15-7V2L18 8Z" stroke="currentColor" stroke-width="1.5"/><path d="M18 9v25M7 9l7 3M7 15l7 3M7 21l7 3M22 12l7-3M22 18l7-3M22 24l7-3" stroke="currentColor" stroke-width="1.3"/><path d="m18 1 3 3-3 3-3-3Z" fill="currentColor"/></svg><div><strong>STORYWORKS</strong><small>NARRATIVE SYSTEMS LAB · 0.1</small></div></div><div class="projectBadge"><strong id="projectTitle">The Last Beacon</strong><small id="saveLabel">Original sample · local workspace</small></div><div class="right"><span class="local"><i class="dot"></i> Offline ready</span><button class="ghost optional" id="restoreDraft" hidden>Restore draft</button><button class="ghost optional" id="helpBtn" title="Help and shortcuts">?</button><button id="openBtn">Open</button><button id="exportBtn" class="primary">Export project <span aria-hidden="true">↗</span></button></div></header>
+<div id="shell">
+<aside class="sidebar"><div class="sideTop"><div class="row"><span class="eyebrow">Story library</span><span class="spacer"></span><button class="ghost small" id="newQuestBtn" title="Add quest" aria-label="Add quest">＋</button></div><div class="searchWrap"><svg class="icon" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="search" placeholder="Find a quest…" aria-label="Find a quest"></div></div><div id="questList"></div><div class="sideSection"><div class="eyebrow">Project overview</div><div id="projectStats"></div><button class="small ghost" id="projectSettings" style="width:100%;text-align:left;padding-left:0">Edit project & variables <span style="float:right">↗</span></button></div><div class="sideSection"><div class="row"><span class="eyebrow">World connection</span><span class="spacer"></span><span class="dot" style="background:var(--amber)"></span></div><p id="connectionLabel">Sandbox adapter<br>Real engine hooks are included.</p><button class="small" style="width:100%" id="importWorldBtn">＋ Import Worldworks map</button></div><div class="sideNote"><span class="eyebrow">Your world. Its stories.</span><p>Build the logic here.<br>Let Worldworks bring it to life.</p></div></aside>
+<main class="workspace"><nav class="viewbar" aria-label="Workspace view"><button class="viewTab active" data-view="graph"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="6" height="5" rx="1"/><rect x="16" y="15" width="6" height="5" rx="1"/><path d="M5 8v10h11M8 5h11v10"/></svg>Story graph</button><button class="viewTab" data-view="world">World bindings</button><button class="viewTab" data-view="hooks">Hook registry</button><span class="spacer"></span><button class="small ghost" id="undoBtn" title="Undo · Ctrl/Cmd Z">↶</button><button class="small ghost" id="redoBtn" title="Redo · Ctrl/Cmd Shift Z">↷</button><button class="small" id="addNodeBtn">＋ Node</button><button id="inspectToggle" class="small" hidden>Inspect</button></nav>
+<section id="stage" aria-label="Story workspace"><div id="graph"><div id="graphWorld"><svg id="edges"></svg><div id="nodes"></div></div></div><div id="graphOverlays"><div class="graphOverlay"><div class="eyebrow">Chapter 01 / Narrative graph</div><h2 id="graphTitle">The Last Beacon</h2><p id="graphSub">Branching quest · 14 nodes · two possible futures</p></div><div class="graphHint">Drag nodes to arrange · drag the canvas to pan · wheel to zoom</div><div class="graphTools"><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomLabel">75%</span><button id="zoomIn" aria-label="Zoom in">＋</button><button id="fitBtn" title="Fit graph · F">Fit</button><button id="followBtn" title="Focus live node">◎ Live</button></div><canvas id="mini" width="264" height="144" aria-label="Graph minimap"></canvas></div><div id="connectHint" hidden></div>
+<div id="worldView" hidden><canvas id="worldMap" aria-label="Interactive world binding map"></canvas><div class="mapTag"><div class="eyebrow">Worldworks / Narrative layer</div><h2>Give the story a place.</h2><p id="mapSubtitle">Click a marker to edit. Drag it to move. Double-click the map to add a region.</p></div><div class="mapActions"><button class="small" id="addRegion">＋ Region</button><button class="small" id="addInteract">＋ Interaction</button><button class="small" id="mapReset">Reset player</button></div><div class="mapLegend"><span>○ Trigger radius · ◇ NPC / interaction</span><span>Shift + click to move the test player</span></div></div>
+<div id="hooksView" hidden><div class="eyebrow">Explicit contracts / no second renderer</div><h2>A story that talks to your world.</h2><p>Gameplay events enter the narrative engine. Story commands leave through registered handlers. This playground uses a simulated world; the bridge module is where you connect your real systems.</p><div class="hookGroups" id="hookGroups"></div><pre class="hookCode">const story = new StoryEngine(project);
+const bridge = new WorldworksStoryBridge({
+  engine: story, bus, handlers
+});
+bridge.enterRegion('relay');
+bridge.inventoryChanged('power_core', 1);
+// Your existing loop — no extra renderer:
+bridge.update(deltaSeconds, player.position);</pre><p style="margin-top:12px">Unhandled commands remain pending. A handler returns true only after it successfully applies a command. In multiplayer, run the engine and progression writes on the authoritative host.</p></div></section>
+<section id="dock" aria-label="Live story test"><div class="dockbar"><button class="dockTab active" data-dock="play">▶ Playtest</button><button class="dockTab" data-dock="events">Event trace <span id="eventCount"></span></button><button class="dockTab" data-dock="state">State</button><button class="dockTab" data-dock="journal">Journal</button><span class="spacer"></span><span class="badge" id="clockLabel">00:00</span><button class="ghost small" id="pauseBtn" title="Pause test clock">Ⅱ</button><button class="small ghost" id="saveGameBtn" title="Export runtime checkpoint">Save</button><button class="small" id="restartBtn" title="Restart playtest with current project">↻ Restart</button></div><div id="dockContent"></div></section>
+</main>
+<aside class="inspector"><div class="inspectorTitle"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#181920"/><circle cx="16" cy="12" r="2" fill="#181920"/><circle cx="7" cy="18" r="2" fill="#181920"/></svg><span class="eyebrow">Inspector</span><span class="spacer"></span><span id="inspectorKind" class="badge">DIALOGUE</span><button id="closeInspector" class="ghost small" style="display:none" aria-label="Close inspector">✕</button></div><div id="inspectorBody"></div><div class="inspectorFooter"><button class="small" id="duplicateBtn">Duplicate</button><span class="spacer"></span><button class="small ghost danger" id="deleteBtn">Delete node</button></div></aside>
+</div><footer><span class="accent">◈ STORYWORKS</span><span id="validationStatus" class="valid">✓ Graph valid</span><span id="runtimeStatus" class="optional">Playtest · sandbox world</span><span class="spacer"></span><span id="pendingStatus">0 pending commands</span><span class="optional">No cloud · no account</span><span>v0.1.0</span></footer><div id="toast" role="status" hidden></div>
+<input id="fileInput" type="file" accept=".json,.storyworks,.storysave" hidden>
+<dialog id="paletteDialog"><button class="ghost close" data-close>✕</button><span class="eyebrow">Create / narrative node</span><h2>Add a beat to the story.</h2><p>Connected after a selected linear node where possible. Otherwise, connect it using an output port or the inspector.</p><div id="nodePalette" class="nodePalette"></div></dialog>
+<dialog id="helpDialog"><button class="ghost close" data-close>✕</button><span class="eyebrow">Worldworks / story system</span><h2>Write it. Wire it. Play it.</h2><p>Storyworks is a local branching-story editor and deterministic runtime. Choose a quest, edit a node, then restart the playtest to run the edited definition.</p><table class="shortcutTable"><tr><td>Click / drag a node</td><td>Select / arrange</td></tr><tr><td>Output dot → node</td><td>Connect a branch to a target</td></tr><tr><td>Canvas drag / wheel</td><td>Pan / zoom around the cursor</td></tr><tr><td>F / N</td><td>Fit graph / add node</td></tr><tr><td>Ctrl/Cmd Z · Shift Z</td><td>Undo / redo authoring</td></tr><tr><td>Ctrl/Cmd S</td><td>Export authored project</td></tr><tr><td>Delete / Escape</td><td>Delete selection / cancel connection</td></tr><tr><td>Map: Shift + click</td><td>Move the test player into a trigger</td></tr></table><p><b>Export project</b> saves the story definition. <b>Save</b> in Playtest saves runtime progress, timers, event IDs, and the pending command outbox. Open either file to restore it; checkpoints must match the current story revision. Authoring drafts are saved locally when browser storage is available.</p><p><b>World bindings</b> place cylindrical XZ triggers and interactable anchors. Import a Worldworks 0.1 project to preview its actual height field and asset IDs. This is a 2D binding map, not another Three.js renderer.</p><p>Demo hook handlers simulate doors, weather, reputation, effects, and rewards. They do not modify your other engine files. The included bridge module provides explicit input/output contracts and a Worldworks world+story bundle format.</p></dialog>
+<dialog id="jsonDialog"><button class="ghost close" data-close>✕</button><span class="eyebrow" id="jsonEyebrow">Project settings</span><h2 id="jsonTitle">Project JSON</h2><p id="jsonDesc">Edit the complete definition. Validation runs before changes are applied.</p><textarea id="jsonText" spellcheck="false" aria-label="JSON editor"></textarea><div id="jsonError" class="errorList"></div><div class="row"><span class="spacer"></span><button class="primary" id="jsonApply">Apply changes</button></div></dialog>
+<dialog id="eventDialog"><button class="ghost close" data-close>✕</button><span class="eyebrow">Host event / simulator</span><h2>Send a gameplay event.</h2><label class="field"><span>Event type</span><input id="customEventName" value="gameplay.signal" list="eventTypes"></label><datalist id="eventTypes"></datalist><label class="field"><span>Payload JSON</span><textarea id="customEventPayload" class="code">{"signalId":"test"}</textarea></label><label class="field"><span>Event ID (optional, for deduplication)</span><input id="customEventId" placeholder="server-event-123"></label><button class="primary" id="sendEvent">Dispatch event</button></dialog>
+<script>
+/* Worldworks 0.1 — deterministic document model. No DOM or renderer dependencies. */
+(function (root) {
+'use strict';
+const C = {};
+C.VERSION = '0.1.0'; C.FORMAT = 'worldworks-project'; C.MAX_ASSETS = 5000;
+C.kinds = ['pine','oak','rock','boulder','grass','shrub','campfire'];
+C.clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+C.lerp = (a,b,t) => a+(b-a)*t;
+C.smooth = (a,b,x) => { const t=C.clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); };
+C.rng = seed => () => { let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296; };
+C.hash = (x,z,s) => { let h=Math.imul(x,374761393)^Math.imul(z,668265263)^Math.imul(s,1597334677);h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967295; };
+C.noise = (x,z,s) => {const i=Math.floor(x),j=Math.floor(z),u=C.smooth(0,1,x-i),v=C.smooth(0,1,z-j);return C.lerp(C.lerp(C.hash(i,j,s),C.hash(i+1,j,s),u),C.lerp(C.hash(i,j+1,s),C.hash(i+1,j+1,s),u),v)*2-1;};
+C.fbm = (x,z,s,n=4) => {let r=0,a=.55,w=0;for(let i=0;i<n;i++){r+=C.noise(x,z,s+i*103)*a;w+=a;x=x*2.03+5.2;z=z*2.03-7.1;a*=.5;}return r/w;};
+C.hex = hex => {const n=parseInt(hex.replace('#',''),16);return [(n>>16)&255,(n>>8)&255,n&255].map(x=>Math.pow(x/255,2.2));};
+C.palette = {grass:C.hex('#617e42'),dirt:C.hex('#926a46'),stone:C.hex('#949b94'),sand:C.hex('#c6ac70'),snow:C.hex('#e8eff0')};
+C.defaults = {water:1.0,sunElevation:38,sunAzimuth:225,ambient:1.0,haze:.003,exposure:1.05,wind:.6,quality:1,layers:{water:true,vegetation:true,geology:true,effects:true}};
+const copy = x => JSON.parse(JSON.stringify(x)); C.copy = copy;
+C.create = (seed=1337,style='highlands',relief=26,n=128,size=180) => {
+ const env=copy(C.defaults);if(style==='desert'){env.water=-4;env.sunElevation=52;}if(style==='alpine')env.water=.1;if(style==='islands')env.water=2.4;
+ const doc={format:C.FORMAT,version:C.VERSION,generator:'ww-heightfield-1',name:({highlands:'Emerald basin',alpine:'Alpine reach',islands:'Saltwater isles',desert:'Ochre valley'})[style]||'Untitled world',seed:seed>>>0,style,relief,n,size,base:new Float32Array((n+1)**2),delta:new Float32Array((n+1)**2),paint:new Float32Array((n+1)**2*4),assets:[],nextId:1,strokeSeed:1,env};
+ for(let j=0;j<=n;j++)for(let i=0;i<=n;i++){
+  const x=(i/n-.5)*size,z=(j/n-.5)*size,wx=x+C.fbm(x*.018,z*.018,seed+71)*10,wz=z+C.fbm(x*.018+21,z*.018-13,seed+91)*10;
+  const large=C.fbm(wx*.017,wz*.017,seed+321),r=1-Math.abs(C.fbm(wx*.039,wz*.039,seed+781,3));
+  const massif=Math.exp(-((x-27)**2/1250+(z+24)**2/730))*.8+Math.exp(-((x+38)**2/900+(z+37)**2/800))*.7;
+  let h=4+large*relief*.36+Math.pow(r,3)*relief*.31+massif*relief*.56;
+  const river=Math.abs(x-Math.sin(z*.045)*12-4);h-=Math.exp(-river*river/30)*6.5*(1-C.smooth(-55,-8,z));
+  if(style==='alpine')h+=Math.pow(r,7)*relief*.48;
+  if(style==='islands')h-=5+Math.sin(x*.045+1)*2;
+  if(style==='desert'){h=h*.8+3;const t=h/3,f=t-Math.floor(t);h=C.lerp(h,(Math.floor(t)+C.smooth(.62,.95,f))*3,.65);}
+  h+=C.fbm(wx*.12,wz*.12,seed+502,3)*.65;
+  const coast=1-C.smooth(size*.32,size*.51,Math.hypot(x*.97,z*1.02));
+  doc.base[j*(n+1)+i]=(h+7)*coast-7;
+ }
+ return doc;
+};
+C.height = (d,i)=>d.base[i]+d.delta[i];
+C.normalAt = (d,i,j) => {const n=d.n,k=n+1,s=d.size/n,x0=Math.max(i-1,0),x1=Math.min(i+1,n),z0=Math.max(j-1,0),z1=Math.min(j+1,n);let nx=(C.height(d,j*k+x0)-C.height(d,j*k+x1))/((x1-x0)*s),nz=(C.height(d,z0*k+i)-C.height(d,z1*k+i))/((z1-z0)*s);const l=Math.hypot(nx,1,nz);return [nx/l,1/l,nz/l];};
+C.sample = (d,x,z) => {
+ const gx=(x/d.size+.5)*d.n,gz=(z/d.size+.5)*d.n;if(gx<0||gz<0||gx>d.n||gz>d.n)return null;
+ const i=Math.min(d.n-1,Math.floor(gx)),j=Math.min(d.n-1,Math.floor(gz)),u=gx-i,v=gz-j,k=d.n+1,a=j*k+i,b=a+1,c=a+k,e=c+1,lower=u+v<=1;
+ const h=lower?C.height(d,a)*(1-u-v)+C.height(d,b)*u+C.height(d,c)*v:C.height(d,e)*(u+v-1)+C.height(d,c)*(1-u)+C.height(d,b)*(1-v);
+ const dx=(lower?C.height(d,b)-C.height(d,a):C.height(d,e)-C.height(d,c))/(d.size/d.n),dz=(lower?C.height(d,c)-C.height(d,a):C.height(d,e)-C.height(d,b))/(d.size/d.n),l=Math.hypot(dx,1,dz);
+ return {height:h,normal:[-dx/l,1/l,-dz/l],slope:Math.acos(1/l)*180/Math.PI};
+};
+C.baseColor = (d,x,z,h,normal) => {
+ const t=C.clamp((h-5)/25,0,1), slope=1-normal[1], wet=C.fbm(x*.04,z*.04,d.seed+813)*.5+.5;
+ let a=C.hex(d.style==='desert'?'#ae8250':wet>.5?'#557643':'#718d4e'),rock=C.hex(d.style==='desert'?'#a7734d':'#959b90');
+ const blend=C.clamp(C.smooth(.12,.5,slope)+t*.25,0,1);a=a.map((v,i)=>C.lerp(v,rock[i],blend));
+ if(d.style==='alpine'){const snow=C.smooth(21,30,h)*(1-C.smooth(.35,.7,slope));a=a.map((v,i)=>C.lerp(v,C.palette.snow[i],snow));}
+ const coast=(1-C.smooth(d.env.water+.4,d.env.water+2.7,h))*(1-C.smooth(.1,.4,slope));a=a.map((v,i)=>C.lerp(v,C.palette.sand[i],coast*.9));
+ const detail=.93+.09*C.noise(x*.6,z*.6,d.seed+29);return a.map(v=>v*detail);
+};
+C.terrainGeometry = d => {
+ const count=(d.n+1)**2,pos=new Float32Array(count*3),nor=new Float32Array(count*3),col=new Float32Array(count*3),motion=new Float32Array(count);
+ const index=new Uint32Array(d.n*d.n*6);let ii=0;
+ for(let j=0;j<=d.n;j++)for(let i=0;i<=d.n;i++){
+  const k=j*(d.n+1)+i,x=(i/d.n-.5)*d.size,z=(j/d.n-.5)*d.size,h=C.height(d,k),normal=C.normalAt(d,i,j),base=C.baseColor(d,x,z,h,normal),p=k*4;
+  pos.set([x,h,z],k*3);nor.set(normal,k*3);col.set(base.map((v,c)=>C.lerp(v,d.paint[p+c],d.paint[p+3])),k*3);
+  if(i<d.n&&j<d.n){const a=k,b=k+1,c=k+d.n+1,e=c+1;index.set([a,c,b,b,c,e],ii);ii+=6;}
+ }
+ return {pos,nor,col,motion,index};
+};
+C.makeStroke = (label) => ({label,heights:new Map(),paints:new Map(),added:[],removed:[],changed:[],area:null});
+C.touchArea=(s,x,z,r)=>{if(!s.area)s.area={x0:x-r,x1:x+r,z0:z-r,z1:z+r};else{const a=s.area;a.x0=Math.min(a.x0,x-r);a.x1=Math.max(a.x1,x+r);a.z0=Math.min(a.z0,z-r);a.z1=Math.max(a.z1,z+r);}};
+C.sculpt = (d,cmd,x,z,brush,amount) => {
+ const {radius:r,falloff:soft,tool,target=0}=brush,n=d.n,step=d.size/n,half=d.size/2;
+ let x0=Math.max(0,Math.floor((x-r+half)/step)),x1=Math.min(n,Math.ceil((x+r+half)/step)),z0=Math.max(0,Math.floor((z-r+half)/step)),z1=Math.min(n,Math.ceil((z+r+half)/step));
+ const pending=[];
+ for(let j=z0;j<=z1;j++)for(let i=x0;i<=x1;i++){
+  const dist=Math.hypot(i*step-half-x,j*step-half-z)/r;if(dist>=1)continue;
+  const w=1-C.smooth(Math.max(0,1-soft),1,dist),k=j*(n+1)+i,old=C.height(d,k);let next=old;
+  if(tool==='raise'||tool==='lower')next+=amount*w*(tool==='lower'?-1:1);
+  else if(tool==='flatten')next=C.lerp(old,target,Math.min(.75,amount*.7*w));
+  else if(tool==='restore')next=C.lerp(old,d.base[k],Math.min(.85,amount*.65*w));
+  else if(tool==='terrace')next=C.lerp(old,Math.round(old/2.5)*2.5,Math.min(.65,amount*.65*w));
+  else if(tool==='smooth'){let sum=0,total=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const ci=C.clamp(i+a,0,n),cj=C.clamp(j+b,0,n);sum+=C.height(d,cj*(n+1)+ci);total++;}next=C.lerp(old,sum/total,Math.min(.8,amount*w));}
+  next=C.clamp(next,-40,100);if(Math.abs(next-old)<.000001)continue;
+  if(!cmd.heights.has(k))cmd.heights.set(k,[d.delta[k],0]);pending.push([k,next-d.base[k]]);
+ }
+ for(const [k,v] of pending){d.delta[k]=v;cmd.heights.get(k)[1]=d.delta[k];}
+ if(pending.length)C.touchArea(cmd,x,z,r+step*2);return pending.length;
+};
+C.paint = (d,cmd,x,z,brush,amount) => {
+ const {radius:r,falloff:soft,material}=brush,n=d.n,step=d.size/n,half=d.size/2;let changed=0;
+ const rgb=C.palette[material];
+ for(let j=Math.max(0,Math.floor((z-r+half)/step));j<=Math.min(n,Math.ceil((z+r+half)/step));j++)for(let i=Math.max(0,Math.floor((x-r+half)/step));i<=Math.min(n,Math.ceil((x+r+half)/step));i++){
+  const dist=Math.hypot(i*step-half-x,j*step-half-z)/r;if(dist>=1)continue;
+  const w=(1-C.smooth(Math.max(0,1-soft),1,dist))*Math.min(.8,amount),k=j*(n+1)+i,p=k*4;if(w<.00001||(material==='auto'&&d.paint[p+3]<.000001))continue;
+  if(!cmd.paints.has(k))cmd.paints.set(k,[Array.from(d.paint.subarray(p,p+4)),null]);
+  if(material==='auto')d.paint[p+3]*=1-w;
+  else{const oldA=d.paint[p+3],newA=oldA+(1-oldA)*w;for(let c=0;c<3;c++)d.paint[p+c]=(d.paint[p+c]*oldA*(1-w)+rgb[c]*w)/Math.max(newA,.000001);d.paint[p+3]=newA;}
+  cmd.paints.get(k)[1]=Array.from(d.paint.subarray(p,p+4));changed++;
+ }
+ return changed;
+};
+C.addAsset = (d,kind,x,z,scale=1,yaw=0,follow=true,offset=0) => {
+ if(d.assets.length>=C.MAX_ASSETS||!C.kinds.includes(kind))return null;
+ if(kind==='campfire'&&d.assets.filter(a=>a.kind==='campfire').length>=24)return null;
+ const s=C.sample(d,x,z);if(!s)return null;
+ const a={id:'a'+d.nextId++,kind,x,y:s.height+offset,z,offset,scale,yaw,follow};d.assets.push(a);return a;
+};
+C.scatter = (d,cmd,x,z,brush,rng) => {
+ const r=brush.radius, count=Math.max(1,Math.round(Math.PI*r*r*.02*brush.density));let made=0;
+ for(let i=0;i<count*4&&made<count;i++){
+  const ang=rng()*Math.PI*2,dist=Math.sqrt(rng())*r,px=x+Math.cos(ang)*dist,pz=z+Math.sin(ang)*dist,s=C.sample(d,px,pz);if(!s||s.height<d.env.water+.2||s.slope>brush.maxSlope)continue;
+  if(rng()>1-C.smooth(Math.max(0,1-brush.falloff),1,dist/r))continue;
+  const q=rng();let kind=brush.asset==='forest'?(q<.5?'pine':q<.73?'oak':q<.88?'grass':'rock'):brush.asset;
+  if(brush.habitat && d.style==='desert' && ['pine','oak'].includes(kind))continue;
+  if(brush.habitat && d.style==='alpine' && s.height>26 && ['pine','oak','grass'].includes(kind))continue;
+  const sep=brush.spacing*(kind==='grass'?.35:kind==='campfire'?1.6:1);
+  if(d.assets.some(a=>Math.hypot(a.x-px,a.z-pz)<sep))continue;
+  const a=C.addAsset(d,kind,px,pz,C.lerp(brush.minScale,brush.maxScale,rng()),rng()*Math.PI*2,true,0);
+  if(a){cmd.added.push(copy(a));made++;}
+ }
+ return made;
+};
+C.erase = (d,cmd,x,z,r,all=true,kind='pine') => {
+ const removed=d.assets.filter(a=>Math.hypot(a.x-x,a.z-z)<=r&&(all||a.kind===kind));
+ if(!removed.length)return 0;const ids=new Set(removed.map(a=>a.id));d.assets=d.assets.filter(a=>!ids.has(a.id));
+ for(const a of removed){const newly=cmd.added.findIndex(v=>v.id===a.id);if(newly>=0)cmd.added.splice(newly,1);else cmd.removed.push(copy(a));}return removed.length;
+};
+C.followTerrain = (d,area) => {
+ for(const a of d.assets){if(!a.follow)continue;if(area&&(a.x<area.x0||a.x>area.x1||a.z<area.z0||a.z>area.z1))continue;const s=C.sample(d,a.x,a.z);if(s)a.y=s.height+a.offset;}
+};
+C.applyCommand = (d,c,forward=true) => {
+ for(const [i,v] of c.heights)d.delta[i]=v[forward?1:0];
+ for(const [i,v] of c.paints)d.paint.set(v[forward?1:0],i*4);
+ const removed=forward?c.removed:c.added,added=forward?c.added:c.removed,ids=new Set(removed.map(a=>a.id));d.assets=d.assets.filter(a=>!ids.has(a.id));
+ for(const a of added)if(!d.assets.some(b=>b.id===a.id))d.assets.push(copy(a));
+ for(const change of c.changed){const index=d.assets.findIndex(a=>a.id===change[0].id);if(index>=0)d.assets[index]=copy(change[forward?1:0]);}
+ C.followTerrain(d,c.area);
+};
+C.commandHasChanges = c => c.heights.size||c.paints.size||c.added.length||c.removed.length||c.changed.length;
+C.encodeFloats = values => {const bytes=new Uint8Array(values.buffer,values.byteOffset,values.byteLength);let s='';for(let i=0;i<bytes.length;i+=16384)s+=String.fromCharCode(...bytes.subarray(i,i+16384));return btoa(s);};
+C.decodeFloats = (s,length) => {if(typeof s!=='string'||s.length>length*6+16)throw Error('Invalid terrain data length');const raw=atob(s);if(raw.length!==length*4)throw Error('Terrain grid length does not match the project');const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));const a=new Float32Array(bytes.buffer);for(const v of a)if(!Number.isFinite(v))throw Error('Project contains a non-finite terrain value');return a;};
+C.export = d => ({format:C.FORMAT,version:C.VERSION,generator:d.generator,name:d.name,seed:d.seed,style:d.style,relief:d.relief,n:d.n,size:d.size,nextId:d.nextId,strokeSeed:d.strokeSeed,encoding:'float32-le-base64',base:C.encodeFloats(d.base),delta:C.encodeFloats(d.delta),paint:C.encodeFloats(d.paint),assets:copy(d.assets),env:copy(d.env)});
+C.import = p => {
+ if(!p||p.format!==C.FORMAT||p.version!==C.VERSION||p.encoding!=='float32-le-base64')throw Error('This is not a supported Worldworks 0.1 project');
+ if(!Number.isInteger(p.n)||p.n<32||p.n>256||!Number.isFinite(p.size)||p.size<30||p.size>500)throw Error('Unsupported terrain dimensions');
+ if(!['highlands','alpine','islands','desert'].includes(p.style))throw Error('Unsupported terrain style');
+ if(!Number.isSafeInteger(p.seed)||p.seed<0||p.seed>4294967295)throw Error('Invalid world seed');
+ const k=(p.n+1)**2,d={format:p.format,version:p.version,generator:String(p.generator||''),name:String(p.name||'Imported world').slice(0,80),seed:p.seed>>>0,style:p.style,relief:C.clamp(Number(p.relief)||26,8,60),n:p.n,size:p.size,base:C.decodeFloats(p.base,k),delta:C.decodeFloats(p.delta,k),paint:C.decodeFloats(p.paint,k*4),assets:[],nextId:1,strokeSeed:Math.max(1,Number(p.strokeSeed)||1),env:copy(C.defaults)};
+ for(let i=0;i<k;i++){if(Math.abs(d.base[i])>200||Math.abs(d.delta[i])>200)throw Error('Elevation is outside supported limits');for(let c=0;c<4;c++)if(d.paint[i*4+c]<0||d.paint[i*4+c]>1.001)throw Error('Invalid surface paint data');}
+ if(!Array.isArray(p.assets)||p.assets.length>C.MAX_ASSETS)throw Error('Too many assets');const ids=new Set();let maxId=0,fire=0;
+ for(const a of p.assets){if(!a||typeof a.id!=='string'||!/^a[1-9][0-9]{0,8}$/.test(a.id)||ids.has(a.id)||!C.kinds.includes(a.kind))throw Error('Invalid or duplicate asset');for(const key of ['x','y','z','offset','scale','yaw'])if(!Number.isFinite(a[key]))throw Error('Invalid object transform');if(Math.abs(a.x)>p.size/2||Math.abs(a.z)>p.size/2||Math.abs(a.y)>300||Math.abs(a.offset)>100||a.scale<.05||a.scale>8||Math.abs(a.yaw)>10000)throw Error('Object transform is outside supported limits');if(a.kind==='campfire'&&++fire>24)throw Error('Maximum 24 campfires');ids.add(a.id);maxId=Math.max(maxId,Number(a.id.slice(1)));d.assets.push({id:a.id,kind:a.kind,x:a.x,y:a.y,z:a.z,offset:a.offset,scale:a.scale,yaw:a.yaw,follow:a.follow!==false});}
+ d.nextId=Math.max(maxId+1,Number.isSafeInteger(p.nextId)?p.nextId:1);
+ const limits={water:[-10,18],sunElevation:[2,85],sunAzimuth:[0,360],ambient:[.2,2],haze:[0,.02],exposure:[.4,2],wind:[0,2],quality:[.65,1.5]};
+ for(const [key,[min,max]] of Object.entries(limits))if(p.env&&Number.isFinite(p.env[key]))d.env[key]=C.clamp(p.env[key],min,max);
+ for(const key of Object.keys(d.env.layers))if(typeof p.env?.layers?.[key]==='boolean')d.env.layers[key]=p.env.layers[key];
+ C.followTerrain(d);return d;
+};
+C.seedAssets = (d) => {
+ const rng=C.rng(d.seed+5117);for(let i=0;i<3200&&d.assets.length<520;i++){
+  const x=(rng()-.5)*d.size*.9,z=(rng()-.5)*d.size*.9,s=C.sample(d,x,z);if(!s||s.height<d.env.water+1||s.slope>42)continue;
+  const cluster=C.fbm(x*.035,z*.035,d.seed+408);if(rng()>(.28+cluster*.5))continue;
+  const v=rng();let kind=v<.24?'pine':v<.4?'oak':v<.64?'rock':v<.7?'boulder':v<.95?'grass':'shrub';
+  if(d.style==='desert'&&['pine','oak','grass'].includes(kind))kind='rock';if(d.style==='alpine'&&s.height>25&&['pine','oak','grass'].includes(kind))kind='rock';
+  if(d.assets.some(a=>Math.hypot(a.x-x,a.z-z)<(kind==='grass'?1:2.2)))continue;
+  C.addAsset(d,kind,x,z,.75+rng()*.65,rng()*Math.PI*2);
+ }
+};
+root.WWCore=C;
+if(typeof module!=='undefined'&&module.exports)module.exports=C;
+})(typeof window!=='undefined'?window:globalThis);
+
+
+;(()=>{
+'use strict';
+/** Storyworks 0.1.0 — renderer-free, deterministic narrative state machine.
+ * No DOM, timers, eval, network, or Three.js dependency. The host owns the clock.
+ */
+const VERSION = '0.1.0';
+const NODE_TYPES = ['start','dialogue','objective','condition','action','delay','journal','end'];
+const INPUT_EVENTS = ['world.region.enter','world.region.exit','world.interact','inventory.changed','combat.defeated','character.changed','weather.changed','world.time.changed','gameplay.signal'];
+const COMMANDS = ['world.marker','world.door','world.spawn','world.flag','inventory.give','inventory.take','character.reputation','weather.set','spell.cast','camera.focus','audio.play'];
+const BLOCKED = new Set(['__proto__','prototype','constructor']);
+const own = (o,k) => Object.prototype.hasOwnProperty.call(o,k);
+const scalar = v => typeof v==='string'||typeof v==='boolean'||(typeof v==='number'&&Number.isFinite(v))||v===null;
+const idOK = x => typeof x==='string'&&/^[a-zA-Z][a-zA-Z0-9_.:-]{0,95}$/.test(x)&&!BLOCKED.has(x);
+function clone(value) { return JSON.parse(JSON.stringify(value)); }
+function assert(ok, message) { if(!ok) throw new Error(message); }
+function safeJSON(value, depth=0, budget={n:0}) {
+  assert(depth<32 && ++budget.n<120000, 'JSON exceeds safety limits');
+  if(scalar(value)) { if(typeof value==='string')assert(value.length<100000,'Text is too long'); return; }
+  assert(value!==undefined && typeof value==='object' && value!==null, 'Only JSON data is supported');
+  assert(Array.isArray(value)||Object.getPrototypeOf(value)===Object.prototype||Object.getPrototypeOf(value)===null, 'Expected plain JSON data');
+  for(const [k,v] of Object.entries(value)) { assert(!BLOCKED.has(k),'Unsafe JSON key: '+k); safeJSON(v,depth+1,budget); }
+}
+function validCondition(c, at, depth=0) {
+  assert(depth<12, at+': conditions are too deeply nested');
+  if(c===undefined||c===null)return;
+  assert(c&&typeof c==='object'&&!Array.isArray(c),at+': condition must be an object');
+  if(own(c,'all')||own(c,'any')) { const a=c.all??c.any; assert(Array.isArray(a)&&a.length<=32,at+': invalid condition group'); a.forEach(x=>validCondition(x,at,depth+1)); return; }
+  if(own(c,'not')) { validCondition(c.not,at,depth+1); return; }
+  assert(['variable','inventory','flag','quest','world'].includes(c.source??'variable'),at+': invalid condition source');
+  assert(idOK(c.key),at+': invalid condition key');
+  assert(['eq','ne','gt','gte','lt','lte','exists'].includes(c.op??'eq'),at+': invalid condition operator');
+  if(c.op!=='exists')assert(scalar(c.value),at+': condition value must be a scalar');
+  if(['gt','gte','lt','lte'].includes(c.op))assert(Number.isFinite(c.value),at+': numeric comparison requires a number');
+}
+function validActions(actions, at, quests) {
+  assert(Array.isArray(actions)&&actions.length<=64,at+': actions must be an array (max 64)');
+  actions.forEach((a,i)=>{
+    const p=at+' action '+i; assert(a&&['set','add','flag','command','journal','startQuest'].includes(a.type),p+': invalid action type');
+    if(['set','add','flag'].includes(a.type)) { assert(idOK(a.key),p+': invalid key'); assert(scalar(a.value),p+': invalid value'); }
+    if(a.type==='add')assert(Number.isFinite(a.value),p+': add needs a number');
+    if(a.type==='flag')assert(typeof a.value==='boolean',p+': flag needs a boolean');
+    if(a.type==='command') { assert(idOK(a.command),p+': invalid command name'); assert(a.payload===undefined||(a.payload&&typeof a.payload==='object'&&!Array.isArray(a.payload)),p+': payload must be an object'); }
+    if(a.type==='journal')assert(typeof a.text==='string',p+': journal needs text');
+    if(a.type==='startQuest')assert(quests.has(a.questId),p+': unknown quest');
+  });
+}
+function validateProject(input) {
+  const errors=[], warnings=[];
+  try {
+    safeJSON(input); const p=input;
+    assert(p.format==='storyworks-project'&&p.version===1,'Expected a Storyworks project, version 1');
+    assert(idOK(p.id)&&typeof p.title==='string'&&p.title.trim(), 'Project needs an ID and a title');
+    assert(Array.isArray(p.quests)&&p.quests.length>0&&p.quests.length<=100,'Project needs 1–100 quests');
+    assert(Array.isArray(p.nodes)&&p.nodes.length>0&&p.nodes.length<=2000,'Project needs 1–2000 nodes');
+    assert(p.variables&&typeof p.variables==='object'&&!Array.isArray(p.variables),'Variables must be an object');
+    for(const [k,v] of Object.entries(p.variables))assert(idOK(k)&&scalar(v),'Invalid variable '+k);
+    const qs=new Set(), ns=new Map();
+    for(const q of p.quests) { assert(idOK(q.id)&&!qs.has(q.id),'Invalid/duplicate quest ID '+q.id); qs.add(q.id); assert(typeof q.title==='string',q.id+': title required'); validCondition(q.requires,q.id); }
+    for(const n of p.nodes) {
+      assert(idOK(n.id)&&!ns.has(n.id),'Invalid/duplicate node ID '+n.id); ns.set(n.id,n);
+      assert(qs.has(n.questId),n.id+': unknown quest'); assert(NODE_TYPES.includes(n.type),n.id+': unknown node type');
+      assert(typeof n.title==='string',n.id+': title required');
+      if(n.x!==undefined)assert(Number.isFinite(n.x)&&Math.abs(n.x)<1e6,n.id+': invalid x');
+      if(n.y!==undefined)assert(Number.isFinite(n.y)&&Math.abs(n.y)<1e6,n.id+': invalid y');
+      validActions(n.actions??[],n.id,qs);
+      if(n.type==='dialogue') {
+        assert(typeof n.text==='string',n.id+': dialogue text required');
+        assert(Array.isArray(n.choices)&&n.choices.length>0&&n.choices.length<=16,n.id+': dialogue needs 1–16 choices');
+        const choices=new Set();
+        for(const c of n.choices) { assert(idOK(c.id)&&!choices.has(c.id),n.id+': duplicate/invalid choice'); choices.add(c.id); assert(typeof c.text==='string',n.id+': choice needs text'); validCondition(c.condition,n.id); validActions(c.actions??[],n.id,qs); }
+      }
+      if(n.type==='objective') {
+        if(n.condition)validCondition(n.condition,n.id);
+        else { assert(idOK(n.event),n.id+': objective event is required'); assert(Number.isSafeInteger(n.goal??1)&&(n.goal??1)>0&&(n.goal??1)<=100000,n.id+': invalid goal'); assert(!n.match||(typeof n.match==='object'&&!Array.isArray(n.match)),n.id+': match must be an object'); for(const [k,v]of Object.entries(n.match??{}))assert(idOK(k)&&scalar(v),n.id+': match fields must be scalar'); }
+      }
+      if(n.type==='condition') { assert(n.condition,n.id+': condition required'); validCondition(n.condition,n.id); }
+      if(n.type==='delay')assert(Number.isFinite(n.seconds)&&n.seconds>=0&&n.seconds<=86400,n.id+': delay must be 0–86400 seconds');
+      if(n.type==='journal')assert(typeof n.text==='string',n.id+': journal text required');
+      if(n.type==='end')assert(['completed','failed'].includes(n.result??'completed'),n.id+': invalid ending result');
+    }
+    const edges=n=>n.type==='end'?[]:n.type==='dialogue'?n.choices.map(c=>c.next):n.type==='condition'?[n.then,n.else]:[n.next];
+    for(const n of p.nodes)for(const target of edges(n))assert(ns.has(target)&&ns.get(target).questId===n.questId,n.id+': missing or cross-quest connection '+target);
+    for(const q of p.quests) {
+      assert(ns.has(q.entry)&&ns.get(q.entry).questId===q.id,q.id+': invalid entry node');
+      const seen=new Set(), todo=[q.entry]; while(todo.length) { const id=todo.pop(); if(seen.has(id))continue; seen.add(id); todo.push(...edges(ns.get(id))); }
+      for(const n of p.nodes.filter(x=>x.questId===q.id))if(!seen.has(n.id))warnings.push(n.id+': unreachable from quest entry');
+      if(![...seen].some(id=>ns.get(id).type==='end'))warnings.push(q.id+': no reachable ending');
+    }
+    assert(Array.isArray(p.bindings??[])&&(p.bindings??[]).length<=1000,'Too many bindings'); const bindings=new Set();
+    for(const b of p.bindings??[]) { assert(idOK(b.id)&&!bindings.has(b.id),'Invalid/duplicate binding'); bindings.add(b.id); assert(['region','interact'].includes(b.kind),b.id+': unknown binding kind'); assert(idOK(b.targetId),b.id+': target ID required'); assert(Array.isArray(b.position)&&b.position.length===3&&b.position.every(Number.isFinite),b.id+': needs XYZ position'); if(b.kind==='region')assert(Number.isFinite(b.radius)&&b.radius>0&&b.radius<=10000,b.id+': invalid radius'); if(b.assetId)assert(idOK(b.assetId),b.id+': invalid asset ID'); }
+    for(const t of p.triggers??[]) { assert(idOK(t.event)&&qs.has(t.questId),'Invalid quest trigger'); validCondition(t.condition,'trigger'); }
+  } catch(e) { errors.push(e.message); }
+  return {valid:errors.length===0,errors,warnings};
+}
+function stable(v) { if(Array.isArray(v))return '['+v.map(stable).join(',')+']'; if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}'; return JSON.stringify(v); }
+function projectFingerprint(p) {
+  const d=clone(p); d.bindings??=[]; d.triggers??=[]; for(const n of d.nodes){delete n.x;delete n.y;} delete d.editor;
+  const str=stable(d); let h=2166136261; for(let i=0;i<str.length;i++)h=Math.imul(h^str.charCodeAt(i),16777619); return (h>>>0).toString(16).padStart(8,'0');
+}
+class EventBus {
+  constructor(){this.listeners=new Map();this.errors=[];}
+  on(type,fn){assert(typeof fn==='function','Listener must be a function');if(!this.listeners.has(type))this.listeners.set(type,new Set());this.listeners.get(type).add(fn);return ()=>this.listeners.get(type)?.delete(fn);}
+  emit(type,payload){for(const fn of [...(this.listeners.get(type)??[]),...(this.listeners.get('*')??[])])try{fn(payload,type);}catch(e){this.errors.push({type,error:String(e.message??e)});if(this.errors.length>32)this.errors.shift();}}
+  clear(){this.listeners.clear();}
+}
+class StoryEngine {
+  constructor(project,{sessionId='session-'+Math.random().toString(36).slice(2),eventHistoryLimit=4096}={}) {
+    const report=validateProject(project);assert(report.valid,report.errors.join('\n'));assert(idOK(sessionId),'Invalid session ID');
+    assert(Number.isSafeInteger(eventHistoryLimit)&&eventHistoryLimit>=16&&eventHistoryLimit<=100000,'Invalid event history limit');
+    this.project=clone(project);this.fingerprint=projectFingerprint(project);this.nodes=new Map(this.project.nodes.map(n=>[n.id,n]));this.bus=new EventBus();
+    this.eventHistoryLimit=eventHistoryLimit;this.disposed=false;this.queue=[];this.processing=false;this.eventIds=new Set();this._budget=0;
+    this.state={format:'storyworks-save',version:1,projectId:project.id,fingerprint:this.fingerprint,sessionId,clock:0,eventSequence:0,commandSequence:0,journalSequence:0,variables:clone(project.variables),flags:{},inventory:{},world:{},quests:{},journal:[],outbox:[],receipts:[],seenEvents:[]};
+    for(const q of project.quests)this.state.quests[q.id]={status:'available',nodeId:null,progress:0,deadline:null,visits:{},history:[],error:null};
+  }
+  on(type,fn){this._alive();return this.bus.on(type,fn);}
+  _alive(){assert(!this.disposed,'Story engine is disposed');}
+  _notify(type,payload){this.bus.emit(type,clone(payload));}
+  test(c){
+    if(!c)return true;if(c.all)return c.all.every(v=>this.test(v));if(c.any)return c.any.some(v=>this.test(v));if(own(c,'not'))return !this.test(c.not);
+    const source=c.source??'variable'; let v;
+    if(source==='quest')v=this.state.quests[c.key]?.status;
+    else { const group=source==='variable'?'variables':source==='flag'?'flags':source==='inventory'?'inventory':'world';v=this.state[group][c.key]; if(source==='inventory'&&v===undefined)v=0; }
+    switch(c.op??'eq'){case 'eq':return v===c.value;case 'ne':return v!==c.value;case 'exists':return v!==undefined;case 'gt':return typeof v==='number'&&v>c.value;case 'gte':return typeof v==='number'&&v>=c.value;case 'lt':return typeof v==='number'&&v<c.value;case 'lte':return typeof v==='number'&&v<=c.value;default:return false;}
+  }
+  _schedule(job){this._alive();this.queue.push(job);if(this.processing)return;this.processing=true;this._budget=0;try{while(this.queue.length){assert(++this._budget<=512,'Event/transition safety limit exceeded');this.queue.shift()();}}catch(e){this.queue.length=0;this._notify('story.error',{message:e.message});throw e;}finally{this.processing=false;}}
+  _q(id){const q=this.state.quests[id];assert(q,'Unknown quest '+id);return q;}
+  startQuest(id){const q=this._q(id),def=this.project.quests.find(x=>x.id===id);if(q.status!=='available'||!this.test(def.requires))return false;this._schedule(()=>this._start(id));return true;}
+  _start(id){const q=this._q(id),def=this.project.quests.find(x=>x.id===id);if(q.status!=='available'||!this.test(def.requires))return;q.status='active';q.error=null;this._notify('story.quest.started',{questId:id});this._enter(id,def.entry);}
+  start(){this._schedule(()=>{for(const q of this.project.quests)if(q.autoStart)this._start(q.id);});}
+  _journal(text,questId,nodeId){const entry={id:'journal-'+(++this.state.journalSequence),text,questId,nodeId,time:this.state.clock};this.state.journal.push(entry);if(this.state.journal.length>2000)this.state.journal.shift();this._notify('story.journal',entry);}
+  _actions(actions,questId,nodeId,visit,scope='node'){
+    for(const [i,a] of (actions??[]).entries()){
+      if(a.type==='set')this.state.variables[a.key]=a.value;
+      else if(a.type==='add'){const v=this.state.variables[a.key]??0;assert(typeof v==='number'&&Number.isFinite(v+a.value),'Cannot add to nonnumeric/overflowed variable '+a.key);this.state.variables[a.key]=v+a.value;}
+      else if(a.type==='flag')this.state.flags[a.key]=a.value;
+      else if(a.type==='journal')this._journal(a.text,questId,nodeId);
+      else if(a.type==='startQuest')this.queue.push(()=>this._start(a.questId));
+      else if(a.type==='command'){
+        assert(this.state.outbox.length<2048,'Command outbox is full; host must acknowledge commands');
+        const command={id:`${this.state.sessionId}:${++this.state.commandSequence}`,questId,nodeId,visit,scope,index:i,command:a.command,payload:clone(a.payload??{}),time:this.state.clock};
+        this.state.outbox.push(command);this._notify('story.command',command);
+      }
+    }
+  }
+  _enter(questId,nodeId){
+    const q=this._q(questId);
+    try {
+      let target=nodeId;
+      while(target&&q.status==='active'){
+        assert(++this._budget<=512,'Automatic node cycle detected (512-transition limit)');
+        const n=this.nodes.get(target);assert(n&&n.questId===questId,'Invalid node transition');q.nodeId=n.id;q.progress=0;q.deadline=null;
+        const visit=(q.visits[n.id]??0)+1;q.visits[n.id]=visit;q.history.push(n.id);if(q.history.length>512)q.history.shift();
+        this._notify('story.node.enter',{questId,nodeId:n.id,type:n.type});this._actions(n.actions,questId,n.id,visit);
+        target=null;
+        switch(n.type){
+          case 'start':case 'action':target=n.next;break;
+          case 'journal':this._journal(n.text,questId,n.id);target=n.next;break;
+          case 'condition':target=this.test(n.condition)?n.then:n.else;break;
+          case 'dialogue':this._notify('story.dialogue',{questId,nodeId:n.id,speaker:n.speaker??'',text:n.text,choices:this.choices(questId)});break;
+          case 'objective':if(n.condition&&this.test(n.condition)){q.progress=1;target=n.next;}else this._notify('story.objective',{questId,nodeId:n.id,progress:0,goal:n.condition?1:n.goal??1});break;
+          case 'delay':q.deadline=this.state.clock+n.seconds;if(n.seconds===0)target=n.next;break;
+          case 'end':q.status=n.result??'completed';this._notify('story.quest.'+q.status,{questId,nodeId:n.id,title:n.title});break;
+        }
+      }
+    }catch(e){q.status='error';q.error=e.message;throw e;}
+  }
+  current(id){const q=this._q(id);return q.nodeId?clone(this.nodes.get(q.nodeId)):null;}
+  choices(id){const q=this._q(id),n=this.nodes.get(q.nodeId);if(q.status!=='active'||n?.type!=='dialogue')return [];return n.choices.map(c=>({...clone(c),enabled:this.test(c.condition)}));}
+  choose(questId,choiceId){const q=this._q(questId),n=this.nodes.get(q.nodeId),c=n?.choices?.find(x=>x.id===choiceId);assert(q.status==='active'&&n?.type==='dialogue','Quest is not waiting for dialogue');assert(c,'Unknown dialogue choice');assert(this.test(c.condition),'That choice is locked');
+    this._schedule(()=>{assert(q.nodeId===n.id,'Dialogue changed before choice was processed');this._actions(c.actions,questId,n.id,q.visits[n.id],'choice:'+c.id);this._notify('story.choice',{questId,nodeId:n.id,choiceId});this._enter(questId,c.next);this._reevaluate();});
+  }
+  _match(match,payload){return Object.entries(match??{}).every(([k,v])=>own(payload,k)&&payload[k]===v);}
+  dispatch(type,payload={},options={}){
+    this._alive();assert(idOK(type),'Invalid event name');safeJSON(payload);assert(payload&&typeof payload==='object'&&!Array.isArray(payload),'Event payload must be an object');
+    if(type==='inventory.changed')assert(idOK(payload.itemId)&&Number.isSafeInteger(payload.count)&&payload.count>=0,'inventory.changed requires itemId and absolute nonnegative count');
+    if(options.id!==undefined)assert(typeof options.id==='string'&&options.id.length>0&&options.id.length<=160,'Invalid event ID');
+    if(options.id&&this.eventIds.has(options.id))return false;
+    const id=options.id??`${this.state.sessionId}:event:${++this.state.eventSequence}`;
+    if(this.eventIds.has(id))return false;
+    this.eventIds.add(id);this.state.seenEvents.push(id);if(this.state.seenEvents.length>this.eventHistoryLimit)this.eventIds.delete(this.state.seenEvents.shift());
+    const data=clone(payload);
+    this._schedule(()=>{
+      const active=Object.entries(this.state.quests).filter(([,q])=>q.status==='active').map(([questId,q])=>({questId,nodeId:q.nodeId,visit:q.visits[q.nodeId]}));
+      if(type==='inventory.changed')this.state.inventory[data.itemId]=data.count;
+      if(type==='world.time.changed'){if(typeof data.period==='string')this.state.world.period=data.period;if(Number.isFinite(data.hour))this.state.world.hour=data.hour;}
+      if(type==='weather.changed'&&typeof data.preset==='string')this.state.world.weather=data.preset;
+      if(type==='character.changed'&&idOK(data.key)&&scalar(data.value))this.state.world[data.key]=data.value;
+      this._notify('story.event',{id,type,payload:data,time:this.state.clock});
+      for(const {questId,nodeId,visit} of active){const q=this._q(questId),n=this.nodes.get(nodeId);if(q.status!=='active'||q.nodeId!==nodeId||q.visits[nodeId]!==visit)continue;
+        if(n.type==='objective'&&!n.condition&&n.event===type&&this._match(n.match,data)){q.progress=Math.min(n.goal??1,q.progress+1);this._notify('story.objective',{questId,nodeId,progress:q.progress,goal:n.goal??1});if(q.progress>=(n.goal??1))this._enter(questId,n.next);}
+      }
+      for(const trigger of this.project.triggers??[])if(trigger.event===type&&this._match(trigger.match,data)&&this.test(trigger.condition))this._start(trigger.questId);
+      this._reevaluate();
+    });return true;
+  }
+  _reevaluate(){for(const [id,q]of Object.entries(this.state.quests)){const n=this.nodes.get(q.nodeId);if(q.status==='active'&&n?.type==='objective'&&n.condition&&this.test(n.condition)){q.progress=1;this._enter(id,n.next);}}for(const q of this.project.quests)if(q.autoStart)this._start(q.id);}
+  update(deltaSeconds){this._alive();assert(Number.isFinite(deltaSeconds)&&deltaSeconds>=0&&deltaSeconds<=3600,'Delta must be between 0 and 3600 seconds');this._schedule(()=>{
+    const target=this.state.clock+deltaSeconds;
+    // Process deadlines chronologically, so chained delays are stable across different tick sizes.
+    while(true){
+      const due=Object.entries(this.state.quests).filter(([,q])=>q.status==='active'&&this.nodes.get(q.nodeId)?.type==='delay'&&q.deadline<=target).sort((a,b)=>a[1].deadline-b[1].deadline);
+      if(!due.length)break;
+      const [id,q]=due[0],n=this.nodes.get(q.nodeId);this.state.clock=Math.max(this.state.clock,q.deadline);this._enter(id,n.next);this._reevaluate();
+    }
+    this.state.clock=target;this._reevaluate();
+  });}
+  setVariable(key,value){this._alive();assert(idOK(key)&&scalar(value),'Invalid variable');this._schedule(()=>{this.state.variables[key]=value;this._reevaluate();this._notify('story.variable',{key,value});});}
+  failQuest(id,reason='Failed by host'){this._schedule(()=>{const q=this._q(id);if(q.status!=='active')return;q.status='failed';q.deadline=null;this._notify('story.quest.failed',{questId:id,reason});});}
+  pendingCommands(){return clone(this.state.outbox);}
+  ackCommand(id){this._alive();const i=this.state.outbox.findIndex(c=>c.id===id);if(i<0)return false;this.state.outbox.splice(i,1);this.state.receipts.push(id);if(this.state.receipts.length>4096)this.state.receipts.shift();this._notify('story.command.ack',{id});return true;}
+  getState(){return clone(this.state);}
+  serialize(){this._alive();return clone(this.state);}
+  loadSave(save){
+    this._alive();safeJSON(save);assert(!this.processing,'Cannot load during event dispatch');
+    assert(save.format==='storyworks-save'&&save.version===1&&save.projectId===this.project.id&&save.fingerprint===this.fingerprint,'Save belongs to a different story/revision');
+    assert(idOK(save.sessionId)&&Number.isFinite(save.clock)&&save.clock>=0,'Invalid save header');
+    for(const k of ['eventSequence','commandSequence','journalSequence'])assert(Number.isSafeInteger(save[k])&&save[k]>=0,'Invalid save sequence');
+    for(const k of ['variables','flags','inventory','world','quests'])assert(save[k]&&typeof save[k]==='object'&&!Array.isArray(save[k]),'Invalid save '+k);
+    for(const [k,v]of Object.entries(save.variables))assert(idOK(k)&&scalar(v),'Invalid saved variable');
+    for(const [k,v]of Object.entries(save.flags))assert(idOK(k)&&typeof v==='boolean','Invalid saved flag');
+    for(const [k,v]of Object.entries(save.inventory))assert(idOK(k)&&Number.isSafeInteger(v)&&v>=0,'Invalid saved inventory');
+    for(const [k,v]of Object.entries(save.world))assert(idOK(k)&&scalar(v),'Invalid saved world state');
+    assert(Object.keys(save.quests).length===this.project.quests.length,'Quest set mismatch');
+    for(const def of this.project.quests){const q=save.quests[def.id],n=this.nodes.get(q?.nodeId);assert(q&&['available','active','completed','failed','error'].includes(q.status),'Invalid saved quest');assert((q.status==='available'&&q.nodeId===null)||(n&&n.questId===def.id),'Invalid saved node');assert(Number.isSafeInteger(q.progress)&&q.progress>=0&&q.progress<=100000,'Invalid objective progress');assert(q.deadline===null||(Number.isFinite(q.deadline)&&q.deadline>=0),'Invalid timer');assert(q.visits&&typeof q.visits==='object'&&!Array.isArray(q.visits),'Invalid visits');for(const [id,v]of Object.entries(q.visits))assert(this.nodes.get(id)?.questId===def.id&&Number.isSafeInteger(v)&&v>0,'Invalid visit');assert(Array.isArray(q.history)&&q.history.length<=512&&q.history.every(id=>this.nodes.get(id)?.questId===def.id),'Invalid history');if(q.status==='active')assert(['dialogue','objective','delay'].includes(n.type),'Active save must be at a blocking node');if(q.status==='active'&&n.type==='delay')assert(q.deadline!==null,'Active delay needs a deadline');}
+    assert(Array.isArray(save.seenEvents)&&save.seenEvents.length<=100000&&save.seenEvents.every(x=>typeof x==='string'&&x.length<=160),'Invalid event history');
+    assert(Array.isArray(save.receipts)&&save.receipts.length<=4096&&save.receipts.every(x=>typeof x==='string'),'Invalid receipts');
+    assert(Array.isArray(save.journal)&&save.journal.length<=2000,'Invalid journal');for(const j of save.journal)assert(j&&typeof j.text==='string'&&typeof j.questId==='string'&&Number.isFinite(j.time),'Invalid journal entry');
+    assert(Array.isArray(save.outbox)&&save.outbox.length<=2048,'Invalid command outbox');const ids=new Set();
+    for(const c of save.outbox){assert(c&&typeof c.id==='string'&&!ids.has(c.id)&&!save.receipts.includes(c.id)&&idOK(c.command),'Invalid pending command');ids.add(c.id);assert(this.state.quests[c.questId]&&this.nodes.get(c.nodeId)?.questId===c.questId,'Invalid command source');assert(c.payload&&typeof c.payload==='object'&&!Array.isArray(c.payload),'Invalid command payload');}
+    const next=clone(save);next.seenEvents=next.seenEvents.slice(-this.eventHistoryLimit);this.state=next;this.eventIds=new Set(next.seenEvents);this.queue.length=0;this._notify('story.loaded',{projectId:this.project.id});
+    // Loading never executes node actions or replays commands. Call bridge.flush() explicitly.
+  }
+  dispose(){if(this.disposed)return;this.disposed=true;this.queue.length=0;this.bus.clear();}
+}
+
+/** Explicit bridge. Does not invent methods on other Worldworks engines. */
+
+class WorldworksStoryBridge {
+  constructor({engine,bus=new EventBus(),handlers={},worldworks=null,onError=()=>{}}={}) {
+    if(!(engine instanceof StoryEngine))throw new Error('A StoryEngine is required');
+    this.engine=engine;this.bus=bus;this.handlers={...handlers};this.worldworks=worldworks;this.onError=onError;this.off=[];this.inflight=new Set();this.inside=new Map();this.assets=new Map();this.disposed=false;this.diagnostics=[];
+    for(const type of INPUT_EVENTS){const fn=(event={})=>{const {eventId,...payload}=event;try{engine.dispatch(type,payload,eventId?{id:eventId}:{});}catch(e){this._error(e,type);}};const off=bus.on(type,fn);if(typeof off==='function')this.off.push(off);else if(typeof bus.off==='function')this.off.push(()=>bus.off(type,fn));else throw new Error('Event bus on() must return unsubscribe or provide off()');}
+    this.off.push(engine.on('*',(payload,type)=>{this.bus.emit(type,payload);if(type==='story.command')this._deliver(payload);}));
+    if(worldworks)this.refreshWorld();
+  }
+  _error(error,source){const d={source,message:String(error.message??error)};this.diagnostics.push(d);if(this.diagnostics.length>50)this.diagnostics.shift();this.bus.emit('story.hook.error',d);try{this.onError(error,source);}catch{ /* diagnostics must not break the engine */ }}
+  _deliver(command){
+    if(this.disposed||this.inflight.has(command.id))return;
+    const handler=this.handlers[command.command];
+    if(typeof handler!=='function'){this.bus.emit('story.hook.unbound',clone(command));return;}
+    this.inflight.add(command.id);
+    const finish=result=>{this.inflight.delete(command.id);if(this.disposed)return;if(result===true||result?.ok===true)this.engine.ackCommand(command.id);else this._error(new Error('Handler did not acknowledge success; command remains pending'),command.command);};
+    const failed=e=>{this.inflight.delete(command.id);if(!this.disposed)this._error(e,command.command);};
+    try {const r=handler(clone(command.payload),clone(command));if(r&&typeof r.then==='function')Promise.resolve(r).then(finish,failed);else finish(r);}catch(e){failed(e);}
+  }
+  setHandler(command,handler){if(typeof handler!=='function')throw new Error('Handler must be a function');this.handlers[command]=handler;}
+  flush(){if(this.disposed)throw new Error('Bridge is disposed');for(const c of this.engine.pendingCommands())this._deliver(c);}
+  emit(type,payload={},eventId){if(this.disposed)throw new Error('Bridge is disposed');return this.engine.dispatch(type,payload,eventId?{id:eventId}:{});}
+  enterRegion(regionId,{actorId='player',eventId}={}){return this.emit('world.region.enter',{regionId,actorId},eventId);}
+  interact(entityOrAssetId,{actorId='player',eventId}={}){const b=this.engine.project.bindings?.find(x=>x.kind==='interact'&&(x.assetId===entityOrAssetId||x.id===entityOrAssetId||x.targetId===entityOrAssetId));return this.emit('world.interact',{entityId:b?.targetId??entityOrAssetId,assetId:b?.assetId??null,actorId},eventId);}
+  defeated({entityId,kind,actorId='player',eventId}){return this.emit('combat.defeated',{entityId:entityId??kind,kind,actorId},eventId);}
+  inventoryChanged(itemId,count,{actorId='player',eventId}={}){return this.emit('inventory.changed',{itemId,count,actorId},eventId);}
+  refreshWorld(){if(!this.worldworks||typeof this.worldworks.exportProject!=='function')throw new Error('Expected Worldworks v0.1 exportProject()');const p=this.worldworks.exportProject();this.assets=new Map((p.assets??[]).map(a=>[a.id,a]));return p;}
+  position(binding){const a=binding.assetId&&this.assets.get(binding.assetId);return a?[a.x,a.y,a.z]:binding.position;}
+  update(deltaSeconds,position=null,actorId='player'){
+    if(this.disposed)throw new Error('Bridge is disposed');
+    if(!Number.isFinite(deltaSeconds)||deltaSeconds<0||deltaSeconds>3600)throw new Error('Delta must be 0–3600 seconds');
+    if(position){const p=Array.isArray(position)?position:[position.x,position.y,position.z];if(p.length!==3||!p.every(Number.isFinite))throw new Error('Player position must be finite XYZ');
+      for(const b of this.engine.project.bindings??[])if(b.kind==='region'){
+        const c=this.position(b),key=actorId+'|'+b.id,was=this.inside.get(key)??false,dist=Math.hypot(p[0]-c[0],p[2]-c[2]);
+        // Cylindrical trigger volume: XZ distance, no vertical limit. Exit hysteresis avoids edge chatter.
+        const now=dist<=(b.radius+(was?0.3:0));this.inside.set(key,now);if(now!==was)this.emit(now?'world.region.enter':'world.region.exit',{regionId:b.targetId,bindingId:b.id,actorId});
+      }
+    }
+    this.engine.update(deltaSeconds);
+  }
+  exportBundle(){if(!this.worldworks)throw new Error('Connect a Worldworks instance before exporting a world bundle');return {format:'worldworks-story-bundle',version:1,world:this.refreshWorld(),story:clone(this.engine.project),save:this.engine.serialize(),regions:[...this.inside.entries()]};}
+  loadBundle(bundle,{worldCore=globalThis.WWCore}={}){
+    if(!this.worldworks||typeof this.worldworks.loadProject!=='function')throw new Error('Worldworks loadProject() is required');
+    if(bundle?.format!=='worldworks-story-bundle'||bundle.version!==1)throw new Error('Not a Worldworks story bundle');
+    if(!worldCore||typeof worldCore.import!=='function')throw new Error('WWCore is required to prevalidate the world');
+    if(this.inflight.size)throw new Error('Wait for in-flight host commands before loading');
+    const testEngine=new StoryEngine(bundle.story);try{testEngine.loadSave(bundle.save);if(testEngine.fingerprint!==this.engine.fingerprint)throw new Error('Load the bundle story into a new engine before attaching this bridge');worldCore.import(bundle.world);if(!Array.isArray(bundle.regions??[])||(bundle.regions??[]).some(v=>!Array.isArray(v)||v.length!==2||typeof v[0]!=='string'||typeof v[1]!=='boolean'))throw new Error('Invalid saved trigger occupancy');}finally{testEngine.dispose();}
+    this.worldworks.loadProject(clone(bundle.world));this.engine.loadSave(bundle.save);this.inside=new Map(bundle.regions??[]);this.refreshWorld();
+    // Explicit flush() required: loading does not execute external effects automatically.
+  }
+  dispose(){if(this.disposed)return;this.disposed=true;for(const off of this.off)off();this.off.length=0;this.inflight.clear();this.inside.clear();}
+}
+function createWorldworksStory(options){return new WorldworksStoryBridge(options);}
+
+/** Original sample narrative: The Last Beacon. Coordinates are editor positions. */
+const demoProject = {
+  format:'storyworks-project',version:1,id:'last-beacon',title:'The Last Beacon',description:'A dark relay. A missing keeper. One light left to bring home.',
+  variables:{trust:0,route:'undecided',signalRestored:false},
+  quests:[
+    {id:'beacon',title:'The Last Beacon',description:'Bring the northern relay back online before the valley disappears into the storm.',entry:'arrival',autoStart:true,chapter:'01 · THE SIGNAL'},
+    {id:'cartographer',title:'A Map of the Missing',description:'Find the cartographer among the ruins. Some paths are only drawn after someone returns.',entry:'map-start',autoStart:false,chapter:'02 · SIDE STORY'}
+  ],
+  bindings:[
+    {id:'relay-zone',kind:'region',targetId:'relay',name:'Northern relay',position:[22,0,-24],radius:9},
+    {id:'keeper-npc',kind:'interact',targetId:'iona',name:'Keeper Iona',position:[-24,0,22]},
+    {id:'map-npc',kind:'interact',targetId:'cartographer',name:'Lost cartographer',position:[-26,0,-20]},
+    {id:'beacon-zone',kind:'region',targetId:'beacon',name:'Beacon tower',position:[34,0,22],radius:7}
+  ],
+  triggers:[{event:'world.interact',match:{entityId:'cartographer'},questId:'cartographer'}],
+  nodes:[
+    {id:'arrival',questId:'beacon',type:'start',title:'A light in the static',x:60,y:220,next:'iona'},
+    {id:'iona',questId:'beacon',type:'dialogue',title:'The keeper’s request',speaker:'Keeper Iona',text:'The northern relay went dark three nights ago. If that beacon dies, every road through the valley dies with it.\n\nBring back its light. And be careful who you trust at the gate.',x:340,y:220,choices:[{id:'accept',text:'I’ll bring the light back.',next:'signal',actions:[{type:'add',key:'trust',value:1}]},{id:'decline',text:'This is not my fight.',next:'abandoned'}]},
+    {id:'signal',questId:'beacon',type:'action',title:'Mark the northern relay',x:630,y:70,actions:[{type:'journal',text:'Iona asked me to restore the northern relay. Follow the signal north.'},{type:'command',command:'world.marker',payload:{markerId:'relay',position:[22,0,-24],visible:true,label:'Northern relay'}}],next:'reach'},
+    {id:'reach',questId:'beacon',type:'objective',title:'Reach the northern relay',description:'Enter the relay trigger volume.',event:'world.region.enter',match:{regionId:'relay'},goal:1,x:920,y:70,next:'gate'},
+    {id:'gate',questId:'beacon',type:'dialogue',title:'A stranger at the gate',speaker:'The Gatekeeper',text:'The relay needs a power core. Recover the one the wraiths took, or take my bypass key.\n\nMy way is faster. The valley will remember the price.',x:1210,y:70,choices:[{id:'recover',text:'We recover the core. No shortcuts.',next:'core',actions:[{type:'set',key:'route',value:'keeper'},{type:'add',key:'trust',value:1}]},{id:'bargain',text:'Give me the bypass key.',next:'bypass',actions:[{type:'set',key:'route',value:'smuggler'},{type:'add',key:'trust',value:-2}]}]},
+    {id:'core',questId:'beacon',type:'objective',title:'Recover a power core',description:'Hold at least one power core. Already-owned items count.',condition:{source:'inventory',key:'power_core',op:'gte',value:1},x:1500,y:-80,next:'wraiths'},
+    {id:'wraiths',questId:'beacon',type:'objective',title:'Clear the relay approach',event:'combat.defeated',match:{kind:'wraith'},goal:2,x:1790,y:-80,next:'restore'},
+    {id:'bypass',questId:'beacon',type:'action',title:'Accept the stranger’s price',x:1500,y:240,actions:[{type:'journal',text:'I accepted the bypass. The stranger knows which roads the valley will lose.'},{type:'command',command:'character.reputation',payload:{faction:'valley',delta:-10}},{type:'command',command:'world.door',payload:{doorId:'relay_gate',locked:false,open:true}}],next:'restore'},
+    {id:'restore',questId:'beacon',type:'action',title:'Reignite the relay',x:2080,y:80,actions:[{type:'set',key:'signalRestored',value:true},{type:'flag',key:'relayOnline',value:true},{type:'command',command:'world.flag',payload:{key:'relayOnline',value:true}},{type:'command',command:'world.door',payload:{doorId:'relay_gate',locked:false,open:true}},{type:'command',command:'weather.set',payload:{preset:'clear',transitionSeconds:4}},{type:'command',command:'spell.cast',payload:{preset:'arcane',target:[22,3,-24]}},{type:'command',command:'world.marker',payload:{markerId:'relay',visible:false}}],next:'dawn'},
+    {id:'dawn',questId:'beacon',type:'delay',title:'Let the light settle',seconds:2,x:2370,y:80,next:'consequence'},
+    {id:'consequence',questId:'beacon',type:'condition',title:'The valley remembers',condition:{source:'variable',key:'trust',op:'gte',value:1},x:2660,y:80,then:'keeper-end',else:'smuggler-end'},
+    {id:'keeper-end',questId:'beacon',type:'end',title:'A light worth keeping',text:'The beacon returns. The valley has its roads, and Iona has her answer. Some promises survive the storm.',result:'completed',x:2950,y:-90,actions:[{type:'journal',text:'The relay burns again. The valley remembers that I kept my promise.'},{type:'command',command:'inventory.give',payload:{itemId:'beacon_token',count:1}}]},
+    {id:'smuggler-end',questId:'beacon',type:'end',title:'The price of a shortcut',text:'The beacon returns. So does the stranger, with a list of favors owed. You saved the road, but someone else owns the destination.',result:'completed',x:2950,y:230,actions:[{type:'journal',text:'The beacon is lit, but the stranger owns a piece of its light.'},{type:'command',command:'inventory.give',payload:{itemId:'bypass_token',count:1}}]},
+    {id:'abandoned',questId:'beacon',type:'end',title:'The long dark',text:'You leave Iona at the roadside. Behind you, one more light goes out.',result:'failed',x:630,y:470,actions:[{type:'journal',text:'I left the keeper at the roadside. The relay is still dark.'}]},
+    {id:'map-start',questId:'cartographer',type:'start',title:'An unfinished map',x:100,y:180,next:'map-talk'},
+    {id:'map-talk',questId:'cartographer',type:'dialogue',title:'Someone had to draw it',speaker:'The Cartographer',text:'I mapped every road I could see. The last one is under the beacon. Find it, and I can finally finish this.',x:420,y:180,choices:[{id:'help',text:'I’ll look beneath the beacon.',next:'map-reach'}]},
+    {id:'map-reach',questId:'cartographer',type:'objective',title:'Find the old beacon road',event:'world.region.enter',match:{regionId:'beacon'},goal:1,x:740,y:180,next:'map-end'},
+    {id:'map-end',questId:'cartographer',type:'end',title:'No one is missing forever',text:'There is a road beneath the old beacon. The map is complete; the valley feels a little less empty.',result:'completed',x:1060,y:180,actions:[{type:'journal',text:'The cartographer’s map is complete. There is always another road.'},{type:'command',command:'inventory.give',payload:{itemId:'valley_map',count:1}}]}
+  ]
+};
+
+/* Storyworks editor. This UI is deliberately separate from the runtime module. */
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const typeInfo={start:{icon:'▷',color:'#86cbbb',name:'Entry point',desc:'Start a quest or story thread'},dialogue:{icon:'≋',color:'#b7a0f6',name:'Dialogue',desc:'Words, choices, and consequences'},objective:{icon:'◎',color:'#eac086',name:'Objective',desc:'Wait for an event or condition'},condition:{icon:'⑂',color:'#e59fc6',name:'Condition',desc:'Branch on the current world state'},action:{icon:'ϟ',color:'#8ebbe9',name:'Action',desc:'Change state or command a system'},delay:{icon:'◷',color:'#c0b0e5',name:'Delay',desc:'Wait on the host’s simulation clock'},journal:{icon:'▤',color:'#aecb8e',name:'Journal',desc:'Record a story beat'},end:{icon:'◇',color:'#7acebd',name:'Ending',desc:'Complete or fail the quest'}};
+let project=clone(demoProject),selectedQuest='beacon',selectedNode='iona',selectedBinding=null,view='graph',dock='play',engine,bridge,events=[],runtimeDirty=true,edited=false,paused=false,history=[],future=[],pan={x:24,y:-15},zoom=.73,drag=null,connect=null,worldRaw=null,worldDoc=null,mapBackground=null,mapDrag=null,player=[-38,0,35],effectState={},selectedFilter='',toastTimer,draftTimer,rafId,disposed=false,uiLast=0,lastFrame=0,importMode='any';
+let jsonApplyCallback=null;
+const report=()=>validateProject(project);
+const nodeById=id=>project.nodes.find(n=>n.id===id);
+const questById=id=>project.quests.find(q=>q.id===id);
+const visibleNodes=()=>project.nodes.filter(n=>n.questId===selectedQuest);
+const fmtTime=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+function toast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4300);}
+function safe(fn){try{return fn();}catch(e){toast(e.message);return null;}}
+function downloadJSON(data,name){const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);}
+function persist(){clearTimeout(draftTimer);draftTimer=setTimeout(()=>{try{localStorage.setItem('storyworks-authoring-01',JSON.stringify(project));$('restoreDraft').hidden=false;$('saveLabel').textContent='Authoring draft saved on this device';}catch{$('saveLabel').textContent='Storage unavailable · export to keep your work';}},350);}
+function commit(fn,{refreshInspector=true}={}){const before=clone(project);try{fn();if(JSON.stringify(before)===JSON.stringify(project))return;history.push(before);if(history.length>80)history.shift();future=[];edited=projectFingerprint(project)!==engine.fingerprint;persist();renderEditor(refreshInspector);runtimeDirty=true;}catch(e){project=before;toast(e.message);renderEditor(refreshInspector);}}
+function undo(redo=false){const from=redo?future:history,to=redo?history:future;if(!from.length)return;to.push(clone(project));project=from.pop();ensureSelection();edited=projectFingerprint(project)!==engine.fingerprint;persist();renderEditor();runtimeDirty=true;}
+function ensureSelection(){if(!questById(selectedQuest))selectedQuest=project.quests[0].id;if(!nodeById(selectedNode)||nodeById(selectedNode).questId!==selectedQuest)selectedNode=questById(selectedQuest).entry;if(selectedBinding&&!project.bindings.some(b=>b.id===selectedBinding))selectedBinding=null;}
+function resetRuntime(save=null){
+  const r=report();if(!r.valid){toast('Fix the graph before playing: '+r.errors[0]);return false;}
+  const next=new StoryEngine(project);if(save)try{next.loadSave(save);}catch(e){next.dispose();throw e;}
+  bridge?.dispose();engine?.dispose();engine=next;events=[];effectState={weather:engine.state.world.weather??(engine.state.flags.relayOnline?'clear':'storm'),door:engine.state.flags.relayOnline?'open':'locked',reputation:0,effects:0,markers:{}};
+  const handlers={};
+  for(const command of COMMANDS)handlers[command]=(payload,cmd)=>{
+    if(command==='weather.set'){effectState.weather=payload.preset??'clear';engine.dispatch('weather.changed',{preset:effectState.weather},{id:'weather-'+cmd.id});}
+    if(command==='world.door')effectState.door=payload.open?'open':payload.locked?'locked':'closed';
+    if(command==='world.marker')effectState.markers[payload.markerId]=clone(payload);
+    if(command==='world.flag')effectState[payload.key]=payload.value;
+    if(command==='character.reputation')effectState.reputation+=Number(payload.delta)||0;
+    if(command==='spell.cast')effectState.effects++;
+    if(command==='world.spawn')effectState.lastSpawn=clone(payload);
+    if(command==='audio.play')effectState.lastAudio=clone(payload);
+    if(command==='camera.focus')effectState.lastCamera=clone(payload);
+    if(command==='inventory.give'||command==='inventory.take'){
+      if(typeof payload.itemId!=='string'||!Number.isSafeInteger(payload.count)||payload.count<0)throw new Error('Demo inventory command requires itemId/count');
+      const current=engine.state.inventory[payload.itemId]??0,value=current+(command==='inventory.give'?1:-1)*payload.count;
+      if(value<0)throw new Error('Insufficient inventory in sandbox');
+      // Authoritative inventory state is fed back as an event; not written by the story engine itself.
+      engine.dispatch('inventory.changed',{itemId:payload.itemId,count:value},{id:'receipt-'+cmd.id});
+    }
+    runtimeDirty=true;return true;
+  };
+  bridge=new WorldworksStoryBridge({engine,handlers,onError:(e,source)=>toast('Hook '+source+': '+e.message),worldworks:worldRaw?{exportProject:()=>clone(worldRaw),loadProject:p=>installWorld(p)}:null});
+  engine.on('*',(payload,type)=>{events.push({type,payload,time:engine.state.clock});if(events.length>240)events.shift();runtimeDirty=true;});
+  bridge.bus.on('story.hook.error',payload=>{events.push({type:'story.hook.error',payload,time:engine.state.clock});runtimeDirty=true;});
+  if(!save)engine.start();edited=false;paused=false;$('pauseBtn').textContent='Ⅱ';$('runtimeStatus').textContent='Playtest · sandbox world';runtimeDirty=true;renderEditor(false);return true;
+}
+function renderLibrary(){
+  $('questList').innerHTML=project.quests.filter(q=>q.title.toLowerCase().includes(selectedFilter)).map(q=>{const s=engine?.state.quests[q.id],total=project.nodes.filter(n=>n.questId===q.id).length,seen=Object.keys(s?.visits??{}).length,status=s?.status??'available';return `<button class="questCard ${q.id===selectedQuest?'selected':''}" data-quest="${esc(q.id)}"><div class="chapter">${esc(q.chapter??'STORY THREAD')}</div><div class="qTitle">${esc(q.title)}</div><div class="qMeta"><span>${total} nodes</span><span class="qStatus" style="color:${status==='failed'?'var(--red)':status==='active'?'var(--purple)':'var(--muted)'}">${esc(status)}</span></div><div class="bar"><i style="width:${Math.min(100,seen/total*100)}%"></i></div></button>`;}).join('');
+  $('projectStats').innerHTML=[['Story threads',project.quests.length],['Narrative nodes',project.nodes.length],['World bindings',project.bindings?.length??0]].map(([k,v])=>`<div class="summaryStat"><span>${k}</span><b>${v.toString().padStart(2,'0')}</b></div>`).join('');
+}
+function nodeSubtitle(n){if(n.type==='dialogue')return (n.speaker?n.speaker+' · ':'')+n.text;if(n.type==='objective')return n.condition?`${n.condition.source??'variable'} / ${n.condition.key??'composite'} ${n.condition.op??''} ${n.condition.value??''}`:n.event;if(n.type==='action')return (n.actions??[]).map(a=>a.command??(a.type==='journal'?'journal':a.type+' '+a.key)).join(' · ')||'No actions configured';if(n.type==='condition')return n.condition?.key?`${n.condition.key} ${n.condition.op??'eq'} ${n.condition.value}`:'Composite condition';if(n.type==='delay')return `Wait ${n.seconds} simulation seconds`;if(n.type==='journal')return n.text;if(n.type==='end')return n.text||'Close this story thread';return 'Begin this story thread';}
+function routes(n){if(n.type==='end')return [];if(n.type==='dialogue')return n.choices.map((c,i)=>({route:'choice:'+i,label:c.text,target:c.next}));if(n.type==='condition')return [{route:'then',label:'True',target:n.then},{route:'else',label:'False',target:n.else}];return [{route:'next',label:'',target:n.next}];}
+function renderGraph(){
+  const ns=visibleNodes(),q=engine?.state.quests[selectedQuest];
+  $('nodes').innerHTML=ns.map((n,i)=>{const info=typeInfo[n.type],isBranch=['dialogue','condition'].includes(n.type),live=q?.status==='active'&&q.nodeId===n.id;return `<article class="node ${selectedNode===n.id?'selected':''} ${live?'live':''} ${q?.visits[n.id]?'visited':''}" data-node="${esc(n.id)}" style="left:${n.x??0}px;top:${n.y??0}px;--node:${info.color}" tabindex="0" aria-label="${esc(info.name+': '+n.title)}"><button class="port in" data-in="${esc(n.id)}" title="Connect here" aria-label="Connect to ${esc(n.title)}"></button><div class="nodeTop"><span class="typeMark">${info.icon}</span><span class="typeLabel">${info.name}</span><span class="nodeNum">${String(i+1).padStart(2,'0')}</span></div><div class="nodeMain"><div class="nodeTitle">${esc(n.title)}</div><div class="nodeSub">${esc(nodeSubtitle(n))}</div></div>${isBranch?routes(n).map(r=>`<div class="branchRow"><span>${esc(r.label)}</span><button class="port out" data-out="${esc(n.id)}" data-route="${r.route}" title="Connect: ${esc(r.label)}" aria-label="Connect ${esc(r.label)}"></button></div>`).join(''):n.type!=='end'?`<button class="port out" data-out="${esc(n.id)}" data-route="next" title="Connect next node" aria-label="Connect next node"></button>`:''}<div class="nodeFoot"><span>${esc(n.type==='objective'?(n.condition?'STATE CONDITION':'EVENT TRIGGER'):n.type==='end'?(n.result??'completed').toUpperCase():n.id)}</span><span class="${live?'liveLabel':''}">${live?'● LIVE':q?.visits[n.id]?'VISITED':isBranch?routes(n).length+' BRANCHES':'•'}</span></div></article>`;}).join('');
+  const def=questById(selectedQuest);$('graphTitle').textContent=def.title;$('graphSub').textContent=`${ns.length} nodes · ${ns.filter(n=>n.type==='end').length} endings · ${ns.filter(n=>n.type==='objective').length} objectives`;
+  transformGraph();drawEdges();drawMini();
+}
+function drawEdges(){
+  const q=engine?.state.quests[selectedQuest];let html='';
+  for(const n of visibleNodes())for(const r of routes(n)){const t=nodeById(r.target);if(!t||t.questId!==selectedQuest)continue;
+    const el=$('nodes').querySelector(`[data-out="${n.id}"][data-route="${r.route}"]`);let sy=(n.y??0)+76;
+    if(el){const parent=el.parentElement;sy=(n.y??0)+el.offsetTop+5.5+(parent.classList.contains('branchRow')?parent.offsetTop:0);}
+    const sx=(n.x??0)+232,tx=t.x??0,ty=(t.y??0)+76,d=Math.max(60,Math.min(200,Math.abs(tx-sx)*.5));
+    const path=tx>=sx?`M${sx} ${sy} C${sx+d} ${sy} ${tx-d} ${ty} ${tx} ${ty}`:`M${sx} ${sy} C${sx+75} ${sy} ${sx+75} ${sy+120} ${sx} ${sy+120} L${tx-55} ${sy+120} C${tx-85} ${sy+120} ${tx-65} ${ty} ${tx} ${ty}`;
+    html+=`<path class="edge ${q?.visits[n.id]&&q?.visits[t.id]?'past':''}" d="${path}"/>`;
+  }
+  $('edges').innerHTML=html;
+}
+function transformGraph(){ $('graphWorld').style.transform=`translate(${pan.x}px,${pan.y}px) scale(${zoom})`;$('graph').style.backgroundSize=(24*zoom)+'px '+(24*zoom)+'px';$('graph').style.backgroundPosition=pan.x+'px '+pan.y+'px';$('zoomLabel').textContent=Math.round(zoom*100)+'%'; }
+function graphBounds(){const ns=visibleNodes();return {x:Math.min(...ns.map(n=>n.x??0))-35,y:Math.min(...ns.map(n=>n.y??0))-35,right:Math.max(...ns.map(n=>(n.x??0)+232))+35,bottom:Math.max(...ns.map(n=>(n.y??0)+(n.type==='dialogue'?210:180)))+35};}
+function fitGraph(){const b=graphBounds(),r=$('graph').getBoundingClientRect();zoom=Math.max(.18,Math.min(1,(r.width-80)/(b.right-b.x),(r.height-95)/(b.bottom-b.y)));pan={x:(r.width-(b.right-b.x)*zoom)/2-b.x*zoom,y:54+(r.height-95-(b.bottom-b.y)*zoom)/2-b.y*zoom};transformGraph();drawMini();}
+function focusNode(id=selectedNode){const n=nodeById(id);if(!n)return;const r=$('graph').getBoundingClientRect();if(zoom<.55)zoom=.75;pan={x:r.width/2-((n.x??0)+116)*zoom,y:r.height/2-((n.y??0)+85)*zoom};transformGraph();drawMini();}
+function drawMini(){const c=$('mini'),ctx=c.getContext('2d'),b=graphBounds(),w=b.right-b.x,h=b.bottom-b.y,s=Math.min((c.width-16)/w,(c.height-16)/h),ox=(c.width-w*s)/2,oy=(c.height-h*s)/2;ctx.clearRect(0,0,c.width,c.height);for(const n of visibleNodes()){ctx.fillStyle=n.id===selectedNode?'#c6a8ff':engine?.state.quests[selectedQuest]?.nodeId===n.id?'#eac086':'#61566f';ctx.fillRect(ox+((n.x??0)-b.x)*s,oy+((n.y??0)-b.y)*s,232*s,150*s);}ctx.strokeStyle='#aaa0c160';ctx.lineWidth=1;const r=$('graph').getBoundingClientRect();ctx.strokeRect(ox+(-pan.x/zoom-b.x)*s,oy+(-pan.y/zoom-b.y)*s,r.width/zoom*s,r.height/zoom*s);c._layout={b,s,ox,oy};}
+function setRoute(n,route,target){if(route.startsWith('choice:'))n.choices[Number(route.split(':')[1])].next=target;else n[route]=target;}
+function completeConnection(target){if(!connect)return;const source=nodeById(connect.id),node=nodeById(target);if(source&&node&&source.questId===node.questId){commit(()=>setRoute(source,connect.route,target));toast('Connected '+source.title+' → '+node.title);}connect=null;$('connectHint').hidden=true;}
+function selectNode(id){if(connect){completeConnection(id);return;}selectedNode=id;selectedBinding=null;renderGraph();renderInspector();}
+function renderEditor(refreshInspector=true){ensureSelection();$('projectTitle').textContent=project.title;renderLibrary();renderGraph();if(refreshInspector)renderInspector();renderValidation();if(view==='world')drawMap();$('undoBtn').disabled=!history.length;$('redoBtn').disabled=!future.length;}
+function renderValidation(){const r=report();$('validationStatus').textContent=r.valid?(r.warnings.length?`△ ${r.warnings.length} graph warnings`:'✓ Graph valid'):'× '+r.errors[0];$('validationStatus').style.color=r.valid?(r.warnings.length?'var(--amber)':'var(--teal)'):'var(--red)';$('validationStatus').title=[...r.errors,...r.warnings].join('\n');$('runtimeStatus').textContent=edited?'Definition edited · restart to apply':'Playtest · sandbox world';}
+function selectOptions(value,items){return items.map(x=>{const [id,label]=Array.isArray(x)?x:[x,x];return `<option value="${esc(id)}" ${id===value?'selected':''}>${esc(label)}</option>`;}).join('');}
+function field(label,control,help=''){return `<label class="field"><span>${label}</span>${control}${help?`<p class="help">${help}</p>`:''}</label>`;}
+function nInput(key,value,type='text',extra=''){return `<input data-prop="${key}" type="${type}" value="${esc(value)}" ${extra}>`;}
+function nText(key,value,code=false){return `<textarea data-prop="${key}" ${code?'data-json="true" class="code" spellcheck="false"':''}>${esc(code?JSON.stringify(value??{},null,2):value)}</textarea>`;}
+function nextSelect(key,value){return `<select data-prop="${key}">${selectOptions(value,visibleNodes().map(n=>[n.id,n.title+' · '+n.type]))}</select>`;}
+function renderInspector(){
+  if(view==='world'&&selectedBinding){renderBindingInspector();return;}
+  const n=nodeById(selectedNode);if(!n)return;const info=typeInfo[n.type];$('inspectorKind').textContent=n.type.toUpperCase();$('deleteBtn').textContent='Delete node';$('duplicateBtn').hidden=false;
+  let h=`<div class="nodeIdentity" style="--node:${info.color}"><span class="typeMark">${info.icon}</span><div><strong>${info.name}</strong><small>${esc(n.id)}</small></div></div>`;
+  h+=field('Node title',nInput('title',n.title));
+  if(n.type==='dialogue'){
+    h+=field('Speaker',nInput('speaker',n.speaker??''))+field('Dialogue text',nText('text',n.text));
+    h+=`<div class="sectionHeading">Player choices <button class="ghost small" data-add-choice>＋</button></div>`;
+    for(const [i,c] of n.choices.entries())h+=`<div class="choiceEditor"><div class="choiceTitle"><span>CHOICE ${String(i+1).padStart(2,'0')}</span><button class="ghost small danger" data-remove-choice="${i}" ${n.choices.length===1?'disabled':''}>×</button></div>${field('Player response',`<input data-choice="${i}" data-choice-prop="text" value="${esc(c.text)}">`)}${field('Continue to',`<select data-choice="${i}" data-choice-prop="next">${selectOptions(c.next,visibleNodes().map(t=>[t.id,t.title]))}</select>`)}<details><summary>Conditions & consequences</summary>${field('Condition (blank = always)',`<textarea class="code" data-choice="${i}" data-choice-prop="condition" data-json="true">${c.condition?esc(JSON.stringify(c.condition,null,2)):''}</textarea>`)}${field('Actions',`<textarea class="code" data-choice="${i}" data-choice-prop="actions" data-json="true">${esc(JSON.stringify(c.actions??[],null,2))}</textarea>`)}</details></div>`;
+  } else if(n.type==='objective'){
+    h+=field('Objective description',nText('description',n.description??''));h+=field('Completion mode',`<select data-objective-mode>${selectOptions(n.condition?'state':'event',[['event','Count matching events'],['state','Evaluate a state condition']])}</select>`);
+    if(n.condition)h+=field('State condition',nText('condition',n.condition,true),'Inventory conditions also count items owned before this objective began.');
+    else h+=field('Incoming event',nInput('event',n.event,'text','list="eventTypes"'))+field('Match payload fields',nText('match',n.match??{},true),'Exact scalar matches. Only events received while this node is active count.')+field('Target event count',nInput('goal',n.goal??1,'number','min="1" max="100000"'));
+  } else if(n.type==='condition')h+=field('Condition',nText('condition',n.condition,true),'Sources: variable, inventory, flag, quest, world. Supports all / any / not.')+field('When true',nextSelect('then',n.then))+field('When false',nextSelect('else',n.else));
+  else if(n.type==='delay')h+=field('Duration in seconds',nInput('seconds',n.seconds,'number','min="0" max="86400" step="0.1"'),'Uses the simulation clock. Pausing the host pauses the timer.');
+  else if(n.type==='journal')h+=field('Journal entry',nText('text',n.text));
+  else if(n.type==='end')h+=field('Quest result',`<select data-prop="result">${selectOptions(n.result??'completed',['completed','failed'])}</select>`)+field('Ending text',nText('text',n.text??''));
+  if(!['dialogue','condition','end'].includes(n.type))h+=field('Continue to',nextSelect('next',n.next));
+  if(n.type==='action')h+=`<div class="sectionHeading">Effects on entry <span>${(n.actions??[]).length} ACTIONS</span></div>${field('Action list',nText('actions',n.actions??[],true),'Use set / add / flag for narrative state, or command to request an external engine action.')}`;
+  else h+=`<details><summary>Entry actions · ${(n.actions??[]).length}</summary>${field('Action list',nText('actions',n.actions??[],true))}</details>`;
+  h+=`<div class="notice"><b>Definition, not live state.</b><br>Changes are saved to the authored story. Restart the playtest to run the new revision.</div><button class="wideButton small" data-node-json>View / edit node JSON</button>`;
+  $('inspectorBody').innerHTML=h;
+}
+function handleInspectorChange(e){const el=e.target,n=nodeById(selectedNode);if(el.dataset.bindingProp){commit(()=>{const b=project.bindings.find(b=>b.id===selectedBinding),key=el.dataset.bindingProp;let v=el.type==='number'?Number(el.value):el.value;if(key.startsWith('position:')){if(!Number.isFinite(v))throw new Error('Position must be finite');b.position[Number(key.split(':')[1])]=v;}else if(key==='assetId'&&!v)delete b.assetId;else b[key]=v;mapBackground=null;});return;}
+  if(!n)return;
+  if(el.hasAttribute('data-objective-mode')){commit(()=>{if(el.value==='state'){n.condition={source:'inventory',key:'power_core',op:'gte',value:1};delete n.event;delete n.goal;delete n.match;}else{delete n.condition;n.event='gameplay.signal';n.match={signalId:'example'};n.goal=1;}});return;}
+  if(el.dataset.prop||el.dataset.choiceProp){let value=el.value;try{if(el.dataset.json)value=el.value.trim()?JSON.parse(el.value):undefined;else if(el.type==='number'){value=Number(el.value);if(!Number.isFinite(value))throw new Error('Enter a finite number');}}catch(e){toast('Invalid field: '+e.message);el.focus();return;}
+    commit(()=>{const object=el.dataset.choice!==undefined?n.choices[Number(el.dataset.choice)]:n,key=el.dataset.choiceProp??el.dataset.prop;if(value===undefined)delete object[key];else object[key]=value;});
+  }
+}
+function openJSON(title,data,onApply,desc='Edit JSON data. Validation runs before applying the changes.'){jsonApplyCallback=onApply;$('jsonTitle').textContent=title;$('jsonDesc').textContent=desc;$('jsonText').value=JSON.stringify(data,null,2);$('jsonError').textContent='';$('jsonDialog').showModal();}
+function applyJSON(){try{const p=JSON.parse($('jsonText').value);jsonApplyCallback(p);$('jsonDialog').close();}catch(e){$('jsonError').textContent=e.message;}}
+function newId(prefix,existing){let i=1;while(existing.has(prefix+'-'+i))i++;return prefix+'-'+i;}
+function addNode(type){const n=nodeById(selectedNode),id=newId(type,new Set(project.nodes.map(n=>n.id))),ending=visibleNodes().find(t=>t.type==='end'),target=n?.next??ending?.id??n?.id;const fresh={id,questId:selectedQuest,type,title:'New '+typeInfo[type].name.toLowerCase(),x:(n?.x??0)+285,y:n?.y??0};
+  if(type==='dialogue')Object.assign(fresh,{speaker:'New speaker',text:'Write your dialogue here.',choices:[{id:'continue',text:'Continue.',next:target}]});
+  else if(type==='condition')Object.assign(fresh,{condition:{source:'variable',key:'trust',op:'gte',value:1},then:target,else:target});
+  else if(type==='objective')Object.assign(fresh,{event:'gameplay.signal',match:{signalId:'example'},goal:1,next:target});
+  else if(type==='delay')Object.assign(fresh,{seconds:2,next:target});
+  else if(type==='journal')Object.assign(fresh,{text:'Something has changed.',next:target});
+  else if(type==='end')Object.assign(fresh,{result:'completed',text:'The story continues elsewhere.'});
+  else Object.assign(fresh,{next:target,actions:[]});
+  commit(()=>{project.nodes.push(fresh);if(n&&!['dialogue','condition','end'].includes(n.type))n.next=id;selectedNode=id;});$('paletteDialog').close();focusNode();toast('Added '+typeInfo[type].name+'. Connect its branches in the inspector.');
+}
+function deleteSelection(){if(view==='world'&&selectedBinding){commit(()=>{project.bindings=project.bindings.filter(b=>b.id!==selectedBinding);selectedBinding=null;});return;}
+  const n=nodeById(selectedNode),q=questById(selectedQuest);if(!n)return;if(n.id===q.entry){toast('The quest entry cannot be deleted. Change the entry in Project JSON first.');return;}
+  const fallback=(n.next&&n.next!==n.id?n.next:null)??visibleNodes().find(t=>t.type==='end'&&t.id!==n.id)?.id;if(!fallback){toast('Keep at least one ending to reconnect this graph.');return;}
+  commit(()=>{for(const t of visibleNodes())for(const r of routes(t))if(r.target===n.id)setRoute(t,r.route,fallback);project.nodes=project.nodes.filter(t=>t.id!==n.id);selectedNode=fallback;});toast('Node deleted; incoming connections were redirected.');
+}
+function duplicate(){const n=nodeById(selectedNode);if(!n)return;const copy=clone(n);copy.id=newId(n.type,new Set(project.nodes.map(n=>n.id)));copy.title+=' · copy';copy.x=(n.x??0)+30;copy.y=(n.y??0)+240;commit(()=>{project.nodes.push(copy);selectedNode=copy.id;});focusNode();}
+function addQuest(){openJSON('New story thread',{id:newId('quest',new Set(project.quests.map(q=>q.id))),title:'An untold story',description:'What happens next?',chapter:'SIDE STORY'},data=>{if(!idOK(data.id)||project.quests.some(q=>q.id===data.id)||typeof data.title!=='string')throw new Error('Choose a unique ID and title.');commit(()=>{const startId=newId('entry',new Set(project.nodes.map(n=>n.id))),endId=newId('ending',new Set(project.nodes.map(n=>n.id)));project.quests.push({...data,entry:startId,autoStart:false});project.nodes.push({id:startId,questId:data.id,type:'start',title:'Begin here',x:100,y:180,next:endId},{id:endId,questId:data.id,type:'end',title:'A new ending',text:'Something begins when something ends.',result:'completed',x:450,y:180});selectedQuest=data.id;selectedNode=startId;});fitGraph();});}
+function renderRuntime(){
+  renderLibrary();const q=engine.state.quests[selectedQuest];
+  for(const el of $('nodes').children){const id=el.dataset.node;el.classList.toggle('live',q?.status==='active'&&q.nodeId===id);el.classList.toggle('visited',!!q?.visits[id]);const tag=el.querySelector('.nodeFoot>span:last-child');if(tag){const live=q?.status==='active'&&q.nodeId===id;tag.textContent=live?'● LIVE':q?.visits[id]?'VISITED':['dialogue','condition'].includes(nodeById(id)?.type)?routes(nodeById(id)).length+' BRANCHES':'•';tag.classList.toggle('liveLabel',live);}}
+  $('clockLabel').textContent=fmtTime(engine.state.clock);$('eventCount').textContent=events.length?String(events.length):'';$('pendingStatus').textContent=engine.state.outbox.length+' pending commands';drawEdges();drawMini();
+  const focused=$('dockContent').contains(document.activeElement)&&['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);if(!focused){if(dock==='play')renderPlay();else if(dock==='events')renderEvents();else if(dock==='state')renderState();else renderJournal();}
+  if(view==='world')drawMap();
+  if(view==='hooks')renderPending();
+}
+function renderPlay(){
+  const q=engine.state.quests[selectedQuest],def=questById(selectedQuest),n=q?.nodeId?engine.nodes.get(q.nodeId):null;let main='';
+  if(!q)main=`<div class="endTag">DEFINITION CHANGED</div><h2>Ready for its first test.</h2><p class="dialogueText">Restart the playtest to load this new story thread.</p>`;
+  else if(q.status==='available')main=`<div class="endTag">OPTIONAL STORY THREAD</div><div class="speaker"><div class="portrait">◇</div><strong>${esc(def.title)}</strong></div><p class="dialogueText">${esc(def.description??'')}</p><button class="choice" data-start-quest="${esc(selectedQuest)}">Start this quest</button>`;
+  else if(q.status==='error')main=`<div class="endTag" style="color:var(--red)">RUNTIME STOPPED SAFELY</div><p class="dialogueText">${esc(q.error)}</p><p class="muted">Fix this definition, then restart the test.</p>`;
+  else if(q.status==='completed'||q.status==='failed')main=`<div class="endTag" style="color:${q.status==='failed'?'var(--red)':'var(--teal)'}">${q.status==='completed'?'◇ QUEST COMPLETE':'◇ QUEST FAILED'}</div><div class="speaker"><strong>${esc(n?.title??def.title)}</strong></div><p class="dialogueText">${esc(n?.text??'This thread has ended.')}</p><button class="small ghost" data-show-journal>Read the journal →</button>`;
+  else if(n?.type==='dialogue'){
+    const initials=(n.speaker??'Narrator').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    main=`<div class="speaker"><div class="portrait">${esc(initials)}</div><div><strong>${esc(n.speaker??'Narrator')}</strong><div class="eyebrow">${esc(n.title)}</div></div><span class="spacer"></span><span class="badge">DIALOGUE</span></div><p class="dialogueText">${esc(n.text)}</p><div class="choices">${engine.choices(selectedQuest).map((c,i)=>`<button class="choice" data-play-choice="${esc(c.id)}" ${c.enabled?'':'disabled'}><b>${i+1}</b><span>${esc(c.text)}${c.enabled?'':' · locked'}</span><span class="spacer"></span><span>${c.enabled?'→':'◇'}</span></button>`).join('')}</div>`;
+  } else if(n?.type==='objective'){
+    const goal=n.condition?1:n.goal??1;
+    main=`<div class="speaker"><div class="portrait" style="color:var(--amber)">◎</div><div><strong>${esc(n.title)}</strong><div class="eyebrow">ACTIVE OBJECTIVE</div></div></div><p class="dialogueText">${esc(n.description??(n.condition?'The story is waiting for a state condition.':'Send a matching gameplay event from the sandbox or your host engine.'))}</p><div class="badge mono" style="display:inline-block;color:var(--amber)">${esc(n.condition?`${n.condition.source??'state'}.${n.condition.key??'condition'} ${n.condition.op??''} ${n.condition.value??''}`:n.event)}</div><div class="objectiveBar"><i style="width:${q.progress/goal*100}%"></i></div><div class="objectiveMeta"><span>${q.progress} / ${goal}</span><span>${n.condition?'STATE CHECK':'MATCHING EVENTS'}</span></div>${!n.condition?`<button class="small ghost" style="margin-top:9px" data-match-event>Emit this objective’s event →</button>`:''}`;
+  } else if(n?.type==='delay')main=`<div class="speaker"><div class="portrait">◷</div><strong>${esc(n.title)}</strong></div><p class="dialogueText">The world catches its breath.</p><div class="objectiveBar"><i style="width:${Math.max(0,Math.min(100,(1-(q.deadline-engine.state.clock)/Math.max(.01,n.seconds))*100))}%"></i></div><div class="objectiveMeta"><span>${Math.max(0,q.deadline-engine.state.clock).toFixed(1)}s remaining</span><span>${paused?'PAUSED':'HOST CLOCK'}</span></div>`;
+  const simButtons=[['relay','↗ Enter relay',n?.id==='reach'],['core','◇ Collect core',n?.id==='core'],['wraith','ϟ Defeat wraith',n?.id==='wraiths'],['cartographer','≋ Cartographer',selectedQuest==='cartographer'&&!n],['beacon','◎ Enter beacon',n?.id==='map-reach'],['custom','＋ Send event',false]];
+  const sim=`<div class="simulator"><div class="eyebrow"><i class="dot" style="background:var(--amber)"></i> Simulated world <span class="spacer"></span><span style="color:var(--faint)">TEST INPUTS</span></div><div class="simButtons">${simButtons.map(([id,label,relevant])=>`<button data-sim="${id}" class="${relevant?'relevant':''}">${label}</button>`).join('')}</div><div class="simState"><span>WEATHER ${esc(effectState.weather).toUpperCase()}</span><span>GATE ${esc(effectState.door).toUpperCase()}</span><span>CORE ${engine.state.inventory.power_core??0}</span></div><p style="font-size:8px;color:var(--faint);line-height:1.6;margin-top:8px">These buttons emit real story events, but world effects are simulated here.</p></div>`;
+  const scroll=$('dockContent').querySelector('.dialogue')?.scrollTop??0;$('dockContent').innerHTML=`<div class="playGrid"><div class="dialogue">${main}</div>${sim}</div>`;if(scroll)$('dockContent').querySelector('.dialogue').scrollTop=scroll;
+}
+function renderEvents(){const list=[...events].reverse();$('dockContent').innerHTML=list.length?list.map(e=>`<div class="eventLine"><time>${fmtTime(e.time)}</time><b>${esc(e.type)}</b><span title="${esc(JSON.stringify(e.payload))}">${esc(JSON.stringify(e.payload))}</span></div>`).join(''):'<div class="empty">Events will appear here as the story runs.</div>';}
+function renderState(){let rows='';for(const [key,value]of Object.entries(engine.state.variables))rows+=`<tr><td>${esc(key)}</td><td>variable</td><td><input style="width:100%;font:10px ui-monospace,monospace;padding:4px 7px" data-state-key="${esc(key)}" value="${esc(JSON.stringify(value))}" aria-label="Runtime variable ${esc(key)}"></td></tr>`;for(const [source,items]of [['inventory',engine.state.inventory],['flag',engine.state.flags],['world',engine.state.world]])for(const [key,value]of Object.entries(items))rows+=`<tr><td>${esc(key)}</td><td>${source}</td><td class="mono">${esc(JSON.stringify(value))}</td></tr>`;for(const [id,q]of Object.entries(engine.state.quests))rows+=`<tr><td>${esc(id)}</td><td>quest</td><td class="mono">${esc(q.status)} / ${esc(q.nodeId??'—')}</td></tr>`;$('dockContent').innerHTML=`<table class="stateTable"><thead><tr><th>Key</th><th>Source</th><th>Value · edit variables as JSON</th></tr></thead><tbody>${rows}</tbody></table>`;}
+function renderJournal(){const entries=[...engine.state.journal].reverse();$('dockContent').innerHTML=entries.length?entries.map(j=>`<div class="journalEntry"><small>${fmtTime(j.time)} · ${esc(j.questId)}</small>${esc(j.text)}</div>`).join(''):'<div class="empty">No journal entries yet. Choices and story actions write the record of your journey.</div>';}
+function simulate(id){safe(()=>{
+  if(id==='relay'){bridge.enterRegion('relay');player=[22,0,-24];}
+  if(id==='core')bridge.inventoryChanged('power_core',(engine.state.inventory.power_core??0)+1);
+  if(id==='wraith')bridge.defeated({kind:'wraith',entityId:'wraith-'+engine.state.eventSequence});
+  if(id==='cartographer'){bridge.interact('cartographer');if(!questById('cartographer')){runtimeDirty=true;return;}selectedQuest='cartographer';selectedNode=engine.state.quests.cartographer?.nodeId??questById('cartographer')?.entry??selectedNode;renderEditor();focusNode();}
+  if(id==='beacon'){bridge.enterRegion('beacon');player=[34,0,22];}
+  if(id==='custom'){$('eventDialog').showModal();return;}
+  runtimeDirty=true;
+});}
+function changeDock(next){dock=next;document.querySelectorAll('[data-dock]').forEach(b=>b.classList.toggle('active',b.dataset.dock===next));runtimeDirty=true;renderRuntime();}
+function changeView(next){view=next;document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===next));$('graph').hidden=next!=='graph';$('graphOverlays').hidden=next!=='graph';$('worldView').hidden=next!=='world';$('hooksView').hidden=next!=='hooks';if(next==='hooks')renderPending();$('addNodeBtn').hidden=next!=='graph';if(next==='world'){selectedBinding=selectedBinding??project.bindings[0]?.id;drawMap();}renderInspector();}
+const inputDescriptions={'world.region.enter':'An actor enters a named trigger volume.','world.region.exit':'An actor leaves a named trigger volume.','world.interact':'The player interacts with an entity / asset.','inventory.changed':'Absolute item count from the inventory authority.','combat.defeated':'A confirmed defeat, not a visual hit.','character.changed':'A character stat or relationship changes.','weather.changed':'A weather preset is now active.','world.time.changed':'Period / hour supplied by the world clock.','gameplay.signal':'A custom named gameplay event.'};
+const outputDescriptions={'world.marker':'Create, update, or hide a quest marker.','world.door':'Request a lock / door-state change.','world.spawn':'Request an entity spawn; host supplies the factory.','world.flag':'Write a host-owned world flag.','inventory.give':'Request an inventory reward.','inventory.take':'Request consumption; host checks the balance.','character.reputation':'Request a faction / relationship adjustment.','weather.set':'Request a weather preset / transition.','spell.cast':'Request an effect through your VFX adapter.','camera.focus':'Request a cinematic camera target.','audio.play':'Request a named sound cue.'};
+function renderHooks(){ $('hookGroups').innerHTML=`<div class="hookGroup"><h3>01 / INPUT EVENTS</h3>${INPUT_EVENTS.map(name=>`<div class="hookItem"><i></i>${name}<small>${inputDescriptions[name]}</small></div>`).join('')}</div><div class="hookGroup"><h3>02 / OUTPUT COMMANDS</h3>${COMMANDS.map(name=>`<div class="hookItem"><i style="background:var(--purple)"></i>${name}<small>${outputDescriptions[name]}</small></div>`).join('')}</div>`;$('eventTypes').innerHTML=INPUT_EVENTS.map(e=>`<option value="${e}">`).join('');}
+function renderPending(){if(!$('pendingList'))return;const pending=engine.pendingCommands();$('pendingList').innerHTML=pending.length?pending.map(c=>`<div class="hookItem">${esc(c.command)}<small class="mono">${esc(c.id)} · ${esc(JSON.stringify(c.payload))}</small></div>`).join(''):'<p class="muted" style="font-size:10px;margin:10px 0">No pending commands. A checkpoint restore never replays external effects automatically.</p>';}
+function renderBindingInspector(){const b=project.bindings.find(b=>b.id===selectedBinding);if(!b)return;const bindInput=(key,value,type='text',extra='')=>`<input data-binding-prop="${key}" value="${esc(value)}" type="${type}" ${extra}>`;$('inspectorKind').textContent=b.kind.toUpperCase();$('duplicateBtn').hidden=true;$('deleteBtn').textContent='Delete binding';let h=`<div class="nodeIdentity" style="--node:var(--teal)"><span class="typeMark">${b.kind==='region'?'◎':'◇'}</span><div><strong>${b.kind==='region'?'Trigger region':'Interaction anchor'}</strong><small>${esc(b.id)}</small></div></div>`;
+  h+=field('Display name',bindInput('name',b.name??''))+field(b.kind==='region'?'Region ID sent to the story':'Entity ID sent to the story',bindInput('targetId',b.targetId));
+  h+=`<div class="sectionHeading">World position</div><div class="twoCols">${field('X',bindInput('position:0',b.position[0],'number','step="0.5"'))}${field('Z',bindInput('position:2',b.position[2],'number','step="0.5"'))}</div>${field('Y / height',bindInput('position:1',b.position[1],'number','step="0.5"'))}`;
+  if(b.kind==='region')h+=field('Trigger radius',bindInput('radius',b.radius,'number','min="0.1" step="0.5"'),'Cylindrical XZ region. The bridge emits enter/exit events with edge hysteresis.');
+  h+=field('Worldworks asset ID (optional)',bindInput('assetId',b.assetId??'','text','list="assetIDs"'),'Bind to an existing placement such as a17. Bound assets supply the position; the saved XYZ is a fallback.')+`<datalist id="assetIDs">${(worldRaw?.assets??[]).map(a=>`<option value="${esc(a.id)}">${esc(a.kind)}</option>`).join('')}</datalist>`;
+  h+=`<div class="notice"><b>Event payload</b><br><code>${b.kind==='region'?'world.region.enter':'world.interact'}</code><br><code>${esc(JSON.stringify(b.kind==='region'?{regionId:b.targetId}:{entityId:b.targetId}))}</code></div><button class="wideButton" data-test-binding>Test this binding →</button>`;
+  if(b.assetId&&!worldRaw?.assets?.some(a=>a.id===b.assetId))h+=`<div class="notice" style="color:var(--amber)">This asset ID is not in the loaded map. The bridge will use the fallback position until you connect the matching Worldworks document.</div>`;
+  $('inspectorBody').innerHTML=h;
+}
+function mapLayout(){const r=$('worldMap').getBoundingClientRect(),size=worldDoc?.size??112,s=Math.min((r.width-90)/size,(r.height-75)/size);return {w:r.width,h:r.height,size,s,ox:r.width/2,oy:r.height/2+12};}
+function toMap(x,z){const m=mapLayout();return [m.ox+x*m.s,m.oy+z*m.s];}
+function fromMap(clientX,clientY){const r=$('worldMap').getBoundingClientRect(),m=mapLayout();return [(clientX-r.left-m.ox)/m.s,(clientY-r.top-m.oy)/m.s];}
+function worldPosition(b){const a=b.assetId&&worldRaw?.assets.find(a=>a.id===b.assetId);return a?[a.x,a.y,a.z]:b.position;}
+function makeMapBackground(){const c=document.createElement('canvas');c.width=c.height=400;const ctx=c.getContext('2d'),img=ctx.createImageData(400,400),size=worldDoc?.size??112;for(let y=0;y<400;y++)for(let x=0;x<400;x++){
+  const wx=(x/399-.5)*size,wz=(y/399-.5)*size;
+  let h=worldDoc?window.WWCore.sample(worldDoc,wx,wz)?.height??0:Math.sin(wx*.044+Math.cos(wz*.065)*.6)*8+Math.cos(wz*.079-wx*.025)*5+Math.sin(wx*.14+wz*.064)*1.5;
+  const water=worldDoc?worldDoc.env.water:-5,wet=h<water,contour=Math.abs((h+100)%2.2)<.16,base=wet?[25,47,62]:[45+h*.65,63+h*.75,58+h*.4],i=(y*400+x)*4;
+  for(let k=0;k<3;k++)img.data[i+k]=Math.max(0,Math.min(255,base[k]+(contour?9:0)));img.data[i+3]=255;
+  }ctx.putImageData(img,0,0);return c;}
+function drawMap(){if(view!=='world')return;const c=$('worldMap'),m=mapLayout();if(m.w<1||m.h<1)return;const dpr=Math.min(2,devicePixelRatio||1);if(c.width!==Math.round(m.w*dpr)||c.height!==Math.round(m.h*dpr)){c.width=Math.round(m.w*dpr);c.height=Math.round(m.h*dpr);}const ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,m.w,m.h);ctx.fillStyle='#11171e';ctx.fillRect(0,0,m.w,m.h);if(!mapBackground)mapBackground=makeMapBackground();ctx.drawImage(mapBackground,m.ox-m.size*m.s/2,m.oy-m.size*m.s/2,m.size*m.s,m.size*m.s);
+  ctx.strokeStyle='#a4c0b016';ctx.lineWidth=.75;for(let i=-Math.floor(m.size/20)*10;i<=m.size/2;i+=10){const [x]=toMap(i,0),[,z]=toMap(0,i);ctx.beginPath();ctx.moveTo(x,m.oy-m.size*m.s/2);ctx.lineTo(x,m.oy+m.size*m.s/2);ctx.stroke();ctx.beginPath();ctx.moveTo(m.ox-m.size*m.s/2,z);ctx.lineTo(m.ox+m.size*m.s/2,z);ctx.stroke();}
+  if(worldRaw)for(const a of worldRaw.assets){const [x,y]=toMap(a.x,a.z);ctx.fillStyle=a.kind==='campfire'?'#edb876':a.kind==='rock'||a.kind==='boulder'?'#858c8a':'#8ba893';ctx.globalAlpha=.55;ctx.fillRect(x-1.3,y-1.3,2.6,2.6);}ctx.globalAlpha=1;
+  for(const b of project.bindings){const pos=worldPosition(b),[x,y]=toMap(pos[0],pos[2]),sel=b.id===selectedBinding;ctx.strokeStyle=sel?'#eac086':'#b7a0f6';ctx.fillStyle=sel?'#eac08618':'#b7a0f60c';ctx.lineWidth=sel?1.7:1;ctx.setLineDash([4,5]);if(b.kind==='region'){ctx.beginPath();ctx.arc(x,y,b.radius*m.s,0,Math.PI*2);ctx.fill();ctx.stroke();}ctx.setLineDash([]);ctx.fillStyle=sel?'#eac086':'#c0a9ed';ctx.beginPath();if(b.kind==='region')ctx.arc(x,y,4.5,0,Math.PI*2);else{ctx.moveTo(x,y-6);ctx.lineTo(x+5,y);ctx.lineTo(x,y+6);ctx.lineTo(x-5,y);ctx.closePath();}ctx.fill();ctx.fillStyle='#e3e4df';ctx.font='10px -apple-system, sans-serif';ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=4;ctx.fillText(b.name??b.targetId,x,y-13);ctx.shadowBlur=0;}
+  const [px,py]=toMap(player[0],player[2]);ctx.fillStyle='#8ce5d3';ctx.strokeStyle='#152924';ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle='#8ce5d377';ctx.beginPath();ctx.arc(px,py,10,0,Math.PI*2);ctx.stroke();ctx.font='8px ui-monospace,monospace';ctx.fillStyle='#8ce5d3';ctx.fillText('PLAYER',px,py+21);
+  ctx.textAlign='right';ctx.fillStyle='#a2ada8';ctx.font='9px ui-monospace,monospace';ctx.fillText('N ↑',m.w-22,28);ctx.fillText(m.size+' × '+m.size+' WORLD UNITS',m.w-22,44);
+}
+function addBinding(kind,position=[0,0,0]){const id=newId(kind,new Set(project.bindings.map(b=>b.id)));commit(()=>{const b={id,kind,targetId:id,name:kind==='region'?'New trigger region':'New interaction',position};if(kind==='region')b.radius=8;project.bindings.push(b);selectedBinding=id;});renderInspector();drawMap();}
+function hitBinding(clientX,clientY){const r=$('worldMap').getBoundingClientRect(),p=[clientX-r.left,clientY-r.top];return [...project.bindings].reverse().find(b=>{const pos=worldPosition(b),xy=toMap(pos[0],pos[2]);return Math.hypot(p[0]-xy[0],p[1]-xy[1])<20;});}
+function installWorld(p){const d=window.WWCore.import(p);worldRaw=clone(p);worldDoc=d;mapBackground=null;if(bridge){bridge.worldworks={exportProject:()=>clone(worldRaw),loadProject:p=>installWorld(p)};bridge.refreshWorld();}$('connectionLabel').textContent='Map loaded: '+p.name+' · '+p.assets.length+' placements. Gameplay is still simulated.';$('mapSubtitle').textContent='Actual Worldworks height field and placements. Click a marker to bind an asset ID.';drawMap();renderInspector();}
+function exportProject(){const r=report();if(!r.valid){toast('Export blocked: '+r.errors[0]);return;}downloadJSON(project,project.id+'.storyworks.json');$('saveLabel').textContent='Project export requested · keep the JSON file';toast('Authored story exported. Runtime progress is saved separately in Playtest.');}
+function exportSave(){if(edited){toast('This runtime belongs to the previous revision. Restart the playtest before saving a checkpoint.');return;}downloadJSON(engine.serialize(),project.id+'.storysave.json');toast('Runtime checkpoint exported. Reopen with the matching story project.');}
+function loadProjectDefinition(p,save=null){p={bindings:[],triggers:[],...clone(p)};const r=validateProject(p);if(!r.valid)throw new Error(r.errors.join('\n'));if(save){const test=new StoryEngine(p);try{test.loadSave(save);}finally{test.dispose();}}
+  project=clone(p);history=[];future=[];selectedQuest=project.quests[0].id;selectedNode=project.quests[0].entry;selectedBinding=null;resetRuntime(save);selectedNode=engine.state.quests[selectedQuest].nodeId??selectedNode;persist();renderEditor();focusNode();runtimeDirty=true;
+}
+async function openFile(file){if(!file)return;if(file.size>25*1024*1024){toast('File exceeds the 25 MB import limit.');return;}try{const p=JSON.parse(await file.text());
+  if(p.format==='worldworks-project'){installWorld(p);changeView('world');toast('Worldworks map loaded. Bindings use its world coordinates and asset IDs.');}
+  else if(p.format==='storyworks-project'){loadProjectDefinition(p);toast('Story definition loaded. A new playtest has started.');}
+  else if(p.format==='storyworks-save'){if(edited)throw new Error('Restart or open the matching story revision before restoring this checkpoint.');resetRuntime(p);selectedNode=engine.state.quests[selectedQuest]?.nodeId??selectedNode;renderEditor();focusNode();toast('Checkpoint restored without replaying story actions. Pending commands require an explicit retry.');}
+  else if(p.format==='worldworks-story-bundle'&&p.version===1){if(!Array.isArray(p.regions??[])||(p.regions??[]).some(v=>!Array.isArray(v)||v.length!==2||typeof v[0]!=='string'||typeof v[1]!=='boolean'))throw new Error('Invalid trigger occupancy');window.WWCore.import(p.world);loadProjectDefinition(p.story,p.save);installWorld(p.world);bridge.inside=new Map(p.regions??[]);toast('World map, story definition, and runtime restored from the bundle.');}
+  else throw new Error('Unsupported file. Open a Storyworks project/checkpoint or Worldworks 0.1 project.');
+}catch(e){toast('Import failed: '+e.message);}finally{$('fileInput').value='';}}
+function requestFile(mode='any'){importMode=mode;$('fileInput').click();}
+function installEvents(){
+  $('questList').addEventListener('click',e=>{const b=e.target.closest('[data-quest]');if(!b)return;selectedQuest=b.dataset.quest;selectedNode=engine.state.quests[selectedQuest]?.nodeId??questById(selectedQuest).entry;selectedBinding=null;renderEditor();focusNode();runtimeDirty=true;});
+  $('search').addEventListener('input',e=>{selectedFilter=e.target.value.toLowerCase();renderLibrary();});
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>changeView(b.dataset.view));document.querySelectorAll('[data-dock]').forEach(b=>b.onclick=()=>changeDock(b.dataset.dock));
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+  $('inspectorBody').addEventListener('change',handleInspectorChange);
+  $('inspectorBody').addEventListener('click',e=>{const n=nodeById(selectedNode);if(e.target.closest('[data-add-choice]'))commit(()=>n.choices.push({id:newId('choice',new Set(n.choices.map(c=>c.id))),text:'A different way.',next:visibleNodes().find(t=>t.type==='end')?.id??n.id}));
+    const remove=e.target.closest('[data-remove-choice]');if(remove)commit(()=>n.choices.splice(Number(remove.dataset.removeChoice),1));
+    if(e.target.closest('[data-node-json]'))openJSON('Edit node definition',n,data=>{const p=clone(project),i=p.nodes.findIndex(t=>t.id===n.id);if(data.id!==n.id||data.questId!==n.questId)throw new Error('Keep the node and quest IDs unchanged here.');p.nodes[i]=data;const r=validateProject(p);if(!r.valid)throw new Error(r.errors.join('\n'));commit(()=>project=p);});
+    if(e.target.closest('[data-test-binding]'))safe(()=>{const b=project.bindings.find(b=>b.id===selectedBinding);if(b.kind==='region')bridge.enterRegion(b.targetId);else bridge.interact(b.targetId);player=worldPosition(b).slice();runtimeDirty=true;toast('Dispatched binding event.');});
+  });
+  $('dockContent').addEventListener('click',e=>{const choice=e.target.closest('[data-play-choice]');if(choice)safe(()=>engine.choose(selectedQuest,choice.dataset.playChoice));const sim=e.target.closest('[data-sim]');if(sim)simulate(sim.dataset.sim);const start=e.target.closest('[data-start-quest]');if(start)safe(()=>{if(!engine.startQuest(start.dataset.startQuest))toast('Quest prerequisites are not met.');});if(e.target.closest('[data-show-journal]'))changeDock('journal');if(e.target.closest('[data-match-event]'))safe(()=>{const n=engine.current(selectedQuest);if(n?.event)bridge.emit(n.event,clone(n.match??{}));});});
+  $('dockContent').addEventListener('change',e=>{if(e.target.dataset.stateKey)safe(()=>{const value=JSON.parse(e.target.value);engine.setVariable(e.target.dataset.stateKey,value);runtimeDirty=true;});});
+  $('helpBtn').onclick=()=>$('helpDialog').showModal();$('addNodeBtn').onclick=()=>$('paletteDialog').showModal();$('newQuestBtn').onclick=addQuest;
+  $('nodePalette').innerHTML=NODE_TYPES.map(type=>{const i=typeInfo[type];return `<button class="paletteItem" data-add-type="${type}" style="--node:${i.color}"><span class="typeMark">${i.icon}</span><span><b>${i.name}</b><small>${i.desc}</small></span></button>`;}).join('');$('nodePalette').onclick=e=>{const b=e.target.closest('[data-add-type]');if(b)addNode(b.dataset.addType);};
+  $('projectSettings').onclick=()=>openJSON('Project definition',project,data=>{const r=validateProject(data);if(!r.valid)throw new Error(r.errors.join('\n'));commit(()=>project=clone(data));},'Edit titles, quests, variables, prerequisites, bindings, and triggers. Restart the playtest to apply a new revision.');
+  $('jsonApply').onclick=applyJSON;$('duplicateBtn').onclick=duplicate;$('deleteBtn').onclick=deleteSelection;$('undoBtn').onclick=()=>undo();$('redoBtn').onclick=()=>undo(true);
+  $('fitBtn').onclick=fitGraph;$('followBtn').onclick=()=>{const id=engine.state.quests[selectedQuest]?.nodeId;if(id&&nodeById(id)){selectedNode=id;renderGraph();renderInspector();focusNode();}else toast('This story thread has not started yet.');};
+  $('zoomIn').onclick=()=>zoomAt(1.18);$('zoomOut').onclick=()=>zoomAt(1/1.18);
+  $('restartBtn').onclick=()=>safe(()=>{if(resetRuntime()){selectedNode=engine.state.quests[selectedQuest]?.nodeId??questById(selectedQuest).entry;renderEditor();toast('Playtest restarted with the current story definition.');}});
+  $('pauseBtn').onclick=()=>{paused=!paused;$('pauseBtn').textContent=paused?'▶':'Ⅱ';runtimeDirty=true;};$('saveGameBtn').onclick=exportSave;$('exportBtn').onclick=exportProject;$('openBtn').onclick=()=>requestFile();$('fileInput').onchange=e=>openFile(e.target.files[0]);$('importWorldBtn').onclick=()=>requestFile('world');
+  $('restoreDraft').onclick=()=>safe(()=>{const raw=localStorage.getItem('storyworks-authoring-01');if(!raw)throw new Error('No local draft exists.');if(confirm('Replace this workspace with the saved authoring draft?'))loadProjectDefinition(JSON.parse(raw));});try{$('restoreDraft').hidden=!localStorage.getItem('storyworks-authoring-01');}catch{}
+  $('sendEvent').onclick=()=>safe(()=>{const payload=JSON.parse($('customEventPayload').value),id=$('customEventId').value.trim();const accepted=bridge.emit($('customEventName').value.trim(),payload,id||undefined);$('eventDialog').close();toast(accepted?'Gameplay event dispatched.':'Duplicate event ID ignored.');});
+  $('addRegion').onclick=()=>addBinding('region');$('addInteract').onclick=()=>addBinding('interact');$('mapReset').onclick=()=>{player=[-38,0,35];bridge.inside.clear();drawMap();};
+  const bundleButton=document.createElement('button');bundleButton.className='small';bundleButton.textContent='Export bundle';bundleButton.id='exportBundleBtn';bundleButton.onclick=()=>safe(()=>{if(!worldRaw)throw new Error('Import a Worldworks project first.');if(edited)throw new Error('Restart the playtest to apply authoring changes before exporting a bundle.');downloadJSON(bridge.exportBundle(),project.id+'.worldworks-story.json');toast('World + story + runtime bundle exported. Reopen it in Storyworks or load it through the bridge.');});document.querySelector('.mapActions').append(bundleButton);
+  $('inspectToggle').onclick=()=>document.body.classList.toggle('showInspector');$('closeInspector').onclick=()=>document.body.classList.remove('showInspector');
+  const pendingSection=document.createElement('section');pendingSection.innerHTML='<div class="sectionHeading">Pending host commands</div><div id="pendingList"></div><button class="small" id="retryHooks">Retry pending commands</button>';$('hooksView').append(pendingSection);
+  $('retryHooks').onclick=()=>safe(()=>{bridge.flush();renderPending();toast(engine.state.outbox.length?engine.state.outbox.length+' command(s) still need a successful host handler.':'All pending commands acknowledged.');});
+  $('pendingStatus').style.cursor='pointer';$('pendingStatus').title='View pending commands and retry handlers';$('pendingStatus').onclick=()=>{changeView('hooks');$('retryHooks').scrollIntoView({block:'nearest'});};
+  $('graph').addEventListener('pointerdown',graphDown);$('graph').addEventListener('pointermove',graphMove);$('graph').addEventListener('pointerup',graphUp);$('graph').addEventListener('pointercancel',()=>graphUp(null,true));$('graph').addEventListener('contextmenu',e=>e.preventDefault());$('graph').addEventListener('wheel',e=>{e.preventDefault();const r=$('graph').getBoundingClientRect();zoomAt(Math.exp(-Math.max(-200,Math.min(200,e.deltaY))*.0016),e.clientX-r.left,e.clientY-r.top);},{passive:false});
+  $('mini').onclick=e=>{const r=$('mini').getBoundingClientRect(),m=$('mini')._layout;if(!m)return;const x=(e.clientX-r.left)*$('mini').width/r.width,y=(e.clientY-r.top)*$('mini').height/r.height,gx=(x-m.ox)/m.s+m.b.x,gy=(y-m.oy)/m.s+m.b.y,gr=$('graph').getBoundingClientRect();pan={x:gr.width/2-gx*zoom,y:gr.height/2-gy*zoom};transformGraph();drawMini();};
+  $('worldMap').addEventListener('pointerdown',mapDown);$('worldMap').addEventListener('pointermove',mapMove);$('worldMap').addEventListener('pointerup',mapUp);$('worldMap').addEventListener('pointercancel',()=>mapUp(null,true));$('worldMap').addEventListener('dblclick',e=>{if(e.shiftKey)return;const [x,z]=fromMap(e.clientX,e.clientY);addBinding('region',[Math.round(x),0,Math.round(z)]);});
+  document.addEventListener('keydown',keyDown);window.addEventListener('resize',resizeApp);document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+}
+function zoomAt(factor,x,y){const r=$('graph').getBoundingClientRect();x=x??r.width/2;y=y??r.height/2;const old=zoom;zoom=Math.max(.18,Math.min(1.8,zoom*factor));pan={x:x-(x-pan.x)*zoom/old,y:y-(y-pan.y)*zoom/old};transformGraph();drawMini();}
+function graphDown(e){if(e.button!==0&&e.button!==1&&e.button!==2)return;const out=e.target.closest('[data-out]'),inside=e.target.closest('[data-in]'),card=e.target.closest('[data-node]');if(out){e.preventDefault();connect={id:out.dataset.out,route:out.dataset.route};$('connectHint').textContent='Click the target node to connect. Escape cancels.';$('connectHint').hidden=false;return;}if(inside&&connect){completeConnection(inside.dataset.in);return;}if(card&&connect){completeConnection(card.dataset.node);return;}
+  if(card&&e.button===0){selectNode(card.dataset.node);const n=nodeById(card.dataset.node);drag={kind:'node',id:n.id,startX:e.clientX,startY:e.clientY,x:n.x??0,y:n.y??0,before:clone(project),moved:false};}else{drag={kind:'pan',startX:e.clientX,startY:e.clientY,x:pan.x,y:pan.y,moved:false};}e.preventDefault();$('graph').setPointerCapture(e.pointerId);
+}
+function graphMove(e){if(!drag)return;const dx=e.clientX-drag.startX,dy=e.clientY-drag.startY;if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;if(drag.kind==='pan'){pan={x:drag.x+dx,y:drag.y+dy};transformGraph();}else if(drag.moved){const n=nodeById(drag.id);n.x=Math.round((drag.x+dx/zoom)/5)*5;n.y=Math.round((drag.y+dy/zoom)/5)*5;const card=$('nodes').querySelector(`[data-node="${n.id}"]`);if(card){card.style.left=n.x+'px';card.style.top=n.y+'px';}drawEdges();}drawMini();}
+function graphUp(e,cancel=false){if(!drag)return;if(drag.kind==='node'&&drag.moved){if(cancel)project=drag.before;else{history.push(drag.before);if(history.length>80)history.shift();future=[];persist();}renderEditor(false);}drag=null;if(e&&$('graph').hasPointerCapture(e.pointerId))$('graph').releasePointerCapture(e.pointerId);}
+function mapDown(e){if(e.button!==0)return;const hit=hitBinding(e.clientX,e.clientY),[x,z]=fromMap(e.clientX,e.clientY);if(e.shiftKey){player=[x,0,z];safe(()=>bridge.update(0,player));runtimeDirty=true;drawMap();return;}if(hit){selectedBinding=hit.id;renderInspector();drawMap();if(hit.assetId){toast('This marker follows '+hit.assetId+'. Clear its asset ID to drag the fallback position.');return;}mapDrag={id:hit.id,before:clone(project),moved:false,startX:e.clientX,startY:e.clientY};$('worldMap').setPointerCapture(e.pointerId);}}
+function mapMove(e){if(!mapDrag)return;if(Math.abs(e.clientX-mapDrag.startX)+Math.abs(e.clientY-mapDrag.startY)<3&&!mapDrag.moved)return;const [x,z]=fromMap(e.clientX,e.clientY),b=project.bindings.find(b=>b.id===mapDrag.id);b.position[0]=Math.round(x*2)/2;b.position[2]=Math.round(z*2)/2;mapDrag.moved=true;drawMap();}
+function mapUp(e,cancel=false){if(!mapDrag)return;if(mapDrag.moved){if(cancel)project=mapDrag.before;else{history.push(mapDrag.before);if(history.length>80)history.shift();future=[];edited=projectFingerprint(project)!==engine.fingerprint;persist();}renderEditor();}mapDrag=null;if(e&&$('worldMap').hasPointerCapture(e.pointerId))$('worldMap').releasePointerCapture(e.pointerId);}
+function keyDown(e){const editing=['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName),modal=document.querySelector('dialog[open]');if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'&&!modal){e.preventDefault();exportProject();return;}if(editing||modal)return;if(e.key==='Escape'){connect=null;$('connectHint').hidden=true;document.body.classList.remove('showInspector');return;}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();undo(e.shiftKey);return;}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();undo(true);return;}if(e.key.toLowerCase()==='f'&&view==='graph'){e.preventDefault();fitGraph();}if(e.key.toLowerCase()==='n'&&view==='graph')$('paletteDialog').showModal();if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();deleteSelection();}if(e.key==='?')$('helpDialog').showModal();}
+function resizeApp(){drawMini();if(view==='world')drawMap();}
+function frame(t){if(disposed)return;const dt=lastFrame?Math.min(.1,(t-lastFrame)/1000):0;lastFrame=t;if(!paused&&!document.hidden){try{bridge.update(dt);}catch(e){paused=true;$('pauseBtn').textContent='▶';toast('Playtest paused: '+e.message);}}
+  const active=engine.state.quests[selectedQuest],isTimer=engine.nodes.get(active?.nodeId)?.type==='delay';if(t-uiLast>100&&(runtimeDirty||isTimer)){renderRuntime();runtimeDirty=false;uiLast=t;}if(Math.floor(t/1000)!==Math.floor((t-16)/1000))$('clockLabel').textContent=fmtTime(engine.state.clock);rafId=requestAnimationFrame(frame);
+}
+function boot(){renderHooks();installEvents();resetRuntime();renderEditor();renderRuntime();runtimeDirty=false;rafId=requestAnimationFrame(frame);
+  window.Storyworks={version:VERSION,get engine(){return engine;},get bridge(){return bridge;},getProject:()=>clone(project),loadProject:loadProjectDefinition,getSave:()=>engine.serialize(),loadSave:save=>{resetRuntime(save);runtimeDirty=true;},dispatch:(type,payload,options)=>engine.dispatch(type,payload,options),choose:(quest,choice)=>engine.choose(quest,choice),validate:()=>report(),exportProject,exportSave,getEditorState:()=>({selectedQuest,selectedNode,selectedBinding,view,dock,edited,zoom,pan:clone(pan),history:history.length,future:future.length}),destroy:()=>{disposed=true;cancelAnimationFrame(rafId);clearTimeout(toastTimer);clearTimeout(draftTimer);bridge.dispose();engine.dispose();window.removeEventListener('resize',resizeApp);document.removeEventListener('keydown',keyDown);}};
+  window.StoryworksCore={StoryEngine,EventBus,WorldworksStoryBridge,createWorldworksStory,validateProject,projectFingerprint,NODE_TYPES,INPUT_EVENTS,COMMANDS};window.__storyworksReady=true;
+}
+try{boot();}catch(e){console.error(e);document.body.innerHTML='<main style="max-width:700px;margin:10vh auto;padding:30px;background:#201d29;border:1px solid #bb7c92;border-radius:12px"><h1>Storyworks could not start.</h1><pre style="white-space:pre-wrap;margin-top:20px">'+esc(e.stack??e.message)+'</pre><p>Your exported project files are unchanged.</p></main>';}
+
+})();</script></body></html>

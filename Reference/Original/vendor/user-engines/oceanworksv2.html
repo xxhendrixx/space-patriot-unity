@@ -1,0 +1,4645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oceanworks</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#02080d;
+  color:#e7f5fa;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+canvas{
+  display:block;
+  position:fixed;
+  inset:0;
+  z-index:0;
+}
+
+#loading{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:#02080d;
+  transition:opacity .35s;
+}
+
+#loadingTitle{
+  font-size:13px;
+  letter-spacing:.20em;
+}
+
+#loadingStage{
+  color:#7595a3;
+  font-size:10px;
+  letter-spacing:.10em;
+}
+
+#error{
+  display:none;
+  position:fixed;
+  inset:20px;
+  z-index:200;
+  padding:20px;
+  overflow:auto;
+  background:#151a1d;
+  color:white;
+  white-space:pre-wrap;
+  font-family:monospace;
+}
+
+#ui{
+  position:fixed;
+  z-index:20;
+  top:14px;
+  left:14px;
+  width:315px;
+  max-height:calc(100% - 28px);
+  overflow-y:auto;
+  padding:15px;
+
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+
+  background:rgba(3,12,18,.80);
+  backdrop-filter:blur(16px);
+}
+
+#ui::-webkit-scrollbar{
+  width:5px;
+}
+
+#ui::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.20);
+  border-radius:10px;
+}
+
+h1{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.17em;
+}
+
+.subtitle{
+  margin:4px 0 13px;
+  color:#83a8b5;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.stat{
+  padding:8px;
+  border-radius:7px;
+  background:rgba(255,255,255,.045);
+}
+
+.stat b{
+  display:block;
+  font-size:14px;
+}
+
+.stat small{
+  color:#819ca7;
+  font-size:8px;
+}
+
+.group{
+  margin-top:11px;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.groupTitle{
+  margin-bottom:10px;
+  color:#91abb5;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+
+.row{
+  margin-bottom:9px;
+}
+
+.label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:4px;
+  font-size:10px;
+}
+
+.value{
+  color:#8ee7ff;
+  font-variant-numeric:tabular-nums;
+}
+
+input[type=range]{
+  width:100%;
+  accent-color:#53c7e8;
+}
+
+.toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0;
+  font-size:10px;
+}
+
+input[type=checkbox]{
+  accent-color:#53c7e8;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+button{
+  min-height:32px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:6px;
+  background:rgba(255,255,255,.05);
+  color:#dcecf1;
+  cursor:pointer;
+  font-size:9px;
+}
+
+button:hover{
+  background:rgba(255,255,255,.10);
+}
+
+button.active{
+  border-color:#57d5fa;
+  background:rgba(35,136,165,.25);
+  color:#a9ebff;
+}
+
+#tip{
+  position:fixed;
+  right:15px;
+  bottom:13px;
+  z-index:10;
+  color:rgba(255,255,255,.55);
+  font-size:9px;
+  letter-spacing:.10em;
+  pointer-events:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="loading">
+  <div id="loadingTitle">
+    INITIALIZING OCEANWORKS...
+  </div>
+
+  <div id="loadingStage">
+    starting module
+  </div>
+</div>
+
+<div id="error"></div>
+
+<div id="ui">
+
+<h1>OCEANWORKS</h1>
+<div class="subtitle">GPU OCEAN LABORATORY</div>
+
+<div class="stats">
+
+  <div class="stat">
+    <b id="fps">--</b>
+    <small>FPS</small>
+  </div>
+
+  <div class="stat">
+    <b id="vertices">--</b>
+    <small>VERTICES</small>
+  </div>
+
+  <div class="stat">
+    <b id="state">SEA</b>
+    <small>STATE</small>
+  </div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- SEA STATE                                              -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+  <div class="groupTitle">
+    SEA STATE
+  </div>
+
+  <div class="buttons">
+
+    <button
+      class="preset"
+      data-state="calm">
+      CALM
+    </button>
+
+    <button
+      class="preset active"
+      data-state="sea">
+      OPEN SEA
+    </button>
+
+    <button
+      class="preset"
+      data-state="rough">
+      ROUGH
+    </button>
+
+    <button
+      class="preset"
+      data-state="storm">
+      STORM
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- WAVES                                                  -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WAVE FIELD
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Wave Height
+    <span id="heightVal" class="value"></span>
+  </div>
+
+  <input
+    id="height"
+    type="range"
+    min="0"
+    max="6"
+    step=".05"
+    value="1.10">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Wavelength
+    <span id="lengthVal" class="value"></span>
+  </div>
+
+  <input
+    id="length"
+    type="range"
+    min="5"
+    max="60"
+    step=".5"
+    value="20">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Chop
+    <span id="chopVal" class="value"></span>
+  </div>
+
+  <input
+    id="chop"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".50">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Wave Speed
+    <span id="speedVal" class="value"></span>
+  </div>
+
+  <input
+    id="speed"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value="1">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Wind Ripples
+    <span id="ripplesVal" class="value"></span>
+  </div>
+
+  <input
+    id="ripples"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".35">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Wind Direction
+    <span id="directionVal" class="value"></span>
+  </div>
+
+  <input
+    id="direction"
+    type="range"
+    min="0"
+    max="360"
+    step="1"
+    value="35">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- SURFACE / NORMALS / CRESTING                           -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  SURFACE & BREAKING
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Normal Strength
+    <span id="normalVal" class="value"></span>
+  </div>
+
+  <input
+    id="normalStrength"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".75">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Micro Normal
+    <span id="microVal" class="value"></span>
+  </div>
+
+  <input
+    id="microNormal"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".55">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Crest Sharpness
+    <span id="crestVal" class="value"></span>
+  </div>
+
+  <input
+    id="crestSharpness"
+    type="range"
+    min="0"
+    max="2.5"
+    step=".05"
+    value=".75">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Crest Curl
+    <span id="curlVal" class="value"></span>
+  </div>
+
+  <input
+    id="crestCurl"
+    type="range"
+    min="0"
+    max="2"
+    step=".05"
+    value=".45">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Breaking Threshold
+    <span id="breakingVal" class="value"></span>
+  </div>
+
+  <input
+    id="breaking"
+    type="range"
+    min=".05"
+    max=".8"
+    step=".01"
+    value=".34">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Whitecaps
+    <span id="whitecapVal" class="value"></span>
+  </div>
+
+  <input
+    id="whitecaps"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".75">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- WATER                                                  -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WATER MATERIAL
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Foam
+    <span id="foamVal" class="value"></span>
+  </div>
+
+  <input
+    id="foam"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".45">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Reflectivity
+    <span id="reflectVal" class="value"></span>
+  </div>
+
+  <input
+    id="reflect"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".78">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Depth
+    <span id="depthVal" class="value"></span>
+  </div>
+
+  <input
+    id="depth"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".70">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ATMOSPHERE                                             -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  ATMOSPHERE
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Ambience
+    <span id="ambientVal" class="value"></span>
+  </div>
+
+  <input
+    id="ambient"
+    type="range"
+    min=".1"
+    max="3"
+    step=".05"
+    value=".90">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Sun Intensity
+    <span id="sunVal" class="value"></span>
+  </div>
+
+  <input
+    id="sun"
+    type="range"
+    min="0"
+    max="6"
+    step=".1"
+    value="2.7">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Sun Elevation
+    <span id="elevationVal" class="value"></span>
+  </div>
+
+  <input
+    id="elevation"
+    type="range"
+    min="2"
+    max="80"
+    step="1"
+    value="20">
+
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Horizon Haze
+    <span id="hazeVal" class="value"></span>
+  </div>
+
+  <input
+    id="haze"
+    type="range"
+    min=".0005"
+    max=".015"
+    step=".0005"
+    value=".003">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- PERFORMANCE                                            -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  PERFORMANCE
+</div>
+
+
+<div class="row">
+
+  <div class="label">
+    Mesh Resolution
+    <span id="meshVal" class="value"></span>
+  </div>
+
+  <input
+    id="mesh"
+    type="range"
+    min="48"
+    max="192"
+    step="48"
+    value="96">
+
+</div>
+
+
+<div class="toggle">
+
+  <span>Sun Glitter</span>
+
+  <input
+    id="glitter"
+    type="checkbox"
+    checked>
+
+</div>
+
+
+<div class="toggle">
+
+  <span>Camera Drift</span>
+
+  <input
+    id="drift"
+    type="checkbox">
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ACTIONS                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+  <div class="buttons">
+
+    <button id="randomize">
+      RANDOMIZE
+    </button>
+
+    <button id="reset">
+      RESET
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<div id="tip">
+  LEFT DRAG: ORBIT · WHEEL: ZOOM
+</div>
+
+
+<script type="module">
+
+// ============================================================
+// STARTUP DIAGNOSTICS
+// ============================================================
+
+const loadingStage =
+  document.getElementById("loadingStage");
+
+const errorBox =
+  document.getElementById("error");
+
+function stage(text) {
+  loadingStage.textContent = text;
+}
+
+function fatal(error) {
+
+  console.error(error);
+
+  const loading =
+    document.getElementById("loading");
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+  errorBox.style.display = "block";
+
+  errorBox.textContent =
+    "OCEANWORKS FAILED TO START\n\n" +
+    (error.stack || error.message || String(error));
+}
+
+
+// ============================================================
+// THREE.JS
+//
+// One dependency only. No import map. No OrbitControls.
+// ============================================================
+
+stage("loading Three.js");
+
+let THREE;
+
+try {
+
+  THREE = await import(
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+  );
+
+} catch (error) {
+
+  fatal(error);
+
+  throw error;
+
+}
+
+stage("Three.js loaded");
+
+
+// ============================================================
+// MAIN INITIALIZATION
+// ============================================================
+
+try {
+
+const $ =
+  id => document.getElementById(id);
+
+
+// ============================================================
+// INPUT REFERENCES
+// ============================================================
+
+const inputs = {
+
+  height: $("height"),
+  length: $("length"),
+  chop: $("chop"),
+  speed: $("speed"),
+  ripples: $("ripples"),
+  direction: $("direction"),
+
+  normalStrength: $("normalStrength"),
+  microNormal: $("microNormal"),
+
+  crestSharpness: $("crestSharpness"),
+  crestCurl: $("crestCurl"),
+  breaking: $("breaking"),
+  whitecaps: $("whitecaps"),
+
+  foam: $("foam"),
+  reflect: $("reflect"),
+  depth: $("depth"),
+
+  ambient: $("ambient"),
+  sun: $("sun"),
+  elevation: $("elevation"),
+  haze: $("haze"),
+
+  mesh: $("mesh")
+
+};
+
+
+// ============================================================
+// WEBGL RENDERER
+// ============================================================
+
+stage("creating WebGL renderer");
+
+const renderer =
+  new THREE.WebGLRenderer({
+
+    antialias: true,
+
+    powerPreference:
+      "high-performance"
+
+  });
+
+
+renderer.setPixelRatio(
+
+  Math.min(
+    window.devicePixelRatio,
+    1.5
+  )
+
+);
+
+
+renderer.setSize(
+
+  window.innerWidth,
+
+  window.innerHeight
+
+);
+
+
+renderer.outputColorSpace =
+  THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+  THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+  1.0;
+
+
+// Keep canvas behind HUD.
+
+renderer.domElement.style.position =
+  "fixed";
+
+renderer.domElement.style.inset =
+  "0";
+
+renderer.domElement.style.zIndex =
+  "0";
+
+
+document.body.prepend(
+  renderer.domElement
+);
+
+
+stage("renderer ready");
+
+
+// ============================================================
+// SCENE
+// ============================================================
+
+const scene =
+  new THREE.Scene();
+
+
+const fogColor =
+  new THREE.Color(
+    0x7899a6
+  );
+
+
+scene.background =
+  fogColor.clone();
+
+
+scene.fog =
+  new THREE.FogExp2(
+
+    fogColor,
+
+    Number(
+      inputs.haze.value
+    )
+
+  );
+
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+const camera =
+  new THREE.PerspectiveCamera(
+
+    50,
+
+    window.innerWidth /
+    window.innerHeight,
+
+    0.1,
+
+    800
+
+  );
+
+
+// ============================================================
+// CUSTOM ORBIT CAMERA
+//
+// Avoids OrbitControls and therefore avoids another module
+// dependency entirely.
+// ============================================================
+
+let cameraRadius =
+  29;
+
+
+let cameraTheta =
+  THREE.MathUtils.degToRad(
+    42
+  );
+
+
+let cameraPhi =
+  THREE.MathUtils.degToRad(
+    72
+  );
+
+
+const cameraTarget =
+  new THREE.Vector3(
+    0,
+    0,
+    0
+  );
+
+
+function updateCamera() {
+
+  cameraPhi =
+    THREE.MathUtils.clamp(
+
+      cameraPhi,
+
+      0.12,
+
+      Math.PI / 2 -
+      0.025
+
+    );
+
+
+  cameraRadius =
+    THREE.MathUtils.clamp(
+
+      cameraRadius,
+
+      4,
+
+      120
+
+    );
+
+
+  camera.position.set(
+
+    cameraTarget.x +
+
+    cameraRadius *
+
+    Math.sin(cameraPhi) *
+
+    Math.cos(cameraTheta),
+
+
+    cameraTarget.y +
+
+    cameraRadius *
+
+    Math.cos(cameraPhi),
+
+
+    cameraTarget.z +
+
+    cameraRadius *
+
+    Math.sin(cameraPhi) *
+
+    Math.sin(cameraTheta)
+
+  );
+
+
+  camera.lookAt(
+    cameraTarget
+  );
+
+}
+
+
+updateCamera();
+
+
+// ============================================================
+// POINTER ORBIT
+// ============================================================
+
+let dragging =
+  false;
+
+
+let previousX =
+  0;
+
+
+let previousY =
+  0;
+
+
+renderer.domElement.addEventListener(
+
+  "pointerdown",
+
+  event => {
+
+    if (event.button !== 0) {
+      return;
+    }
+
+
+    dragging =
+      true;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    renderer.domElement
+      .setPointerCapture(
+        event.pointerId
+      );
+
+  }
+
+);
+
+
+// ============================================================
+// POINTER MOVE
+// ============================================================
+
+renderer.domElement.addEventListener(
+
+  "pointermove",
+
+  event => {
+
+    if (!dragging) {
+      return;
+    }
+
+
+    const dx =
+      event.clientX -
+      previousX;
+
+
+    const dy =
+      event.clientY -
+      previousY;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    cameraTheta -=
+      dx * 0.005;
+
+
+    cameraPhi -=
+      dy * 0.005;
+
+
+    updateCamera();
+
+  }
+
+);
+
+
+// ============================================================
+// POINTER RELEASE
+// ============================================================
+
+function releasePointer(event) {
+
+  dragging =
+    false;
+
+
+  if (
+
+    renderer.domElement
+      .hasPointerCapture(
+        event.pointerId
+      )
+
+  ) {
+
+    renderer.domElement
+      .releasePointerCapture(
+        event.pointerId
+      );
+
+  }
+
+}
+
+
+renderer.domElement.addEventListener(
+  "pointerup",
+  releasePointer
+);
+
+
+renderer.domElement.addEventListener(
+  "pointercancel",
+  releasePointer
+);
+
+
+// ============================================================
+// WHEEL ZOOM
+// ============================================================
+
+renderer.domElement.addEventListener(
+
+  "wheel",
+
+  event => {
+
+    event.preventDefault();
+
+
+    cameraRadius *=
+      Math.exp(
+
+        event.deltaY *
+        0.001
+
+      );
+
+
+    updateCamera();
+
+  },
+
+  {
+    passive: false
+  }
+
+);
+
+
+stage("camera ready");
+
+
+// ============================================================
+// LIGHTING
+// ============================================================
+
+const hemisphere =
+  new THREE.HemisphereLight(
+
+    0xc9e2e8,
+
+    0x102630,
+
+    Number(
+      inputs.ambient.value
+    )
+
+  );
+
+
+scene.add(
+  hemisphere
+);
+
+
+const sun =
+  new THREE.DirectionalLight(
+
+    0xffd6a0,
+
+    Number(
+      inputs.sun.value
+    )
+
+  );
+
+
+scene.add(
+  sun
+);
+
+
+// ============================================================
+// OCEAN STATE
+//
+// Declare before updateSun() can ever reference the material.
+// ============================================================
+
+let ocean =
+  null;
+
+
+let oceanMaterial =
+  null;
+
+
+// ============================================================
+// SUN POSITION
+// ============================================================
+
+function updateSun() {
+
+  const elevation =
+    THREE.MathUtils.degToRad(
+
+      Number(
+        inputs.elevation.value
+      )
+
+    );
+
+
+  // Fixed azimuth for now.
+  // Elevation remains user-adjustable.
+
+  const azimuth =
+    THREE.MathUtils.degToRad(
+      220
+    );
+
+
+  const radius =
+    100;
+
+
+  sun.position.set(
+
+    Math.cos(elevation) *
+    Math.cos(azimuth) *
+    radius,
+
+
+    Math.sin(elevation) *
+    radius,
+
+
+    Math.cos(elevation) *
+    Math.sin(azimuth) *
+    radius
+
+  );
+
+
+  if (oceanMaterial) {
+
+    oceanMaterial.uniforms
+      .uSunDirection
+      .value
+      .copy(
+        sun.position
+      )
+      .normalize();
+
+  }
+
+}
+
+
+updateSun();
+
+
+stage("lighting ready");
+
+// ============================================================
+// SKY
+// ============================================================
+
+stage("building sky");
+
+
+const skyGeometry =
+  new THREE.SphereGeometry(
+    420,
+    32,
+    16
+  );
+
+
+const skyMaterial =
+  new THREE.ShaderMaterial({
+
+    side:
+      THREE.BackSide,
+
+    depthWrite:
+      false,
+
+    uniforms: {
+
+      uSunDirection: {
+
+        value:
+          sun.position
+            .clone()
+            .normalize()
+
+      },
+
+      uStorm: {
+
+        value: 0
+
+      }
+
+    },
+
+
+// ============================================================
+// SKY VERTEX SHADER
+// ============================================================
+
+vertexShader: `
+
+varying vec3 vDirection;
+
+void main() {
+
+  vDirection =
+    normalize(
+      position
+    );
+
+
+  gl_Position =
+
+    projectionMatrix *
+
+    modelViewMatrix *
+
+    vec4(
+      position,
+      1.0
+    );
+
+}
+
+`,
+
+
+// ============================================================
+// SKY FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+
+varying vec3 vDirection;
+
+
+uniform vec3 uSunDirection;
+
+uniform float uStorm;
+
+
+void main() {
+
+  vec3 direction =
+    normalize(
+      vDirection
+    );
+
+
+  float altitude =
+    clamp(
+
+      direction.y *
+      0.5 +
+      0.5,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  // ----------------------------------------------------------
+  // CLEAR SKY
+  // ----------------------------------------------------------
+
+  vec3 clearHorizon =
+    vec3(
+      0.50,
+      0.65,
+      0.71
+    );
+
+
+  vec3 clearZenith =
+    vec3(
+      0.055,
+      0.19,
+      0.35
+    );
+
+
+  // ----------------------------------------------------------
+  // STORM SKY
+  // ----------------------------------------------------------
+
+  vec3 stormHorizon =
+    vec3(
+      0.19,
+      0.23,
+      0.25
+    );
+
+
+  vec3 stormZenith =
+    vec3(
+      0.025,
+      0.045,
+      0.065
+    );
+
+
+  vec3 horizon =
+    mix(
+
+      clearHorizon,
+
+      stormHorizon,
+
+      uStorm
+
+    );
+
+
+  vec3 zenith =
+    mix(
+
+      clearZenith,
+
+      stormZenith,
+
+      uStorm
+
+    );
+
+
+  vec3 color =
+    mix(
+
+      horizon,
+
+      zenith,
+
+      pow(
+        altitude,
+        0.70
+      )
+
+    );
+
+
+  // ----------------------------------------------------------
+  // SUN
+  // ----------------------------------------------------------
+
+  float sunDot =
+    max(
+
+      dot(
+
+        direction,
+
+        normalize(
+          uSunDirection
+        )
+
+      ),
+
+      0.0
+
+    );
+
+
+  // Large atmospheric glow.
+
+  float sunGlow =
+    pow(
+      sunDot,
+      16.0
+    );
+
+
+  // Tight visible solar disc.
+
+  float sunDisc =
+    pow(
+      sunDot,
+      1200.0
+    );
+
+
+  color +=
+
+    vec3(
+      1.0,
+      0.48,
+      0.16
+    )
+
+    *
+
+    sunGlow
+
+    *
+
+    0.42
+
+    *
+
+    (1.0-uStorm);
+
+
+  color +=
+
+    vec3(
+      1.0,
+      0.90,
+      0.67
+    )
+
+    *
+
+    sunDisc
+
+    *
+
+    3.5
+
+    *
+
+    (1.0-uStorm);
+
+
+  // ----------------------------------------------------------
+  // HORIZON WARMTH
+  // ----------------------------------------------------------
+
+  float horizonBand =
+    pow(
+
+      1.0 -
+      abs(
+        direction.y
+      ),
+
+      7.0
+
+    );
+
+
+  color +=
+
+    vec3(
+      0.10,
+      0.045,
+      0.018
+    )
+
+    *
+
+    horizonBand
+
+    *
+
+    (1.0-uStorm);
+
+
+  gl_FragColor =
+    vec4(
+      color,
+      1.0
+    );
+
+}
+
+`
+
+  });
+
+
+const sky =
+  new THREE.Mesh(
+
+    skyGeometry,
+
+    skyMaterial
+
+  );
+
+
+scene.add(
+  sky
+);
+
+
+stage("sky ready");
+
+
+// ============================================================
+// OCEAN MATERIAL FACTORY
+// ============================================================
+
+stage("creating ocean material");
+
+
+function createOceanMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    side:
+      THREE.DoubleSide,
+
+
+// ============================================================
+// UNIFORMS
+// ============================================================
+
+    uniforms: {
+
+
+// ------------------------------------------------------------
+// TIME
+// ------------------------------------------------------------
+
+      uTime: {
+
+        value: 0
+
+      },
+
+
+// ------------------------------------------------------------
+// LARGE WAVE FIELD
+// ------------------------------------------------------------
+
+      uHeight: {
+
+        value:
+          Number(
+            inputs.height.value
+          )
+
+      },
+
+
+      uLength: {
+
+        value:
+          Number(
+            inputs.length.value
+          )
+
+      },
+
+
+      uChop: {
+
+        value:
+          Number(
+            inputs.chop.value
+          )
+
+      },
+
+
+      uSpeed: {
+
+        value:
+          Number(
+            inputs.speed.value
+          )
+
+      },
+
+
+      uRipples: {
+
+        value:
+          Number(
+            inputs.ripples.value
+          )
+
+      },
+
+
+      uDirection: {
+
+        value:
+          THREE.MathUtils.degToRad(
+
+            Number(
+              inputs.direction.value
+            )
+
+          )
+
+      },
+
+
+// ------------------------------------------------------------
+// NORMAL SYSTEM
+// ------------------------------------------------------------
+
+      uNormalStrength: {
+
+        value:
+          Number(
+            inputs.normalStrength.value
+          )
+
+      },
+
+
+      uMicroNormal: {
+
+        value:
+          Number(
+            inputs.microNormal.value
+          )
+
+      },
+
+
+// ------------------------------------------------------------
+// CRESTING / BREAKING
+// ------------------------------------------------------------
+
+      uCrestSharpness: {
+
+        value:
+          Number(
+            inputs.crestSharpness.value
+          )
+
+      },
+
+
+      uCrestCurl: {
+
+        value:
+          Number(
+            inputs.crestCurl.value
+          )
+
+      },
+
+
+      uBreaking: {
+
+        value:
+          Number(
+            inputs.breaking.value
+          )
+
+      },
+
+
+      uWhitecaps: {
+
+        value:
+          Number(
+            inputs.whitecaps.value
+          )
+
+      },
+
+
+// ------------------------------------------------------------
+// WATER MATERIAL
+// ------------------------------------------------------------
+
+      uFoam: {
+
+        value:
+          Number(
+            inputs.foam.value
+          )
+
+      },
+
+
+      uReflectivity: {
+
+        value:
+          Number(
+            inputs.reflect.value
+          )
+
+      },
+
+
+      uDepth: {
+
+        value:
+          Number(
+            inputs.depth.value
+          )
+
+      },
+
+
+// ------------------------------------------------------------
+// SUN
+// ------------------------------------------------------------
+
+      uSunDirection: {
+
+        value:
+          sun.position
+            .clone()
+            .normalize()
+
+      },
+
+
+      uSunIntensity: {
+
+        value:
+          Number(
+            inputs.sun.value
+          )
+
+      },
+
+
+// ------------------------------------------------------------
+// ATMOSPHERE
+// ------------------------------------------------------------
+
+      uFogDensity: {
+
+        value:
+          Number(
+            inputs.haze.value
+          )
+
+      },
+
+
+      uFogColor: {
+
+        value:
+          fogColor.clone()
+
+      },
+
+
+// ------------------------------------------------------------
+// EFFECT TOGGLES
+// ------------------------------------------------------------
+
+      uGlitter: {
+
+        value: 1
+
+      }
+
+    },
+
+
+// ============================================================
+// VERTEX SHADER BEGINS HERE
+//
+// Part 4 continues directly from this point.
+// ============================================================
+
+vertexShader: `
+
+precision highp float;
+
+
+// ============================================================
+// UNIFORMS
+// ============================================================
+
+uniform float uTime;
+
+uniform float uHeight;
+uniform float uLength;
+uniform float uChop;
+uniform float uSpeed;
+
+uniform float uRipples;
+uniform float uDirection;
+
+uniform float uNormalStrength;
+
+uniform float uCrestSharpness;
+uniform float uCrestCurl;
+
+
+// ============================================================
+// OUTPUT TO FRAGMENT SHADER
+// ============================================================
+
+varying vec3 vWorldPosition;
+
+varying vec3 vNormal;
+
+varying float vElevation;
+
+varying float vSlope;
+
+varying float vDetail;
+
+varying float vCrest;
+
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+
+const float PI =
+  3.141592653589793;
+
+
+// ============================================================
+// BASIC TRAVELING WAVE
+// ============================================================
+
+float waveValue(
+
+  vec2 point,
+
+  vec2 direction,
+
+  float wavelength,
+
+  float velocity,
+
+  float phase
+
+) {
+
+  float k =
+
+    2.0 *
+
+    PI
+
+    /
+
+    max(
+      wavelength,
+      0.1
+    );
+
+
+  return sin(
+
+    dot(
+      point,
+      direction
+    )
+
+    *
+
+    k
+
+    -
+
+    uTime *
+
+    velocity
+
+    +
+
+    phase
+
+  );
+
+}
+
+// ============================================================
+// MULTI-SCALE OCEAN HEIGHT FIELD
+// ============================================================
+
+float getHeight(
+  vec2 point
+) {
+
+  float angle =
+    uDirection;
+
+
+  vec2 d1 =
+    normalize(
+      vec2(
+        cos(angle),
+        sin(angle)
+      )
+    );
+
+
+  vec2 d2 =
+    normalize(
+      vec2(
+        cos(angle + 0.68),
+        sin(angle + 0.68)
+      )
+    );
+
+
+  vec2 d3 =
+    normalize(
+      vec2(
+        cos(angle - 1.04),
+        sin(angle - 1.04)
+      )
+    );
+
+
+  vec2 d4 =
+    normalize(
+      vec2(
+        cos(angle + 1.58),
+        sin(angle + 1.58)
+      )
+    );
+
+
+  float h =
+    0.0;
+
+
+  // ----------------------------------------------------------
+  // PRIMARY SWELL
+  // ----------------------------------------------------------
+
+  h +=
+
+    waveValue(
+
+      point,
+
+      d1,
+
+      uLength,
+
+      uSpeed * 1.15,
+
+      0.0
+
+    )
+
+    *
+
+    uHeight
+
+    *
+
+    0.56;
+
+
+  // ----------------------------------------------------------
+  // CROSSING SWELL
+  // ----------------------------------------------------------
+
+  h +=
+
+    waveValue(
+
+      point,
+
+      d2,
+
+      uLength * 0.53,
+
+      uSpeed * 1.55,
+
+      1.7
+
+    )
+
+    *
+
+    uHeight
+
+    *
+
+    0.25;
+
+
+  // ----------------------------------------------------------
+  // SHORTER WAVE
+  // ----------------------------------------------------------
+
+  h +=
+
+    waveValue(
+
+      point,
+
+      d3,
+
+      uLength * 0.27,
+
+      uSpeed * 2.15,
+
+      3.2
+
+    )
+
+    *
+
+    uHeight
+
+    *
+
+    0.12;
+
+
+  // ----------------------------------------------------------
+  // WIND WAVE
+  // ----------------------------------------------------------
+
+  h +=
+
+    waveValue(
+
+      point,
+
+      d4,
+
+      4.2,
+
+      uSpeed * 3.1,
+
+      2.3
+
+    )
+
+    *
+
+    uRipples
+
+    *
+
+    0.10;
+
+
+  // ----------------------------------------------------------
+  // MICRO SURFACE DISPLACEMENT
+  // ----------------------------------------------------------
+
+  h +=
+
+    sin(
+
+      point.x * 2.4
+
+      +
+
+      point.y * 2.05
+
+      -
+
+      uTime *
+      uSpeed *
+      4.4
+
+    )
+
+    *
+
+    uRipples
+
+    *
+
+    0.025;
+
+
+  // ==========================================================
+  // CREST SHARPENING
+  //
+  // Broad troughs remain relatively sinusoidal while positive
+  // wave displacement receives an additional nonlinear lift.
+  // ==========================================================
+
+  float normalizedHeight =
+
+    h /
+
+    max(
+      uHeight,
+      0.10
+    );
+
+
+  float positiveHeight =
+
+    max(
+      normalizedHeight,
+      0.0
+    );
+
+
+  float crestShape =
+
+    positiveHeight *
+
+    positiveHeight;
+
+
+  h +=
+
+    crestShape
+
+    *
+
+    uCrestSharpness
+
+    *
+
+    uHeight
+
+    *
+
+    0.28;
+
+
+  return h;
+
+}
+
+
+// ============================================================
+// VERTEX MAIN
+// ============================================================
+
+void main() {
+
+  vec3 p =
+    position;
+
+
+  vec2 originalPoint =
+    p.xz;
+
+
+  float angle =
+    uDirection;
+
+
+  // ==========================================================
+  // PRIMARY WAVE DIRECTIONS
+  // ==========================================================
+
+  vec2 primaryDirection =
+
+    normalize(
+
+      vec2(
+        cos(angle),
+        sin(angle)
+      )
+
+    );
+
+
+  vec2 crossingDirection =
+
+    normalize(
+
+      vec2(
+        cos(angle + 0.68),
+        sin(angle + 0.68)
+      )
+
+    );
+
+
+  // ==========================================================
+  // GERSTNER-LIKE HORIZONTAL CHOP
+  // ==========================================================
+
+  float primaryWave =
+
+    waveValue(
+
+      originalPoint,
+
+      primaryDirection,
+
+      uLength,
+
+      uSpeed * 1.15,
+
+      0.0
+
+    );
+
+
+  float crossingWave =
+
+    waveValue(
+
+      originalPoint,
+
+      crossingDirection,
+
+      uLength * 0.53,
+
+      uSpeed * 1.55,
+
+      1.7
+
+    );
+
+
+  p.xz +=
+
+    primaryDirection
+
+    *
+
+    primaryWave
+
+    *
+
+    uHeight
+
+    *
+
+    uChop
+
+    *
+
+    0.14;
+
+
+  p.xz +=
+
+    crossingDirection
+
+    *
+
+    crossingWave
+
+    *
+
+    uHeight
+
+    *
+
+    uChop
+
+    *
+
+    0.055;
+
+
+  // ==========================================================
+  // VERTICAL DISPLACEMENT
+  // ==========================================================
+
+  float h =
+    getHeight(
+      p.xz
+    );
+
+
+  p.y +=
+    h;
+
+
+  // ==========================================================
+  // CREST MASK
+  //
+  // Identifies the upper portion of the swell.
+  // ==========================================================
+
+  float crestStart =
+
+    uHeight *
+
+    0.18;
+
+
+  float crestEnd =
+
+    max(
+
+      uHeight *
+
+      0.72,
+
+      crestStart +
+      0.001
+
+    );
+
+
+  float crestMask =
+
+    smoothstep(
+
+      crestStart,
+
+      crestEnd,
+
+      h
+
+    );
+
+
+  // ==========================================================
+  // FORWARD CREST CURL
+  //
+  // This cannot produce a truly overturning volume because
+  // the ocean remains a height-field surface, but it moves
+  // high crest vertices forward and gives the wave a much
+  // stronger pre-breaking silhouette.
+  // ==========================================================
+
+  p.xz +=
+
+    primaryDirection
+
+    *
+
+    crestMask
+
+    *
+
+    uCrestCurl
+
+    *
+
+    uHeight
+
+    *
+
+    0.18;
+
+
+  // ==========================================================
+  // NORMAL CALCULATION
+  //
+  // Sample neighboring positions from the SAME procedural
+  // wave field. The normal therefore follows the displaced
+  // ocean instead of the original flat plane.
+  // ==========================================================
+
+  float epsilon =
+    0.22;
+
+
+  float heightX =
+
+    getHeight(
+
+      p.xz +
+
+      vec2(
+        epsilon,
+        0.0
+      )
+
+    );
+
+
+  float heightZ =
+
+    getHeight(
+
+      p.xz +
+
+      vec2(
+        0.0,
+        epsilon
+      )
+
+    );
+
+
+  vec3 tangentX =
+
+    vec3(
+
+      epsilon,
+
+      heightX - h,
+
+      0.0
+
+    );
+
+
+  vec3 tangentZ =
+
+    vec3(
+
+      0.0,
+
+      heightZ - h,
+
+      epsilon
+
+    );
+
+
+  vec3 geometricNormal =
+
+    normalize(
+
+      cross(
+        tangentZ,
+        tangentX
+      )
+
+    );
+
+
+  // ==========================================================
+  // NORMAL STRENGTH
+  //
+  // Increase horizontal components while preserving the
+  // upward component. This exaggerates reflected detail
+  // without requiring a denser mesh.
+  // ==========================================================
+
+  vec3 enhancedNormal =
+
+    normalize(
+
+      vec3(
+
+        geometricNormal.x *
+        (
+          1.0 +
+          uNormalStrength
+        ),
+
+        geometricNormal.y,
+
+        geometricNormal.z *
+        (
+          1.0 +
+          uNormalStrength
+        )
+
+      )
+
+    );
+
+
+  // ==========================================================
+  // WORLD SPACE
+  // ==========================================================
+
+  vec4 worldPosition =
+
+    modelMatrix
+
+    *
+
+    vec4(
+      p,
+      1.0
+    );
+
+
+  vWorldPosition =
+    worldPosition.xyz;
+
+
+  vNormal =
+
+    normalize(
+
+      mat3(
+        modelMatrix
+      )
+
+      *
+
+      enhancedNormal
+
+    );
+
+
+  // ==========================================================
+  // VALUES FOR FRAGMENT SHADER
+  // ==========================================================
+
+  vElevation =
+    h;
+
+
+  vSlope =
+
+    1.0
+
+    -
+
+    clamp(
+
+      geometricNormal.y,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  vCrest =
+    crestMask;
+
+
+  // High-frequency breakup signal used by micro normals,
+  // sun glitter, and foam.
+
+  vDetail =
+
+    sin(
+
+      p.x * 5.0
+
+      +
+
+      p.z * 4.3
+
+      +
+
+      uTime *
+      uSpeed *
+      5.5
+
+    )
+
+    *
+
+    0.5
+
+    +
+
+    0.5;
+
+
+  gl_Position =
+
+    projectionMatrix
+
+    *
+
+    viewMatrix
+
+    *
+
+    worldPosition;
+
+}
+
+`,
+
+// ============================================================
+// FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+
+// ============================================================
+// UNIFORMS
+// ============================================================
+
+uniform float uTime;
+
+uniform float uHeight;
+
+uniform float uFoam;
+uniform float uReflectivity;
+uniform float uDepth;
+
+uniform float uMicroNormal;
+
+uniform float uBreaking;
+uniform float uWhitecaps;
+
+uniform float uSunIntensity;
+
+uniform float uFogDensity;
+
+uniform float uGlitter;
+
+uniform vec3 uSunDirection;
+uniform vec3 uFogColor;
+
+
+// ============================================================
+// INPUT FROM VERTEX SHADER
+// ============================================================
+
+varying vec3 vWorldPosition;
+
+varying vec3 vNormal;
+
+varying float vElevation;
+
+varying float vSlope;
+
+varying float vDetail;
+
+varying float vCrest;
+
+
+// ============================================================
+// MAIN
+// ============================================================
+
+void main() {
+
+  // ==========================================================
+  // LARGE-SCALE GEOMETRIC NORMAL
+  // ==========================================================
+
+  vec3 N =
+    normalize(
+      vNormal
+    );
+
+
+  // ==========================================================
+  // MICRO NORMAL FIELD
+  //
+  // This affects lighting/reflection without requiring extra
+  // geometry. Multiple frequencies prevent the ocean from
+  // looking like a smoothly shaded sheet.
+  // ==========================================================
+
+  float micro1 =
+
+    sin(
+
+      vWorldPosition.x * 7.3
+
+      +
+
+      vWorldPosition.z * 4.7
+
+      +
+
+      uTime * 3.1
+
+    );
+
+
+  float micro2 =
+
+    cos(
+
+      vWorldPosition.x * 5.1
+
+      -
+
+      vWorldPosition.z * 8.4
+
+      +
+
+      uTime * 2.7
+
+    );
+
+
+  float micro3 =
+
+    sin(
+
+      vWorldPosition.x * 13.2
+
+      +
+
+      vWorldPosition.z * 10.7
+
+      -
+
+      uTime * 4.3
+
+    );
+
+
+  vec3 microNormal =
+
+    vec3(
+
+      micro1 +
+      micro3 * 0.35,
+
+      0.0,
+
+      micro2 -
+      micro3 * 0.25
+
+    )
+
+    *
+
+    uMicroNormal
+
+    *
+
+    0.055;
+
+
+  N =
+    normalize(
+
+      N +
+
+      microNormal
+
+    );
+
+
+  // ==========================================================
+  // VIEW + SUN VECTORS
+  // ==========================================================
+
+  vec3 V =
+
+    normalize(
+
+      cameraPosition -
+
+      vWorldPosition
+
+    );
+
+
+  vec3 L =
+
+    normalize(
+      uSunDirection
+    );
+
+
+  // ==========================================================
+  // WATER BODY COLORS
+  // ==========================================================
+
+  vec3 abyss =
+
+    vec3(
+      0.002,
+      0.027,
+      0.052
+    );
+
+
+  vec3 deepWater =
+
+    vec3(
+      0.004,
+      0.105,
+      0.18
+    );
+
+
+  vec3 surfaceWater =
+
+    vec3(
+      0.018,
+      0.285,
+      0.35
+    );
+
+
+  float heightScale =
+
+    max(
+      uHeight,
+      0.10
+    );
+
+
+  float elevation =
+
+    clamp(
+
+      vElevation /
+
+      heightScale *
+
+      0.5
+
+      +
+
+      0.5,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  vec3 waterColor =
+
+    mix(
+
+      deepWater,
+
+      abyss,
+
+      uDepth *
+      0.72
+
+    );
+
+
+  waterColor =
+
+    mix(
+
+      waterColor,
+
+      surfaceWater,
+
+      elevation *
+      0.31
+
+    );
+
+
+  // ==========================================================
+  // FRESNEL
+  //
+  // Grazing angles become strongly reflective while looking
+  // downward into the water reveals more body color.
+  // ==========================================================
+
+  float normalView =
+
+    max(
+
+      dot(
+        N,
+        V
+      ),
+
+      0.0
+
+    );
+
+
+  float fresnel =
+
+    0.025
+
+    +
+
+    0.975 *
+
+    pow(
+
+      1.0 -
+      normalView,
+
+      4.5
+
+    );
+
+
+  vec3 horizonReflection =
+
+    vec3(
+      0.43,
+      0.60,
+      0.68
+    );
+
+
+  vec3 upperSkyReflection =
+
+    vec3(
+      0.055,
+      0.20,
+      0.34
+    );
+
+
+  float skyFactor =
+
+    clamp(
+
+      V.y *
+      0.5 +
+      0.5,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  vec3 reflection =
+
+    mix(
+
+      horizonReflection,
+
+      upperSkyReflection,
+
+      skyFactor
+
+    );
+
+
+  vec3 color =
+
+    mix(
+
+      waterColor,
+
+      reflection,
+
+      fresnel *
+      uReflectivity
+
+    );
+
+
+  // ==========================================================
+  // DIFFUSE SUNLIGHT
+  // ==========================================================
+
+  float diffuse =
+
+    max(
+
+      dot(
+        N,
+        L
+      ),
+
+      0.0
+
+    );
+
+
+  color +=
+
+    vec3(
+      0.025,
+      0.045,
+      0.050
+    )
+
+    *
+
+    diffuse
+
+    *
+
+    uSunIntensity;
+
+
+  // ==========================================================
+  // SPECULAR SUN PATH
+  // ==========================================================
+
+  vec3 H =
+
+    normalize(
+      L + V
+    );
+
+
+  float alignment =
+
+    max(
+
+      dot(
+        N,
+        H
+      ),
+
+      0.0
+
+    );
+
+
+  float broadSpecular =
+
+    pow(
+      alignment,
+      30.0
+    );
+
+
+  float sharpSpecular =
+
+    pow(
+      alignment,
+      190.0
+    );
+
+
+  // Micro-normal field + procedural detail cause individual
+  // points along the sun path to flash.
+
+  float sparkle =
+
+    mix(
+
+      1.0,
+
+      0.38 +
+
+      vDetail *
+      1.25,
+
+      uGlitter
+
+    );
+
+
+  vec3 sunlight =
+
+    vec3(
+      1.0,
+      0.68,
+      0.34
+    );
+
+
+  color +=
+
+    sunlight
+
+    *
+
+    broadSpecular
+
+    *
+
+    uSunIntensity
+
+    *
+
+    0.13;
+
+
+  color +=
+
+    sunlight
+
+    *
+
+    sharpSpecular
+
+    *
+
+    uSunIntensity
+
+    *
+
+    3.1
+
+    *
+
+    sparkle;
+
+
+  // ==========================================================
+  // CREST ILLUMINATION
+  // ==========================================================
+
+  float crestLight =
+
+    smoothstep(
+
+      0.45,
+
+      0.95,
+
+      vCrest
+
+    );
+
+
+  color +=
+
+    vec3(
+      0.055,
+      0.090,
+      0.095
+    )
+
+    *
+
+    crestLight;
+
+
+  // ==========================================================
+  // BREAKING DETECTION
+  //
+  // A breaking candidate needs BOTH:
+  //
+  // 1. sufficient geometric slope
+  // 2. position in the upper region of the wave
+  //
+  // This is considerably better than painting every high
+  // vertex white.
+  // ==========================================================
+
+  float breakingSlope =
+
+    smoothstep(
+
+      uBreaking,
+
+      uBreaking +
+      0.18,
+
+      vSlope
+
+    );
+
+
+  float upperWave =
+
+    smoothstep(
+
+      0.52,
+
+      0.84,
+
+      elevation
+
+    );
+
+
+  float breaking =
+
+    breakingSlope
+
+    *
+
+    upperWave;
+
+
+  // ==========================================================
+  // IRREGULAR BREAKING EDGE
+  // ==========================================================
+
+  float breakup1 =
+
+    sin(
+
+      vWorldPosition.x * 3.7
+
+      +
+
+      vWorldPosition.z * 4.9
+
+      +
+
+      uTime * 2.8
+
+    );
+
+
+  float breakup2 =
+
+    sin(
+
+      vWorldPosition.x * 8.1
+
+      -
+
+      vWorldPosition.z * 6.3
+
+      -
+
+      uTime * 4.1
+
+    );
+
+
+  float breakup =
+
+    0.60
+
+    +
+
+    breakup1 *
+    0.20
+
+    +
+
+    breakup2 *
+    0.12
+
+    +
+
+    vDetail *
+    0.18;
+
+
+  breaking *=
+
+    clamp(
+
+      breakup,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  // ==========================================================
+  // ORDINARY CREST FOAM
+  // ==========================================================
+
+  float crestFoam =
+
+    smoothstep(
+
+      0.70,
+
+      0.98,
+
+      elevation
+
+    );
+
+
+  float foamAmount =
+
+    crestFoam
+
+    *
+
+    uFoam
+
+    *
+
+    0.52;
+
+
+  // ==========================================================
+  // BREAKING WHITECAPS
+  // ==========================================================
+
+  foamAmount +=
+
+    breaking
+
+    *
+
+    uWhitecaps;
+
+
+  // Break up the interior of the foam.
+
+  foamAmount *=
+
+    0.52
+
+    +
+
+    vDetail *
+    0.66;
+
+
+  foamAmount =
+
+    clamp(
+
+      foamAmount,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  // ==========================================================
+  // FOAM COLOR
+  // ==========================================================
+
+  vec3 foamColor =
+
+    vec3(
+      0.82,
+      0.91,
+      0.91
+    );
+
+
+  color =
+
+    mix(
+
+      color,
+
+      foamColor,
+
+      foamAmount *
+      0.74
+
+    );
+
+
+  // ==========================================================
+  // EXTRA WHITEWATER ON AGGRESSIVE BREAKING FACES
+  // ==========================================================
+
+  float whitewater =
+
+    breaking
+
+    *
+
+    uWhitecaps
+
+    *
+
+    smoothstep(
+
+      0.55,
+
+      1.0,
+
+      vCrest
+
+    );
+
+
+  color +=
+
+    vec3(
+      0.13,
+      0.16,
+      0.15
+    )
+
+    *
+
+    whitewater;
+
+
+  // ==========================================================
+  // DISTANCE HAZE
+  // ==========================================================
+
+  float distanceToCamera =
+
+    length(
+
+      cameraPosition -
+
+      vWorldPosition
+
+    );
+
+
+  float fogAmount =
+
+    1.0
+
+    -
+
+    exp(
+
+      -uFogDensity *
+
+      uFogDensity *
+
+      distanceToCamera *
+
+      distanceToCamera
+
+    );
+
+
+  color =
+
+    mix(
+
+      color,
+
+      uFogColor,
+
+      clamp(
+
+        fogAmount,
+
+        0.0,
+
+        1.0
+
+      )
+
+    );
+
+
+  // ==========================================================
+  // OUTPUT
+  // ==========================================================
+
+  gl_FragColor =
+
+    vec4(
+      color,
+      1.0
+    );
+
+}
+
+`
+
+  });
+
+}
+
+// ============================================================
+// BUILD / REBUILD OCEAN
+// ============================================================
+
+function rebuildOcean() {
+
+  stage("building ocean mesh");
+
+  if (ocean) {
+
+    scene.remove(ocean);
+
+    ocean.geometry.dispose();
+
+    ocean.material.dispose();
+
+    ocean = null;
+
+  }
+
+  const segments =
+    Number(inputs.mesh.value);
+
+  const geometry =
+    new THREE.PlaneGeometry(
+      360,
+      360,
+      segments,
+      segments
+    );
+
+  geometry.rotateX(
+    -Math.PI / 2
+  );
+
+  oceanMaterial =
+    createOceanMaterial();
+
+  ocean =
+    new THREE.Mesh(
+      geometry,
+      oceanMaterial
+    );
+
+  // Displacement extends beyond the original flat bounds.
+  ocean.frustumCulled =
+    false;
+
+  scene.add(ocean);
+
+  const vertexCount =
+    geometry.attributes.position.count;
+
+  $("vertices").textContent =
+    vertexCount >= 1000
+      ? (vertexCount / 1000).toFixed(1) + "K"
+      : vertexCount;
+
+  stage("ocean mesh ready");
+
+}
+
+
+// ============================================================
+// INITIAL OCEAN
+// ============================================================
+
+rebuildOcean();
+
+stage("compiling ocean shader");
+
+// Force the shader to compile now.
+renderer.render(
+  scene,
+  camera
+);
+
+stage("ocean shader ready");
+
+
+// ============================================================
+// LABELS
+// ============================================================
+
+function updateLabels() {
+
+  $("heightVal").textContent =
+    Number(inputs.height.value).toFixed(2) + " m";
+
+  $("lengthVal").textContent =
+    Number(inputs.length.value).toFixed(1) + " m";
+
+  $("chopVal").textContent =
+    Number(inputs.chop.value).toFixed(2);
+
+  $("speedVal").textContent =
+    Number(inputs.speed.value).toFixed(2);
+
+  $("ripplesVal").textContent =
+    Number(inputs.ripples.value).toFixed(2);
+
+  $("directionVal").textContent =
+    Math.round(Number(inputs.direction.value)) + "°";
+
+
+  // ----------------------------------------------------------
+  // NORMAL / BREAKING LABELS
+  // ----------------------------------------------------------
+
+  $("normalVal").textContent =
+    Number(inputs.normalStrength.value).toFixed(2);
+
+  $("microVal").textContent =
+    Number(inputs.microNormal.value).toFixed(2);
+
+  $("crestVal").textContent =
+    Number(inputs.crestSharpness.value).toFixed(2);
+
+  $("curlVal").textContent =
+    Number(inputs.crestCurl.value).toFixed(2);
+
+  $("breakingVal").textContent =
+    Number(inputs.breaking.value).toFixed(2);
+
+  $("whitecapVal").textContent =
+    Number(inputs.whitecaps.value).toFixed(2);
+
+
+  // ----------------------------------------------------------
+  // WATER
+  // ----------------------------------------------------------
+
+  $("foamVal").textContent =
+    Number(inputs.foam.value).toFixed(2);
+
+  $("reflectVal").textContent =
+    Number(inputs.reflect.value).toFixed(2);
+
+  $("depthVal").textContent =
+    Number(inputs.depth.value).toFixed(2);
+
+
+  // ----------------------------------------------------------
+  // ATMOSPHERE
+  // ----------------------------------------------------------
+
+  $("ambientVal").textContent =
+    Number(inputs.ambient.value).toFixed(2);
+
+  $("sunVal").textContent =
+    Number(inputs.sun.value).toFixed(1);
+
+  $("elevationVal").textContent =
+    Math.round(Number(inputs.elevation.value)) + "°";
+
+  $("hazeVal").textContent =
+    Number(inputs.haze.value).toFixed(4);
+
+
+  // ----------------------------------------------------------
+  // PERFORMANCE
+  // ----------------------------------------------------------
+
+  $("meshVal").textContent =
+    inputs.mesh.value +
+    " × " +
+    inputs.mesh.value;
+
+}
+
+
+// ============================================================
+// UPDATE ALL LIVE SHADER SETTINGS
+// ============================================================
+
+function updateSettings() {
+
+  if (!oceanMaterial) {
+    return;
+  }
+
+  const u =
+    oceanMaterial.uniforms;
+
+
+  // ----------------------------------------------------------
+  // WAVES
+  // ----------------------------------------------------------
+
+  u.uHeight.value =
+    Number(inputs.height.value);
+
+  u.uLength.value =
+    Number(inputs.length.value);
+
+  u.uChop.value =
+    Number(inputs.chop.value);
+
+  u.uSpeed.value =
+    Number(inputs.speed.value);
+
+  u.uRipples.value =
+    Number(inputs.ripples.value);
+
+  u.uDirection.value =
+    THREE.MathUtils.degToRad(
+      Number(inputs.direction.value)
+    );
+
+
+  // ----------------------------------------------------------
+  // NORMALS
+  // ----------------------------------------------------------
+
+  u.uNormalStrength.value =
+    Number(inputs.normalStrength.value);
+
+  u.uMicroNormal.value =
+    Number(inputs.microNormal.value);
+
+
+  // ----------------------------------------------------------
+  // CRESTING / BREAKING
+  // ----------------------------------------------------------
+
+  u.uCrestSharpness.value =
+    Number(inputs.crestSharpness.value);
+
+  u.uCrestCurl.value =
+    Number(inputs.crestCurl.value);
+
+  u.uBreaking.value =
+    Number(inputs.breaking.value);
+
+  u.uWhitecaps.value =
+    Number(inputs.whitecaps.value);
+
+
+  // ----------------------------------------------------------
+  // WATER
+  // ----------------------------------------------------------
+
+  u.uFoam.value =
+    Number(inputs.foam.value);
+
+  u.uReflectivity.value =
+    Number(inputs.reflect.value);
+
+  u.uDepth.value =
+    Number(inputs.depth.value);
+
+
+  // ----------------------------------------------------------
+  // LIGHT / ATMOSPHERE
+  // ----------------------------------------------------------
+
+  u.uSunIntensity.value =
+    Number(inputs.sun.value);
+
+  u.uFogDensity.value =
+    Number(inputs.haze.value);
+
+  hemisphere.intensity =
+    Number(inputs.ambient.value);
+
+  sun.intensity =
+    Number(inputs.sun.value);
+
+  scene.fog.density =
+    Number(inputs.haze.value);
+
+
+  updateSun();
+
+
+  skyMaterial.uniforms
+    .uSunDirection.value
+    .copy(sun.position)
+    .normalize();
+
+
+  updateLabels();
+
+}
+
+
+// ============================================================
+// LIVE SLIDER EVENTS
+// ============================================================
+
+[
+  "height",
+  "length",
+  "chop",
+  "speed",
+  "ripples",
+  "direction",
+
+  "normalStrength",
+  "microNormal",
+
+  "crestSharpness",
+  "crestCurl",
+  "breaking",
+  "whitecaps",
+
+  "foam",
+  "reflect",
+  "depth",
+
+  "ambient",
+  "sun",
+  "elevation",
+  "haze"
+
+].forEach(name => {
+
+  inputs[name].addEventListener(
+    "input",
+    updateSettings
+  );
+
+});
+
+
+// ============================================================
+// MESH RESOLUTION
+// ============================================================
+
+inputs.mesh.addEventListener(
+  "input",
+  updateLabels
+);
+
+
+inputs.mesh.addEventListener(
+  "change",
+  () => {
+
+    rebuildOcean();
+
+    updateSettings();
+
+  }
+);
+
+
+// ============================================================
+// SUN GLITTER
+// ============================================================
+
+$("glitter").addEventListener(
+  "change",
+  event => {
+
+    if (!oceanMaterial) {
+      return;
+    }
+
+    oceanMaterial.uniforms
+      .uGlitter.value =
+      event.target.checked
+        ? 1
+        : 0;
+
+  }
+);
+
+
+// ============================================================
+// SEA-STATE PRESETS
+//
+// Notice that these now alter the crest/breaking model too.
+// ============================================================
+
+const presets = {
+
+  calm: {
+
+    height: 0.16,
+    length: 34,
+    chop: 0.08,
+    speed: 0.48,
+    ripples: 0.12,
+    direction: 25,
+
+    normalStrength: 0.40,
+    microNormal: 0.30,
+
+    crestSharpness: 0.12,
+    crestCurl: 0.05,
+    breaking: 0.60,
+    whitecaps: 0.02,
+
+    foam: 0.02,
+    reflect: 0.90,
+    depth: 0.52,
+
+    ambient: 1.05,
+    sun: 3.2,
+    elevation: 30,
+    haze: 0.002,
+
+    storm: 0
+
+  },
+
+
+  sea: {
+
+    height: 1.10,
+    length: 20,
+    chop: 0.50,
+    speed: 1.00,
+    ripples: 0.35,
+    direction: 35,
+
+    normalStrength: 0.75,
+    microNormal: 0.55,
+
+    crestSharpness: 0.75,
+    crestCurl: 0.45,
+    breaking: 0.34,
+    whitecaps: 0.75,
+
+    foam: 0.45,
+    reflect: 0.78,
+    depth: 0.70,
+
+    ambient: 0.90,
+    sun: 2.7,
+    elevation: 20,
+    haze: 0.003,
+
+    storm: 0
+
+  },
+
+
+  rough: {
+
+    height: 2.35,
+    length: 17,
+    chop: 1.00,
+    speed: 1.35,
+    ripples: 0.70,
+    direction: 48,
+
+    normalStrength: 1.05,
+    microNormal: 0.85,
+
+    crestSharpness: 1.25,
+    crestCurl: 0.90,
+    breaking: 0.23,
+    whitecaps: 1.20,
+
+    foam: 0.90,
+    reflect: 0.68,
+    depth: 0.82,
+
+    ambient: 0.68,
+    sun: 1.7,
+    elevation: 13,
+    haze: 0.0055,
+
+    storm: 0.38
+
+  },
+
+
+  storm: {
+
+    height: 4.10,
+    length: 23,
+    chop: 1.45,
+    speed: 1.65,
+    ripples: 1.05,
+    direction: 62,
+
+    normalStrength: 1.35,
+    microNormal: 1.15,
+
+    crestSharpness: 1.70,
+    crestCurl: 1.25,
+    breaking: 0.16,
+    whitecaps: 1.65,
+
+    foam: 1.40,
+    reflect: 0.54,
+    depth: 0.94,
+
+    ambient: 0.40,
+    sun: 0.55,
+    elevation: 7,
+    haze: 0.009,
+
+    storm: 0.90
+
+  }
+
+};
+
+
+// ============================================================
+// APPLY PRESET
+// ============================================================
+
+document
+  .querySelectorAll(".preset")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const name =
+          button.dataset.state;
+
+        const preset =
+          presets[name];
+
+        if (!preset) {
+          return;
+        }
+
+
+        Object.entries(preset)
+          .forEach(([key, value]) => {
+
+            if (inputs[key]) {
+
+              inputs[key].value =
+                value;
+
+            }
+
+          });
+
+
+        skyMaterial.uniforms
+          .uStorm.value =
+          preset.storm;
+
+
+        $("state").textContent =
+          name.toUpperCase();
+
+
+        document
+          .querySelectorAll(".preset")
+          .forEach(other => {
+
+            other.classList.remove(
+              "active"
+            );
+
+          });
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        updateSettings();
+
+      }
+    );
+
+  });
+
+
+// ============================================================
+// RANDOMIZE
+// ============================================================
+
+function randomRange(min, max) {
+
+  return (
+    min +
+    Math.random() *
+    (max - min)
+  );
+
+}
+
+
+$("randomize").addEventListener(
+  "click",
+  () => {
+
+    inputs.height.value =
+      randomRange(0.1, 3.8);
+
+    inputs.length.value =
+      randomRange(8, 45);
+
+    inputs.chop.value =
+      randomRange(0.05, 1.35);
+
+    inputs.speed.value =
+      randomRange(0.3, 1.9);
+
+    inputs.ripples.value =
+      randomRange(0.05, 1.0);
+
+    inputs.direction.value =
+      randomRange(0, 360);
+
+
+    inputs.normalStrength.value =
+      randomRange(0.25, 1.4);
+
+    inputs.microNormal.value =
+      randomRange(0.15, 1.2);
+
+
+    inputs.crestSharpness.value =
+      randomRange(0.1, 1.7);
+
+    inputs.crestCurl.value =
+      randomRange(0.05, 1.2);
+
+    inputs.breaking.value =
+      randomRange(0.15, 0.55);
+
+    inputs.whitecaps.value =
+      randomRange(0.05, 1.6);
+
+
+    inputs.foam.value =
+      randomRange(0.05, 1.4);
+
+    inputs.reflect.value =
+      randomRange(0.45, 0.95);
+
+    inputs.depth.value =
+      randomRange(0.4, 0.95);
+
+
+    inputs.ambient.value =
+      randomRange(0.4, 1.4);
+
+    inputs.sun.value =
+      randomRange(0.5, 4.5);
+
+    inputs.elevation.value =
+      randomRange(5, 55);
+
+    inputs.haze.value =
+      randomRange(0.0015, 0.008);
+
+
+    skyMaterial.uniforms
+      .uStorm.value =
+      randomRange(0, 0.45);
+
+
+    $("state").textContent =
+      "CUSTOM";
+
+
+    document
+      .querySelectorAll(".preset")
+      .forEach(button => {
+
+        button.classList.remove(
+          "active"
+        );
+
+      });
+
+
+    updateSettings();
+
+  }
+);
+
+
+// ============================================================
+// RESET DEFAULTS
+// ============================================================
+
+const defaults = {
+
+  height: 1.10,
+  length: 20,
+  chop: 0.50,
+  speed: 1.00,
+  ripples: 0.35,
+  direction: 35,
+
+  normalStrength: 0.75,
+  microNormal: 0.55,
+
+  crestSharpness: 0.75,
+  crestCurl: 0.45,
+  breaking: 0.34,
+  whitecaps: 0.75,
+
+  foam: 0.45,
+  reflect: 0.78,
+  depth: 0.70,
+
+  ambient: 0.90,
+  sun: 2.7,
+  elevation: 20,
+  haze: 0.003,
+
+  mesh: 96
+
+};
+
+
+$("reset").addEventListener(
+  "click",
+  () => {
+
+    Object.entries(defaults)
+      .forEach(([key, value]) => {
+
+        if (inputs[key]) {
+
+          inputs[key].value =
+            value;
+
+        }
+
+      });
+
+
+    $("glitter").checked =
+      true;
+
+    $("drift").checked =
+      false;
+
+
+    skyMaterial.uniforms
+      .uStorm.value =
+      0;
+
+
+    $("state").textContent =
+      "SEA";
+
+
+    document
+      .querySelectorAll(".preset")
+      .forEach(button => {
+
+        button.classList.toggle(
+
+          "active",
+
+          button.dataset.state ===
+          "sea"
+
+        );
+
+      });
+
+
+    cameraRadius =
+      29;
+
+    cameraTheta =
+      THREE.MathUtils.degToRad(
+        42
+      );
+
+    cameraPhi =
+      THREE.MathUtils.degToRad(
+        72
+      );
+
+    updateCamera();
+
+
+    rebuildOcean();
+
+    updateSettings();
+
+  }
+);
+
+
+// ============================================================
+// FPS
+// ============================================================
+
+let frameCount =
+  0;
+
+
+let fpsStart =
+  performance.now();
+
+
+function updateFPS(now) {
+
+  frameCount++;
+
+
+  const elapsed =
+    now -
+    fpsStart;
+
+
+  if (elapsed >= 500) {
+
+    const fps =
+      Math.round(
+
+        frameCount *
+        1000 /
+
+        elapsed
+
+      );
+
+
+    $("fps").textContent =
+      fps;
+
+
+    frameCount =
+      0;
+
+
+    fpsStart =
+      now;
+
+  }
+
+}
+
+
+// ============================================================
+// OPTIONAL CAMERA DRIFT
+// ============================================================
+
+function updateCameraDrift() {
+
+  if (!$("drift").checked) {
+    return;
+  }
+
+
+  cameraTheta +=
+    0.00035;
+
+
+  updateCamera();
+
+}
+
+
+// ============================================================
+// RESIZE
+// ============================================================
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    camera.aspect =
+
+      window.innerWidth /
+
+      window.innerHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+
+      window.innerWidth,
+
+      window.innerHeight
+
+    );
+
+  }
+);
+
+
+// ============================================================
+// INITIAL VALUES
+// ============================================================
+
+updateLabels();
+
+updateSettings();
+
+
+// ============================================================
+// ANIMATION
+// ============================================================
+
+stage("starting animation");
+
+
+const clock =
+  new THREE.Clock();
+
+
+function animate(now) {
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const elapsed =
+    clock.getElapsedTime();
+
+
+  if (oceanMaterial) {
+
+    oceanMaterial.uniforms
+      .uTime.value =
+      elapsed;
+
+  }
+
+
+  updateCameraDrift();
+
+
+  renderer.render(
+
+    scene,
+
+    camera
+
+  );
+
+
+  updateFPS(now);
+
+}
+
+
+requestAnimationFrame(
+  animate
+);
+
+
+// ============================================================
+// READY
+// ============================================================
+
+stage("ready");
+
+
+const loading =
+  document.getElementById(
+    "loading"
+  );
+
+
+loading.style.opacity =
+  "0";
+
+
+setTimeout(
+  () => {
+
+    loading.style.display =
+      "none";
+
+  },
+  350
+);
+
+
+// ============================================================
+// MAIN INITIALIZATION ERROR HANDLER
+// ============================================================
+
+} catch (error) {
+
+  fatal(error);
+
+}
+
+</script>
+
+</body>
+</html>

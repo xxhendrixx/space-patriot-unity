@@ -10,6 +10,9 @@ namespace SpacePatriot
         Vector2 journalScroll;
         float valveA=.25f,valveB=.8f,valveC=.1f;
         bool restartConfirm;
+        readonly System.Collections.Generic.List<string> menuControls=new System.Collections.Generic.List<string>();
+        int menuFocus,menuActionFrame=-1,menuNavigationFrame=-1;
+        string focusPage;
         void Styles()
         {
             if(type!=null)return;
@@ -23,11 +26,14 @@ namespace SpacePatriot
         void Rule(float x,float y,float w)=>Fill(x,y,w,1,line);
         bool Button(string label,float x,float y,float w=260,float h=46,bool primary=false,bool enabled=true)
         {
-            var rect=new Rect(x,y,w,h);bool hover=rect.Contains(Event.current.mousePosition);
+            string controlId=x+":"+y+":"+label;if(Event.current.type==EventType.Layout&&enabled)menuControls.Add(controlId);
+            bool selected=UnityEngine.InputSystem.Gamepad.current!=null&&menuControls.IndexOf(controlId)==menuFocus;
+            var rect=new Rect(x,y,w,h);bool hover=rect.Contains(Event.current.mousePosition)||selected;
             Fill(x,y,w,h,primary?amber:hover?new Color(.17f,.23f,.24f):new Color(.10f,.14f,.15f));
             if(!primary)Fill(x,y,3,h,hover?aqua:line);
             button.fontSize=17;button.fontStyle=primary?FontStyle.Bold:FontStyle.Normal;button.normal.textColor=!enabled?muted:primary?new Color(.08f,.10f,.10f):paper;
-            bool old=GUI.enabled;GUI.enabled=enabled;bool click=GUI.Button(rect,label,button);GUI.enabled=old;
+            bool old=GUI.enabled;GUI.enabled=enabled;GUI.SetNextControlName(controlId);bool click=GUI.Button(rect,label,button);GUI.enabled=old;
+            if(selected&&enabled&&menuActionFrame!=Time.frameCount&&UnityEngine.InputSystem.Gamepad.current?.buttonSouth.wasPressedThisFrame==true){click=true;menuActionFrame=Time.frameCount;}
             if(click)Sound(buttonClip,.25f);return click;
         }
         void Tag(string title,string value,float x,float y,float width=190)
@@ -37,11 +43,13 @@ namespace SpacePatriot
         void OnGUI()
         {
             if(save==null||view==null)return;Styles();float fit=Mathf.Min(Screen.width/1440f,Screen.height/900f);float ox=(Screen.width-1440*fit)/2,oy=(Screen.height-900*fit)/2;
+            if(Event.current.type==EventType.Layout){var pad=UnityEngine.InputSystem.Gamepad.current;if(focusPage!=page){menuFocus=0;focusPage=page;}
+                if(pad!=null&&menuNavigationFrame!=Time.frameCount&&menuControls.Count>0){if(pad.dpad.down.wasPressedThisFrame||pad.dpad.right.wasPressedThisFrame)menuFocus=(menuFocus+1)%menuControls.Count;if(pad.dpad.up.wasPressedThisFrame||pad.dpad.left.wasPressedThisFrame)menuFocus=(menuFocus+menuControls.Count-1)%menuControls.Count;if(pad.buttonEast.wasPressedThisFrame&&started)menu=false;menuNavigationFrame=Time.frameCount;}menuControls.Clear();}
             GUI.matrix=Matrix4x4.identity;Fill(0,0,ox,Screen.height,Color.black);Fill(Screen.width-ox,0,ox,Screen.height,Color.black);Fill(0,0,Screen.width,oy,Color.black);Fill(0,Screen.height-oy,Screen.width,oy,Color.black);
             GUI.matrix=Matrix4x4.TRS(new Vector3(ox,oy,0),Quaternion.identity,new Vector3(fit,fit,1));
             if(!started)TitleScreen();else
             {
-                FlightHud();
+                FlightHud();WeaponsHud();
                 if(menu)Computer();
                 if(reportText!="")Report();
                 if(dead)Recovery();
@@ -77,8 +85,8 @@ namespace SpacePatriot
                 Text("TAB  NAVIGATION     ESC  FLIGHT COMPUTER",31,861,510,23,12,muted,true);
                 if(!walking)
                 {
-                    Fill(31,702,256,121,new Color(.025f,.045f,.05f,.80f));Tag("VELOCITY",speed.ToString("0")+" m/s",48,720,142);Tag("ALTITUDE",Mathf.Max(0,ship.position.y-world.SurfaceAt(ship.position)-2.65f).ToString("0")+" m",179,720,95);
-                    Text("THRUST  "+(throttle*100).ToString("0")+"%",48,784,220,24,13,muted,true);
+                    Fill(31,702,256,121,new Color(.025f,.045f,.05f,.80f));Tag("VELOCITY",speed.ToString("0")+" m/s",48,720,142);Tag("ALTITUDE",Mathf.Max(0,ship.position.y-world.SurfaceAt(ship.position)-StandHeight).ToString("0")+" m",179,720,95);
+                    Text("SPEED LIMIT  "+(throttle*100).ToString("0")+"%",48,784,220,24,13,muted,true);
                     Fill(1150,687,259,136,new Color(.025f,.045f,.05f,.80f));Meter("HULL",HullPercent,100,1170,704,218,amber);Meter("FUEL",save.fuel,100,1170,755,218,aqua);
                     Text("SHIELD  "+shield.ToString("0")+"    HEAT  "+heat.ToString("0"),1150,840,259,24,12,heat>80?amber:muted,true,TextAnchor.UpperRight);
                     if(flying)
@@ -92,13 +100,14 @@ namespace SpacePatriot
                         if(docking)Text("APPROACH ASSIST",510,580,420,40,18,aqua,true,TextAnchor.MiddleCenter);
                         if(save.fuel<12)Text("LOW FUEL / RETURN TO PORT",470,640,500,35,19,amber,true,TextAnchor.MiddleCenter);
                     }
-                    else Prompt("F  LAUNCH     E  LEAVE SEAT     C  CAMERA");
+                    else Prompt("SPACE  LAUNCH     F  LEAVE SEAT     V  CAMERA");
                 }
                 else
                 {
                     var near=NearInteract();
                     if(near!=null)Prompt("E  "+near.name.ToUpperInvariant());
-                    else if(Vector3.Distance(walkPosition,ship.position)<13)Prompt("E  BOARD "+Spec.name);
+                    else if(Vector3.Distance(walkPosition,CargoAccess)<14)Prompt("E  CARGO MANIFEST     F  BOARD");
+                    else if(Vector3.Distance(walkPosition,ship.position)<Spec.width*.7f+8)Prompt("F  BOARD "+Spec.name);
                     Text("WASD  WALK    SHIFT  RUN    RIGHT MOUSE / ARROWS  LOOK",550,861,830,23,12,muted,true,TextAnchor.UpperRight);
                     Fill(718,448,4,4,paper);
                     foreach(var p in world.places)if(p.kind!="landing"&&Vector3.Distance(walkPosition,p.position)<65)Marker(p.name.ToUpperInvariant(),p.position+Vector3.up*2.8f,aqua);
@@ -123,17 +132,17 @@ namespace SpacePatriot
         {
             Fill(0,70,1440,830,new Color(.01f,.025f,.03f,.67f));Fill(88,112,1264,682,panel);
             Text("FLIGHT\nCOMPUTER",117,144,227,100,30,paper,true);Text(Spec.designation+" / "+Spec.name,117,244,231,30,12,amber,true);Rule(117,287,200);
-            string[] keys={"overview","navigation","cases","trade","hangar","journal","help","settings"};string[] names={"01   Operations","02   Navigation","03   Cases","04   Freight exchange","05   Shipyard & service","06   Flight journal","07   Flight manual","08   Settings"};
-            for(int i=0;i<keys.Length;i++)if(Button(names[i],109,307+i*48,233,41,page==keys[i]))page=keys[i];
+            string[] keys={"overview","navigation","cases","trade","cargo","contracts","hangar","systems","journal","help","controls","settings"};string[] names={"Operations","Navigation","The Long Debt","Freight exchange","Cargo handling","Freight contracts","Fleet & service","Vessel systems","Journal","Flight manual","Controls","Settings"};
+            for(int i=0;i<keys.Length;i++)if(Button(names[i],109,291+i*34,233,30,page==keys[i]))page=keys[i];
             if(Button("RETURN TO SHIFT  →",109,719,233,43))menu=false;
             Fill(367,141,1,619,line);Text(PageTitle(),399,143,864,45,30,paper,true);Rule(399,203,918);
             switch(page)
             {
                 case "overview":Overview();break;case "navigation":Navigation();break;case "cases":Cases();break;case "trade":Trade();break;
-                case "hangar":Hangar();break;case "journal":Journal();break;case "help":Help(400,229);break;case "settings":Settings(400,236);break;case "reactor":Reactor();break;
+                case "contracts":ContractsPanel();break;case "cargo":CargoPanel();break;case "systems":SystemsPanel();break;case "controls":ControlsPanel();break;case "hangar":Hangar();break;case "journal":Journal();break;case "help":Help(400,229);break;case "settings":Settings(400,236);break;case "reactor":Reactor();break;
             }
         }
-        string PageTitle()=>page switch{"navigation"=>"PLOT A COURSE","cases"=>"THE LONG DEBT","trade"=>"FREIGHT EXCHANGE","hangar"=>"SHIPYARD & SERVICE","journal"=>"FLIGHT JOURNAL","help"=>"FLIGHT MANUAL","settings"=>"SETTINGS","reactor"=>"CITY POWER BUS",_=>"SHIFT OPERATIONS"};
+        string PageTitle()=>page switch{"contracts"=>"FREIGHT CONTRACTS","cargo"=>"CARGO HANDLING","systems"=>"VESSEL SYSTEMS","controls"=>"CONTROLS & INPUT","navigation"=>"PLOT A COURSE","cases"=>"THE LONG DEBT","trade"=>"FREIGHT EXCHANGE","hangar"=>"SHIPYARD & SERVICE","journal"=>"FLIGHT JOURNAL","help"=>"FLIGHT MANUAL","settings"=>"SETTINGS","reactor"=>"CITY POWER BUS",_=>"SHIFT OPERATIONS"};
         void Overview()
         {
             Tag("LOCAL SECTOR",CurrentWorld.name,400,233,320);Tag("VESSEL",Spec.name,778,233,235);Tag("ACCOUNT",save.credits.ToString("N0")+" CR",1080,233,236);
@@ -185,37 +194,41 @@ namespace SpacePatriot
         }
         void Trade()
         {
-            Text("Cargo: "+Progression.Used(save)+" / "+Spec.capacity+" units",400,236,800,37,23,paper,true);
-            Text(AtPort?"Local prices respond to your campaign decisions. Selling returns 78% of the local buy price.":"Exchange access is available after landing.",400,289,902,61,17,muted);
+            Text("Loaded hold: "+Progression.Used(save)+" / "+Spec.capacity+" units",400,236,800,37,23,paper,true);
+            Text(AtPort?"Purchases arrive on the dock. Load them through Cargo handling. Unload goods before selling.":"Exchange access is available after landing.",400,289,902,61,17,muted);
             string[] goods={"organics","ore","crystal"};string[] descriptions={"Filter cultures, food and medical feedstock.","Construction stock and replacement parts.","Power cells and precision lattice material."};
             for(int i=0;i<3;i++)
             {
                 float y=377+i*107;int price=Progression.Price(save,CurrentWorld,goods[i]);int units=Progression.Cargo(save,goods[i]);
                 Rule(400,y-17,918);Text(goods[i].ToUpperInvariant(),400,y,333,26,19,paper,true);Text(descriptions[i],400,y+33,400,52,16,muted);
-                Text(units+" UNITS",813,y+6,136,29,17,aqua,true);
-                if(Button("BUY / "+price,956,y,170,47,false,AtPort&&save.credits>=price&&Progression.Used(save)<Spec.capacity))
-                {save.credits-=price;Progression.AddCargo(save,goods[i],1);Save();}
-                int sell=Mathf.FloorToInt(price*.78f);if(Button("SELL / "+sell,1138,y,170,47,false,AtPort&&units>0))
-                {save.credits+=sell;Progression.AddCargo(save,goods[i],-1);Save();}
+                Text(units+" HOLD\n"+CargoHandling.Staged(save,save.world,goods[i])+" DOCK",813,y+6,136,58,15,aqua,true);
+                if(Button("BUY / "+price,956,y,170,47,false,AtPort&&save.credits>=price&&save.economy.markets.Find(m=>m.id==CurrentWorld.id).Stock(goods[i])>=1))
+                {save.economy.markets.Find(m=>m.id==CurrentWorld.id).Add(goods[i],-1);save.credits-=price;CargoHandling.Stage(save,save.world,goods[i],1);RebuildCargo();Save();}
+                int sell=FrontierEconomy.Price(save,CurrentWorld,goods[i],false);if(Button("SELL / "+sell,1138,y,170,47,false,AtPort&&CargoHandling.Staged(save,save.world,goods[i])-Mathf.Max(0,FrontierEconomy.Reserved(save,goods[i])-Progression.Cargo(save,goods[i]))>0))
+                {save.economy.markets.Find(m=>m.id==CurrentWorld.id).Add(goods[i],1);save.credits+=sell;CargoHandling.Stage(save,save.world,goods[i],-1);RebuildCargo();Save();}
             }
-            Text("Case deliveries are handed over at a freight terminal with E. They are separate from selling cargo.",400,713,905,58,16,amber);
+            Text("Cargo must be physically aboard to travel or fulfil a delivery. Open Cargo handling to load and unload.",400,713,905,58,16,amber);
         }
         void Hangar()
         {
-            for(int i=0;i<3;i++)if(Button(ShipSpec.Fleet[i].name,400+i*308,234,289,46,selectedShip==i))selectedShip=i;
-            var spec=ShipSpec.Fleet[selectedShip];Text(spec.designation+" / "+spec.role,400,315,915,27,13,amber,true);Text(spec.description,400,360,880,92,22,muted);
-            Tag("CRUISE",spec.speed+" m/s",400,476,205);Tag("HOLD",spec.capacity+" units",634,476,205);Tag("HULL",spec.health+" points",868,476,205);Tag("PRICE",spec.price==0?"ISSUED":spec.price+" CR",1102,476,205);
-            bool owned=selectedShip==0||(selectedShip==1?save.striderOwned:save.wayfarerOwned);
-            bool eligible=AtPort&&Progression.Used(save)<=spec.capacity;
-            if(Button(save.ship==selectedShip?"CURRENT VESSEL":owned?"TRANSFER TO VESSEL":"PURCHASE & TRANSFER",400,581,430,49,true,eligible&&save.ship!=selectedShip&&(owned||save.credits>=spec.price)))
+            for(int i=0;i<10;i++){int col=i%5,row=i/5;if(Button(ShipSpec.Fleet[i*10].name.Split(' ')[0],400+col*184,228+row*39,173,33,selectedShip/10==i))selectedShip=i*10+selectedShip%10;}
+            if(Button("← FINISH",400,317,195,35))selectedShip=selectedShip/10*10+(selectedShip%10+9)%10;
+            Text(ShipSpec.Fleet[selectedShip].name,611,319,470,36,21,paper,true);
+            if(Button("FINISH →",1113,317,195,35))selectedShip=selectedShip/10*10+(selectedShip%10+1)%10;
+            var spec=ShipSpec.Fleet[selectedShip];Text(spec.designation+" / "+spec.role,400,371,915,27,13,amber,true);Text(spec.description,400,411,890,77,19,muted);
+            Tag("SPEED",spec.speed.ToString("0")+" m/s",400,503,220);Tag("HOLD",spec.capacity+" units",634,503,210);Tag("LENGTH",spec.length.ToString("0.0")+" m",868,503,220);Tag("PRICE",spec.price+" CR",1102,503,205);
+            bool owned=save.ownedShips.Contains(selectedShip);bool eligible=AtPort&&Progression.Used(save)<=spec.capacity&&cargoTransfer==null;
+            if(Button(save.ship==selectedShip?"CURRENT VESSEL":owned?"ASSIGN VESSEL":"PURCHASE & ASSIGN",400,600,430,49,true,eligible&&save.ship!=selectedShip&&(owned||save.credits>=spec.price)))
             {
-                if(!owned){save.credits-=spec.price;if(selectedShip==1)save.striderOwned=true;else save.wayfarerOwned=true;}
-                save.ship=selectedShip;save.hull=spec.health;RespawnShip();walking=true;walkPosition=new Vector3(-9,world.Deck+1.75f,-15);Save();Toast("Transfer complete. Your cargo is aboard.");
+                if(!owned){save.credits-=spec.price;save.ownedShips.Add(selectedShip);}
+                save.ship=selectedShip;save.hull=spec.health;activeDeck=null;RespawnShip();walking=true;walkPosition=ship.position+new Vector3(-Spec.width*.65f,1.75f-StandHeight,-3);Save();Toast("Fleet assignment complete. Original vessel dimensions and flight specifications restored.");
             }
             int service=Mathf.CeilToInt((Spec.health-save.hull)*1.4f+(100-save.fuel)*2);
-            if(Button("REPAIR + REFUEL / "+service+" CR",851,581,456,49,false,AtPort&&save.credits>=service))
-            {save.credits-=service;save.hull=Spec.health;save.fuel=100;shield=100;Save();Toast("Maintenance complete. All systems ready.");}
-            Text("Transfers require a landed vessel and enough room for all current cargo.",400,658,900,35,16,muted);
+            if(Button("REPAIR + REFUEL / "+service+" CR",851,600,456,49,false,AtPort&&save.credits>=service))
+            {save.credits-=service;save.hull=Spec.health;save.fuel=100;shield=100;systemsHull=save.hull;Save();Toast("Hull repaired and fuel replenished. Component maintenance is available under Vessel systems.");}
+            int rearm=0;for(int i=0;i<WeaponSpec.All.Length;i++){var w=WeaponSpec.All[i];if(i!=1)rearm+=Mathf.Max(0,w.mag+w.reserve-save.ammo[i].mag-save.ammo[i].reserve)*(i==2?12:1);}
+            if(Button("REARM / "+rearm+" CR",851,666,456,42,false,AtPort&&rearm>0&&save.credits>=rearm)){save.credits-=rearm;save.ammo=System.Array.ConvertAll(WeaponSpec.All,w=>new WeaponAmmo(w.mag,w.reserve));reloadRemaining=0;reloadWeapon=-1;Save();Toast("Magazines and reserve ammunition replenished.");}
+            Text("Vessel transfers require a port berth and sufficient hold capacity.",400,654,425,50,15,muted);
             if(AtPort&&save.fuel<12&&Button("PORT EMERGENCY FUEL / 12 UNITS",400,706,460,42))
             {save.fuel=12;Save();Toast("Safety reserve issued. No charge.");}
         }
@@ -229,16 +242,26 @@ namespace SpacePatriot
         }
         void Help(float x,float y)
         {
-            string[] left={"ON FOOT","FLIGHT","LANDING","TRAVEL","CASES","CAMERA"};
-            string[] right={"WASD move · Shift run · Right mouse / arrows look · E interact or board","F launch · W/S throttle · A/D steer · Arrows pitch · Q/E roll · R/F lift/lower · Shift boost · Space brake · Left click / Ctrl fire","Brake below 45 m/s; press L within 140 m of a pad. E leaves the pilot seat after landing.","Tab opens Navigation. Climb 65 m above port; slow below 70 m/s. Each world jump costs 8 fuel.","Accept a case, follow its objective, and use the matching terminal on foot. Campaign choices affect standing and prices.","C toggles the modeled cockpit and chase view. Esc opens the flight computer. No mouse capture is required."};
-            for(int i=0;i<left.Length;i++){Text(left[i],x,y+i*71,110,28,12,amber,true);Text(right[i],x+118,y+i*71,started?783:522,65,17,paper);}
+            string[] left={"ON FOOT","TRANSLATION","ROTATION","FLIGHT","LAND / CARGO","COCKPIT"};
+            string[] right={"WASD move · Shift run · F board/leave seat · E interact · Right mouse / arrows look",
+                "W/S forward/reverse · A/D strafe · Space/Ctrl up/down · Mouse wheel speed limit · Shift boost · X brake",
+                "Mouse while holding right button, or arrow keys: pitch/yaw · Q/E or [/] roll · U level to horizon",
+                "Space or L launch · T flight assist · G gear · P power · Cockpit switch for cruise · H jump · Double-tap W tactical thrust",
+                "X brake, G extend gear, L landing assist. Buy at exchange; open hatch and load at the cargo ramp. Close hatch before launch.",
+                "V cockpit/chase · Z/I instruments · Click modeled switches/MFDs · Y arm weapons · 1/2/3 select · R reload · C target · Left click fire · Tab navigation · Esc menu"};
+            for(int i=0;i<left.Length;i++){Text(left[i],x,y+i*71,110,30,12,amber,true);Text(right[i],x+118,y+i*71,started?783:522,65,16,paper);}
         }
         void Settings(float x,float y)
         {
             Text("AUDIO LEVEL",x,y,540,30,13,amber,true);float volume=PlayerPrefs.GetFloat("sp.volume",.55f);float newVolume=GUI.HorizontalSlider(new Rect(x,y+46,500,20),volume,0,1);if(newVolume!=volume)PlayerPrefs.SetFloat("sp.volume",newVolume);
-            Text("GRAPHICS",x,y+102,590,30,13,amber,true);
-            if(Button("STANDARD",x,y+148,237,43))SetQuality(false);if(Button("HIGH",x+258,y+148,237,43))SetQuality(true);
-            Text("Standard reduces shadow distance and render resolution. High favors distant detail. Settings stay on this browser.",x,y+215,started?870:610,85,18,muted);
+            Text("GRAPHICS",x,y+80,590,25,13,amber,true);
+            if(Button("STANDARD",x,y+113,237,36))SetQuality(false);if(Button("HIGH",x+258,y+113,237,36))SetQuality(true);
+            bool mouseInvert=PlayerPrefs.GetInt("sp.invert",0)==1,padInvert=PlayerPrefs.GetInt("sp.padInvert",0)==1;
+            if(Button("MOUSE Y: "+(mouseInvert?"INVERTED":"NORMAL"),x,y+180,237,38)){PlayerPrefs.SetInt("sp.invert",mouseInvert?0:1);PlayerPrefs.Save();}
+            if(Button("STICK Y: "+(padInvert?"INVERTED":"NORMAL"),x+258,y+180,260,38)){PlayerPrefs.SetInt("sp.padInvert",padInvert?0:1);PlayerPrefs.Save();}
+            float sensitivity=PlayerPrefs.GetFloat("sp.sensitivity",1);Text("MOUSE SENSITIVITY  "+sensitivity.ToString("0.0"),x,y+238,510,24,13,amber,true);
+            float changed=GUI.HorizontalSlider(new Rect(x,y+272,500,20),sensitivity,.25f,2);if(changed!=sensitivity)PlayerPrefs.SetFloat("sp.sensitivity",changed);
+            Text("Normal: move mouse/stick up to look up. Hold right mouse to steer. Arrow keys also steer.",x,y+305,started?870:610,38,15,muted);
             if(started&&Button(restartConfirm?"CONFIRM NEW SHIFT":"START A NEW SHIFT",x,y+345,350,46,false))
             {
                 if(!restartConfirm){restartConfirm=true;Toast("Press Confirm New Shift to replace this browser's saved progress.");}

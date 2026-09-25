@@ -1,0 +1,1477 @@
+[
+  {
+    "path": "index.html",
+    "bytes": 2311148,
+    "sha256": "39fb372b35108a7f4b2848e4fa27b26b329e2fc898670e057560f9c3aacd1eb3"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 40804,
+    "sha256": "ea177e3ca1950c411dc4054830057ff62f8e37eaf1fe2729843c556dab241aae"
+  },
+  {
+    "path": "package.json",
+    "bytes": 571,
+    "sha256": "01f0acd0d90fd700b32036610e0d3681a769acfeafdf2a4cf107e3048764c6df"
+  },
+  {
+    "path": "Space_Patriot.html",
+    "bytes": 89218835,
+    "sha256": "ce3821a69729794d666d94f42c2512e84b350eca45c46bf40a5b5b30f0d4064b"
+  },
+  {
+    "path": "assets/FRONTIER_09_ATLAS_PROMPTS.md",
+    "bytes": 4865,
+    "sha256": "70d09925ace41d066ac2870fd2c654aa345feea5826b2e268e253ca97e306c7e"
+  },
+  {
+    "path": "assets/SPACE_PATRIOT_PROMPTS.md",
+    "bytes": 9593,
+    "sha256": "85de316a4db2b413a9d79ce718df996455fbfdfba347fe5a7527fe9ddf22ec37"
+  },
+  {
+    "path": "docs/ADS_ART_PROMPTS.md",
+    "bytes": 3651,
+    "sha256": "3c7643345251f56b30785c4d2f978ce4273ef25bb16302620904b4dbfd0b5f61"
+  },
+  {
+    "path": "docs/ALIEN_ATLAS_PROMPTS.md",
+    "bytes": 3534,
+    "sha256": "88bf188af17daca718a15349b83981e66cdce2ae8926ad015a452e650b3489bd"
+  },
+  {
+    "path": "docs/COSMOPLOT_WORLDS.md",
+    "bytes": 3348,
+    "sha256": "c17ded4bd181d1dbf36691c2c3b4a525fa547351699dd518ecadffd54296bfc3"
+  },
+  {
+    "path": "docs/FRONTIER_10.md",
+    "bytes": 5158,
+    "sha256": "065d5b6e722d33a34ad9bd0b5bcf1f97e7346b1700c1bbadd2ccfbfeb5065fb7"
+  },
+  {
+    "path": "docs/FRONTIER_11.md",
+    "bytes": 8690,
+    "sha256": "00890e923c2c4b2748295c5733985bb5e041b961adcfe262ca28df1a3e871c2b"
+  },
+  {
+    "path": "docs/GRAPHICS_FEATURE.md",
+    "bytes": 14659,
+    "sha256": "e5afcfc899d941952eb4ad4d160ea4d4437d03f2503e62120b2113aa099f4fba"
+  },
+  {
+    "path": "docs/pause-terminal-prompt.txt",
+    "bytes": 1803,
+    "sha256": "7c357052489e36f55c64c57bc2ba381783703cdf66da813c54f1ab37b4c50c2e"
+  },
+  {
+    "path": "docs/PLANET_FLIGHT_FOLLOWUP.md",
+    "bytes": 10125,
+    "sha256": "9a7509946945ac80b3f1f160582186d99f7bda5128233b5e9c737a8f6a47e15b"
+  },
+  {
+    "path": "docs/rifle-asset-v10.md",
+    "bytes": 932,
+    "sha256": "281596578adbd57cce6cf5e2f8f51473b3fc553c1568dd7fb4f51f36d2be59ae"
+  },
+  {
+    "path": "docs/SYSTEMS_RESEARCH.md",
+    "bytes": 2865,
+    "sha256": "bf09463c4e46bf8594603dc3052958361e5f8bfd6f0b0a2d6c93920f538fc811"
+  },
+  {
+    "path": "docs/THE_LONG_DEBT.md",
+    "bytes": 15311,
+    "sha256": "5acee9eddd602fabcad0184e244375f84c8492374e37debcfe8c5372ee20d37a"
+  },
+  {
+    "path": "docs/THIRD_PARTY.md",
+    "bytes": 1676,
+    "sha256": "fb236d8399b4022bf3a5ea50abdc03ff1f419338bebb712f5c9728947fb97c68"
+  },
+  {
+    "path": "docs/USER_ENGINES.md",
+    "bytes": 11313,
+    "sha256": "c084060ab572bd3ece0ef77c23d7e71044faba4db50480c41b95412acaca4354"
+  },
+  {
+    "path": "docs/WORLD_ATLAS_PROMPTS.md",
+    "bytes": 3473,
+    "sha256": "ff8988a3980551c31b8cf0375d478085011c4f2f53dd346aea982628adb4e066"
+  },
+  {
+    "path": "scripts/build.mjs",
+    "bytes": 6482,
+    "sha256": "f8992d7ed2c1cd62bc8e523447c26716edefd1af854249f1c28532f567a4e738"
+  },
+  {
+    "path": "scripts/capture-atmosphere.mjs",
+    "bytes": 1912,
+    "sha256": "45d514577cb1c251bf05f64fbf16db3c057ff0f5ddd65deb5ce8c517e473f3f4"
+  },
+  {
+    "path": "scripts/capture-fauna.mjs",
+    "bytes": 2946,
+    "sha256": "b744a66f9a380abacf8af9d3f97d09b0d0168cd989cfb6941cc42cc2b1ba7a5b"
+  },
+  {
+    "path": "scripts/capture-frontier.mjs",
+    "bytes": 2102,
+    "sha256": "55b384897765732cea614a8e1226140704f56e4b2e8894e2b823d75a58582445"
+  },
+  {
+    "path": "scripts/diagnose-cloud-arrival.mjs",
+    "bytes": 1412,
+    "sha256": "bf9712b447e0c3da9e2b55c8645f61b1bef6024fed5f8477f2dfed4bee211602"
+  },
+  {
+    "path": "scripts/diagnose-walker.mjs",
+    "bytes": 2624,
+    "sha256": "6a6fc71c0a1b570029c24d2e5fae3fda63f3af87c1b0c9389e93c5630ec91ceb"
+  },
+  {
+    "path": "scripts/extract-engines.mjs",
+    "bytes": 10966,
+    "sha256": "6069de8facae8243775d4d331e950e7db5784b4caacb7778b0355acb647adb91"
+  },
+  {
+    "path": "scripts/feature-acceptance.mjs",
+    "bytes": 18015,
+    "sha256": "dc6dfa7332abfd01d756f887610922f3d187a9a99ccd68061be93d642cf0d644"
+  },
+  {
+    "path": "scripts/feature-behavior.test.mjs",
+    "bytes": 12960,
+    "sha256": "caf820849863041034d14745c70433bd903c2588a4b4b962f6d254027149e97b"
+  },
+  {
+    "path": "scripts/feature-browser-config.mjs",
+    "bytes": 590,
+    "sha256": "660b6dbfcbc38ef2c0311adeb58c429a8093a402d32d2f8af6c8326416120381"
+  },
+  {
+    "path": "scripts/feature-browser.mjs",
+    "bytes": 5674,
+    "sha256": "2e8fb69eb11bf5a20874f53f4d1cb2210009d4a8195ade094660cb42189c542a"
+  },
+  {
+    "path": "scripts/import-climate.mjs",
+    "bytes": 1705,
+    "sha256": "9dbbe66f5e55f4a01a94d1ab2a57c4d14e21da7ff3d9da4bb882a98700b31489"
+  },
+  {
+    "path": "scripts/import-cosmoplot.mjs",
+    "bytes": 3237,
+    "sha256": "b0eb49794548af965420dcf63dada6f2193e0b69f9a8802303aadb4654d3f9d0"
+  },
+  {
+    "path": "scripts/lookdev.mjs",
+    "bytes": 1879,
+    "sha256": "32372769d7b77a54afe9637fb2d9615b958946929e0d5a4f4f38ca65091d026c"
+  },
+  {
+    "path": "scripts/package-source.py",
+    "bytes": 3072,
+    "sha256": "871c476dbf0edea707e78e8673b5f9ce3d09f23aa2fdd17154e6bfdb4a5392ae"
+  },
+  {
+    "path": "scripts/planet-flight-acceptance.mjs",
+    "bytes": 7124,
+    "sha256": "93ca8797f964ee6975fdddbb073ced1f8ee3075ece6312c1fc03dd3fd4ac1302"
+  },
+  {
+    "path": "scripts/planet-flight-browser.mjs",
+    "bytes": 5112,
+    "sha256": "cfff2d2ba186236b56f236ea3290c7b9e1895e2100babf1630227c6fb582f160"
+  },
+  {
+    "path": "scripts/profile-city.mjs",
+    "bytes": 2428,
+    "sha256": "94b77da83e16f7b5969273071b31c140fe95f24c2fa3686d6a8d0665524d31a9"
+  },
+  {
+    "path": "scripts/profile-flight.mjs",
+    "bytes": 3755,
+    "sha256": "feff13ad817756a1ec70b424258312c8e58d2ed6817d47e364cd7291e398e1d3"
+  },
+  {
+    "path": "scripts/profile-shader.mjs",
+    "bytes": 1538,
+    "sha256": "375442349400db14872f7fcc340912b7c52481983e436eed20df73033a9cd9a4"
+  },
+  {
+    "path": "scripts/serve.mjs",
+    "bytes": 1849,
+    "sha256": "6c72e782c89fb64a987d18bbb372bdbc84922261811e106d8c0aa8698d75fd9d"
+  },
+  {
+    "path": "scripts/verification-report.mjs",
+    "bytes": 7804,
+    "sha256": "66ec3886a44a103fd70c30933dd27a88405e6b5f9e2aa908156189a7773d2b43"
+  },
+  {
+    "path": "scripts/verify-browsers.mjs",
+    "bytes": 1082,
+    "sha256": "b72711151c77f102a4c31de14ab3279dea2eb357c67542514da9751807e873af"
+  },
+  {
+    "path": "source/app.js",
+    "bytes": 40083,
+    "sha256": "2d0c7b410281be2bdbb0e9a0492927b3d0aec685b4d1fc604ed5883bd5ffe5f0"
+  },
+  {
+    "path": "source/architecture-furniture.js",
+    "bytes": 2757,
+    "sha256": "816bc8d3a23044dd408f52b90ebaaa2f719eb16e0dddec5b7683f6fa494d0640"
+  },
+  {
+    "path": "source/artwork-ui.js",
+    "bytes": 28134,
+    "sha256": "6e29f8786e641559f267b4091aff7234d32261d452fb71d77b5265d49438aa0a"
+  },
+  {
+    "path": "source/biology.js",
+    "bytes": 2563,
+    "sha256": "4eeb30403f6a44f02877441bfa05f38c3d324655d644ac48e03c220830db3f90"
+  },
+  {
+    "path": "source/boot.js",
+    "bytes": 4016,
+    "sha256": "2c7014f23aac035e1d8126f89caf648f1feee3b07ed333b1795fba0d1ff4b37f"
+  },
+  {
+    "path": "source/campaign-data.js",
+    "bytes": 17909,
+    "sha256": "94767cf588644b47f1b277a7481d38aa0d7259cee7e3fcb0bf9835f09bb7cfd6"
+  },
+  {
+    "path": "source/campaign-ui.js",
+    "bytes": 6093,
+    "sha256": "987c4211a4b6f1b187fd6e6a6b2d8a2a868194e0c95b1e647109fcfba9190bcc"
+  },
+  {
+    "path": "source/campaign.js",
+    "bytes": 4506,
+    "sha256": "b8f7ea9e7091cec8a7ed3c8910ec67f2b2be4014f47805fe2d8f7764c70d322b"
+  },
+  {
+    "path": "source/celestial.js",
+    "bytes": 8825,
+    "sha256": "425814dd363a9e40166d0a307d3383118722101e0d81b1d8612369a1c43da3f3"
+  },
+  {
+    "path": "source/citizen-ui.js",
+    "bytes": 22635,
+    "sha256": "fabeb44be2df0d71210a038d2e44604779a349db14534d7bb5f428195e128a78"
+  },
+  {
+    "path": "source/citizen.css",
+    "bytes": 37493,
+    "sha256": "81432cfd3f0f2dec586ad19610fb3ea1827b047dd8cf60e77e279c596fc15558"
+  },
+  {
+    "path": "source/citizen.html",
+    "bytes": 7823,
+    "sha256": "a4325155ab62b59328742972d3626f19abed4a8ef94f16a0e51ceb63f69e484b"
+  },
+  {
+    "path": "source/city-ui.js",
+    "bytes": 7787,
+    "sha256": "d8d924e9946a9b5b6b8d046d72e64ed64b930cba8ff18f1f819245ba20ebee96"
+  },
+  {
+    "path": "source/city-world.js",
+    "bytes": 19129,
+    "sha256": "04ae3c77debd770f51eb61a9409a209a31601d56c4456dc157a3821dc9d24b6f"
+  },
+  {
+    "path": "source/climate-data.js",
+    "bytes": 47407,
+    "sha256": "41e73e792188324d53411642fdc1ec0602d1c02e00c71a56feb5e980901cbadc"
+  },
+  {
+    "path": "source/climate.js",
+    "bytes": 4381,
+    "sha256": "f48a74e1952a6649eefa1bdf5405c1bc27445f194a40c6d1b4a476ef147fceaa"
+  },
+  {
+    "path": "source/combat.js",
+    "bytes": 32127,
+    "sha256": "71a8dd0c3bd1d06c2a3bf083f9bb6abfb8f3d1d3f86d157a21e1864e4dca687e"
+  },
+  {
+    "path": "source/controller.js",
+    "bytes": 11200,
+    "sha256": "893785a2f5e8cc5930d89b231aafddab470fd6d748887ddcd70a7f628674da6f"
+  },
+  {
+    "path": "source/core.js",
+    "bytes": 21347,
+    "sha256": "4cfd0f5ee4dc3f2dacd7de2d302e52a96e8c32733369b19cdb4ef500e11623dd"
+  },
+  {
+    "path": "source/cosmoplot-data.js",
+    "bytes": 76429,
+    "sha256": "5451108129c9e1fc995dd7a0e0e42d6caf58c799698c3a997768997056c2cc02"
+  },
+  {
+    "path": "source/economy.js",
+    "bytes": 14045,
+    "sha256": "b207b3e9405fc066a7023f8aa26fa09e285157836eef32d3da44e661c3cb55b1"
+  },
+  {
+    "path": "source/engines-architecture.js",
+    "bytes": 43014,
+    "sha256": "164c061d945bc55b0644edb0008a783c51b9f0a31d50bc17d588bc5ea7a4df16"
+  },
+  {
+    "path": "source/engines-inventory.js",
+    "bytes": 28366,
+    "sha256": "48adcb943d08e559e92ea096c3e0ed2ac90fa4b0fe77a22dd8571d987fff489e"
+  },
+  {
+    "path": "source/engines-machineworks.js",
+    "bytes": 18687,
+    "sha256": "df273902791b60c03a79e51382f7f9855da13395e5b2934a016585efde1a4c7a"
+  },
+  {
+    "path": "source/engines-pathworks.js",
+    "bytes": 32132,
+    "sha256": "f792be409545ad2e1f9471648093c2b27102d802f1c8b1987c42f4a2b56f31ba"
+  },
+  {
+    "path": "source/engines-storyworks.js",
+    "bytes": 31191,
+    "sha256": "50709ddb264c094a1d04a4715aea923bdf81938b8b45392ec9dcaec9629bac68"
+  },
+  {
+    "path": "source/engines-terrainworks.js",
+    "bytes": 10973,
+    "sha256": "6db2be904a80bde967b93a1f5c9c7ccc137c136441b4a02c38e94726b23ae057"
+  },
+  {
+    "path": "source/engines-ui.js",
+    "bytes": 3068,
+    "sha256": "691ccb21c07bff18fd0991a49d6567422100bca0049cd35dfdda0526743175d7"
+  },
+  {
+    "path": "source/engines-worldworks.js",
+    "bytes": 15466,
+    "sha256": "146ffa3b187d46615fd3cc99303ba04829a7aa1cc0635404eac7715690b59196"
+  },
+  {
+    "path": "source/expedition-ui.js",
+    "bytes": 17201,
+    "sha256": "048b3d4b6425d5675c8b39a153319df99421e72fe1bbe8d9b2e5256b5d43ae1d"
+  },
+  {
+    "path": "source/expedition.js",
+    "bytes": 93633,
+    "sha256": "90a63e0fba9defad9b330785ee1339adf4abb9ad2695f86aeaa79e2b5f7a8ddb"
+  },
+  {
+    "path": "source/field-inventory.js",
+    "bytes": 2869,
+    "sha256": "ee48b9808b287768df962eb82ba8b571f9d011daf911e0b69347695bccce8ce0"
+  },
+  {
+    "path": "source/field-story.js",
+    "bytes": 3928,
+    "sha256": "703ea11187067e9085cc1a1d6f1d66d805cbe8726a08b087c408b99104140844"
+  },
+  {
+    "path": "source/flight-ui.js",
+    "bytes": 12629,
+    "sha256": "4f3ec80d1367fc225f3b2ab9d233f246dc0fb5bddd58a7e4697fac095aa2b8dd"
+  },
+  {
+    "path": "source/graphics-settings.js",
+    "bytes": 1825,
+    "sha256": "d6e848bb12668712dbd3384d63d2a663855d9611064a91f9e8c01555d8dbb153"
+  },
+  {
+    "path": "source/interior-layout.js",
+    "bytes": 5347,
+    "sha256": "81a5ed4b3ae6aa2efe8d2827613f2426d24952dbbd576e8fd488fe8ed62de703"
+  },
+  {
+    "path": "source/landscape.js",
+    "bytes": 3012,
+    "sha256": "e7560b26f0299d5b9b9e4ca752ffd978e71b20a46c9eea58f110d74215377410"
+  },
+  {
+    "path": "source/living-ui.js",
+    "bytes": 25860,
+    "sha256": "b489b9304b5c4f082045980e26ff041380bf8bd5c753058c92d20d6342c47575"
+  },
+  {
+    "path": "source/living.js",
+    "bytes": 52386,
+    "sha256": "54fc33f1d244d4a245f091516e38efb30b49fbb4aaf2fdf0e8f6665d4f38786e"
+  },
+  {
+    "path": "source/Longway_4_Flight_Deck.original.html",
+    "bytes": 316524,
+    "sha256": "eada6ee912f8adf422dc4ec94a0b8548367dd23da48911708c827f9965e18481"
+  },
+  {
+    "path": "source/materials.js",
+    "bytes": 8315,
+    "sha256": "ea9c470dd05e0bab54f8c78ff99b1a922a6ebc474b6b76bc6a01ed15695b0ec0"
+  },
+  {
+    "path": "source/mfd-ui.js",
+    "bytes": 8289,
+    "sha256": "3e5f124d7ccbf6aab37db1bb9c0363175e835669c8a50b335f3c57600bf68d62"
+  },
+  {
+    "path": "source/multiplayer.js",
+    "bytes": 19790,
+    "sha256": "b2f9b4fadc81562c941e8d7bd4c527f6c4c32d3b8a865a82a94d3728ce1041dd"
+  },
+  {
+    "path": "source/pause-ui.js",
+    "bytes": 6101,
+    "sha256": "600f295172ec076719ee244495714b0c3f542c3fefb47d3356afc25cd203a586"
+  },
+  {
+    "path": "source/planet-engines.js",
+    "bytes": 6686,
+    "sha256": "5d65bc1f9334e393898d782ad3f5659177290bfd6dccacaa1d58a5e174eca816"
+  },
+  {
+    "path": "source/renderer.js",
+    "bytes": 37103,
+    "sha256": "88fcc32c9aeb295fd684bbf36c9e0c7f618b10229ebd0ebdc4282cd2ecf8cd16"
+  },
+  {
+    "path": "source/runtime.js",
+    "bytes": 4216,
+    "sha256": "c8b289838c3bf971ab74050afb0f9b9691091f5b30c57f5c6566bbb7b7195a8f"
+  },
+  {
+    "path": "source/settlements.js",
+    "bytes": 9899,
+    "sha256": "f2deb530e1cb1c2d8d061fc99a5443d096523da16b0fedd3b97cb818ed33f78d"
+  },
+  {
+    "path": "source/shell.html",
+    "bytes": 72407,
+    "sha256": "7b74e633088917ef950384b7e0b7ced6d10d3399e929f9e5caf2e0492ea916d2"
+  },
+  {
+    "path": "source/shipboard.js",
+    "bytes": 20346,
+    "sha256": "d7ce7b121abfb227b64913d8074ddb4d7c47b6c6ddf744595e13c420784d3c56"
+  },
+  {
+    "path": "source/society-ui.js",
+    "bytes": 6445,
+    "sha256": "22dc2c6d0cd1b2f7c88e1e86bcae9210373861430993ffafa37b8bbd5be85eca"
+  },
+  {
+    "path": "source/society.js",
+    "bytes": 16543,
+    "sha256": "a190434176b38f423bcc4e9ae47c572bb608598db5b13ae085f0f44263065f81"
+  },
+  {
+    "path": "source/systems-ui.js",
+    "bytes": 8994,
+    "sha256": "c744738dd12dac95827375adbe56538d0ddb067fdb7d99ef028f844d4f144063"
+  },
+  {
+    "path": "source/systems.js",
+    "bytes": 14672,
+    "sha256": "271ea2230dce15df5484298c734bcdb59fbfa51f9bf2218a3703dd5add89ca98"
+  },
+  {
+    "path": "source/targeting-ui.js",
+    "bytes": 5657,
+    "sha256": "82e6f2fce5624fe7b4fcaa850ff73baf33cf470d732aed05a828d170ca634e8e"
+  },
+  {
+    "path": "source/world.frag.glsl",
+    "bytes": 77445,
+    "sha256": "f8b4a3c972acdb189287f03c16fad8cb39a078ab168fafead0c8a2d18e7f929d"
+  },
+  {
+    "path": "__MACOSX/._index.html",
+    "bytes": 188,
+    "sha256": "a9261ba784fef8a9cee9bedd91063a77d530df27ed2c195eba2a8866363b13e0"
+  },
+  {
+    "path": "__MACOSX/._Space_Patriot.html",
+    "bytes": 344,
+    "sha256": "6c9a2b81a8c4f507411526592e58237a9e8bad60f1d401cf8d8c75bfe5d03ddb"
+  },
+  {
+    "path": "assets/concepts/cockpit-fleet-board.png",
+    "bytes": 2847014,
+    "sha256": "dd9c4e34315a2009e340e6d8590978bd31d4b0eeeecef036e10ca53acf294a46"
+  },
+  {
+    "path": "assets/concepts/flight-systems-board.png",
+    "bytes": 2063411,
+    "sha256": "b04baff8feb00f351e464b6d0d90e0bde20d52570526c070e05f982952dee3e2"
+  },
+  {
+    "path": "assets/concepts/PROMPT.md",
+    "bytes": 2019,
+    "sha256": "e16bc3049dac43fe7372e0619c2ae6b72710c3a1fe30e31ba53dda095bf8c562"
+  },
+  {
+    "path": "assets/concepts/space-patriot-frontier.png",
+    "bytes": 3057940,
+    "sha256": "23076c1bc2a7894c171ad99f5c8b10f30af13aa2a18f405570d046a7960471ff"
+  },
+  {
+    "path": "assets/concepts/space-patriot-interiors.png",
+    "bytes": 2801665,
+    "sha256": "2d6c3fcd156d2c0f2b7f519bfd696be97c889560b5e1ee9999c5da77474dba0d"
+  },
+  {
+    "path": "assets/data/cosmoplot-climate.json",
+    "bytes": 66508,
+    "sha256": "fdfe91b08c3c3c3bb771be5d9bdcab4f32eb5a3fe998e2107d6ec82e21fbf627"
+  },
+  {
+    "path": "assets/data/cosmoplot-worlds.json",
+    "bytes": 121295,
+    "sha256": "d854a539c980beb194b212ea22776850afeff49634722124ab3c053575378352"
+  },
+  {
+    "path": "assets/textures/alien-fauna-atlas.png",
+    "bytes": 4089311,
+    "sha256": "b3e489c3f674e03d4e1630822608b295471c6b371c1d5cef544fec40d63b0119"
+  },
+  {
+    "path": "assets/textures/alien-flora-atlas.png",
+    "bytes": 3892407,
+    "sha256": "bf1336fcc06ef03749857d49effb4210d57c7fc5d7710bf2f18b1e23ac457869"
+  },
+  {
+    "path": "assets/textures/biology-atlas.png",
+    "bytes": 3617746,
+    "sha256": "bc8a05d60d164b6c58b57f71dfad6afbf9ea7472da2212a3c3ff938bcab93310"
+  },
+  {
+    "path": "assets/textures/city-interiors-atlas.png",
+    "bytes": 2653168,
+    "sha256": "c9a412ad93713798d492e974f3af5cdda077b14e6f14b6e689f56a918a998e16"
+  },
+  {
+    "path": "assets/textures/conifer-branch.png",
+    "bytes": 2289464,
+    "sha256": "53e63ff64e581bfddcd0aff56e18372a171d863215ab9cf1259ca29136492d65"
+  },
+  {
+    "path": "assets/textures/exterior-atlas.png",
+    "bytes": 3081833,
+    "sha256": "48293d6fff03a48c4d3e97dead8501c1795c6cb961e0c4c1025bc9257e32e2fa"
+  },
+  {
+    "path": "assets/textures/frontier-surfaces-atlas.png",
+    "bytes": 3668105,
+    "sha256": "52adcdba29050f674bb96570f51365500092261144a58e9a79cc49ce64f58f6b"
+  },
+  {
+    "path": "assets/textures/geology-atlas.png",
+    "bytes": 3625499,
+    "sha256": "5484590aad9d386db5413afe42ac51e9e2f07bd87c72166a96b727ea9349de3e"
+  },
+  {
+    "path": "assets/textures/habitat-surfaces-atlas.png",
+    "bytes": 3145560,
+    "sha256": "7dba3bc2a1844b790db598f26e636035b0c490d85ef303341a0f5a069b84a466"
+  },
+  {
+    "path": "assets/textures/interior-atlas.png",
+    "bytes": 2700691,
+    "sha256": "4ff56ccd28820f00410021898dbf1049f409c19935ffacc5f284473af3354346"
+  },
+  {
+    "path": "assets/textures/machinery-atlas.png",
+    "bytes": 2984808,
+    "sha256": "748edbe75e9cb0f32744b4fc4c53cd4c8af7bbbeefb3b27da00beafce1401e03"
+  },
+  {
+    "path": "assets/textures/terrain-atlas.png",
+    "bytes": 3735455,
+    "sha256": "aa2a0e8b7d7ff267c62a9ec11095b47fa856cb441df9daa98821dc3008c4685c"
+  },
+  {
+    "path": "assets/ui/instrument-frame.png",
+    "bytes": 1961719,
+    "sha256": "3c6056e5a3a2de6b042761bd56d3626ad1b7ccab2e0d7d0d14c8c781dddf5218"
+  },
+  {
+    "path": "assets/ui/meridian-cockpit.png",
+    "bytes": 2306395,
+    "sha256": "2210ca012401d89271ee7dcc61a3fbc35dd2c5d0939d78f75b3bc2d9d1274392"
+  },
+  {
+    "path": "assets/ui/pause-terminal-v10.png",
+    "bytes": 2059396,
+    "sha256": "96f916c2ff8a92d480b2c4f908086236d85c978cd5d892bdae745281ff06dfa8"
+  },
+  {
+    "path": "assets/ui/PROMPTS.md",
+    "bytes": 9947,
+    "sha256": "18bef50a8e5294492127abee5117e3d391881fb688b91365f321763eca081b27"
+  },
+  {
+    "path": "assets/ui/rifle-ads-v11.png",
+    "bytes": 1546119,
+    "sha256": "ffda6b5c68df0e54d5b8493fe3ae58e002dbaac4ca7c422b25d6e1dcd3214e27"
+  },
+  {
+    "path": "assets/ui/rifle-view-v10.png",
+    "bytes": 1575296,
+    "sha256": "a9fe4f235740c5b9f59f592f44ac7a42a730fe61008702665b2dc8acd530bbe8"
+  },
+  {
+    "path": "assets/ui/rifle-view.png",
+    "bytes": 1392647,
+    "sha256": "f325ee8f5a361b390be7082f5889cc7fec58d656f6ab72c9283c93fca1acaf47"
+  },
+  {
+    "path": "assets/ui/sidearm-view.png",
+    "bytes": 1181351,
+    "sha256": "7729a8baa4a5fa5919aa2524f7e59dcecd4b3c5117674dbebcfd1232fc11e7d6"
+  },
+  {
+    "path": "assets/ui/strider-cockpit.png",
+    "bytes": 2090934,
+    "sha256": "486476613f9b046ad8de977bd6c0ec27465b969ca4bea5a5425b18c6ca404358"
+  },
+  {
+    "path": "assets/ui/wayfarer-cockpit.png",
+    "bytes": 2205541,
+    "sha256": "894c7245753ea6c758f525eaef882a7f0cb919cedba38e483046f300d5b9ef04"
+  },
+  {
+    "path": "assets/ui/WEAPON_PROMPTS.md",
+    "bytes": 3088,
+    "sha256": "026cdcc471e3a7f0fe1058467a036893a96b866f20c276bb2c469bcf629a7a74"
+  },
+  {
+    "path": "docs/licenses/peerjs-LICENSE.txt",
+    "bytes": 1108,
+    "sha256": "9407807dba7f47a79bfb3ac55759d63d77c9371ebd0616d5a093e97d3e810397"
+  },
+  {
+    "path": "docs/licenses/three-LICENSE.txt",
+    "bytes": 1081,
+    "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+  },
+  {
+    "path": "source/engines/creatureworks.js",
+    "bytes": 34559,
+    "sha256": "9b70291a7ce80e87eb8ce94c9a092dc2ca9b9d52e899aa934d3bc085277facee"
+  },
+  {
+    "path": "source/engines/fireworks.js",
+    "bytes": 33298,
+    "sha256": "cb16929ea94267ca708cf5048c72c52e00cc1579794d8b9b2b92d85149d4e99f"
+  },
+  {
+    "path": "source/engines/grassworks.js",
+    "bytes": 11826,
+    "sha256": "3467782fa6ebf563ef141b3ab395a56951aeb96bb018679e47b76eea90bb45c7"
+  },
+  {
+    "path": "source/engines/oceanworks.js",
+    "bytes": 21703,
+    "sha256": "2fbb8a093251cde3b6338832f48060eb5498645ef25ddb5a33c750fa9d5289f8"
+  },
+  {
+    "path": "source/engines/spellworks.js",
+    "bytes": 44809,
+    "sha256": "137cc0409525850f2b0d23b6f83a18b2b609fa5dc30d4bec68b40c916679245e"
+  },
+  {
+    "path": "source/engines/weatherworks.js",
+    "bytes": 38886,
+    "sha256": "5bd5b566c5ad40c50049d0fa72f51afb96009574d08a6fa0c5299af8d0e89fc5"
+  },
+  {
+    "path": "source/visuals/alien-biology.js",
+    "bytes": 4059,
+    "sha256": "453a38e4dc3075cb311153075e56c9d87b08d19b739d472e901d1325d9de84e7"
+  },
+  {
+    "path": "source/visuals/art-materials.js",
+    "bytes": 9550,
+    "sha256": "a497c4c89b60f097680c81c741787c04caec52a95bda6f9ae9151a213fd3cbad"
+  },
+  {
+    "path": "source/visuals/city-stage.js",
+    "bytes": 10984,
+    "sha256": "5abc87971026cfc030bc0a1c8a8a795a98edfa24006e71b89045fd1db9a5425a"
+  },
+  {
+    "path": "source/visuals/cloud-platform.js",
+    "bytes": 830,
+    "sha256": "266f0fb29131da37bbba8fd76e27fbf5a07a838a0fb6a26698002d3f10fb2578"
+  },
+  {
+    "path": "source/visuals/craft.js",
+    "bytes": 14704,
+    "sha256": "ef62d708a391d251a665c9d15caeb3d5ac6d7ee2be8f4d86d29bb2a7ab54fa60"
+  },
+  {
+    "path": "source/visuals/engine-stage.js",
+    "bytes": 5853,
+    "sha256": "4f4c545683f4be13051c46f54f05c63b86dfdce622d5de6b402abc15aa978e6e"
+  },
+  {
+    "path": "source/visuals/environment.js",
+    "bytes": 22816,
+    "sha256": "a86fbf487d865e73efa67d2670aafd52b72b76d3bb67d6db6b5c8b7e75c4ecc4"
+  },
+  {
+    "path": "source/visuals/explosions.js",
+    "bytes": 4190,
+    "sha256": "44965948e83382b8d1e3e2fd884aab68af7814f90a338e5fa101ac8ed130e050"
+  },
+  {
+    "path": "source/visuals/fauna.js",
+    "bytes": 14388,
+    "sha256": "a7781a08b61d54657bdf4fcedf7a4893fb2478d07df67c1c2f788c8be3638570"
+  },
+  {
+    "path": "source/visuals/forest-stage.js",
+    "bytes": 6435,
+    "sha256": "bf6cb9bdf0cb1642a35a17d8415e35c762a45c6c4937186a3f799ac7ddcd1c49"
+  },
+  {
+    "path": "source/visuals/gaussian-splats.js",
+    "bytes": 7035,
+    "sha256": "552abdef4b3cd19345310dfa68877be131ed65bc2b32ca37c7b05329a451ba12"
+  },
+  {
+    "path": "source/visuals/hangar-stage.js",
+    "bytes": 1505,
+    "sha256": "247add43aea7ecdeece175ccec41628001b7dda3e1e4a7e9325760ebf6228377"
+  },
+  {
+    "path": "source/visuals/instruments.js",
+    "bytes": 7112,
+    "sha256": "b648b267e8cfb4b6a66f3c01f2721acdc89403cc070b5239a0396f0aa8d84a67"
+  },
+  {
+    "path": "source/visuals/interiors.js",
+    "bytes": 9061,
+    "sha256": "15903dbe279ebb19864883790f6e6edc3b1808e6a2fd3ffc402444c90ab7cc1f"
+  },
+  {
+    "path": "source/visuals/large-craft.js",
+    "bytes": 9556,
+    "sha256": "3f55af7c273f8559b1c58538378d2f8505694e152d13deeaae292a24545d3dc1"
+  },
+  {
+    "path": "source/visuals/materials.js",
+    "bytes": 5121,
+    "sha256": "0969a2a0f068bbcbad6b9437a88cbe7e655f63ffcd2a8de1616555ad44d7feb5"
+  },
+  {
+    "path": "source/visuals/primitives.js",
+    "bytes": 7732,
+    "sha256": "08278dd563a5a28688c4aa6547a5a2d39a76ba4f76f99f53ae5d05141c461434"
+  },
+  {
+    "path": "source/visuals/settlement-stage.js",
+    "bytes": 3168,
+    "sha256": "d9135a8914254fcfdad04759ca7c45790e7427ead85c05ac803933e8313d43f6"
+  },
+  {
+    "path": "source/visuals/stage.js",
+    "bytes": 29288,
+    "sha256": "0c860e8be636468eee72255e427361504fbb1a569065e023c61373f5c6a490c2"
+  },
+  {
+    "path": "source/visuals/stellar-stage.js",
+    "bytes": 4452,
+    "sha256": "1a0027e19f216b675d7dffadc06bda2748984497f6663383f9050c99b4517b67"
+  },
+  {
+    "path": "source/visuals/surface-detail.js",
+    "bytes": 4359,
+    "sha256": "c75be3057c7ae7437b7fb0b776d72dffc470d3ae3323e8b7cff7353da1bb45ef"
+  },
+  {
+    "path": "source/visuals/surface-transition.js",
+    "bytes": 3515,
+    "sha256": "260bf80088f220b1f33da891543f47cd0460f83759ec0db69dbfb991eb27b733"
+  },
+  {
+    "path": "source/visuals/thruster-stage.js",
+    "bytes": 1578,
+    "sha256": "ebe9ea6626ca18144efbaa384031313dd4e1f31d52897b84756ed84b910358e8"
+  },
+  {
+    "path": "source/visuals/vegetation-stage.js",
+    "bytes": 12838,
+    "sha256": "d986dc415ae9a6aa90d5ae9b6d87e0e98b19a71cadfcfb78c641ed9fb86ab6cd"
+  },
+  {
+    "path": "source/visuals/view-culling.js",
+    "bytes": 2498,
+    "sha256": "1006c50005f292ef1498eea44e9f204629e93221dad9701011b1cfeaa0ac8324"
+  },
+  {
+    "path": "source/visuals/weapon-lighting.js",
+    "bytes": 2833,
+    "sha256": "29cff0878319576563ec1cd70cba0283db25da1bd9394137b9c9042ea186ff3a"
+  },
+  {
+    "path": "source/visuals/weapon-stage.js",
+    "bytes": 3249,
+    "sha256": "0bb07036c340e8d41f12856e71460eb50b2ae4de1ecaa0b4c7cd3f328e9ea16c"
+  },
+  {
+    "path": "source/visuals/weather-stage.js",
+    "bytes": 4301,
+    "sha256": "0804d9cbb4332fd9fd45eefa46bf0f9060370619a07bdb610597e73712761d9e"
+  },
+  {
+    "path": "source/engines/machineworks/geometry.mjs",
+    "bytes": 4574,
+    "sha256": "a24c56b44d9d72e29140e6a74bb3f0d74171958869e8f7c3d1d60d2006d80213"
+  },
+  {
+    "path": "source/engines/machineworks/math.mjs",
+    "bytes": 3579,
+    "sha256": "f9d2977245d04008c1361d86b1fb82a19f8ed92fc696673adb89728016925d97"
+  },
+  {
+    "path": "source/engines/machineworks/model.mjs",
+    "bytes": 17056,
+    "sha256": "6e0169b5dcac01ea1c772d9420f97063119f6753ef5382f9ddd5ed7cb462dd2d"
+  },
+  {
+    "path": "source/engines/machineworks/simulation.mjs",
+    "bytes": 18649,
+    "sha256": "82565016ef3654379ad7830d17e5c19ca5315bd5c6d377370dc219dccda9ea98"
+  },
+  {
+    "path": "source/engines/machineworks/three-view.mjs",
+    "bytes": 2484,
+    "sha256": "3ef7b63402ffa38dee39c9b2128a8e442acab61a4499eff46d3a66f760ea67f3"
+  },
+  {
+    "path": "vendor/user-engines/architectureworks.html",
+    "bytes": 157457,
+    "sha256": "42de9443ad8f70f8bae76615467117ea6c468e44279c3a973654823b4934e1dc"
+  },
+  {
+    "path": "vendor/user-engines/creatureworks.html",
+    "bytes": 698767,
+    "sha256": "494111e45a100178a58bc72dd3b498f330396833af6efdda7f03ab08fbf0a946"
+  },
+  {
+    "path": "vendor/user-engines/Fireworks.html",
+    "bytes": 84420,
+    "sha256": "031dddab4de9edc738d8b6d04e4e2e61db52f74de0e23ecde5c3c33b703ac66d"
+  },
+  {
+    "path": "vendor/user-engines/grasspack3js.html",
+    "bytes": 34950,
+    "sha256": "7d14f50e87f9d53bd8b252824c1a9e65d540be9f80923038455de20e4792aa91"
+  },
+  {
+    "path": "vendor/user-engines/inventoryworks.html",
+    "bytes": 112327,
+    "sha256": "5c386ad3bc648ed67679a9e21667693e08f9460d670400678a7b0303b8ac9ec4"
+  },
+  {
+    "path": "vendor/user-engines/machineworks.html",
+    "bytes": 133939,
+    "sha256": "95c7d76e6b7b246f20bfb853b3ad405e6ca8d0a5aaea5e887a179b614b965d78"
+  },
+  {
+    "path": "vendor/user-engines/manifest.json",
+    "bytes": 3177,
+    "sha256": "6b66da4fd6369b4d07568ad73e075f223375b8dacca02d63f9fc7b540536e811"
+  },
+  {
+    "path": "vendor/user-engines/oceanworksv2.html",
+    "bytes": 60648,
+    "sha256": "711bbe38f4b0e779725bb2979f1c93e20f9276f12d0cf3197143468bd5bbe854"
+  },
+  {
+    "path": "vendor/user-engines/Pathworks.html",
+    "bytes": 128319,
+    "sha256": "c7ce8f33e041311d92f2c0e7ad4625ee44afbf88e989585619d6cd1f7fd729bc"
+  },
+  {
+    "path": "vendor/user-engines/spellworks.html",
+    "bytes": 112347,
+    "sha256": "9a8a5f5c844f94c86d27f2bcbc0071d4a495f7c88ff82a33df06fe8ea3fbc32d"
+  },
+  {
+    "path": "vendor/user-engines/storyworks.html",
+    "bytes": 143297,
+    "sha256": "cb5f7ecdfa3ee78480cac977fac4dd1e2de2170e333c4346150f006f52e78280"
+  },
+  {
+    "path": "vendor/user-engines/Terrainworks.html",
+    "bytes": 113677,
+    "sha256": "d1e8d49c23fa07b9650eafe5ca6736a58f0be92a9dc2f4dee9d539b3cbc367a7"
+  },
+  {
+    "path": "vendor/user-engines/weatherworks.html",
+    "bytes": 100661,
+    "sha256": "ab5e45c7397be844aa8da8c4e152bdbd2d32dc90eac3f42b96f477afaeeeaf45"
+  },
+  {
+    "path": "__MACOSX/assets/._.DS_Store",
+    "bytes": 120,
+    "sha256": "2f380f4a3d05a8d90c2106f50da75064e9ce57a598599dc5404f8f69a0223aa9"
+  },
+  {
+    "path": "__MACOSX/assets/._FRONTIER_09_ATLAS_PROMPTS.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._FRONTIER_10.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._FRONTIER_11.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._rifle-asset-v10.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._SYSTEMS_RESEARCH.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._THIRD_PARTY.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/docs/._USER_ENGINES.md",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._build.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._capture-fauna.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._diagnose-walker.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._extract-engines.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._import-climate.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._import-cosmoplot.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._lookdev.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._profile-city.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._profile-flight.mjs",
+    "bytes": 188,
+    "sha256": "5dbaf366082f1bef1e3f9bd60042e7673bc25a47df8220c3c50338f3e617b8c0"
+  },
+  {
+    "path": "__MACOSX/scripts/._serve.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._verification-report.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/scripts/._verify-browsers.mjs",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._.DS_Store",
+    "bytes": 120,
+    "sha256": "2f380f4a3d05a8d90c2106f50da75064e9ce57a598599dc5404f8f69a0223aa9"
+  },
+  {
+    "path": "__MACOSX/source/._app.js",
+    "bytes": 231,
+    "sha256": "e7014490461ce2d5ba39f984da66ea6f683b5ecd2b07e76b35ddec94a5f1a9e9"
+  },
+  {
+    "path": "__MACOSX/source/._artwork-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._biology.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._boot.js",
+    "bytes": 231,
+    "sha256": "f3355898892e4d8950b15340b0a009f3467289129eba938007d15364a90512cb"
+  },
+  {
+    "path": "__MACOSX/source/._campaign-data.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._campaign-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._campaign.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._celestial.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._citizen-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._citizen.css",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._citizen.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._city-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._city-world.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._climate.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._combat.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._core.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._economy.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._engines-architecture.js",
+    "bytes": 188,
+    "sha256": "9c77c286c43bdd1af47e74748e19ff84211b43af7b4ac92421662310863cad76"
+  },
+  {
+    "path": "__MACOSX/source/._engines-inventory.js",
+    "bytes": 188,
+    "sha256": "a0c5294c13ff1e781e89d5a0c660ab1359ffc4f1dcb3e21da6420851ab791594"
+  },
+  {
+    "path": "__MACOSX/source/._engines-machineworks.js",
+    "bytes": 188,
+    "sha256": "7204d6b9959e7e337fb7ff1ec8b743d6f3b3fea8dda40bc0b77e0b9ad57d3455"
+  },
+  {
+    "path": "__MACOSX/source/._engines-pathworks.js",
+    "bytes": 188,
+    "sha256": "ade08f7aab832c44a8f9af86664ec3f5228e4ac783b7aaaf66c5fe3bc528e29c"
+  },
+  {
+    "path": "__MACOSX/source/._engines-storyworks.js",
+    "bytes": 188,
+    "sha256": "a7e7a06dca587f15c7139f8c8f9cf68a4cd2e3d32144cbb85d31585be4976573"
+  },
+  {
+    "path": "__MACOSX/source/._engines-terrainworks.js",
+    "bytes": 188,
+    "sha256": "40eb17072addeacd3cf54b8672263e9f5cf5417508f86a157dfabad128cb8f11"
+  },
+  {
+    "path": "__MACOSX/source/._engines-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._engines-worldworks.js",
+    "bytes": 188,
+    "sha256": "1064d9c68edc2513ab457511a472285892f3f9c1f1a30fbea95b47c0ace9dc4b"
+  },
+  {
+    "path": "__MACOSX/source/._expedition-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._expedition.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._field-inventory.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._field-story.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._flight-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._interior-layout.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._living-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._living.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._Longway_4_Flight_Deck.original.html",
+    "bytes": 610,
+    "sha256": "ecd1ff0e63fa9b4ffe17d47a0782a1c302ea8e93d7012a111e35729006e59428"
+  },
+  {
+    "path": "__MACOSX/source/._mfd-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._multiplayer.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._pause-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._planet-engines.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._renderer.js",
+    "bytes": 231,
+    "sha256": "38ed3547bc66a87beb3f33801b32cc3e5b1e97d7c8b949880ec688d47d7c196c"
+  },
+  {
+    "path": "__MACOSX/source/._runtime.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._settlements.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._shell.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._shipboard.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._society-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._society.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._systems-ui.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._systems.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/._world.frag.glsl",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/._.DS_Store",
+    "bytes": 120,
+    "sha256": "2f380f4a3d05a8d90c2106f50da75064e9ce57a598599dc5404f8f69a0223aa9"
+  },
+  {
+    "path": "__MACOSX/assets/textures/._geology-atlas.png",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/assets/textures/._habitat-surfaces-atlas.png",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/engines/._creatureworks.js",
+    "bytes": 188,
+    "sha256": "dac52ed63af8505d793b2d66e43429bc7949fdbd23c28aa330301e8dd14ceec2"
+  },
+  {
+    "path": "__MACOSX/source/engines/._fireworks.js",
+    "bytes": 188,
+    "sha256": "909e26355eca499f2555a1c90e49d0c2782da4806ad225a18045302788773426"
+  },
+  {
+    "path": "__MACOSX/source/engines/._grassworks.js",
+    "bytes": 188,
+    "sha256": "657d15934ee856ef0bf29d85846de6762332296542315b8d42004e7337e3ad5d"
+  },
+  {
+    "path": "__MACOSX/source/engines/._oceanworks.js",
+    "bytes": 188,
+    "sha256": "454e49931980c2b027a5c599054ac7332c71d09697624b05a28fb91618e249b4"
+  },
+  {
+    "path": "__MACOSX/source/engines/._spellworks.js",
+    "bytes": 188,
+    "sha256": "458654e7ca6ba31d5037665ee8d8bba605625dfa8b296d444308319e156eefe5"
+  },
+  {
+    "path": "__MACOSX/source/engines/._weatherworks.js",
+    "bytes": 188,
+    "sha256": "d33527c28487d222a5274bf5f69838d18e87cb8fa43f2e76f7ce4a55d26eca67"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._art-materials.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._city-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._craft.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._engine-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._environment.js",
+    "bytes": 231,
+    "sha256": "69bbbd5e16516af559e4b37dcf9bfe681d830123ca5b4100ac6ae81bb9d1460d"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._fauna.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._forest-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._gaussian-splats.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._hangar-stage.js",
+    "bytes": 263,
+    "sha256": "5bf15b68eacceacf130a4e656c239bcc433777cd6d98b6a67fd049aa3baeddc1"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._instruments.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._interiors.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._large-craft.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._materials.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._primitives.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._settlement-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._stage.js",
+    "bytes": 231,
+    "sha256": "4ae10ffddfe31178e46fb5a07e030603ae5ff6c81b9b4a35df43440236ee07c9"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._stellar-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._vegetation-stage.js",
+    "bytes": 231,
+    "sha256": "228c359360836bf396b83f92f67c98fea1ac9b4f07893dbf62c76799bc19e5b3"
+  },
+  {
+    "path": "__MACOSX/source/visuals/._weather-stage.js",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/source/engines/machineworks/._geometry.mjs",
+    "bytes": 188,
+    "sha256": "c7a2d25fd3a65662d213b4c48e2536c571d743b3f2a13c3f023d48fcdb5c51cb"
+  },
+  {
+    "path": "__MACOSX/source/engines/machineworks/._math.mjs",
+    "bytes": 188,
+    "sha256": "22858b1300538510bb8708656b69dd4971e02324f8d1731236955d4fda732303"
+  },
+  {
+    "path": "__MACOSX/source/engines/machineworks/._model.mjs",
+    "bytes": 188,
+    "sha256": "39e463de218a2977405726d46133b7a09b7f139d0f456ef0d33bce21297dd9d4"
+  },
+  {
+    "path": "__MACOSX/source/engines/machineworks/._simulation.mjs",
+    "bytes": 188,
+    "sha256": "37e06b7fe036f4ae6f0f6c5726f2ace070ae20a6e2e4598862a1c7ac39f3bcf3"
+  },
+  {
+    "path": "__MACOSX/source/engines/machineworks/._three-view.mjs",
+    "bytes": 188,
+    "sha256": "93f131fc0b36044e6885cbf0f8878d27ad7545f84d9f19b98fa683547a85813d"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._architectureworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._creatureworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._inventoryworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._machineworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._manifest.json",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._Pathworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._Terrainworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  },
+  {
+    "path": "__MACOSX/vendor/user-engines/._weatherworks.html",
+    "bytes": 163,
+    "sha256": "9c798152fc9ee044642969e15cdcb3e12f7dbeef07683b02edf1b791a8cb7637"
+  }
+]

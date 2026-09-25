@@ -1,0 +1,215 @@
+<canvas id="tacticalOverlay" aria-label="Live targeting overlay"></canvas>
+<div id="citizenHUD">
+  <div class="citizen-rail">
+    <button id="openCombat" title="Combat and loadout [0]">
+      TACTICAL <kbd>0</kbd></button
+    ><button id="openCrew">CREW LINK <span id="crewDot">○</span></button
+    ><button id="openArt">DESIGN ARCHIVE ↗</button>
+  </div>
+  <div id="combatStrip">
+    <span class="signal-light"></span><b id="combatMode">EXPLORATION</b
+    ><span id="combatMessage">FLIGHT SYSTEMS NOMINAL</span
+    ><span id="linkStatus">SOLO</span>
+  </div>
+  <section id="radarPanel" class="avionics">
+    <div class="avionics-heading">
+      <span>TACTICAL SCOPE</span
+      ><button id="radarRange" aria-label="Change radar range">3.0 KM</button>
+    </div>
+    <canvas
+      id="radar"
+      width="360"
+      height="230"
+      aria-label="Real-time radar contacts relative to the ship"
+    ></canvas>
+    <div class="radar-caption">
+      <span><i class="hostile-dot"></i> HOSTILE</span
+      ><span><i class="friendly-dot"></i> CREW</span
+      ><b id="contactCount">00 CONTACTS</b>
+    </div>
+  </section>
+  <section id="weaponsPanel" class="avionics">
+    <div class="avionics-heading">
+      <span>FIRE CONTROL</span
+      ><button id="armWeapons">SAFE <kbd>Y</kbd></button>
+    </div>
+    <div class="weapon-name" id="weaponName">K-28 TWIN AUTOCANNON</div>
+    <div class="ammo-row">
+      <strong id="magazine">120</strong
+      ><span
+        >/ <b id="reserve">960</b
+        ><small id="ammoLabel">ROUNDS · READY</small></span
+      ><button id="reloadWeapon" title="Reload [R]">RELOAD</button>
+    </div>
+    <div class="weapon-select">
+      <button data-weapon="kinetic">01 KINETIC</button
+      ><button data-weapon="laser">02 LASER</button
+      ><button data-weapon="missile">03 MISSILE</button>
+    </div>
+    <div class="weapon-meter">
+      <span>SHIELD <b id="shieldNumber">100</b></span
+      ><i><em id="shieldFill"></em></i>
+    </div>
+    <div class="weapon-meter">
+      <span>HEAT <b id="heatNumber">0%</b></span
+      ><i><em id="combatHeatFill"></em></i>
+    </div>
+    <div id="targetReadout">NO TARGET · C TO CYCLE</div>
+  </section>
+  <div id="combatControls">
+    <span><kbd>Y</kbd> ARM</span><span><kbd>LMB</kbd> FIRE</span
+    ><span><kbd>1–3</kbd> WEAPON</span><span><kbd>C</kbd> TARGET</span
+    ><span><kbd>R</kbd> RELOAD</span><span><kbd>V</kbd> VIEW</span>
+  </div>
+  <button id="touchFire" aria-label="Hold to fire weapon">FIRE</button>
+</div>
+<div id="combatPanel" class="citizen-modal" hidden>
+  <section class="citizen-dialog">
+    <div class="dialog-top">
+      <span>01 / TACTICAL OPERATIONS</span
+      ><button data-close-citizen aria-label="Close tactical operations">
+        ×
+      </button>
+    </div>
+    <p class="eyebrow">SPACE PATRIOT · FLIGHT DECK</p>
+    <h2>Ready when you are.</h2>
+    <p>
+      Configure your weapons, launch a live encounter, or return to exploration.
+      Crew members share the host’s contacts and combat.
+    </p>
+    <div class="mission-grid">
+      <button id="spaceSortie">
+        <span>01 / ORBITAL</span><strong>Intercept raiders ↗</strong
+        ><small
+          >Five hostile ships · kinetic, laser & missile combat</small
+        ></button
+      ><button id="groundSortie">
+        <span>02 / SURFACE</span><strong>Clear the perimeter ↗</strong
+        ><small>Four armed sentries · rifle & sidearm</small>
+      </button>
+    </div>
+    <div class="loadout-grid">
+      <div>
+        <small>SHIP HARDPOINTS</small><b>K-28 / L-9 / M-6</b>
+        <p>
+          Twin autocannons, capacitor-fed pulse array, six guided seekers.
+          Missiles require a sustained target lock.
+        </p>
+      </div>
+      <div>
+        <small>PERSONAL EQUIPMENT</small><b>AR-30 / P-12</b>
+        <p>
+          Service rifle, sidearm, protective suit. Weapons switch automatically
+          when you disembark.
+        </p>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button id="combatService">REARM & REPAIR AT PORT</button
+      ><button id="endSortie">END SORTIE / RECOVER</button>
+    </div>
+    <p class="help-note">
+      Y arm · hold left mouse to fire · C cycle contacts · 1 / 2 / 3 select
+      weapon · Z reload. Safe mode lets you operate cockpit switches.
+    </p>
+  </section>
+</div>
+<div id="crewPanel" class="citizen-modal" hidden>
+  <section class="citizen-dialog crew-dialog">
+    <div class="dialog-top">
+      <span>02 / CREW LINK</span
+      ><button data-close-citizen aria-label="Close crew link">×</button>
+    </div>
+    <p class="eyebrow">FLY THE SAME SKY</p>
+    <h2>Bring your crew.</h2>
+    <p>
+      Host a session and share the six-character code. Up to eight pilots can
+      fly and fight together.
+    </p>
+    <label class="citizen-field"
+      >CALLSIGN<input
+        id="callsign"
+        maxlength="24"
+        value="PILOT"
+        autocomplete="off"
+    /></label>
+    <div class="crew-actions">
+      <button class="primary" id="hostRoom">HOST SESSION ↗</button
+      ><span>or</span
+      ><input
+        id="roomCode"
+        maxlength="6"
+        placeholder="ROOM CODE"
+        aria-label="Six-character room code"
+        autocomplete="off"
+      /><button id="joinRoom">JOIN</button>
+    </div>
+    <div class="room-ticket">
+      <span>SESSION CODE</span><strong id="roomDisplay">— — — — — —</strong
+      ><button id="copyRoom">COPY</button>
+    </div>
+    <div class="crew-connection">
+      <span id="crewConnection">OFFLINE</span><b id="crewPing">—</b>
+    </div>
+    <div id="crewRoster"></div>
+    <button id="leaveRoom" class="wide">LEAVE SESSION</button>
+    <details>
+      <summary>Connection settings</summary>
+      <p>
+        PeerJS uses WebRTC data channels. Internet sessions use PeerJS signaling
+        and STUN. Networks that block direct connections may require a TURN
+        relay.
+      </p>
+      <label class="citizen-field"
+        >TURN URL<input
+          id="turnURL"
+          placeholder="turn:your-relay:3478" /></label
+      ><label class="citizen-field"
+        >TURN USERNAME<input id="turnUser" autocomplete="off" /></label
+      ><label class="citizen-field"
+        >TURN CREDENTIAL<input
+          id="turnCredential"
+          type="password"
+          autocomplete="off" /></label
+      ><button id="applyRelay">USE RELAY FOR NEXT CONNECTION</button>
+      <p class="help-note">
+        Relay credentials stay in this page’s memory. For local testing, open
+        this game with ?signaling=local.
+      </p>
+    </details>
+  </section>
+</div>
+<div id="artPanel" class="citizen-modal" hidden>
+  <section class="citizen-dialog art-dialog">
+    <div class="dialog-top">
+      <span>03 / DESIGN ARCHIVE · CONCEPT ART</span
+      ><button data-close-citizen aria-label="Close concept art">×</button>
+    </div>
+    <h2>One visual language.</h2>
+    <p>
+      HUD, radar, targeting, surface combat, navigation, fleet, crew, field
+      journal and systems. These original concept boards guide the world;
+      generated cockpit, weapon and surface artwork is used directly in play.
+    </p>
+    <img
+      src="assets/concepts/flight-systems-board.png"
+      alt="Space Patriot nine-panel HUD and interface concept art board"
+    /><a
+      href="assets/concepts/flight-systems-board.png"
+      target="_blank"
+      rel="noopener"
+      >OPEN FULL CONCEPT BOARD ↗</a
+    >
+  </section>
+</div>
+<div id="disabledPanel" class="citizen-modal" hidden>
+  <section class="citizen-dialog">
+    <p class="eyebrow">EMERGENCY BEACON ACTIVE</p>
+    <h2>Flight interrupted.</h2>
+    <p id="disabledReason">
+      Your vessel has been disabled. Recover to the nearest port to repair and
+      rearm.
+    </p>
+    <button class="primary" id="recoverShip">RECOVER TO PORT</button>
+  </section>
+</div>

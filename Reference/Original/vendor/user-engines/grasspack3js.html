@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grassworks</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08100b;color:#e8f1e9;font-family:Arial,sans-serif}
+canvas{display:block}
+
+#loading{
+ position:fixed;inset:0;z-index:99;display:flex;align-items:center;
+ justify-content:center;background:#08100b;font-size:14px;
+ letter-spacing:.18em
+}
+
+#ui{
+ position:fixed;z-index:10;left:15px;top:15px;width:300px;
+ max-height:calc(100% - 30px);overflow:auto;
+ background:rgba(5,12,8,.82);backdrop-filter:blur(15px);
+ border:1px solid rgba(255,255,255,.15);
+ border-radius:12px;padding:15px
+}
+
+h1{font-size:16px;margin:0;letter-spacing:.15em}
+.sub{font-size:9px;color:#8ba293;margin:4px 0 13px;letter-spacing:.12em}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:15px}
+.stat{background:#ffffff0b;padding:8px;border-radius:7px}
+.stat b{display:block;font-size:14px}
+.stat small{font-size:8px;color:#829187}
+
+.group{border-top:1px solid #ffffff14;padding-top:11px;margin-top:11px}
+.groupTitle{font-size:9px;color:#9eb1a3;letter-spacing:.14em;margin-bottom:10px}
+
+.row{margin-bottom:9px}
+.label{display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px}
+.val{color:#9fe4ad;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:#79d88d}
+
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+button{
+ border:1px solid #ffffff1f;background:#ffffff0d;color:#dce9df;
+ padding:8px;border-radius:6px;cursor:pointer;font-size:9px
+}
+button:hover{background:#ffffff1b}
+button.active{border-color:#73db8d;background:#4ca45f30;color:#aaffbd}
+
+.toggle{display:flex;justify-content:space-between;font-size:10px;margin:8px 0}
+input[type=checkbox]{accent-color:#79d88d}
+
+#tip{
+ position:fixed;right:15px;bottom:12px;color:#ffffff80;
+ font-size:9px;letter-spacing:.1em;pointer-events:none
+}
+
+#error{
+ display:none;position:fixed;z-index:200;inset:20px;background:#181b19;
+ color:white;padding:20px;white-space:pre-wrap;overflow:auto
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading">GROWING GRASS...</div>
+<div id="error"></div>
+
+<div id="ui">
+ <h1>GRASSWORKS</h1>
+ <div class="sub">GPU VEGETATION LAB</div>
+
+ <div class="stats">
+  <div class="stat"><b id="fps">--</b><small>FPS</small></div>
+  <div class="stat"><b id="blades">--</b><small>BLADES</small></div>
+  <div class="stat"><b id="quality">HIGH</b><small>QUALITY</small></div>
+ </div>
+
+ <div class="group">
+  <div class="groupTitle">QUALITY</div>
+  <div class="buttons">
+   <button class="preset" data-density="20000">LOW</button>
+   <button class="preset" data-density="50000">MEDIUM</button>
+   <button class="preset active" data-density="90000">HIGH</button>
+   <button class="preset" data-density="180000">ULTRA</button>
+  </div>
+ </div>
+
+ <div class="group">
+  <div class="groupTitle">VEGETATION</div>
+
+  <div class="row">
+   <div class="label">Density <span id="densityVal" class="val"></span></div>
+   <input id="density" type="range" min="5000" max="250000" step="5000" value="90000">
+  </div>
+
+  <div class="row">
+   <div class="label">Field Radius <span id="fieldVal" class="val"></span></div>
+   <input id="field" type="range" min="10" max="70" step="1" value="38">
+  </div>
+
+  <div class="row">
+   <div class="label">Blade Height <span id="heightVal" class="val"></span></div>
+   <input id="height" type="range" min=".25" max="2.5" step=".05" value="1.05">
+  </div>
+
+  <div class="row">
+   <div class="label">Blade Width <span id="widthVal" class="val"></span></div>
+   <input id="width" type="range" min=".02" max=".18" step=".005" value=".065">
+  </div>
+
+  <div class="row">
+   <div class="label">Wildness <span id="wildVal" class="val"></span></div>
+   <input id="wild" type="range" min="0" max="1" step=".01" value=".55">
+  </div>
+ </div>
+
+ <div class="group">
+  <div class="groupTitle">WIND</div>
+
+  <div class="row">
+   <div class="label">Strength <span id="windVal" class="val"></span></div>
+   <input id="wind" type="range" min="0" max="2.5" step=".05" value=".8">
+  </div>
+
+  <div class="row">
+   <div class="label">Speed <span id="speedVal" class="val"></span></div>
+   <input id="speed" type="range" min="0" max="4" step=".05" value="1.15">
+  </div>
+
+  <div class="row">
+   <div class="label">Gust Scale <span id="gustVal" class="val"></span></div>
+   <input id="gust" type="range" min=".05" max="1.5" step=".05" value=".3">
+  </div>
+
+  <div class="row">
+   <div class="label">Turbulence <span id="turbVal" class="val"></span></div>
+   <input id="turb" type="range" min="0" max="2" step=".05" value=".5">
+  </div>
+ </div>
+
+ <div class="group">
+  <div class="groupTitle">ATMOSPHERE</div>
+
+  <div class="row">
+   <div class="label">Ambience <span id="ambientVal" class="val"></span></div>
+   <input id="ambient" type="range" min=".1" max="3" step=".05" value="1">
+  </div>
+
+  <div class="row">
+   <div class="label">Sun <span id="sunVal" class="val"></span></div>
+   <input id="sun" type="range" min="0" max="5" step=".1" value="2.2">
+  </div>
+
+  <div class="row">
+   <div class="label">Fog <span id="fogVal" class="val"></span></div>
+   <input id="fog" type="range" min=".001" max=".05" step=".001" value=".012">
+  </div>
+
+  <div class="row">
+   <div class="label">Color Variation <span id="colorVal" class="val"></span></div>
+   <input id="colorVar" type="range" min="0" max="1" step=".01" value=".45">
+  </div>
+
+  <div class="toggle">
+   <span>Fireflies</span>
+   <input id="firefliesToggle" type="checkbox" checked>
+  </div>
+
+  <div class="toggle">
+   <span>Camera Drift</span>
+   <input id="drift" type="checkbox">
+  </div>
+ </div>
+
+ <div class="group">
+  <div class="buttons">
+   <button id="randomize">RANDOMIZE</button>
+   <button id="reset">RESET</button>
+  </div>
+ </div>
+</div>
+
+<div id="tip">DRAG: ORBIT · WHEEL: ZOOM · RIGHT DRAG: PAN</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+(async () => {
+try {
+
+const THREE = await import("three");
+
+const { OrbitControls } = await import(
+  "three/addons/controls/OrbitControls.js"
+);
+
+// ============================================================
+// DOM
+// ============================================================
+
+const $ = id => document.getElementById(id);
+
+const loading = $("loading");
+const errorBox = $("error");
+
+const inputs = {
+  density: $("density"),
+  field: $("field"),
+  height: $("height"),
+  width: $("width"),
+  wild: $("wild"),
+  wind: $("wind"),
+  speed: $("speed"),
+  gust: $("gust"),
+  turb: $("turb"),
+  ambient: $("ambient"),
+  sun: $("sun"),
+  fog: $("fog"),
+  colorVar: $("colorVar")
+};
+
+// ============================================================
+// RENDERER
+// ============================================================
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  powerPreference: "high-performance"
+});
+
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+
+document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+// ============================================================
+// SCENE
+// ============================================================
+
+const scene = new THREE.Scene();
+
+scene.background = new THREE.Color(0x87a6a8);
+scene.fog = new THREE.FogExp2(
+  0x82998d,
+  Number(inputs.fog.value)
+);
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+const camera = new THREE.PerspectiveCamera(
+  50,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  300
+);
+
+camera.position.set(14, 6.5, 16);
+
+// ============================================================
+// CAMERA CONTROLS
+// ============================================================
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.055;
+
+controls.target.set(0, 0.8, 0);
+
+controls.minDistance = 1.5;
+controls.maxDistance = 75;
+
+controls.maxPolarAngle = Math.PI * 0.49;
+
+// ============================================================
+// LIGHTING
+// ============================================================
+
+const hemisphere = new THREE.HemisphereLight(
+  0xc4dce1,
+  0x26341c,
+  Number(inputs.ambient.value)
+);
+
+scene.add(hemisphere);
+
+const sun = new THREE.DirectionalLight(
+  0xffe1aa,
+  Number(inputs.sun.value)
+);
+
+sun.position.set(-18, 26, -14);
+
+scene.add(sun);
+
+// ============================================================
+// SKY
+// ============================================================
+
+const skyGeometry = new THREE.SphereGeometry(
+  160,
+  32,
+  16
+);
+
+const skyMaterial = new THREE.ShaderMaterial({
+
+  side: THREE.BackSide,
+
+  depthWrite: false,
+
+  uniforms: {
+    uTime: { value: 0 }
+  },
+
+  vertexShader: `
+    varying vec3 vPosition;
+
+    void main() {
+
+      vPosition = normalize(position);
+
+      gl_Position =
+        projectionMatrix *
+        modelViewMatrix *
+        vec4(position,1.0);
+    }
+  `,
+
+  fragmentShader: `
+    varying vec3 vPosition;
+
+    uniform float uTime;
+
+    void main() {
+
+      float h =
+        clamp(vPosition.y * 0.5 + 0.5,0.0,1.0);
+
+      vec3 horizon =
+        vec3(0.48,0.61,0.59);
+
+      vec3 sky =
+        vec3(0.10,0.27,0.39);
+
+      vec3 color =
+        mix(horizon,sky,pow(h,0.72));
+
+      float sunset =
+        pow(1.0-h,5.0);
+
+      color +=
+        vec3(0.18,0.075,0.025) *
+        sunset;
+
+      gl_FragColor =
+        vec4(color,1.0);
+    }
+  `
+});
+
+const sky = new THREE.Mesh(
+  skyGeometry,
+  skyMaterial
+);
+
+scene.add(sky);
+
+// ============================================================
+// GROUND
+// ============================================================
+
+const groundGeometry =
+  new THREE.CircleGeometry(90,128);
+
+groundGeometry.rotateX(-Math.PI/2);
+
+const groundMaterial =
+  new THREE.MeshStandardMaterial({
+    color: 0x24341b,
+    roughness: 1,
+    metalness: 0
+  });
+
+const ground =
+  new THREE.Mesh(
+    groundGeometry,
+    groundMaterial
+  );
+
+ground.position.y = -0.035;
+
+scene.add(ground);
+
+// ============================================================
+// GRASS VARIABLES
+// ============================================================
+
+let grass = null;
+let grassMaterial = null;
+
+// ============================================================
+// BLADE GEOMETRY
+// ============================================================
+
+function createBladeGeometry() {
+
+  const segments = 5;
+
+  const positions = [];
+  const uvs = [];
+  const indices = [];
+
+  for(let i=0;i<=segments;i++) {
+
+    const t = i/segments;
+
+    // Width tapers toward the blade tip.
+    const taper =
+      Math.pow(1.0-t,0.72);
+
+    positions.push(
+      -0.5*taper,
+      t,
+      0
+    );
+
+    positions.push(
+      0.5*taper,
+      t,
+      0
+    );
+
+    uvs.push(0,t);
+    uvs.push(1,t);
+
+    if(i<segments) {
+
+      const n=i*2;
+
+      indices.push(
+        n,
+        n+1,
+        n+2
+      );
+
+      indices.push(
+        n+1,
+        n+3,
+        n+2
+      );
+    }
+  }
+
+  const geo =
+    new THREE.BufferGeometry();
+
+  geo.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+      positions,
+      3
+    )
+  );
+
+  geo.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(
+      uvs,
+      2
+    )
+  );
+
+  geo.setIndex(indices);
+
+  return geo;
+}
+
+// ============================================================
+// GPU GRASS SHADER
+// ============================================================
+
+function createGrassMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    side: THREE.DoubleSide,
+
+    transparent: false,
+
+    uniforms: {
+
+      uTime: {
+        value: 0
+      },
+
+      uHeight: {
+        value: Number(inputs.height.value)
+      },
+
+      uWidth: {
+        value: Number(inputs.width.value)
+      },
+
+      uWind: {
+        value: Number(inputs.wind.value)
+      },
+
+      uSpeed: {
+        value: Number(inputs.speed.value)
+      },
+
+      uGust: {
+        value: Number(inputs.gust.value)
+      },
+
+      uTurbulence: {
+        value: Number(inputs.turb.value)
+      },
+
+      uWild: {
+        value: Number(inputs.wild.value)
+      },
+
+      uColorVariation: {
+        value: Number(inputs.colorVar.value)
+      },
+
+      uFogDensity: {
+        value: Number(inputs.fog.value)
+      },
+
+      uFogColor: {
+        value: new THREE.Color(0x82998d)
+      },
+
+      uSunDirection: {
+        value: new THREE.Vector3(
+          -0.4,
+          1.0,
+          -0.3
+        ).normalize()
+      }
+    },
+
+    vertexShader: `
+
+      precision highp float;
+
+      attribute vec3 offset;
+      attribute float scale;
+      attribute float angle;
+      attribute float randomValue;
+
+      uniform float uTime;
+      uniform float uHeight;
+      uniform float uWidth;
+      uniform float uWind;
+      uniform float uSpeed;
+      uniform float uGust;
+      uniform float uTurbulence;
+      uniform float uWild;
+
+      varying vec2 vUv;
+      varying float vRandom;
+      varying float vHeight;
+      varying vec3 vWorldPosition;
+
+      float hash(vec2 p) {
+
+        return fract(
+          sin(
+            dot(
+              p,
+              vec2(127.1,311.7)
+            )
+          ) *
+          43758.5453123
+        );
+      }
+
+      float noise(vec2 p) {
+
+        vec2 i=floor(p);
+        vec2 f=fract(p);
+
+        f=f*f*(3.0-2.0*f);
+
+        float a=hash(i);
+        float b=hash(i+vec2(1.0,0.0));
+        float c=hash(i+vec2(0.0,1.0));
+        float d=hash(i+vec2(1.0,1.0));
+
+        return mix(
+          mix(a,b,f.x),
+          mix(c,d,f.x),
+          f.y
+        );
+      }
+
+      void main() {
+
+        vUv=uv;
+        vRandom=randomValue;
+        vHeight=uv.y;
+
+        vec3 p=position;
+
+        // ------------------------------------------
+        // Individual blade size
+        // ------------------------------------------
+
+        float individualHeight =
+          uHeight *
+          scale *
+          mix(
+            1.0,
+            0.45 + randomValue*1.1,
+            uWild
+          );
+
+        p.y *= individualHeight;
+
+        p.x *=
+          uWidth *
+          mix(
+            0.7,
+            1.3,
+            randomValue
+          );
+
+        // ------------------------------------------
+        // Blade rotation
+        // ------------------------------------------
+
+        float ca=cos(angle);
+        float sa=sin(angle);
+
+        float rx =
+          p.x*ca -
+          p.z*sa;
+
+        float rz =
+          p.x*sa +
+          p.z*ca;
+
+        p.x=rx;
+        p.z=rz;
+
+        // ------------------------------------------
+        // Large rolling wind field
+        // ------------------------------------------
+
+        vec2 worldXZ=offset.xz;
+
+        float windTime =
+          uTime*uSpeed;
+
+        float largeWave =
+          sin(
+            worldXZ.x*0.11 +
+            worldXZ.y*0.075 +
+            windTime
+          );
+
+        float crossWave =
+          sin(
+            worldXZ.x*-0.055 +
+            worldXZ.y*0.16 +
+            windTime*1.37
+          );
+
+        float gustNoise =
+          noise(
+            worldXZ*uGust +
+            vec2(
+              windTime*0.15,
+              windTime*0.09
+            )
+          );
+
+        float micro =
+          sin(
+            worldXZ.x*0.75 +
+            worldXZ.y*0.63 +
+            windTime*3.2 +
+            randomValue*8.0
+          );
+
+        float windField =
+          largeWave*0.48 +
+          crossWave*0.22 +
+          (gustNoise-0.5)*1.2 +
+          micro*0.08*uTurbulence;
+
+        // Blade base remains planted.
+        float bend =
+          pow(uv.y,1.7);
+
+        float strength =
+          uWind *
+          windField *
+          bend;
+
+        p.x += strength*0.58;
+        p.z += strength*0.22;
+
+        // Natural blade curvature.
+        p.z +=
+          bend*bend*
+          individualHeight*
+          0.075;
+
+        // Small high-frequency tip flutter.
+        p.x +=
+          sin(
+            windTime*5.0 +
+            randomValue*17.0 +
+            worldXZ.x
+          ) *
+          uTurbulence *
+          0.025 *
+          bend;
+
+        // ------------------------------------------
+        // Translate blade into field
+        // ------------------------------------------
+
+        p += offset;
+
+        vec4 worldPosition =
+          modelMatrix *
+          vec4(p,1.0);
+
+        vWorldPosition =
+          worldPosition.xyz;
+
+        gl_Position =
+          projectionMatrix *
+          viewMatrix *
+          worldPosition;
+      }
+    `,
+
+    fragmentShader: `
+
+      precision highp float;
+
+      uniform float uColorVariation;
+      uniform float uFogDensity;
+      uniform vec3 uFogColor;
+      uniform vec3 uSunDirection;
+
+      varying vec2 vUv;
+      varying float vRandom;
+      varying float vHeight;
+      varying vec3 vWorldPosition;
+
+      void main() {
+
+        // Deep shaded blade base.
+        vec3 darkGreen =
+          vec3(
+            0.055,
+            0.14,
+            0.025
+          );
+
+        // Main grass.
+        vec3 grassGreen =
+          vec3(
+            0.18,
+            0.42,
+            0.075
+          );
+
+        // Sunlit blade tips.
+        vec3 tipGreen =
+          vec3(
+            0.46,
+            0.67,
+            0.19
+          );
+
+        vec3 color =
+          mix(
+            darkGreen,
+            grassGreen,
+            smoothstep(
+              0.0,
+              0.45,
+              vHeight
+            )
+          );
+
+        color =
+          mix(
+            color,
+            tipGreen,
+            pow(vHeight,2.4)*0.65
+          );
+
+        // Per-blade color variation.
+        float variation =
+          (vRandom-0.5) *
+          uColorVariation;
+
+        color +=
+          vec3(
+            variation*0.10,
+            variation*0.20,
+            variation*0.035
+          );
+
+        // Simulated directional lighting.
+        float fakeNormal =
+          0.58 +
+          0.42*
+          abs(
+            sin(
+              vRandom*18.0 +
+              vWorldPosition.x*0.08
+            )
+          );
+
+        color *= fakeNormal;
+
+        // Warm sun contribution.
+        color +=
+          vec3(
+            0.11,
+            0.075,
+            0.025
+          ) *
+          pow(vHeight,2.0);
+
+        // ------------------------------------------
+        // Distance fog
+        // ------------------------------------------
+
+        float distanceToCamera =
+          length(
+            cameraPosition -
+            vWorldPosition
+          );
+
+        float fogFactor =
+          1.0 -
+          exp(
+            -uFogDensity *
+            uFogDensity *
+            distanceToCamera *
+            distanceToCamera
+          );
+
+        color =
+          mix(
+            color,
+            uFogColor,
+            clamp(
+              fogFactor,
+              0.0,
+              1.0
+            )
+          );
+
+        gl_FragColor =
+          vec4(color,1.0);
+      }
+    `
+  });
+}
+
+// ============================================================
+// GENERATE FIELD
+// ============================================================
+
+function rebuildGrass() {
+
+  if(grass) {
+
+    scene.remove(grass);
+
+    grass.geometry.dispose();
+
+    if(grass.material) {
+      grass.material.dispose();
+    }
+
+    grass=null;
+  }
+
+  const count =
+    Number(inputs.density.value);
+
+  const radius =
+    Number(inputs.field.value);
+
+  const bladeGeometry =
+    createBladeGeometry();
+
+  const geometry =
+    new THREE.InstancedBufferGeometry();
+
+  geometry.index =
+    bladeGeometry.index;
+
+  geometry.attributes.position =
+    bladeGeometry.attributes.position;
+
+  geometry.attributes.uv =
+    bladeGeometry.attributes.uv;
+
+  const offsets =
+    new Float32Array(count*3);
+
+  const scales =
+    new Float32Array(count);
+
+  const angles =
+    new Float32Array(count);
+
+  const randomValues =
+    new Float32Array(count);
+
+  for(let i=0;i<count;i++) {
+
+    // sqrt gives uniform distribution over disk.
+    const r =
+      Math.sqrt(Math.random()) *
+      radius;
+
+    const theta =
+      Math.random() *
+      Math.PI *
+      2;
+
+    let x =
+      Math.cos(theta)*r;
+
+    let z =
+      Math.sin(theta)*r;
+
+    // Break the perfect mathematical distribution.
+    x +=
+      (Math.random()-0.5)*0.25;
+
+    z +=
+      (Math.random()-0.5)*0.25;
+
+    const i3=i*3;
+
+    offsets[i3]=x;
+    offsets[i3+1]=0;
+    offsets[i3+2]=z;
+
+    scales[i] =
+      0.68 +
+      Math.random()*0.64;
+
+    angles[i] =
+      Math.random() *
+      Math.PI *
+      2;
+
+    randomValues[i] =
+      Math.random();
+  }
+
+  geometry.setAttribute(
+    "offset",
+    new THREE.InstancedBufferAttribute(
+      offsets,
+      3
+    )
+  );
+
+  geometry.setAttribute(
+    "scale",
+    new THREE.InstancedBufferAttribute(
+      scales,
+      1
+    )
+  );
+
+  geometry.setAttribute(
+    "angle",
+    new THREE.InstancedBufferAttribute(
+      angles,
+      1
+    )
+  );
+
+  geometry.setAttribute(
+    "randomValue",
+    new THREE.InstancedBufferAttribute(
+      randomValues,
+      1
+    )
+  );
+
+  geometry.instanceCount=count;
+
+  // Prevent Three.js from incorrectly culling the field
+  // because individual blade vertices start near origin.
+  geometry.boundingSphere =
+    new THREE.Sphere(
+      new THREE.Vector3(0,1,0),
+      radius+5
+    );
+
+  grassMaterial =
+    createGrassMaterial();
+
+  grass =
+    new THREE.Mesh(
+      geometry,
+      grassMaterial
+    );
+
+  grass.frustumCulled=false;
+
+  scene.add(grass);
+
+  $("blades").textContent =
+    count>=1000
+      ? (count/1000).toFixed(0)+"K"
+      : count;
+
+  bladeGeometry.dispose();
+}
+
+// ============================================================
+// FIREFLIES
+// ============================================================
+
+const fireflyCount=120;
+
+const fireflyGeometry =
+  new THREE.BufferGeometry();
+
+const fireflyPositions =
+  new Float32Array(
+    fireflyCount*3
+  );
+
+for(let i=0;i<fireflyCount;i++) {
+
+  const r =
+    8 +
+    Math.random()*32;
+
+  const a =
+    Math.random() *
+    Math.PI *
+    2;
+
+  fireflyPositions[i*3] =
+    Math.cos(a)*r;
+
+  fireflyPositions[i*3+1] =
+    0.35 +
+    Math.random()*3.8;
+
+  fireflyPositions[i*3+2] =
+    Math.sin(a)*r;
+}
+
+fireflyGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(
+    fireflyPositions,
+    3
+  )
+);
+
+const fireflyMaterial =
+  new THREE.PointsMaterial({
+    color:0xffef9c,
+    size:0.055,
+    transparent:true,
+    opacity:0.75,
+    depthWrite:false
+  });
+
+const fireflies =
+  new THREE.Points(
+    fireflyGeometry,
+    fireflyMaterial
+  );
+
+scene.add(fireflies);
+
+// ============================================================
+// INITIAL BUILD
+// ============================================================
+
+rebuildGrass();
+
+loading.style.display="none";
+
+// ============================================================
+// VALUE LABELS
+// ============================================================
+
+function updateLabels() {
+
+  $("densityVal").textContent =
+    Number(inputs.density.value).toLocaleString();
+
+  $("fieldVal").textContent =
+    inputs.field.value + " m";
+
+  $("heightVal").textContent =
+    Number(inputs.height.value).toFixed(2);
+
+  $("widthVal").textContent =
+    Number(inputs.width.value).toFixed(3);
+
+  $("wildVal").textContent =
+    Number(inputs.wild.value).toFixed(2);
+
+  $("windVal").textContent =
+    Number(inputs.wind.value).toFixed(2);
+
+  $("speedVal").textContent =
+    Number(inputs.speed.value).toFixed(2);
+
+  $("gustVal").textContent =
+    Number(inputs.gust.value).toFixed(2);
+
+  $("turbVal").textContent =
+    Number(inputs.turb.value).toFixed(2);
+
+  $("ambientVal").textContent =
+    Number(inputs.ambient.value).toFixed(2);
+
+  $("sunVal").textContent =
+    Number(inputs.sun.value).toFixed(1);
+
+  $("fogVal").textContent =
+    Number(inputs.fog.value).toFixed(3);
+
+  $("colorVal").textContent =
+    Number(inputs.colorVar.value).toFixed(2);
+}
+
+updateLabels();
+
+// ============================================================
+// LIVE SHADER CONTROLS
+// ============================================================
+
+function updateShader() {
+
+  if(!grassMaterial) return;
+
+  grassMaterial.uniforms.uHeight.value =
+    Number(inputs.height.value);
+
+  grassMaterial.uniforms.uWidth.value =
+    Number(inputs.width.value);
+
+  grassMaterial.uniforms.uWild.value =
+    Number(inputs.wild.value);
+
+  grassMaterial.uniforms.uWind.value =
+    Number(inputs.wind.value);
+
+  grassMaterial.uniforms.uSpeed.value =
+    Number(inputs.speed.value);
+
+  grassMaterial.uniforms.uGust.value =
+    Number(inputs.gust.value);
+
+  grassMaterial.uniforms.uTurbulence.value =
+    Number(inputs.turb.value);
+
+  grassMaterial.uniforms.uColorVariation.value =
+    Number(inputs.colorVar.value);
+
+  grassMaterial.uniforms.uFogDensity.value =
+    Number(inputs.fog.value);
+
+  hemisphere.intensity =
+    Number(inputs.ambient.value);
+
+  sun.intensity =
+    Number(inputs.sun.value);
+
+  scene.fog.density =
+    Number(inputs.fog.value);
+
+  updateLabels();
+}
+
+// These do not require regenerating the grass population.
+[
+  "height",
+  "width",
+  "wild",
+  "wind",
+  "speed",
+  "gust",
+  "turb",
+  "ambient",
+  "sun",
+  "fog",
+  "colorVar"
+].forEach(name => {
+
+  inputs[name].addEventListener(
+    "input",
+    updateShader
+  );
+
+});
+
+// Density and field radius rebuild the instance buffer.
+// Change event means it waits until you release the slider,
+// avoiding repeated 250K-blade allocations while dragging.
+
+inputs.density.addEventListener(
+  "input",
+  updateLabels
+);
+
+inputs.field.addEventListener(
+  "input",
+  updateLabels
+);
+
+inputs.density.addEventListener(
+  "change",
+  rebuildGrass
+);
+
+inputs.field.addEventListener(
+  "change",
+  rebuildGrass
+);
+
+// ============================================================
+// QUALITY PRESETS
+// ============================================================
+
+const presetData = {
+
+  LOW: {
+    density: 20000,
+    pixelRatio: 1
+  },
+
+  MEDIUM: {
+    density: 50000,
+    pixelRatio: 1.25
+  },
+
+  HIGH: {
+    density: 90000,
+    pixelRatio: 1.75
+  },
+
+  ULTRA: {
+    density: 180000,
+    pixelRatio: 2
+  }
+
+};
+
+document.querySelectorAll(".preset").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    const name =
+      button.textContent.trim();
+
+    const preset =
+      presetData[name];
+
+    if(!preset) return;
+
+    inputs.density.value =
+      preset.density;
+
+    renderer.setPixelRatio(
+      Math.min(
+        window.devicePixelRatio,
+        preset.pixelRatio
+      )
+    );
+
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+
+    $("quality").textContent =
+      name;
+
+    document
+      .querySelectorAll(".preset")
+      .forEach(b =>
+        b.classList.remove("active")
+      );
+
+    button.classList.add("active");
+
+    updateLabels();
+    rebuildGrass();
+  });
+
+});
+
+// ============================================================
+// RESET
+// ============================================================
+
+const defaults = {
+
+  density: 90000,
+  field: 38,
+
+  height: 1.05,
+  width: 0.065,
+  wild: 0.55,
+
+  wind: 0.8,
+  speed: 1.15,
+  gust: 0.3,
+  turb: 0.5,
+
+  ambient: 1,
+  sun: 2.2,
+  fog: 0.012,
+
+  colorVar: 0.45
+};
+
+$("reset").addEventListener("click", () => {
+
+  Object.entries(defaults)
+    .forEach(([name,value]) => {
+
+      if(inputs[name]) {
+        inputs[name].value=value;
+      }
+
+    });
+
+  renderer.setPixelRatio(
+    Math.min(
+      window.devicePixelRatio,
+      1.75
+    )
+  );
+
+  $("quality").textContent =
+    "HIGH";
+
+  document
+    .querySelectorAll(".preset")
+    .forEach(b =>
+      b.classList.toggle(
+        "active",
+        b.textContent.trim()==="HIGH"
+      )
+    );
+
+  $("firefliesToggle").checked=true;
+  $("drift").checked=false;
+
+  fireflies.visible=true;
+
+  camera.position.set(
+    14,
+    6.5,
+    16
+  );
+
+  controls.target.set(
+    0,
+    0.8,
+    0
+  );
+
+  controls.update();
+
+  updateLabels();
+  updateShader();
+  rebuildGrass();
+});
+
+// ============================================================
+// RANDOMIZE
+// ============================================================
+
+function randomRange(min,max) {
+  return min +
+    Math.random()*(max-min);
+}
+
+$("randomize").addEventListener("click", () => {
+
+  inputs.height.value =
+    randomRange(.55,1.8);
+
+  inputs.width.value =
+    randomRange(.035,.11);
+
+  inputs.wild.value =
+    randomRange(.25,.9);
+
+  inputs.wind.value =
+    randomRange(.25,1.8);
+
+  inputs.speed.value =
+    randomRange(.35,2.7);
+
+  inputs.gust.value =
+    randomRange(.12,.85);
+
+  inputs.turb.value =
+    randomRange(.1,1.4);
+
+  inputs.ambient.value =
+    randomRange(.5,1.8);
+
+  inputs.sun.value =
+    randomRange(.8,3.8);
+
+  inputs.fog.value =
+    randomRange(.005,.025);
+
+  inputs.colorVar.value =
+    randomRange(.15,.85);
+
+  updateLabels();
+  updateShader();
+});
+
+// ============================================================
+// TOGGLES
+// ============================================================
+
+$("firefliesToggle")
+  .addEventListener("change", e => {
+
+    fireflies.visible =
+      e.target.checked;
+
+  });
+
+// ============================================================
+// FPS COUNTER
+// ============================================================
+
+let frameCounter=0;
+let fpsTimer=performance.now();
+let displayedFPS=60;
+
+function updateFPS(now) {
+
+  frameCounter++;
+
+  if(now-fpsTimer>=500) {
+
+    displayedFPS =
+      Math.round(
+        frameCounter*1000 /
+        (now-fpsTimer)
+      );
+
+    $("fps").textContent =
+      displayedFPS;
+
+    frameCounter=0;
+    fpsTimer=now;
+  }
+}
+
+// ============================================================
+// DYNAMIC SUN
+// ============================================================
+
+function updateSun(time) {
+
+  // Very subtle movement prevents the lighting
+  // from looking completely static.
+
+  const x =
+    -18 +
+    Math.sin(time*.025)*5;
+
+  const z =
+    -14 +
+    Math.cos(time*.021)*4;
+
+  sun.position.set(
+    x,
+    26,
+    z
+  );
+
+  if(grassMaterial) {
+
+    grassMaterial.uniforms
+      .uSunDirection.value
+      .copy(sun.position)
+      .normalize();
+
+  }
+}
+
+// ============================================================
+// FIREFLY ANIMATION
+// ============================================================
+
+const baseFireflies =
+  fireflyPositions.slice();
+
+function animateFireflies(time) {
+
+  if(!fireflies.visible) return;
+
+  const positions =
+    fireflyGeometry.attributes.position.array;
+
+  for(let i=0;i<fireflyCount;i++) {
+
+    const i3=i*3;
+
+    positions[i3] =
+      baseFireflies[i3] +
+      Math.sin(
+        time*.35+i*.71
+      )*.18;
+
+    positions[i3+1] =
+      baseFireflies[i3+1] +
+      Math.sin(
+        time*1.15+i*1.37
+      )*.15;
+
+    positions[i3+2] =
+      baseFireflies[i3+2] +
+      Math.cos(
+        time*.31+i*.59
+      )*.18;
+  }
+
+  fireflyGeometry
+    .attributes
+    .position
+    .needsUpdate=true;
+
+  fireflyMaterial.opacity =
+    .5 +
+    Math.sin(time*2.3)*.12;
+}
+
+// ============================================================
+// CAMERA DRIFT
+// ============================================================
+
+function updateCameraDrift(time) {
+
+  if(!$("drift").checked) return;
+
+  const radius =
+    Math.sqrt(
+      camera.position.x*
+      camera.position.x +
+
+      camera.position.z*
+      camera.position.z
+    );
+
+  const currentAngle =
+    Math.atan2(
+      camera.position.z,
+      camera.position.x
+    );
+
+  const nextAngle =
+    currentAngle +
+    0.00035;
+
+  camera.position.x =
+    Math.cos(nextAngle)*radius;
+
+  camera.position.z =
+    Math.sin(nextAngle)*radius;
+}
+
+// ============================================================
+// SUBTLE TERRAIN ATMOSPHERE
+// ============================================================
+
+// Add distant dark ring so the edge of the grass field
+// doesn't terminate against an empty horizon.
+
+const outerGroundGeometry =
+  new THREE.RingGeometry(
+    55,
+    145,
+    128
+  );
+
+outerGroundGeometry.rotateX(
+  -Math.PI/2
+);
+
+const outerGroundMaterial =
+  new THREE.MeshBasicMaterial({
+    color:0x18251a,
+    side:THREE.DoubleSide
+  });
+
+const outerGround =
+  new THREE.Mesh(
+    outerGroundGeometry,
+    outerGroundMaterial
+  );
+
+outerGround.position.y=-.055;
+
+scene.add(outerGround);
+
+// ============================================================
+// DISTANT HAZE PLANES
+// ============================================================
+
+const hazeGeometry =
+  new THREE.PlaneGeometry(
+    300,
+    18
+  );
+
+const hazeMaterial =
+  new THREE.MeshBasicMaterial({
+
+    color:0x81968b,
+
+    transparent:true,
+
+    opacity:.13,
+
+    depthWrite:false,
+
+    side:THREE.DoubleSide
+
+  });
+
+for(let i=0;i<4;i++) {
+
+  const haze =
+    new THREE.Mesh(
+      hazeGeometry,
+      hazeMaterial
+    );
+
+  haze.position.y =
+    5+i*2;
+
+  haze.position.z =
+    -60-i*10;
+
+  scene.add(haze);
+}
+
+// ============================================================
+// RESIZE
+// ============================================================
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    camera.aspect =
+      window.innerWidth /
+      window.innerHeight;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+
+  }
+);
+
+// ============================================================
+// ANIMATION
+// ============================================================
+
+const clock =
+  new THREE.Clock();
+
+function animate(now) {
+
+  requestAnimationFrame(animate);
+
+  const time =
+    clock.getElapsedTime();
+
+  if(grassMaterial) {
+
+    grassMaterial
+      .uniforms
+      .uTime
+      .value=time;
+
+  }
+
+  skyMaterial
+    .uniforms
+    .uTime
+    .value=time;
+
+  updateSun(time);
+
+  animateFireflies(time);
+
+  updateCameraDrift(time);
+
+  controls.update();
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+  updateFPS(now);
+}
+
+requestAnimationFrame(animate);
+
+// ============================================================
+// READY
+// ============================================================
+
+updateLabels();
+updateShader();
+
+setTimeout(() => {
+
+  loading.style.opacity="0";
+
+  setTimeout(() => {
+    loading.style.display="none";
+  },350);
+
+},150);
+
+// ============================================================
+// ERROR HANDLING
+// ============================================================
+
+} catch(error) {
+
+  console.error(error);
+
+  const loading =
+    document.getElementById("loading");
+
+  if(loading) {
+    loading.style.display="none";
+  }
+
+  const errorBox =
+    document.getElementById("error");
+
+  if(errorBox) {
+
+    errorBox.style.display="block";
+
+    errorBox.textContent =
+      "GRASSWORKS FAILED TO START\n\n" +
+      error.message +
+      "\n\nOpen the browser developer console for more information.";
+
+  }
+
+}
+})();
+</script>
+
+</body>
+</html>

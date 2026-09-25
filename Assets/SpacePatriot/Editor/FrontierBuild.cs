@@ -60,7 +60,7 @@ public static class FrontierBuild
         RenderSettings.fog=true;RenderSettings.fogMode=FogMode.ExponentialSquared;RenderSettings.fogDensity=.0008f;
         string starPath="Assets/SpacePatriot/Resources/Rendering/StarUnlit.mat";
         if(AssetDatabase.LoadAssetAtPath<Material>(starPath)==null)AssetDatabase.CreateAsset(new Material(Shader.Find("Universal Render Pipeline/Unlit")),starPath);
-        ShipAssetBaker.Bake();
+        // Original assets are imported through OriginalAssetImporter.
         EditorSceneManager.SaveScene(scene,ScenePath);EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(ScenePath,true)};
         AssetDatabase.SaveAssets();Validate();Debug.Log("SPACE_PATRIOT_CONFIGURED");
     }

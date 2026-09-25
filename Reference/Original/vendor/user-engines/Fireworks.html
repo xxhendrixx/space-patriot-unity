@@ -1,0 +1,6962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fireworks — GPU Fire Laboratory</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#050403;
+  color:#f5eee8;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+canvas{
+  display:block;
+  position:fixed;
+  inset:0;
+  z-index:0;
+}
+
+#loading{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:#050403;
+  transition:opacity .35s;
+}
+
+#loadingTitle{
+  font-size:13px;
+  letter-spacing:.20em;
+}
+
+#loadingStage{
+  color:#a98f79;
+  font-size:10px;
+  letter-spacing:.10em;
+}
+
+#error{
+  display:none;
+  position:fixed;
+  inset:20px;
+  z-index:200;
+  padding:20px;
+  overflow:auto;
+  background:#171310;
+  color:white;
+  white-space:pre-wrap;
+  font-family:monospace;
+}
+
+#ui{
+  position:fixed;
+  z-index:20;
+  top:14px;
+  left:14px;
+  width:320px;
+  max-height:calc(100% - 28px);
+  overflow-y:auto;
+  padding:15px;
+
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:12px;
+
+  background:rgba(12,8,5,.82);
+  backdrop-filter:blur(16px);
+}
+
+#ui::-webkit-scrollbar{
+  width:5px;
+}
+
+#ui::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.20);
+  border-radius:10px;
+}
+
+h1{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.17em;
+}
+
+.subtitle{
+  margin:4px 0 13px;
+  color:#aa8f78;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.stat{
+  padding:8px;
+  border-radius:7px;
+  background:rgba(255,255,255,.045);
+}
+
+.stat b{
+  display:block;
+  font-size:14px;
+}
+
+.stat small{
+  color:#a28d7d;
+  font-size:8px;
+}
+
+.group{
+  margin-top:11px;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.groupTitle{
+  margin-bottom:10px;
+  color:#b49a83;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+
+.row{
+  margin-bottom:9px;
+}
+
+.label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:4px;
+  font-size:10px;
+}
+
+.value{
+  color:#ffb36b;
+  font-variant-numeric:tabular-nums;
+}
+
+input[type=range]{
+  width:100%;
+  accent-color:#e87d32;
+}
+
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:8px 0;
+  font-size:10px;
+}
+
+input[type=checkbox]{
+  accent-color:#e87d32;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+button{
+  min-height:32px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:6px;
+  background:rgba(255,255,255,.05);
+  color:#eee4dc;
+  cursor:pointer;
+  font-size:9px;
+}
+
+button:hover{
+  background:rgba(255,255,255,.10);
+}
+
+button.active{
+  border-color:#f08b43;
+  background:rgba(190,83,20,.24);
+  color:#ffc08a;
+}
+
+#tip{
+  position:fixed;
+  right:15px;
+  bottom:13px;
+  z-index:10;
+  color:rgba(255,255,255,.5);
+  font-size:9px;
+  letter-spacing:.10em;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading">
+  <div id="loadingTitle">
+    IGNITING FIREWORKS...
+  </div>
+  <div id="loadingStage">
+    starting module
+  </div>
+</div>
+
+<div id="error"></div>
+
+<div id="ui">
+
+<h1>FIREWORKS</h1>
+<div class="subtitle">GPU COMBUSTION LABORATORY</div>
+
+<div class="stats">
+
+  <div class="stat">
+    <b id="fps">--</b>
+    <small>FPS</small>
+  </div>
+
+  <div class="stat">
+    <b id="particles">--</b>
+    <small>PARTICLES</small>
+  </div>
+
+  <div class="stat">
+    <b id="state">FIRE</b>
+    <small>PRESET</small>
+  </div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- PRESETS                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  FIRE TYPE
+</div>
+
+<div class="buttons">
+
+  <button class="preset" data-state="candle">
+    CANDLE
+  </button>
+
+  <button class="preset" data-state="campfire">
+    CAMPFIRE
+  </button>
+
+  <button class="preset active" data-state="bonfire">
+    BONFIRE
+  </button>
+
+  <button class="preset" data-state="inferno">
+    INFERNO
+  </button>
+
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- COMBUSTION                                             -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  COMBUSTION
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Fuel
+    <span id="fuelVal" class="value"></span>
+  </div>
+
+  <input
+    id="fuel"
+    type="range"
+    min=".1"
+    max="3"
+    step=".05"
+    value="1.25">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Oxygen
+    <span id="oxygenVal" class="value"></span>
+  </div>
+
+  <input
+    id="oxygen"
+    type="range"
+    min=".1"
+    max="2"
+    step=".05"
+    value="1">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Temperature
+    <span id="temperatureVal" class="value"></span>
+  </div>
+
+  <input
+    id="temperature"
+    type="range"
+    min=".2"
+    max="2"
+    step=".02"
+    value="1">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Flame Height
+    <span id="heightVal" class="value"></span>
+  </div>
+
+  <input
+    id="height"
+    type="range"
+    min=".3"
+    max="10"
+    step=".1"
+    value="4">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Flame Width
+    <span id="widthVal" class="value"></span>
+  </div>
+
+  <input
+    id="width"
+    type="range"
+    min=".15"
+    max="5"
+    step=".05"
+    value="1.8">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Turbulence
+    <span id="turbVal" class="value"></span>
+  </div>
+
+  <input
+    id="turbulence"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value="1">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Flicker
+    <span id="flickerVal" class="value"></span>
+  </div>
+
+  <input
+    id="flicker"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".65">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- WIND                                                   -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  WIND FIELD
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Wind Strength
+    <span id="windVal" class="value"></span>
+  </div>
+
+  <input
+    id="wind"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value=".25">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Wind Direction
+    <span id="windDirectionVal" class="value"></span>
+  </div>
+
+  <input
+    id="windDirection"
+    type="range"
+    min="0"
+    max="360"
+    step="1"
+    value="25">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Gusts
+    <span id="gustVal" class="value"></span>
+  </div>
+
+  <input
+    id="gust"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".45">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- EMBERS                                                 -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  EMBERS & SPARKS
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Ember Rate
+    <span id="emberVal" class="value"></span>
+  </div>
+
+  <input
+    id="emberRate"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".65">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Spark Height
+    <span id="sparkHeightVal" class="value"></span>
+  </div>
+
+  <input
+    id="sparkHeight"
+    type="range"
+    min=".5"
+    max="15"
+    step=".1"
+    value="6">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Spark Spread
+    <span id="sparkSpreadVal" class="value"></span>
+  </div>
+
+  <input
+    id="sparkSpread"
+    type="range"
+    min="0"
+    max="5"
+    step=".05"
+    value="1.2">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- SMOKE                                                  -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  SMOKE
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Smoke Amount
+    <span id="smokeVal" class="value"></span>
+  </div>
+
+  <input
+    id="smoke"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".55">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Smoke Expansion
+    <span id="smokeExpansionVal" class="value"></span>
+  </div>
+
+  <input
+    id="smokeExpansion"
+    type="range"
+    min=".1"
+    max="3"
+    step=".05"
+    value="1">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Soot
+    <span id="sootVal" class="value"></span>
+  </div>
+
+  <input
+    id="soot"
+    type="range"
+    min="0"
+    max="1"
+    step=".01"
+    value=".55">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- RENDERING                                              -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  RENDERING
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Glow
+    <span id="glowVal" class="value"></span>
+  </div>
+
+  <input
+    id="glow"
+    type="range"
+    min="0"
+    max="3"
+    step=".05"
+    value="1.25">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Heat Shimmer
+    <span id="heatVal" class="value"></span>
+  </div>
+
+  <input
+    id="heat"
+    type="range"
+    min="0"
+    max="2"
+    step=".02"
+    value=".55">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Light Intensity
+    <span id="lightVal" class="value"></span>
+  </div>
+
+  <input
+    id="lightIntensity"
+    type="range"
+    min="0"
+    max="10"
+    step=".1"
+    value="4">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Exposure
+    <span id="exposureVal" class="value"></span>
+  </div>
+
+  <input
+    id="exposure"
+    type="range"
+    min=".3"
+    max="2"
+    step=".05"
+    value="1">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- PERFORMANCE                                            -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="groupTitle">
+  PERFORMANCE
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Flame Particles
+    <span id="flameCountVal" class="value"></span>
+  </div>
+
+  <input
+    id="flameCount"
+    type="range"
+    min="2000"
+    max="50000"
+    step="2000"
+    value="16000">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Ember Particles
+    <span id="emberCountVal" class="value"></span>
+  </div>
+
+  <input
+    id="emberCount"
+    type="range"
+    min="500"
+    max="12000"
+    step="500"
+    value="4000">
+</div>
+
+
+<div class="row">
+  <div class="label">
+    Smoke Particles
+    <span id="smokeCountVal" class="value"></span>
+  </div>
+
+  <input
+    id="smokeCount"
+    type="range"
+    min="500"
+    max="12000"
+    step="500"
+    value="3500">
+</div>
+
+
+<div class="toggle">
+  <span>Dynamic Fire Light</span>
+  <input id="dynamicLight" type="checkbox" checked>
+</div>
+
+
+<div class="toggle">
+  <span>Heat Shimmer</span>
+  <input id="heatToggle" type="checkbox" checked>
+</div>
+
+
+<div class="toggle">
+  <span>Camera Drift</span>
+  <input id="drift" type="checkbox">
+</div>
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- ACTIONS                                                -->
+<!-- ====================================================== -->
+
+<div class="group">
+
+<div class="buttons">
+
+  <button id="randomize">
+    RANDOMIZE
+  </button>
+
+  <button id="reset">
+    RESET
+  </button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="tip">
+  LEFT DRAG: ORBIT · WHEEL: ZOOM
+</div>
+
+
+<!--
+One direct Three.js module import will be performed by Part 2.
+No import map.
+No OrbitControls.
+-->
+
+<script type="module">
+
+// ============================================================
+// STARTUP DIAGNOSTICS
+// ============================================================
+
+const loadingStage =
+  document.getElementById("loadingStage");
+
+const errorBox =
+  document.getElementById("error");
+
+function stage(text) {
+  loadingStage.textContent = text;
+}
+
+function fatal(error) {
+
+  console.error(error);
+
+  const loading =
+    document.getElementById("loading");
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+  errorBox.style.display = "block";
+
+  errorBox.textContent =
+    "FIREWORKS FAILED TO START\n\n" +
+    (error.stack || error.message || String(error));
+}
+
+
+// ============================================================
+// LOAD THREE.JS
+//
+// One external module only.
+// ============================================================
+
+stage("loading Three.js");
+
+let THREE;
+
+try {
+
+  THREE = await import(
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+  );
+
+} catch (error) {
+
+  fatal(error);
+  throw error;
+
+}
+
+stage("Three.js loaded");
+
+
+// ============================================================
+// MAIN INITIALIZATION
+// ============================================================
+
+try {
+
+const $ =
+  id => document.getElementById(id);
+
+
+// ============================================================
+// INPUT REFERENCES
+// ============================================================
+
+const inputs = {
+
+  fuel: $("fuel"),
+  oxygen: $("oxygen"),
+  temperature: $("temperature"),
+
+  height: $("height"),
+  width: $("width"),
+
+  turbulence: $("turbulence"),
+  flicker: $("flicker"),
+
+  wind: $("wind"),
+  windDirection: $("windDirection"),
+  gust: $("gust"),
+
+  emberRate: $("emberRate"),
+  sparkHeight: $("sparkHeight"),
+  sparkSpread: $("sparkSpread"),
+
+  smoke: $("smoke"),
+  smokeExpansion: $("smokeExpansion"),
+  soot: $("soot"),
+
+  glow: $("glow"),
+  heat: $("heat"),
+  lightIntensity: $("lightIntensity"),
+  exposure: $("exposure"),
+
+  flameCount: $("flameCount"),
+  emberCount: $("emberCount"),
+  smokeCount: $("smokeCount")
+
+};
+
+
+// ============================================================
+// RENDERER
+// ============================================================
+
+stage("creating WebGL renderer");
+
+const renderer =
+  new THREE.WebGLRenderer({
+
+    antialias: true,
+
+    powerPreference:
+      "high-performance"
+
+  });
+
+
+renderer.setPixelRatio(
+
+  Math.min(
+    window.devicePixelRatio,
+    1.5
+  )
+
+);
+
+
+renderer.setSize(
+
+  window.innerWidth,
+
+  window.innerHeight
+
+);
+
+
+renderer.outputColorSpace =
+  THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+  THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+  Number(
+    inputs.exposure.value
+  );
+
+
+renderer.domElement.style.position =
+  "fixed";
+
+renderer.domElement.style.inset =
+  "0";
+
+renderer.domElement.style.zIndex =
+  "0";
+
+
+document.body.prepend(
+  renderer.domElement
+);
+
+
+stage("renderer ready");
+
+
+// ============================================================
+// SCENE
+// ============================================================
+
+const scene =
+  new THREE.Scene();
+
+
+scene.background =
+  new THREE.Color(
+    0x050607
+  );
+
+
+scene.fog =
+  new THREE.FogExp2(
+    0x070809,
+    0.018
+  );
+
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+const camera =
+  new THREE.PerspectiveCamera(
+
+    50,
+
+    window.innerWidth /
+    window.innerHeight,
+
+    0.1,
+
+    250
+
+  );
+
+
+// ============================================================
+// CUSTOM ORBIT CAMERA
+// ============================================================
+
+let cameraRadius =
+  14;
+
+
+let cameraTheta =
+  THREE.MathUtils.degToRad(
+    40
+  );
+
+
+let cameraPhi =
+  THREE.MathUtils.degToRad(
+    72
+  );
+
+
+const cameraTarget =
+  new THREE.Vector3(
+    0,
+    2.0,
+    0
+  );
+
+
+function updateCamera() {
+
+  cameraPhi =
+    THREE.MathUtils.clamp(
+
+      cameraPhi,
+
+      0.15,
+
+      Math.PI / 2 -
+      0.03
+
+    );
+
+
+  cameraRadius =
+    THREE.MathUtils.clamp(
+
+      cameraRadius,
+
+      3,
+
+      60
+
+    );
+
+
+  camera.position.set(
+
+    cameraTarget.x +
+
+    cameraRadius *
+    Math.sin(cameraPhi) *
+    Math.cos(cameraTheta),
+
+
+    cameraTarget.y +
+
+    cameraRadius *
+    Math.cos(cameraPhi),
+
+
+    cameraTarget.z +
+
+    cameraRadius *
+    Math.sin(cameraPhi) *
+    Math.sin(cameraTheta)
+
+  );
+
+
+  camera.lookAt(
+    cameraTarget
+  );
+
+}
+
+
+updateCamera();
+
+
+// ============================================================
+// POINTER CAMERA CONTROLS
+// ============================================================
+
+let dragging =
+  false;
+
+
+let previousX =
+  0;
+
+
+let previousY =
+  0;
+
+
+renderer.domElement.addEventListener(
+
+  "pointerdown",
+
+  event => {
+
+    if (event.button !== 0) {
+      return;
+    }
+
+
+    dragging =
+      true;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    renderer.domElement
+      .setPointerCapture(
+        event.pointerId
+      );
+
+  }
+
+);
+
+
+renderer.domElement.addEventListener(
+
+  "pointermove",
+
+  event => {
+
+    if (!dragging) {
+      return;
+    }
+
+
+    const dx =
+      event.clientX -
+      previousX;
+
+
+    const dy =
+      event.clientY -
+      previousY;
+
+
+    previousX =
+      event.clientX;
+
+
+    previousY =
+      event.clientY;
+
+
+    cameraTheta -=
+      dx * 0.005;
+
+
+    cameraPhi -=
+      dy * 0.005;
+
+
+    updateCamera();
+
+  }
+
+);
+
+
+function releasePointer(event) {
+
+  dragging =
+    false;
+
+
+  if (
+
+    renderer.domElement
+      .hasPointerCapture(
+        event.pointerId
+      )
+
+  ) {
+
+    renderer.domElement
+      .releasePointerCapture(
+        event.pointerId
+      );
+
+  }
+
+}
+
+
+renderer.domElement.addEventListener(
+  "pointerup",
+  releasePointer
+);
+
+
+renderer.domElement.addEventListener(
+  "pointercancel",
+  releasePointer
+);
+
+
+// ============================================================
+// ZOOM
+// ============================================================
+
+renderer.domElement.addEventListener(
+
+  "wheel",
+
+  event => {
+
+    event.preventDefault();
+
+
+    cameraRadius *=
+      Math.exp(
+        event.deltaY *
+        0.001
+      );
+
+
+    updateCamera();
+
+  },
+
+  {
+    passive: false
+  }
+
+);
+
+
+stage("camera ready");
+
+
+// ============================================================
+// LOW AMBIENT LIGHT
+//
+// Fire should dominate the scene.
+// ============================================================
+
+const ambientLight =
+  new THREE.HemisphereLight(
+
+    0x24303b,
+
+    0x080503,
+
+    0.22
+
+  );
+
+
+scene.add(
+  ambientLight
+);
+
+
+// ============================================================
+// FIRE LIGHT RIG
+//
+// Multiple lights avoid the scene looking like it contains
+// one perfectly spherical orange light bulb.
+// ============================================================
+
+const fireLightLow =
+  new THREE.PointLight(
+
+    0xff4a12,
+
+    4,
+
+    18,
+
+    2
+
+  );
+
+
+fireLightLow.position.set(
+  0,
+  0.7,
+  0
+);
+
+
+scene.add(
+  fireLightLow
+);
+
+
+const fireLightMid =
+  new THREE.PointLight(
+
+    0xff8a32,
+
+    2.8,
+
+    14,
+
+    2
+
+  );
+
+
+fireLightMid.position.set(
+  0,
+  2.0,
+  0
+);
+
+
+scene.add(
+  fireLightMid
+);
+
+
+const fireLightHot =
+  new THREE.PointLight(
+
+    0xffd08a,
+
+    1.5,
+
+    8,
+
+    2
+
+  );
+
+
+fireLightHot.position.set(
+  0,
+  0.35,
+  0
+);
+
+
+scene.add(
+  fireLightHot
+);
+
+
+// ============================================================
+// GROUND
+// ============================================================
+
+stage("building environment");
+
+
+const groundGeometry =
+  new THREE.CircleGeometry(
+
+    35,
+
+    96
+
+  );
+
+
+groundGeometry.rotateX(
+  -Math.PI / 2
+);
+
+
+const groundMaterial =
+  new THREE.MeshStandardMaterial({
+
+    color:
+      0x17130f,
+
+    roughness:
+      0.93,
+
+    metalness:
+      0.02
+
+  });
+
+
+const ground =
+  new THREE.Mesh(
+
+    groundGeometry,
+
+    groundMaterial
+
+  );
+
+
+ground.position.y =
+  -0.04;
+
+
+scene.add(
+  ground
+);
+
+
+// ============================================================
+// FIRE PIT / CHARRED FUEL BED
+// ============================================================
+
+const pitGeometry =
+  new THREE.CylinderGeometry(
+
+    1.25,
+
+    1.45,
+
+    0.18,
+
+    48
+
+  );
+
+
+const pitMaterial =
+  new THREE.MeshStandardMaterial({
+
+    color:
+      0x090706,
+
+    roughness:
+      1
+
+  });
+
+
+const pit =
+  new THREE.Mesh(
+
+    pitGeometry,
+
+    pitMaterial
+
+  );
+
+
+pit.position.y =
+  0.02;
+
+
+scene.add(
+  pit
+);
+
+
+// ============================================================
+// GLOWING COAL BED
+// ============================================================
+
+const coalGeometry =
+  new THREE.CircleGeometry(
+
+    1.05,
+
+    48
+
+  );
+
+
+coalGeometry.rotateX(
+  -Math.PI / 2
+);
+
+
+const coalMaterial =
+  new THREE.MeshStandardMaterial({
+
+    color:
+      0x2a0802,
+
+    emissive:
+      0xff2400,
+
+    emissiveIntensity:
+      0.65,
+
+    roughness:
+      1
+
+  });
+
+
+const coalBed =
+  new THREE.Mesh(
+
+    coalGeometry,
+
+    coalMaterial
+
+  );
+
+
+coalBed.position.y =
+  0.12;
+
+
+scene.add(
+  coalBed
+);
+
+
+// ============================================================
+// SIMPLE LOGS
+//
+// These give the fire a visual source rather than allowing
+// the flames to emerge from an abstract coordinate.
+// ============================================================
+
+const logGeometry =
+  new THREE.CylinderGeometry(
+
+    0.18,
+
+    0.23,
+
+    2.6,
+
+    12
+
+  );
+
+
+const logMaterial =
+  new THREE.MeshStandardMaterial({
+
+    color:
+      0x25130a,
+
+    roughness:
+      1
+
+  });
+
+
+function makeLog(rotation) {
+
+  const log =
+    new THREE.Mesh(
+
+      logGeometry,
+
+      logMaterial
+
+    );
+
+
+  log.rotation.z =
+    Math.PI / 2;
+
+
+  log.rotation.y =
+    rotation;
+
+
+  log.position.y =
+    0.36;
+
+
+  scene.add(
+    log
+  );
+
+
+  return log;
+
+}
+
+
+const log1 =
+  makeLog(
+    Math.PI / 4
+  );
+
+
+const log2 =
+  makeLog(
+    -Math.PI / 4
+  );
+
+
+// ============================================================
+// SYSTEM STATE
+//
+// These are declared now so later functions can safely
+// reference them.
+// ============================================================
+
+let flamePoints =
+  null;
+
+
+let flameMaterial =
+  null;
+
+
+let emberPoints =
+  null;
+
+
+let emberMaterial =
+  null;
+
+
+let smokePoints =
+  null;
+
+
+let smokeMaterial =
+  null;
+
+
+let heatMesh =
+  null;
+
+
+let heatMaterial =
+  null;
+
+
+stage("environment ready");
+
+// ============================================================
+// FLAME SYSTEM
+// ============================================================
+
+stage("building flame system");
+
+
+// ============================================================
+// FLAME SHADER MATERIAL
+// ============================================================
+
+function createFlameMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    transparent: true,
+
+    depthWrite: false,
+
+    blending:
+      THREE.AdditiveBlending,
+
+    uniforms: {
+
+      uTime: {
+        value: 0
+      },
+
+      uFuel: {
+        value:
+          Number(inputs.fuel.value)
+      },
+
+      uOxygen: {
+        value:
+          Number(inputs.oxygen.value)
+      },
+
+      uTemperature: {
+        value:
+          Number(inputs.temperature.value)
+      },
+
+      uHeight: {
+        value:
+          Number(inputs.height.value)
+      },
+
+      uWidth: {
+        value:
+          Number(inputs.width.value)
+      },
+
+      uTurbulence: {
+        value:
+          Number(inputs.turbulence.value)
+      },
+
+      uFlicker: {
+        value:
+          Number(inputs.flicker.value)
+      },
+
+      uWind: {
+        value:
+          Number(inputs.wind.value)
+      },
+
+      uWindDirection: {
+        value:
+          THREE.MathUtils.degToRad(
+            Number(inputs.windDirection.value)
+          )
+      },
+
+      uGust: {
+        value:
+          Number(inputs.gust.value)
+      },
+
+      uGlow: {
+        value:
+          Number(inputs.glow.value)
+      }
+
+    },
+
+
+// ============================================================
+// FLAME VERTEX SHADER
+// ============================================================
+
+vertexShader: `
+
+precision highp float;
+
+
+uniform float uTime;
+
+uniform float uFuel;
+uniform float uOxygen;
+
+uniform float uHeight;
+uniform float uWidth;
+
+uniform float uTurbulence;
+uniform float uFlicker;
+
+uniform float uWind;
+uniform float uWindDirection;
+uniform float uGust;
+
+
+attribute float aSeed;
+attribute float aPhase;
+attribute float aRadius;
+attribute float aSize;
+attribute float aSpeed;
+
+
+varying float vLife;
+varying float vSeed;
+varying float vHeat;
+varying float vEdge;
+
+
+// ============================================================
+// HASH
+// ============================================================
+
+float hash(float n) {
+
+  return fract(
+    sin(n) *
+    43758.5453123
+  );
+
+}
+
+
+// ============================================================
+// VALUE NOISE
+// ============================================================
+
+float noise3(
+  vec3 p
+) {
+
+  vec3 i =
+    floor(p);
+
+  vec3 f =
+    fract(p);
+
+
+  f =
+    f *
+    f *
+    (
+      3.0 -
+      2.0*f
+    );
+
+
+  float n =
+    dot(
+      i,
+      vec3(
+        1.0,
+        57.0,
+        113.0
+      )
+    );
+
+
+  return mix(
+
+    mix(
+
+      mix(
+        hash(n+0.0),
+        hash(n+1.0),
+        f.x
+      ),
+
+      mix(
+        hash(n+57.0),
+        hash(n+58.0),
+        f.x
+      ),
+
+      f.y
+
+    ),
+
+    mix(
+
+      mix(
+        hash(n+113.0),
+        hash(n+114.0),
+        f.x
+      ),
+
+      mix(
+        hash(n+170.0),
+        hash(n+171.0),
+        f.x
+      ),
+
+      f.y
+
+    ),
+
+    f.z
+
+  );
+
+}
+
+
+// ============================================================
+// MAIN FLAME PARTICLE MOTION
+// ============================================================
+
+void main() {
+
+  // ----------------------------------------------------------
+  // PARTICLE LIFECYCLE
+  //
+  // Each GPU particle continuously respawns by wrapping its
+  // normalized age from 0 -> 1.
+  // ----------------------------------------------------------
+
+  float life =
+
+    fract(
+
+      aPhase
+
+      +
+
+      uTime *
+      aSpeed *
+      (
+        0.15 +
+        uFuel*0.08
+      )
+
+    );
+
+
+  vLife =
+    life;
+
+
+  vSeed =
+    aSeed;
+
+
+  // ----------------------------------------------------------
+  // BASE FLAME SHAPE
+  //
+  // Flame is wide at the fuel bed and contracts as it rises.
+  // ----------------------------------------------------------
+
+  float taper =
+
+    pow(
+
+      max(
+        1.0-life,
+        0.0
+      ),
+
+      0.72
+
+    );
+
+
+  float baseAngle =
+
+    aSeed *
+    6.2831853;
+
+
+  float radius =
+
+    aRadius
+
+    *
+
+    uWidth
+
+    *
+
+    taper;
+
+
+  vec3 p =
+    vec3(
+
+      cos(baseAngle) *
+      radius,
+
+      life *
+      uHeight,
+
+      sin(baseAngle) *
+      radius
+
+    );
+
+
+  // ----------------------------------------------------------
+  // BUOYANCY ACCELERATION
+  //
+  // Flames stretch faster toward the upper region.
+  // ----------------------------------------------------------
+
+  p.y +=
+
+    life *
+    life *
+    uHeight *
+    0.20;
+
+
+  // ----------------------------------------------------------
+  // LARGE TURBULENT FLAME MOTION
+  // ----------------------------------------------------------
+
+  float time =
+    uTime;
+
+
+  float noiseA =
+
+    noise3(
+
+      vec3(
+
+        p.x*0.65 +
+        aSeed*5.0,
+
+        life*3.5,
+
+        time*1.25
+
+      )
+
+    );
+
+
+  float noiseB =
+
+    noise3(
+
+      vec3(
+
+        p.z*0.72 +
+        aSeed*9.0,
+
+        life*4.1,
+
+        time*1.05 +
+        17.0
+
+      )
+
+    );
+
+
+  float turbulenceEnvelope =
+
+    sin(
+      life *
+      3.14159265
+    );
+
+
+  p.x +=
+
+    (
+      noiseA -
+      0.5
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    (
+      0.35 +
+      life*0.8
+    )
+
+    *
+
+    turbulenceEnvelope;
+
+
+  p.z +=
+
+    (
+      noiseB -
+      0.5
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    (
+      0.35 +
+      life*0.8
+    )
+
+    *
+
+    turbulenceEnvelope;
+
+
+  // ----------------------------------------------------------
+  // FLAME TONGUES
+  //
+  // Several frequencies create separate twisting columns
+  // rather than one symmetrical cone.
+  // ----------------------------------------------------------
+
+  float tongue1 =
+
+    sin(
+
+      life*8.0
+
+      -
+
+      time*4.2
+
+      +
+
+      aSeed*12.0
+
+    );
+
+
+  float tongue2 =
+
+    sin(
+
+      life*13.0
+
+      -
+
+      time*5.7
+
+      +
+
+      aSeed*19.0
+
+    );
+
+
+  p.x +=
+
+    tongue1
+
+    *
+
+    uTurbulence
+
+    *
+
+    0.11
+
+    *
+
+    life;
+
+
+  p.z +=
+
+    tongue2
+
+    *
+
+    uTurbulence
+
+    *
+
+    0.09
+
+    *
+
+    life;
+
+
+  // ----------------------------------------------------------
+  // WIND
+  // ----------------------------------------------------------
+
+  vec2 windDirection =
+
+    vec2(
+
+      cos(
+        uWindDirection
+      ),
+
+      sin(
+        uWindDirection
+      )
+
+    );
+
+
+  // Wind has progressively more leverage on hot rising gas.
+
+  float windEnvelope =
+
+    life *
+    life;
+
+
+  p.x +=
+
+    windDirection.x
+
+    *
+
+    uWind
+
+    *
+
+    windEnvelope
+
+    *
+
+    uHeight
+
+    *
+
+    0.18;
+
+
+  p.z +=
+
+    windDirection.y
+
+    *
+
+    uWind
+
+    *
+
+    windEnvelope
+
+    *
+
+    uHeight
+
+    *
+
+    0.18;
+
+
+  // ----------------------------------------------------------
+  // GUSTS
+  // ----------------------------------------------------------
+
+  float gust =
+
+    sin(
+
+      time*1.7
+
+      +
+
+      life*4.0
+
+      +
+
+      aSeed*6.283
+
+    );
+
+
+  gust +=
+
+    sin(
+
+      time*3.7 +
+      aSeed*11.0
+
+    )
+
+    *
+
+    0.35;
+
+
+  p.x +=
+
+    windDirection.x
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.30;
+
+
+  p.z +=
+
+    windDirection.y
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.30;
+
+
+  // ----------------------------------------------------------
+  // FLICKER
+  // ----------------------------------------------------------
+
+  float flicker =
+
+    sin(
+
+      time*9.0
+
+      +
+
+      aSeed*17.0
+
+    );
+
+
+  flicker +=
+
+    sin(
+
+      time*14.0
+
+      +
+
+      aSeed*7.0
+
+    )
+
+    *
+
+    0.4;
+
+
+  p.y +=
+
+    flicker
+
+    *
+
+    uFlicker
+
+    *
+
+    0.08
+
+    *
+
+    life;
+
+
+  // ----------------------------------------------------------
+  // TEMPERATURE / HEAT VALUE
+  //
+  // Lower flame region is hottest. Oxygen increases the
+  // effective hot region.
+  // ----------------------------------------------------------
+
+  float heat =
+
+    1.0 -
+    life;
+
+
+  heat =
+
+    pow(
+      heat,
+      0.55
+    );
+
+
+  heat *=
+
+    mix(
+      0.75,
+      1.15,
+      clamp(
+        uOxygen/2.0,
+        0.0,
+        1.0
+      )
+    );
+
+
+  vHeat =
+    clamp(
+      heat,
+      0.0,
+      1.0
+    );
+
+
+  // ----------------------------------------------------------
+  // EDGE SIGNAL
+  // ----------------------------------------------------------
+
+  vEdge =
+
+    clamp(
+
+      radius /
+
+      max(
+        uWidth,
+        0.001
+      ),
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  // ----------------------------------------------------------
+  // PROJECT
+  // ----------------------------------------------------------
+
+  vec4 worldPosition =
+
+    modelMatrix *
+
+    vec4(
+      p,
+      1.0
+    );
+
+
+  vec4 viewPosition =
+
+    viewMatrix *
+
+    worldPosition;
+
+
+  gl_Position =
+
+    projectionMatrix *
+
+    viewPosition;
+
+
+  // ----------------------------------------------------------
+  // PERSPECTIVE PARTICLE SIZE
+  // ----------------------------------------------------------
+
+  float size =
+
+    aSize
+
+    *
+
+    (
+      18.0 +
+      uWidth*10.0
+    );
+
+
+  // Larger near the base, smaller near the tip.
+
+  size *=
+
+    mix(
+      1.15,
+      0.35,
+      life
+    );
+
+
+  gl_PointSize =
+
+    size
+
+    *
+
+    (
+      18.0 /
+
+      max(
+        -viewPosition.z,
+        1.0
+      )
+    );
+
+}
+
+`,
+
+
+// ============================================================
+// FLAME FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+
+uniform float uTemperature;
+uniform float uOxygen;
+uniform float uGlow;
+
+
+varying float vLife;
+varying float vSeed;
+varying float vHeat;
+varying float vEdge;
+
+
+void main() {
+
+  // ----------------------------------------------------------
+  // ROUND PARTICLE
+  // ----------------------------------------------------------
+
+  vec2 point =
+
+    gl_PointCoord -
+    vec2(0.5);
+
+
+  float distanceFromCenter =
+
+    length(point);
+
+
+  if (
+    distanceFromCenter >
+    0.5
+  ) {
+
+    discard;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // SOFT PARTICLE PROFILE
+  // ----------------------------------------------------------
+
+  float radial =
+
+    1.0 -
+
+    smoothstep(
+
+      0.08,
+
+      0.50,
+
+      distanceFromCenter
+
+    );
+
+
+  // ----------------------------------------------------------
+  // BLACKBODY-LIKE FLAME GRADIENT
+  //
+  // Not a literal physical blackbody implementation, but the
+  // ordering follows hot core -> yellow -> orange -> red.
+  // ----------------------------------------------------------
+
+  vec3 deepRed =
+
+    vec3(
+      1.0,
+      0.055,
+      0.005
+    );
+
+
+  vec3 orange =
+
+    vec3(
+      1.0,
+      0.22,
+      0.015
+    );
+
+
+  vec3 yellow =
+
+    vec3(
+      1.0,
+      0.68,
+      0.12
+    );
+
+
+  vec3 hotWhite =
+
+    vec3(
+      1.0,
+      0.94,
+      0.72
+    );
+
+
+  // Temperature shifts more of the flame toward the hot end.
+
+  float temperature =
+
+    clamp(
+
+      vHeat *
+
+      uTemperature,
+
+      0.0,
+
+      1.0
+
+    );
+
+
+  vec3 color;
+
+
+  if (
+    temperature <
+    0.33
+  ) {
+
+    color =
+
+      mix(
+
+        deepRed,
+
+        orange,
+
+        temperature /
+        0.33
+
+      );
+
+  }
+
+  else if (
+    temperature <
+    0.68
+  ) {
+
+    color =
+
+      mix(
+
+        orange,
+
+        yellow,
+
+        (
+          temperature -
+          0.33
+        )
+
+        /
+
+        0.35
+
+      );
+
+  }
+
+  else {
+
+    color =
+
+      mix(
+
+        yellow,
+
+        hotWhite,
+
+        (
+          temperature -
+          0.68
+        )
+
+        /
+
+        0.32
+
+      );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // OXYGEN EFFECT
+  //
+  // Higher oxygen produces a tighter, brighter hot core.
+  // ----------------------------------------------------------
+
+  float oxygenBoost =
+
+    mix(
+
+      0.78,
+
+      1.22,
+
+      clamp(
+        uOxygen/2.0,
+        0.0,
+        1.0
+      )
+
+    );
+
+
+  color *=
+    oxygenBoost;
+
+
+  // ----------------------------------------------------------
+  // LOWER CORE BRIGHTNESS
+  // ----------------------------------------------------------
+
+  float core =
+
+    pow(
+
+      1.0 -
+      vLife,
+
+      2.0
+
+    );
+
+
+  color +=
+
+    hotWhite
+
+    *
+
+    core
+
+    *
+
+    0.35
+
+    *
+
+    uGlow;
+
+
+  // ----------------------------------------------------------
+  // PARTICLE ALPHA
+  //
+  // Fade in rapidly at the fuel bed, remain strong through
+  // the body, then disappear toward the tip.
+  // ----------------------------------------------------------
+
+  float birth =
+
+    smoothstep(
+      0.0,
+      0.06,
+      vLife
+    );
+
+
+  float death =
+
+    1.0 -
+
+    smoothstep(
+      0.58,
+      1.0,
+      vLife
+    );
+
+
+  float alpha =
+
+    radial
+
+    *
+
+    birth
+
+    *
+
+    death;
+
+
+  // Thin outer flame particles slightly.
+
+  alpha *=
+
+    mix(
+
+      1.0,
+
+      0.62,
+
+      vEdge
+
+    );
+
+
+  // ----------------------------------------------------------
+  // ADDITIVE GLOW
+  // ----------------------------------------------------------
+
+  color *=
+
+    1.0 +
+
+    uGlow *
+    0.32;
+
+
+  gl_FragColor =
+
+    vec4(
+
+      color,
+
+      alpha *
+      0.72
+
+    );
+
+}
+
+`
+
+  });
+
+}
+
+
+// ============================================================
+// BUILD FLAME PARTICLES
+// ============================================================
+
+function rebuildFlames() {
+
+  stage("allocating flame particles");
+
+
+  if (flamePoints) {
+
+    scene.remove(
+      flamePoints
+    );
+
+
+    flamePoints.geometry.dispose();
+
+
+    flamePoints.material.dispose();
+
+
+    flamePoints =
+      null;
+
+  }
+
+
+  const count =
+
+    Number(
+      inputs.flameCount.value
+    );
+
+
+  // Position is required by THREE.Points even though the
+  // procedural shader generates the meaningful coordinates.
+
+  const positions =
+    new Float32Array(
+      count * 3
+    );
+
+
+  const seeds =
+    new Float32Array(
+      count
+    );
+
+
+  const phases =
+    new Float32Array(
+      count
+    );
+
+
+  const radii =
+    new Float32Array(
+      count
+    );
+
+
+  const sizes =
+    new Float32Array(
+      count
+    );
+
+
+  const speeds =
+    new Float32Array(
+      count
+    );
+
+
+  for (
+    let i=0;
+    i<count;
+    i++
+  ) {
+
+    const i3 =
+      i*3;
+
+
+    positions[i3] =
+      0;
+
+    positions[i3+1] =
+      0;
+
+    positions[i3+2] =
+      0;
+
+
+    seeds[i] =
+      Math.random();
+
+
+    phases[i] =
+      Math.random();
+
+
+    // sqrt gives better radial distribution.
+
+    radii[i] =
+      Math.sqrt(
+        Math.random()
+      );
+
+
+    sizes[i] =
+
+      0.65 +
+
+      Math.random() *
+      0.85;
+
+
+    speeds[i] =
+
+      0.75 +
+
+      Math.random() *
+      0.55;
+
+  }
+
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+
+  geometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSeed",
+
+    new THREE.BufferAttribute(
+      seeds,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aPhase",
+
+    new THREE.BufferAttribute(
+      phases,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aRadius",
+
+    new THREE.BufferAttribute(
+      radii,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSize",
+
+    new THREE.BufferAttribute(
+      sizes,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSpeed",
+
+    new THREE.BufferAttribute(
+      speeds,
+      1
+    )
+
+  );
+
+
+  flameMaterial =
+    createFlameMaterial();
+
+
+  flamePoints =
+    new THREE.Points(
+
+      geometry,
+
+      flameMaterial
+
+    );
+
+
+  flamePoints.frustumCulled =
+    false;
+
+
+  scene.add(
+    flamePoints
+  );
+
+
+  stage("flame particles ready");
+
+}
+
+
+// ============================================================
+// INITIAL FLAME BUILD
+// ============================================================
+
+rebuildFlames();
+
+// ============================================================
+// EMBER / SPARK MATERIAL
+// ============================================================
+
+stage("building ember system");
+
+function createEmberMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    transparent: true,
+
+    depthWrite: false,
+
+    blending:
+      THREE.AdditiveBlending,
+
+    uniforms: {
+
+      uTime: {
+        value: 0
+      },
+
+      uRate: {
+        value:
+          Number(inputs.emberRate.value)
+      },
+
+      uHeight: {
+        value:
+          Number(inputs.sparkHeight.value)
+      },
+
+      uSpread: {
+        value:
+          Number(inputs.sparkSpread.value)
+      },
+
+      uWind: {
+        value:
+          Number(inputs.wind.value)
+      },
+
+      uWindDirection: {
+        value:
+          THREE.MathUtils.degToRad(
+            Number(inputs.windDirection.value)
+          )
+      },
+
+      uGust: {
+        value:
+          Number(inputs.gust.value)
+      },
+
+      uTurbulence: {
+        value:
+          Number(inputs.turbulence.value)
+      }
+
+    },
+
+
+// ============================================================
+// EMBER VERTEX SHADER
+// ============================================================
+
+vertexShader: `
+
+precision highp float;
+
+uniform float uTime;
+uniform float uRate;
+uniform float uHeight;
+uniform float uSpread;
+
+uniform float uWind;
+uniform float uWindDirection;
+uniform float uGust;
+uniform float uTurbulence;
+
+attribute float aSeed;
+attribute float aPhase;
+attribute float aSpeed;
+attribute float aSize;
+
+varying float vLife;
+varying float vHeat;
+varying float vSeed;
+
+
+float hash(float n) {
+
+  return fract(
+    sin(n) *
+    43758.5453123
+  );
+
+}
+
+
+void main() {
+
+  // ----------------------------------------------------------
+  // LIFETIME
+  // ----------------------------------------------------------
+
+  float life =
+
+    fract(
+
+      aPhase +
+
+      uTime *
+      aSpeed *
+      (
+        0.10 +
+        uRate*0.08
+      )
+
+    );
+
+
+  vLife =
+    life;
+
+
+  vSeed =
+    aSeed;
+
+
+  // ----------------------------------------------------------
+  // RANDOM LAUNCH DIRECTION
+  // ----------------------------------------------------------
+
+  float angle =
+
+    aSeed *
+    6.2831853;
+
+
+  float secondary =
+
+    hash(
+      aSeed*91.7
+    );
+
+
+  float launchRadius =
+
+    (
+      0.10 +
+      secondary*0.42
+    )
+
+    *
+
+    uSpread;
+
+
+  vec3 p =
+    vec3(
+
+      cos(angle) *
+      launchRadius *
+      life,
+
+      0.25,
+
+      sin(angle) *
+      launchRadius *
+      life
+
+    );
+
+
+  // ----------------------------------------------------------
+  // RISING BALLISTIC TRAJECTORY
+  //
+  // Embers initially rise quickly, slow, then begin to arc.
+  // ----------------------------------------------------------
+
+  float rise =
+
+    life *
+    uHeight;
+
+
+  float dragFall =
+
+    life *
+    life *
+    uHeight *
+    0.36;
+
+
+  p.y +=
+
+    rise -
+    dragFall;
+
+
+  // ----------------------------------------------------------
+  // SIDEWAYS SPREAD
+  // ----------------------------------------------------------
+
+  p.x +=
+
+    cos(
+      angle*2.7
+    )
+
+    *
+
+    life
+
+    *
+
+    uSpread
+
+    *
+
+    0.22;
+
+
+  p.z +=
+
+    sin(
+      angle*3.1
+    )
+
+    *
+
+    life
+
+    *
+
+    uSpread
+
+    *
+
+    0.22;
+
+
+  // ----------------------------------------------------------
+  // WIND
+  // ----------------------------------------------------------
+
+  vec2 windDir =
+
+    vec2(
+
+      cos(
+        uWindDirection
+      ),
+
+      sin(
+        uWindDirection
+      )
+
+    );
+
+
+  p.x +=
+
+    windDir.x
+
+    *
+
+    uWind
+
+    *
+
+    life *
+    life
+
+    *
+
+    1.8;
+
+
+  p.z +=
+
+    windDir.y
+
+    *
+
+    uWind
+
+    *
+
+    life *
+    life
+
+    *
+
+    1.8;
+
+
+  // ----------------------------------------------------------
+  // GUSTS
+  // ----------------------------------------------------------
+
+  float gust =
+
+    sin(
+
+      uTime*2.0
+
+      +
+
+      aSeed*18.0
+
+      +
+
+      life*6.0
+
+    );
+
+
+  p.x +=
+
+    windDir.x
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.45;
+
+
+  p.z +=
+
+    windDir.y
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.45;
+
+
+  // ----------------------------------------------------------
+  // CHAOTIC SPARK MOTION
+  // ----------------------------------------------------------
+
+  p.x +=
+
+    sin(
+
+      uTime*5.0
+
+      +
+
+      aSeed*31.0
+
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    life
+
+    *
+
+    0.08;
+
+
+  p.z +=
+
+    cos(
+
+      uTime*4.2
+
+      +
+
+      aSeed*27.0
+
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    life
+
+    *
+
+    0.08;
+
+
+  // ----------------------------------------------------------
+  // COOLING
+  // ----------------------------------------------------------
+
+  vHeat =
+
+    pow(
+
+      1.0-life,
+
+      0.65
+
+    );
+
+
+  // ----------------------------------------------------------
+  // PROJECT
+  // ----------------------------------------------------------
+
+  vec4 world =
+
+    modelMatrix *
+
+    vec4(
+      p,
+      1.0
+    );
+
+
+  vec4 view =
+
+    viewMatrix *
+
+    world;
+
+
+  gl_Position =
+
+    projectionMatrix *
+
+    view;
+
+
+  float pointSize =
+
+    aSize
+
+    *
+
+    mix(
+      8.0,
+      2.0,
+      life
+    );
+
+
+  gl_PointSize =
+
+    pointSize
+
+    *
+
+    (
+      18.0 /
+
+      max(
+        -view.z,
+        1.0
+      )
+    );
+
+}
+
+`,
+
+
+// ============================================================
+// EMBER FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+varying float vLife;
+varying float vHeat;
+varying float vSeed;
+
+
+void main() {
+
+  vec2 p =
+
+    gl_PointCoord -
+
+    vec2(0.5);
+
+
+  float d =
+    length(p);
+
+
+  if (
+    d > 0.5
+  ) {
+
+    discard;
+
+  }
+
+
+  float core =
+
+    1.0 -
+
+    smoothstep(
+      0.0,
+      0.5,
+      d
+    );
+
+
+  // Hot white/yellow -> orange -> dark red.
+
+  vec3 hot =
+
+    vec3(
+      1.0,
+      0.88,
+      0.48
+    );
+
+
+  vec3 orange =
+
+    vec3(
+      1.0,
+      0.23,
+      0.015
+    );
+
+
+  vec3 red =
+
+    vec3(
+      0.55,
+      0.025,
+      0.002
+    );
+
+
+  vec3 color =
+
+    mix(
+
+      red,
+
+      orange,
+
+      smoothstep(
+        0.0,
+        0.65,
+        vHeat
+      )
+
+    );
+
+
+  color =
+
+    mix(
+
+      color,
+
+      hot,
+
+      smoothstep(
+        0.70,
+        1.0,
+        vHeat
+      )
+
+    );
+
+
+  // Occasional bright sparks.
+
+  float sparkle =
+
+    step(
+      0.82,
+      fract(
+        vSeed*17.31
+      )
+    );
+
+
+  color +=
+
+    hot
+
+    *
+
+    sparkle
+
+    *
+
+    core
+
+    *
+
+    0.7;
+
+
+  float fade =
+
+    1.0 -
+
+    smoothstep(
+      0.72,
+      1.0,
+      vLife
+    );
+
+
+  gl_FragColor =
+
+    vec4(
+
+      color,
+
+      core *
+      fade *
+      0.95
+
+    );
+
+}
+
+`
+
+  });
+
+}
+
+
+// ============================================================
+// BUILD EMBERS
+// ============================================================
+
+function rebuildEmbers() {
+
+  stage("allocating embers");
+
+
+  if (emberPoints) {
+
+    scene.remove(
+      emberPoints
+    );
+
+
+    emberPoints.geometry.dispose();
+
+
+    emberPoints.material.dispose();
+
+
+    emberPoints =
+      null;
+
+  }
+
+
+  const count =
+
+    Number(
+      inputs.emberCount.value
+    );
+
+
+  const positions =
+    new Float32Array(
+      count*3
+    );
+
+
+  const seeds =
+    new Float32Array(
+      count
+    );
+
+
+  const phases =
+    new Float32Array(
+      count
+    );
+
+
+  const speeds =
+    new Float32Array(
+      count
+    );
+
+
+  const sizes =
+    new Float32Array(
+      count
+    );
+
+
+  for (
+    let i=0;
+    i<count;
+    i++
+  ) {
+
+    seeds[i] =
+      Math.random();
+
+
+    phases[i] =
+      Math.random();
+
+
+    speeds[i] =
+
+      0.55 +
+
+      Math.random() *
+      1.0;
+
+
+    sizes[i] =
+
+      0.6 +
+
+      Math.random() *
+      1.6;
+
+  }
+
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+
+  geometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSeed",
+
+    new THREE.BufferAttribute(
+      seeds,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aPhase",
+
+    new THREE.BufferAttribute(
+      phases,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSpeed",
+
+    new THREE.BufferAttribute(
+      speeds,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSize",
+
+    new THREE.BufferAttribute(
+      sizes,
+      1
+    )
+
+  );
+
+
+  emberMaterial =
+    createEmberMaterial();
+
+
+  emberPoints =
+    new THREE.Points(
+
+      geometry,
+
+      emberMaterial
+
+    );
+
+
+  emberPoints.frustumCulled =
+    false;
+
+
+  scene.add(
+    emberPoints
+  );
+
+
+  stage("embers ready");
+
+}
+
+
+rebuildEmbers();
+
+
+// ============================================================
+// SMOKE SYSTEM
+// ============================================================
+
+stage("building smoke system");
+
+
+function createSmokeMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    transparent:
+      true,
+
+    depthWrite:
+      false,
+
+    blending:
+      THREE.NormalBlending,
+
+    uniforms: {
+
+      uTime: {
+        value: 0
+      },
+
+      uAmount: {
+        value:
+          Number(inputs.smoke.value)
+      },
+
+      uExpansion: {
+        value:
+          Number(
+            inputs.smokeExpansion.value
+          )
+      },
+
+      uSoot: {
+        value:
+          Number(inputs.soot.value)
+      },
+
+      uHeight: {
+        value:
+          Number(inputs.height.value)
+      },
+
+      uWidth: {
+        value:
+          Number(inputs.width.value)
+      },
+
+      uWind: {
+        value:
+          Number(inputs.wind.value)
+      },
+
+      uWindDirection: {
+        value:
+          THREE.MathUtils.degToRad(
+            Number(inputs.windDirection.value)
+          )
+      },
+
+      uGust: {
+        value:
+          Number(inputs.gust.value)
+      },
+
+      uTurbulence: {
+        value:
+          Number(inputs.turbulence.value)
+      }
+
+    },
+
+
+// ============================================================
+// SMOKE VERTEX SHADER
+// ============================================================
+
+vertexShader: `
+
+precision highp float;
+
+uniform float uTime;
+
+uniform float uAmount;
+uniform float uExpansion;
+uniform float uSoot;
+
+uniform float uHeight;
+uniform float uWidth;
+
+uniform float uWind;
+uniform float uWindDirection;
+uniform float uGust;
+uniform float uTurbulence;
+
+attribute float aSeed;
+attribute float aPhase;
+attribute float aSpeed;
+attribute float aSize;
+attribute float aRadius;
+
+varying float vLife;
+varying float vSeed;
+varying float vSoot;
+
+
+void main() {
+
+  float life =
+
+    fract(
+
+      aPhase +
+
+      uTime *
+      aSpeed *
+      (
+        0.035 +
+        uAmount*0.025
+      )
+
+    );
+
+
+  vLife =
+    life;
+
+
+  vSeed =
+    aSeed;
+
+
+  vSoot =
+    uSoot;
+
+
+  float angle =
+
+    aSeed *
+    6.2831853;
+
+
+  // ----------------------------------------------------------
+  // START ABOVE THE BRIGHT FLAME BODY
+  // ----------------------------------------------------------
+
+  float startHeight =
+
+    uHeight *
+    0.42;
+
+
+  float riseDistance =
+
+    uHeight *
+    (
+      0.9 +
+      uExpansion*0.9
+    );
+
+
+  float radius =
+
+    (
+      aRadius *
+      uWidth *
+      0.55
+    )
+
+    +
+
+    life *
+    uExpansion *
+    1.35;
+
+
+  vec3 p =
+
+    vec3(
+
+      cos(angle) *
+      radius,
+
+      startHeight +
+      life *
+      riseDistance,
+
+      sin(angle) *
+      radius
+
+    );
+
+
+  // ----------------------------------------------------------
+  // SMOKE BILLowing
+  // ----------------------------------------------------------
+
+  p.x +=
+
+    sin(
+
+      life*9.0 +
+
+      uTime*0.9 +
+
+      aSeed*13.0
+
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    (
+      0.15 +
+      life*0.55
+    );
+
+
+  p.z +=
+
+    cos(
+
+      life*8.0 +
+
+      uTime*0.75 +
+
+      aSeed*17.0
+
+    )
+
+    *
+
+    uTurbulence
+
+    *
+
+    (
+      0.15 +
+      life*0.55
+    );
+
+
+  // ----------------------------------------------------------
+  // WIND DRIFT
+  // ----------------------------------------------------------
+
+  vec2 windDir =
+
+    vec2(
+
+      cos(
+        uWindDirection
+      ),
+
+      sin(
+        uWindDirection
+      )
+
+    );
+
+
+  float windEffect =
+
+    life *
+    life;
+
+
+  p.x +=
+
+    windDir.x
+
+    *
+
+    uWind
+
+    *
+
+    windEffect
+
+    *
+
+    uHeight
+
+    *
+
+    0.55;
+
+
+  p.z +=
+
+    windDir.y
+
+    *
+
+    uWind
+
+    *
+
+    windEffect
+
+    *
+
+    uHeight
+
+    *
+
+    0.55;
+
+
+  // ----------------------------------------------------------
+  // SLOW GUSTS
+  // ----------------------------------------------------------
+
+  float gust =
+
+    sin(
+
+      uTime*1.1 +
+
+      aSeed*8.0 +
+
+      life*3.0
+
+    );
+
+
+  p.x +=
+
+    windDir.x
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.75;
+
+
+  p.z +=
+
+    windDir.y
+
+    *
+
+    gust
+
+    *
+
+    uGust
+
+    *
+
+    life
+
+    *
+
+    0.75;
+
+
+  // ----------------------------------------------------------
+  // PROJECT
+  // ----------------------------------------------------------
+
+  vec4 world =
+
+    modelMatrix *
+
+    vec4(
+      p,
+      1.0
+    );
+
+
+  vec4 view =
+
+    viewMatrix *
+
+    world;
+
+
+  gl_Position =
+
+    projectionMatrix *
+
+    view;
+
+
+  // Smoke expands strongly as it cools.
+
+  float size =
+
+    aSize
+
+    *
+
+    mix(
+      20.0,
+      70.0,
+      life
+    )
+
+    *
+
+    (
+      0.65 +
+      uExpansion*0.45
+    );
+
+
+  gl_PointSize =
+
+    size
+
+    *
+
+    (
+      18.0 /
+
+      max(
+        -view.z,
+        1.0
+      )
+    );
+
+}
+
+`,
+
+
+// ============================================================
+// SMOKE FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+varying float vLife;
+varying float vSeed;
+varying float vSoot;
+
+
+void main() {
+
+  vec2 p =
+
+    gl_PointCoord -
+
+    vec2(0.5);
+
+
+  float d =
+    length(p);
+
+
+  if (
+    d > 0.5
+  ) {
+
+    discard;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // SOFT PUFF
+  // ----------------------------------------------------------
+
+  float radial =
+
+    1.0 -
+
+    smoothstep(
+      0.08,
+      0.50,
+      d
+    );
+
+
+  radial *=
+    radial;
+
+
+  // ----------------------------------------------------------
+  // SMOKE COLOR
+  // ----------------------------------------------------------
+
+  vec3 lightSmoke =
+
+    vec3(
+      0.20,
+      0.19,
+      0.18
+    );
+
+
+  vec3 sootSmoke =
+
+    vec3(
+      0.025,
+      0.024,
+      0.023
+    );
+
+
+  vec3 color =
+
+    mix(
+
+      lightSmoke,
+
+      sootSmoke,
+
+      vSoot
+
+    );
+
+
+  // Slight warm illumination near the fire.
+
+  float warm =
+
+    1.0 -
+
+    smoothstep(
+      0.0,
+      0.40,
+      vLife
+    );
+
+
+  color +=
+
+    vec3(
+      0.15,
+      0.055,
+      0.015
+    )
+
+    *
+
+    warm;
+
+
+  // ----------------------------------------------------------
+  // LIFE ALPHA
+  // ----------------------------------------------------------
+
+  float birth =
+
+    smoothstep(
+      0.0,
+      0.12,
+      vLife
+    );
+
+
+  float death =
+
+    1.0 -
+
+    smoothstep(
+      0.60,
+      1.0,
+      vLife
+    );
+
+
+  float alpha =
+
+    radial
+
+    *
+
+    birth
+
+    *
+
+    death
+
+    *
+
+    0.34;
+
+
+  gl_FragColor =
+
+    vec4(
+      color,
+      alpha
+    );
+
+}
+
+`
+
+  });
+
+}
+
+
+// ============================================================
+// BUILD SMOKE
+// ============================================================
+
+function rebuildSmoke() {
+
+  stage("allocating smoke");
+
+
+  if (smokePoints) {
+
+    scene.remove(
+      smokePoints
+    );
+
+
+    smokePoints.geometry.dispose();
+
+
+    smokePoints.material.dispose();
+
+
+    smokePoints =
+      null;
+
+  }
+
+
+  const count =
+
+    Number(
+      inputs.smokeCount.value
+    );
+
+
+  const positions =
+    new Float32Array(
+      count*3
+    );
+
+
+  const seeds =
+    new Float32Array(
+      count
+    );
+
+
+  const phases =
+    new Float32Array(
+      count
+    );
+
+
+  const speeds =
+    new Float32Array(
+      count
+    );
+
+
+  const sizes =
+    new Float32Array(
+      count
+    );
+
+
+  const radii =
+    new Float32Array(
+      count
+    );
+
+
+  for (
+    let i=0;
+    i<count;
+    i++
+  ) {
+
+    seeds[i] =
+      Math.random();
+
+
+    phases[i] =
+      Math.random();
+
+
+    speeds[i] =
+
+      0.65 +
+
+      Math.random() *
+      0.55;
+
+
+    sizes[i] =
+
+      0.65 +
+
+      Math.random() *
+      0.8;
+
+
+    radii[i] =
+
+      Math.sqrt(
+        Math.random()
+      );
+
+  }
+
+    // ==========================================================
+  // SMOKE GEOMETRY ATTRIBUTES
+  // ==========================================================
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+
+  geometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSeed",
+
+    new THREE.BufferAttribute(
+      seeds,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aPhase",
+
+    new THREE.BufferAttribute(
+      phases,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSpeed",
+
+    new THREE.BufferAttribute(
+      speeds,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aSize",
+
+    new THREE.BufferAttribute(
+      sizes,
+      1
+    )
+
+  );
+
+
+  geometry.setAttribute(
+
+    "aRadius",
+
+    new THREE.BufferAttribute(
+      radii,
+      1
+    )
+
+  );
+
+
+  smokeMaterial =
+    createSmokeMaterial();
+
+
+  smokePoints =
+    new THREE.Points(
+
+      geometry,
+
+      smokeMaterial
+
+    );
+
+
+  smokePoints.frustumCulled =
+    false;
+
+
+  scene.add(
+    smokePoints
+  );
+
+
+  stage("smoke ready");
+
+}
+
+
+// ============================================================
+// INITIAL SMOKE BUILD
+// ============================================================
+
+rebuildSmoke();
+
+
+// ============================================================
+// UPDATE TOTAL PARTICLE COUNTER
+// ============================================================
+
+function updateParticleCounter() {
+
+  const flameCount =
+    Number(
+      inputs.flameCount.value
+    );
+
+
+  const emberCount =
+    Number(
+      inputs.emberCount.value
+    );
+
+
+  const smokeCount =
+    Number(
+      inputs.smokeCount.value
+    );
+
+
+  const total =
+    flameCount +
+    emberCount +
+    smokeCount;
+
+
+  $("particles").textContent =
+
+    total >= 1000
+
+      ?
+
+      (
+        total /
+        1000
+      ).toFixed(1) +
+      "K"
+
+      :
+
+      total;
+
+}
+
+
+updateParticleCounter();
+
+
+// ============================================================
+// TEST PARTICLE RENDER
+//
+// This forces Three.js to compile all three shader systems
+// now rather than waiting until the final animation loop.
+// ============================================================
+
+stage("compiling particle shaders");
+
+
+renderer.render(
+
+  scene,
+
+  camera
+
+);
+
+
+stage("particle shaders ready");
+
+// ============================================================
+// HEAT SHIMMER
+//
+// This is a transparent procedural volume above the fire.
+// It creates moving refractive-looking bands without requiring
+// a full post-processing pipeline.
+// ============================================================
+
+stage("building heat shimmer");
+
+
+function createHeatMaterial() {
+
+  return new THREE.ShaderMaterial({
+
+    transparent: true,
+
+    depthWrite: false,
+
+    side: THREE.DoubleSide,
+
+    blending:
+      THREE.AdditiveBlending,
+
+    uniforms: {
+
+      uTime: {
+        value: 0
+      },
+
+      uHeat: {
+        value:
+          Number(inputs.heat.value)
+      },
+
+      uHeight: {
+        value:
+          Number(inputs.height.value)
+      },
+
+      uWidth: {
+        value:
+          Number(inputs.width.value)
+      },
+
+      uWind: {
+        value:
+          Number(inputs.wind.value)
+      },
+
+      uWindDirection: {
+        value:
+          THREE.MathUtils.degToRad(
+            Number(inputs.windDirection.value)
+          )
+      }
+
+    },
+
+
+// ============================================================
+// HEAT VERTEX SHADER
+// ============================================================
+
+vertexShader: `
+
+precision highp float;
+
+uniform float uTime;
+uniform float uHeat;
+
+uniform float uHeight;
+uniform float uWidth;
+
+uniform float uWind;
+uniform float uWindDirection;
+
+varying vec2 vUv;
+varying float vWave;
+
+
+void main() {
+
+  vUv =
+    uv;
+
+
+  vec3 p =
+    position;
+
+
+  // ----------------------------------------------------------
+  // TAPERED HOT AIR COLUMN
+  // ----------------------------------------------------------
+
+  float vertical =
+    uv.y;
+
+
+  float taper =
+    1.0 -
+    vertical *
+    0.45;
+
+
+  p.x *=
+    uWidth *
+    taper;
+
+
+  p.y *=
+    uHeight *
+    1.35;
+
+
+  // ----------------------------------------------------------
+  // RISING DISTORTION WAVES
+  // ----------------------------------------------------------
+
+  float wave1 =
+
+    sin(
+
+      vertical*18.0
+
+      -
+
+      uTime*5.5
+
+      +
+
+      p.x*2.2
+
+    );
+
+
+  float wave2 =
+
+    sin(
+
+      vertical*31.0
+
+      -
+
+      uTime*8.1
+
+      -
+
+      p.x*3.7
+
+    );
+
+
+  float distortion =
+
+    (
+      wave1 +
+      wave2*0.35
+    )
+
+    *
+
+    uHeat
+
+    *
+
+    0.045;
+
+
+  p.x +=
+    distortion;
+
+
+  p.z +=
+
+    wave2
+
+    *
+
+    uHeat
+
+    *
+
+    0.025;
+
+
+  // ----------------------------------------------------------
+  // WIND BENDING
+  // ----------------------------------------------------------
+
+  vec2 windDirection =
+
+    vec2(
+
+      cos(
+        uWindDirection
+      ),
+
+      sin(
+        uWindDirection
+      )
+
+    );
+
+
+  p.x +=
+
+    windDirection.x
+
+    *
+
+    uWind
+
+    *
+
+    vertical *
+    vertical
+
+    *
+
+    0.55;
+
+
+  p.z +=
+
+    windDirection.y
+
+    *
+
+    uWind
+
+    *
+
+    vertical *
+    vertical
+
+    *
+
+    0.55;
+
+
+  vWave =
+    wave1*0.5 +
+    wave2*0.5;
+
+
+  gl_Position =
+
+    projectionMatrix *
+
+    modelViewMatrix *
+
+    vec4(
+      p,
+      1.0
+    );
+
+}
+
+`,
+
+
+// ============================================================
+// HEAT FRAGMENT SHADER
+// ============================================================
+
+fragmentShader: `
+
+precision highp float;
+
+uniform float uHeat;
+
+varying vec2 vUv;
+varying float vWave;
+
+
+void main() {
+
+  // ----------------------------------------------------------
+  // EDGE FADE
+  // ----------------------------------------------------------
+
+  float horizontal =
+
+    abs(
+      vUv.x -
+      0.5
+    )
+
+    *
+
+    2.0;
+
+
+  float edge =
+
+    1.0 -
+
+    smoothstep(
+      0.25,
+      1.0,
+      horizontal
+    );
+
+
+  // ----------------------------------------------------------
+  // VERTICAL FADE
+  // ----------------------------------------------------------
+
+  float bottom =
+
+    smoothstep(
+      0.0,
+      0.12,
+      vUv.y
+    );
+
+
+  float top =
+
+    1.0 -
+
+    smoothstep(
+      0.55,
+      1.0,
+      vUv.y
+    );
+
+
+  // ----------------------------------------------------------
+  // SHIMMER BANDS
+  // ----------------------------------------------------------
+
+  float band =
+
+    0.5 +
+
+    vWave *
+    0.5;
+
+
+  band =
+    smoothstep(
+      0.25,
+      0.85,
+      band
+    );
+
+
+  float alpha =
+
+    edge
+
+    *
+
+    bottom
+
+    *
+
+    top
+
+    *
+
+    band
+
+    *
+
+    uHeat
+
+    *
+
+    0.055;
+
+
+  // Extremely subtle warm air glow.
+
+  vec3 color =
+
+    vec3(
+      1.0,
+      0.30,
+      0.055
+    );
+
+
+  gl_FragColor =
+
+    vec4(
+      color,
+      alpha
+    );
+
+}
+
+`
+
+  });
+
+}
+
+
+// ============================================================
+// BUILD HEAT VOLUME
+// ============================================================
+
+function buildHeatShimmer() {
+
+  if (heatMesh) {
+
+    scene.remove(
+      heatMesh
+    );
+
+
+    heatMesh.geometry.dispose();
+
+
+    heatMesh.material.dispose();
+
+
+    heatMesh =
+      null;
+
+  }
+
+
+  // Vertical plane centered over the flame.
+
+  const geometry =
+    new THREE.PlaneGeometry(
+
+      2.0,
+
+      1.0,
+
+      20,
+
+      40
+
+    );
+
+
+  // Move plane origin to the fuel bed.
+
+  geometry.translate(
+    0,
+    0.5,
+    0
+  );
+
+
+  heatMaterial =
+    createHeatMaterial();
+
+
+  heatMesh =
+    new THREE.Mesh(
+
+      geometry,
+
+      heatMaterial
+
+    );
+
+
+  heatMesh.position.y =
+    0.15;
+
+
+  heatMesh.frustumCulled =
+    false;
+
+
+  scene.add(
+    heatMesh
+  );
+
+}
+
+
+buildHeatShimmer();
+
+
+// ============================================================
+// SECOND HEAT PLANE
+//
+// Crossed geometry makes the shimmer visible from more camera
+// angles without requiring billboard calculations.
+// ============================================================
+
+const heatGeometryCross =
+  heatMesh.geometry.clone();
+
+
+const heatMaterialCross =
+  heatMaterial.clone();
+
+
+const heatCross =
+  new THREE.Mesh(
+
+    heatGeometryCross,
+
+    heatMaterialCross
+
+  );
+
+
+heatCross.rotation.y =
+  Math.PI / 2;
+
+
+heatCross.position.y =
+  0.15;
+
+
+heatCross.frustumCulled =
+  false;
+
+
+scene.add(
+  heatCross
+);
+
+
+// ============================================================
+// DYNAMIC LIGHT FLICKER
+// ============================================================
+
+function updateFireLighting(time) {
+
+  const enabled =
+    $("dynamicLight").checked;
+
+
+  if (!enabled) {
+
+    fireLightLow.intensity =
+      0;
+
+    fireLightMid.intensity =
+      0;
+
+    fireLightHot.intensity =
+      0;
+
+    return;
+
+  }
+
+
+  const base =
+
+    Number(
+      inputs.lightIntensity.value
+    );
+
+
+  const flickerAmount =
+
+    Number(
+      inputs.flicker.value
+    );
+
+
+  const fuel =
+
+    Number(
+      inputs.fuel.value
+    );
+
+
+  // ----------------------------------------------------------
+  // MULTI-FREQUENCY FLICKER
+  // ----------------------------------------------------------
+
+  const slow =
+
+    Math.sin(
+      time*3.1
+    );
+
+
+  const medium =
+
+    Math.sin(
+      time*7.7 + 1.4
+    );
+
+
+  const fast =
+
+    Math.sin(
+      time*15.3 + 2.7
+    );
+
+
+  const irregular =
+
+    slow*0.45 +
+
+    medium*0.35 +
+
+    fast*0.20;
+
+
+  const flicker =
+
+    1 +
+
+    irregular *
+
+    flickerAmount *
+
+    0.18;
+
+
+  const fuelBoost =
+
+    0.55 +
+
+    fuel*0.45;
+
+
+  // ----------------------------------------------------------
+  // THREE DIFFERENT LIGHT REGIONS
+  // ----------------------------------------------------------
+
+  fireLightLow.intensity =
+
+    base *
+
+    fuelBoost *
+
+    flicker;
+
+
+  fireLightMid.intensity =
+
+    base *
+
+    0.62 *
+
+    fuelBoost *
+
+    (
+      1 +
+      medium *
+      flickerAmount *
+      0.12
+    );
+
+
+  fireLightHot.intensity =
+
+    base *
+
+    0.32 *
+
+    (
+      1 +
+      fast *
+      flickerAmount *
+      0.10
+    );
+
+
+  // Slight vertical light motion.
+
+  fireLightMid.position.y =
+
+    1.7 +
+
+    slow *
+    0.18 *
+
+    flickerAmount;
+
+
+  fireLightLow.position.x =
+
+    medium *
+    0.08 *
+    flickerAmount;
+
+
+  fireLightLow.position.z =
+
+    fast *
+    0.06 *
+    flickerAmount;
+
+}
+
+
+// ============================================================
+// COAL BED ANIMATION
+// ============================================================
+
+function updateCoalBed(time) {
+
+  const fuel =
+
+    Number(
+      inputs.fuel.value
+    );
+
+
+  const oxygen =
+
+    Number(
+      inputs.oxygen.value
+    );
+
+
+  const pulse =
+
+    0.78 +
+
+    Math.sin(
+      time*2.7
+    ) *
+    0.10 +
+
+    Math.sin(
+      time*8.1
+    ) *
+    0.04;
+
+
+  coalMaterial.emissiveIntensity =
+
+    pulse *
+
+    (
+      0.35 +
+      fuel*0.28 +
+      oxygen*0.12
+    );
+
+}
+
+
+// ============================================================
+// GROUND RESPONSE
+//
+// Fire illumination subtly changes the ground material itself
+// in addition to the point lights.
+// ============================================================
+
+function updateGroundResponse(time) {
+
+  const light =
+
+    Number(
+      inputs.lightIntensity.value
+    );
+
+
+  const pulse =
+
+    0.5 +
+
+    Math.sin(
+      time*4.3
+    ) *
+    0.5;
+
+
+  const warmth =
+
+    Math.min(
+      light/10,
+      1
+    );
+
+
+  groundMaterial.color.setRGB(
+
+    0.055 +
+    warmth*0.018 +
+    pulse*0.004,
+
+    0.042 +
+    warmth*0.008,
+
+    0.032
+
+  );
+
+}
+
+
+// ============================================================
+// UPDATE FLAME UNIFORMS
+// ============================================================
+
+function updateFlameUniforms() {
+
+  if (!flameMaterial) {
+    return;
+  }
+
+
+  const u =
+    flameMaterial.uniforms;
+
+
+  u.uFuel.value =
+    Number(
+      inputs.fuel.value
+    );
+
+
+  u.uOxygen.value =
+    Number(
+      inputs.oxygen.value
+    );
+
+
+  u.uTemperature.value =
+    Number(
+      inputs.temperature.value
+    );
+
+
+  u.uHeight.value =
+    Number(
+      inputs.height.value
+    );
+
+
+  u.uWidth.value =
+    Number(
+      inputs.width.value
+    );
+
+
+  u.uTurbulence.value =
+    Number(
+      inputs.turbulence.value
+    );
+
+
+  u.uFlicker.value =
+    Number(
+      inputs.flicker.value
+    );
+
+
+  u.uWind.value =
+    Number(
+      inputs.wind.value
+    );
+
+
+  u.uWindDirection.value =
+    THREE.MathUtils.degToRad(
+
+      Number(
+        inputs.windDirection.value
+      )
+
+    );
+
+
+  u.uGust.value =
+    Number(
+      inputs.gust.value
+    );
+
+
+  u.uGlow.value =
+    Number(
+      inputs.glow.value
+    );
+
+}
+
+
+// ============================================================
+// UPDATE EMBER UNIFORMS
+// ============================================================
+
+function updateEmberUniforms() {
+
+  if (!emberMaterial) {
+    return;
+  }
+
+
+  const u =
+    emberMaterial.uniforms;
+
+
+  u.uRate.value =
+    Number(
+      inputs.emberRate.value
+    );
+
+
+  u.uHeight.value =
+    Number(
+      inputs.sparkHeight.value
+    );
+
+
+  u.uSpread.value =
+    Number(
+      inputs.sparkSpread.value
+    );
+
+
+  u.uWind.value =
+    Number(
+      inputs.wind.value
+    );
+
+
+  u.uWindDirection.value =
+    THREE.MathUtils.degToRad(
+
+      Number(
+        inputs.windDirection.value
+      )
+
+    );
+
+
+  u.uGust.value =
+    Number(
+      inputs.gust.value
+    );
+
+
+  u.uTurbulence.value =
+    Number(
+      inputs.turbulence.value
+    );
+
+}
+
+
+// ============================================================
+// UPDATE SMOKE UNIFORMS
+// ============================================================
+
+function updateSmokeUniforms() {
+
+  if (!smokeMaterial) {
+    return;
+  }
+
+
+  const u =
+    smokeMaterial.uniforms;
+
+
+  u.uAmount.value =
+    Number(
+      inputs.smoke.value
+    );
+
+
+  u.uExpansion.value =
+    Number(
+      inputs.smokeExpansion.value
+    );
+
+
+  u.uSoot.value =
+    Number(
+      inputs.soot.value
+    );
+
+
+  u.uHeight.value =
+    Number(
+      inputs.height.value
+    );
+
+
+  u.uWidth.value =
+    Number(
+      inputs.width.value
+    );
+
+
+  u.uWind.value =
+    Number(
+      inputs.wind.value
+    );
+
+
+  u.uWindDirection.value =
+    THREE.MathUtils.degToRad(
+
+      Number(
+        inputs.windDirection.value
+      )
+
+    );
+
+
+  u.uGust.value =
+    Number(
+      inputs.gust.value
+    );
+
+
+  u.uTurbulence.value =
+    Number(
+      inputs.turbulence.value
+    );
+
+}
+
+
+// ============================================================
+// UPDATE HEAT SHIMMER
+// ============================================================
+
+function updateHeatUniforms() {
+
+  const enabled =
+    $("heatToggle").checked;
+
+
+  if (heatMesh) {
+
+    heatMesh.visible =
+      enabled;
+
+  }
+
+
+  heatCross.visible =
+    enabled;
+
+
+  const heatStrength =
+
+    enabled
+
+      ?
+
+      Number(
+        inputs.heat.value
+      )
+
+      :
+
+      0;
+
+
+  [
+    heatMaterial,
+    heatMaterialCross
+  ].forEach(material => {
+
+    if (!material) {
+      return;
+    }
+
+
+    material.uniforms.uHeat.value =
+      heatStrength;
+
+
+    material.uniforms.uHeight.value =
+      Number(
+        inputs.height.value
+      );
+
+
+    material.uniforms.uWidth.value =
+      Number(
+        inputs.width.value
+      );
+
+
+    material.uniforms.uWind.value =
+      Number(
+        inputs.wind.value
+      );
+
+
+    material.uniforms
+      .uWindDirection.value =
+      THREE.MathUtils.degToRad(
+
+        Number(
+          inputs.windDirection.value
+        )
+
+      );
+
+  });
+
+}
+
+
+// ============================================================
+// MASTER VISUAL UPDATE
+// ============================================================
+
+function updateVisualSystems() {
+
+  updateFlameUniforms();
+
+  updateEmberUniforms();
+
+  updateSmokeUniforms();
+
+  updateHeatUniforms();
+
+
+  renderer.toneMappingExposure =
+
+    Number(
+      inputs.exposure.value
+    );
+
+}
+
+
+updateVisualSystems();
+
+
+stage("effects ready");
+
+// ============================================================
+// HUD LABELS
+// ============================================================
+
+function updateLabels() {
+
+  $("fuelVal").textContent =
+    Number(inputs.fuel.value).toFixed(2);
+
+  $("oxygenVal").textContent =
+    Number(inputs.oxygen.value).toFixed(2);
+
+  $("temperatureVal").textContent =
+    Number(inputs.temperature.value).toFixed(2);
+
+  $("heightVal").textContent =
+    Number(inputs.height.value).toFixed(1) + " m";
+
+  $("widthVal").textContent =
+    Number(inputs.width.value).toFixed(2) + " m";
+
+  $("turbVal").textContent =
+    Number(inputs.turbulence.value).toFixed(2);
+
+  $("flickerVal").textContent =
+    Number(inputs.flicker.value).toFixed(2);
+
+
+  $("windVal").textContent =
+    Number(inputs.wind.value).toFixed(2);
+
+  $("windDirectionVal").textContent =
+    Math.round(
+      Number(inputs.windDirection.value)
+    ) + "°";
+
+  $("gustVal").textContent =
+    Number(inputs.gust.value).toFixed(2);
+
+
+  $("emberVal").textContent =
+    Number(inputs.emberRate.value).toFixed(2);
+
+  $("sparkHeightVal").textContent =
+    Number(inputs.sparkHeight.value).toFixed(1) + " m";
+
+  $("sparkSpreadVal").textContent =
+    Number(inputs.sparkSpread.value).toFixed(2);
+
+
+  $("smokeVal").textContent =
+    Number(inputs.smoke.value).toFixed(2);
+
+  $("smokeExpansionVal").textContent =
+    Number(inputs.smokeExpansion.value).toFixed(2);
+
+  $("sootVal").textContent =
+    Number(inputs.soot.value).toFixed(2);
+
+
+  $("glowVal").textContent =
+    Number(inputs.glow.value).toFixed(2);
+
+  $("heatVal").textContent =
+    Number(inputs.heat.value).toFixed(2);
+
+  $("lightVal").textContent =
+    Number(inputs.lightIntensity.value).toFixed(1);
+
+  $("exposureVal").textContent =
+    Number(inputs.exposure.value).toFixed(2);
+
+
+  $("flameCountVal").textContent =
+    Number(inputs.flameCount.value).toLocaleString();
+
+  $("emberCountVal").textContent =
+    Number(inputs.emberCount.value).toLocaleString();
+
+  $("smokeCountVal").textContent =
+    Number(inputs.smokeCount.value).toLocaleString();
+
+}
+
+
+// ============================================================
+// LIVE CONTROLS
+// ============================================================
+
+const liveControls = [
+
+  "fuel",
+  "oxygen",
+  "temperature",
+
+  "height",
+  "width",
+
+  "turbulence",
+  "flicker",
+
+  "wind",
+  "windDirection",
+  "gust",
+
+  "emberRate",
+  "sparkHeight",
+  "sparkSpread",
+
+  "smoke",
+  "smokeExpansion",
+  "soot",
+
+  "glow",
+  "heat",
+  "lightIntensity",
+  "exposure"
+
+];
+
+
+liveControls.forEach(
+  name => {
+
+    inputs[name].addEventListener(
+      "input",
+      () => {
+
+        updateLabels();
+
+        updateVisualSystems();
+
+      }
+    );
+
+  }
+);
+
+
+// ============================================================
+// PARTICLE COUNT CONTROLS
+//
+// Update the displayed number while dragging, but only rebuild
+// GPU buffers after the slider is released.
+// ============================================================
+
+[
+  "flameCount",
+  "emberCount",
+  "smokeCount"
+].forEach(
+  name => {
+
+    inputs[name].addEventListener(
+      "input",
+      () => {
+
+        updateLabels();
+        updateParticleCounter();
+
+      }
+    );
+
+  }
+);
+
+
+inputs.flameCount.addEventListener(
+  "change",
+  () => {
+
+    rebuildFlames();
+
+    updateVisualSystems();
+
+    updateParticleCounter();
+
+  }
+);
+
+
+inputs.emberCount.addEventListener(
+  "change",
+  () => {
+
+    rebuildEmbers();
+
+    updateVisualSystems();
+
+    updateParticleCounter();
+
+  }
+);
+
+
+inputs.smokeCount.addEventListener(
+  "change",
+  () => {
+
+    rebuildSmoke();
+
+    updateVisualSystems();
+
+    updateParticleCounter();
+
+  }
+);
+
+
+// ============================================================
+// EFFECT TOGGLES
+// ============================================================
+
+$("heatToggle").addEventListener(
+  "change",
+  updateHeatUniforms
+);
+
+
+$("dynamicLight").addEventListener(
+  "change",
+  () => {
+
+    if (!$("dynamicLight").checked) {
+
+      fireLightLow.intensity = 0;
+      fireLightMid.intensity = 0;
+      fireLightHot.intensity = 0;
+
+    }
+
+  }
+);
+
+
+// ============================================================
+// PRESETS
+// ============================================================
+
+const presets = {
+
+  // ----------------------------------------------------------
+  // CANDLE
+  // ----------------------------------------------------------
+
+  candle: {
+
+    fuel: .35,
+    oxygen: 1.15,
+    temperature: 1.25,
+
+    height: 1.2,
+    width: .28,
+
+    turbulence: .22,
+    flicker: .32,
+
+    wind: .04,
+    windDirection: 20,
+    gust: .08,
+
+    emberRate: .02,
+    sparkHeight: 1.8,
+    sparkSpread: .15,
+
+    smoke: .08,
+    smokeExpansion: .45,
+    soot: .20,
+
+    glow: .90,
+    heat: .25,
+    lightIntensity: 1.2,
+    exposure: 1.05
+
+  },
+
+
+  // ----------------------------------------------------------
+  // CAMPFIRE
+  // ----------------------------------------------------------
+
+  campfire: {
+
+    fuel: .85,
+    oxygen: 1.0,
+    temperature: 1.05,
+
+    height: 2.7,
+    width: 1.05,
+
+    turbulence: .72,
+    flicker: .58,
+
+    wind: .14,
+    windDirection: 25,
+    gust: .28,
+
+    emberRate: .45,
+    sparkHeight: 4.5,
+    sparkSpread: .75,
+
+    smoke: .40,
+    smokeExpansion: .85,
+    soot: .48,
+
+    glow: 1.10,
+    heat: .42,
+    lightIntensity: 2.8,
+    exposure: 1.0
+
+  },
+
+
+  // ----------------------------------------------------------
+  // BONFIRE
+  // ----------------------------------------------------------
+
+  bonfire: {
+
+    fuel: 1.25,
+    oxygen: 1.0,
+    temperature: 1.0,
+
+    height: 4.0,
+    width: 1.8,
+
+    turbulence: 1.0,
+    flicker: .65,
+
+    wind: .25,
+    windDirection: 25,
+    gust: .45,
+
+    emberRate: .65,
+    sparkHeight: 6,
+    sparkSpread: 1.2,
+
+    smoke: .55,
+    smokeExpansion: 1.0,
+    soot: .55,
+
+    glow: 1.25,
+    heat: .55,
+    lightIntensity: 4.0,
+    exposure: 1.0
+
+  },
+
+
+  // ----------------------------------------------------------
+  // INFERNO
+  // ----------------------------------------------------------
+
+  inferno: {
+
+    fuel: 2.5,
+    oxygen: 1.4,
+    temperature: 1.35,
+
+    height: 8.0,
+    width: 3.4,
+
+    turbulence: 1.75,
+    flicker: 1.0,
+
+    wind: .48,
+    windDirection: 40,
+    gust: .90,
+
+    emberRate: 1.35,
+    sparkHeight: 12,
+    sparkSpread: 2.8,
+
+    smoke: 1.25,
+    smokeExpansion: 1.65,
+    soot: .72,
+
+    glow: 1.75,
+    heat: 1.1,
+    lightIntensity: 8.0,
+    exposure: .90
+
+  }
+
+};
+
+
+// ============================================================
+// APPLY PRESET
+// ============================================================
+
+document
+  .querySelectorAll(".preset")
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const name =
+            button.dataset.state;
+
+
+          const preset =
+            presets[name];
+
+
+          if (!preset) {
+            return;
+          }
+
+
+          Object.entries(preset)
+            .forEach(
+              ([key,value]) => {
+
+                if (inputs[key]) {
+
+                  inputs[key].value =
+                    value;
+
+                }
+
+              }
+            );
+
+
+          $("state").textContent =
+            name.toUpperCase();
+
+
+          document
+            .querySelectorAll(".preset")
+            .forEach(
+              other => {
+
+                other.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          updateLabels();
+
+          updateVisualSystems();
+
+        }
+      );
+
+    }
+  );
+
+
+// ============================================================
+// RANDOMIZER
+// ============================================================
+
+function randomRange(
+  min,
+  max
+) {
+
+  return (
+    min +
+    Math.random() *
+    (max-min)
+  );
+
+}
+
+
+$("randomize").addEventListener(
+  "click",
+  () => {
+
+    inputs.fuel.value =
+      randomRange(.3,2.4);
+
+    inputs.oxygen.value =
+      randomRange(.5,1.7);
+
+    inputs.temperature.value =
+      randomRange(.6,1.6);
+
+
+    inputs.height.value =
+      randomRange(1.2,7);
+
+    inputs.width.value =
+      randomRange(.4,3);
+
+
+    inputs.turbulence.value =
+      randomRange(.2,1.8);
+
+    inputs.flicker.value =
+      randomRange(.15,1.2);
+
+
+    inputs.wind.value =
+      randomRange(0,.9);
+
+    inputs.windDirection.value =
+      randomRange(0,360);
+
+    inputs.gust.value =
+      randomRange(0,1);
+
+
+    inputs.emberRate.value =
+      randomRange(.05,1.4);
+
+    inputs.sparkHeight.value =
+      randomRange(2,11);
+
+    inputs.sparkSpread.value =
+      randomRange(.2,2.8);
+
+
+    inputs.smoke.value =
+      randomRange(.05,1.3);
+
+    inputs.smokeExpansion.value =
+      randomRange(.4,1.8);
+
+    inputs.soot.value =
+      randomRange(.15,.85);
+
+
+    inputs.glow.value =
+      randomRange(.5,1.8);
+
+    inputs.heat.value =
+      randomRange(.1,1.2);
+
+    inputs.lightIntensity.value =
+      randomRange(1,8);
+
+    inputs.exposure.value =
+      randomRange(.7,1.25);
+
+
+    $("state").textContent =
+      "CUSTOM";
+
+
+    document
+      .querySelectorAll(".preset")
+      .forEach(
+        button => {
+
+          button.classList.remove(
+            "active"
+          );
+
+        }
+      );
+
+
+    updateLabels();
+
+    updateVisualSystems();
+
+  }
+);
+
+
+// ============================================================
+// RESET
+// ============================================================
+
+const defaults = {
+
+  fuel: 1.25,
+  oxygen: 1,
+  temperature: 1,
+
+  height: 4,
+  width: 1.8,
+
+  turbulence: 1,
+  flicker: .65,
+
+  wind: .25,
+  windDirection: 25,
+  gust: .45,
+
+  emberRate: .65,
+  sparkHeight: 6,
+  sparkSpread: 1.2,
+
+  smoke: .55,
+  smokeExpansion: 1,
+  soot: .55,
+
+  glow: 1.25,
+  heat: .55,
+  lightIntensity: 4,
+  exposure: 1,
+
+  flameCount: 16000,
+  emberCount: 4000,
+  smokeCount: 3500
+
+};
+
+
+$("reset").addEventListener(
+  "click",
+  () => {
+
+    Object.entries(defaults)
+      .forEach(
+        ([key,value]) => {
+
+          if (inputs[key]) {
+
+            inputs[key].value =
+              value;
+
+          }
+
+        }
+      );
+
+
+    $("dynamicLight").checked =
+      true;
+
+    $("heatToggle").checked =
+      true;
+
+    $("drift").checked =
+      false;
+
+
+    $("state").textContent =
+      "BONFIRE";
+
+
+    document
+      .querySelectorAll(".preset")
+      .forEach(
+        button => {
+
+          button.classList.toggle(
+
+            "active",
+
+            button.dataset.state ===
+            "bonfire"
+
+          );
+
+        }
+      );
+
+
+    // Restore camera.
+
+    cameraRadius =
+      14;
+
+
+    cameraTheta =
+      THREE.MathUtils.degToRad(
+        40
+      );
+
+
+    cameraPhi =
+      THREE.MathUtils.degToRad(
+        72
+      );
+
+
+    updateCamera();
+
+
+    // Counts may have changed, so rebuild buffers.
+
+    rebuildFlames();
+
+    rebuildEmbers();
+
+    rebuildSmoke();
+
+
+    updateLabels();
+
+    updateParticleCounter();
+
+    updateVisualSystems();
+
+  }
+);
+
+
+// ============================================================
+// FPS COUNTER
+// ============================================================
+
+let frameCount =
+  0;
+
+
+let fpsStart =
+  performance.now();
+
+
+function updateFPS(now) {
+
+  frameCount++;
+
+
+  const elapsed =
+    now -
+    fpsStart;
+
+
+  if (elapsed >= 500) {
+
+    const fps =
+
+      Math.round(
+
+        frameCount *
+        1000 /
+
+        elapsed
+
+      );
+
+
+    $("fps").textContent =
+      fps;
+
+
+    frameCount =
+      0;
+
+
+    fpsStart =
+      now;
+
+  }
+
+}
+
+
+// ============================================================
+// CAMERA DRIFT
+// ============================================================
+
+function updateCameraDrift() {
+
+  if (
+    !$("drift").checked
+  ) {
+
+    return;
+
+  }
+
+
+  cameraTheta +=
+    .00032;
+
+
+  updateCamera();
+
+}
+
+
+// ============================================================
+// RESIZE
+// ============================================================
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    camera.aspect =
+
+      window.innerWidth /
+
+      window.innerHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+
+      window.innerWidth,
+
+      window.innerHeight
+
+    );
+
+  }
+);
+
+
+// ============================================================
+// INITIAL UI
+// ============================================================
+
+updateLabels();
+
+updateParticleCounter();
+
+updateVisualSystems();
+
+
+// ============================================================
+// ANIMATION CLOCK
+// ============================================================
+
+stage("starting animation");
+
+
+const clock =
+  new THREE.Clock();
+
+
+function animate(now) {
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const time =
+    clock.getElapsedTime();
+
+
+  // ----------------------------------------------------------
+  // FLAME TIME
+  // ----------------------------------------------------------
+
+  if (flameMaterial) {
+
+    flameMaterial.uniforms
+      .uTime.value =
+      time;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // EMBER TIME
+  // ----------------------------------------------------------
+
+  if (emberMaterial) {
+
+    emberMaterial.uniforms
+      .uTime.value =
+      time;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // SMOKE TIME
+  // ----------------------------------------------------------
+
+  if (smokeMaterial) {
+
+    smokeMaterial.uniforms
+      .uTime.value =
+      time;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // HEAT SHIMMER TIME
+  // ----------------------------------------------------------
+
+  if (heatMaterial) {
+
+    heatMaterial.uniforms
+      .uTime.value =
+      time;
+
+  }
+
+
+  if (heatMaterialCross) {
+
+    heatMaterialCross.uniforms
+      .uTime.value =
+      time;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // ENVIRONMENT RESPONSE
+  // ----------------------------------------------------------
+
+  updateFireLighting(
+    time
+  );
+
+
+  updateCoalBed(
+    time
+  );
+
+
+  updateGroundResponse(
+    time
+  );
+
+
+  updateCameraDrift();
+
+
+  // ----------------------------------------------------------
+  // RENDER
+  // ----------------------------------------------------------
+
+  renderer.render(
+
+    scene,
+
+    camera
+
+  );
+
+
+  updateFPS(
+    now
+  );
+
+}
+
+
+// ============================================================
+// START LOOP
+// ============================================================
+
+requestAnimationFrame(
+  animate
+);
+
+
+// ============================================================
+// READY
+// ============================================================
+
+stage("ready");
+
+
+const loading =
+  document.getElementById(
+    "loading"
+  );
+
+
+loading.style.opacity =
+  "0";
+
+
+setTimeout(
+  () => {
+
+    loading.style.display =
+      "none";
+
+  },
+  350
+);
+
+
+// ============================================================
+// INITIALIZATION ERROR HANDLER
+// ============================================================
+
+} catch (error) {
+
+  fatal(error);
+
+}
+
+</script>
+
+</body>
+</html>

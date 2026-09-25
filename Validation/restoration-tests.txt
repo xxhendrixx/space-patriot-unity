@@ -1,0 +1,81 @@
+PASS A/D strafe bindings
+PASS Space/Ctrl vertical bindings
+PASS X brake and V camera bindings
+PASS Strafe creates lateral thrust
+PASS Reverse thrust works from rest
+PASS Both vertical thrust axes work
+PASS Decoupled forward thrust preserves lateral momentum
+PASS Decoupled neutral input coasts
+PASS Assist counters drift on release
+PASS Brake works with assist off
+PASS Unpowered ship cannot magically brake
+PASS Roll permits inversion without an upright clamp
+PASS Cargo cannot load from a different world's dock
+PASS Loading transfers exactly one unit
+PASS Hold capacity blocks loading without deleting dock cargo
+PASS Unloading conserves cargo
+PASS Cannot unload an empty hold
+PASS Dock inventory survives save round trip
+PASS Power redistribution conserves 12 points
+PASS Disabled engine component removes thrust
+PASS All 100 original craft variants restored
+PASS Large-ship dimensions are preserved
+PASS Original hull prefab 0
+PASS Original hull prefab 1
+PASS Original hull prefab 2
+PASS Original hull prefab 3
+PASS Original hull prefab 4
+PASS Original hull prefab 5
+PASS Original hull prefab 6
+PASS Original hull prefab 7
+PASS Original hull prefab 8
+PASS Original hull prefab 9
+PASS No missing script references: alien-flora-0
+PASS No missing script references: alien-flora-1
+PASS No missing script references: alien-flora-2
+PASS No missing script references: building-0
+PASS No missing script references: building-1
+PASS No missing script references: building-2
+PASS No missing script references: building-3
+PASS No missing script references: cabin-0
+PASS No missing script references: cabin-7
+PASS No missing script references: cabin-9
+PASS No missing script references: conifer
+PASS No missing script references: hangar
+PASS No missing script references: hull-0
+PASS No missing script references: hull-1
+PASS No missing script references: hull-2
+PASS No missing script references: hull-3
+PASS No missing script references: hull-4
+PASS No missing script references: hull-5
+PASS No missing script references: hull-6
+PASS No missing script references: hull-7
+PASS No missing script references: hull-8
+PASS No missing script references: hull-9
+PASS No missing script references: outpost
+PASS No missing script references: port
+PASS No missing script references: rifle
+PASS No missing script references: sidearm
+PASS No missing script references: station
+PASS Twelve physical cockpit switches and three MFD click targets survive prefab serialization
+PASS All 128 atlas cells available in Unity
+PASS Every world has an independent persistent market
+PASS Background convoys depart and deliver goods
+PASS Market and faction balances remain nonnegative during simulation
+PASS Freight cannot be delivered straight from the hold
+PASS Unloaded freight is consumed and paid exactly once
+PASS Completed freight contracts cannot pay twice
+PASS Connected walkable FLIGHT DECK on family 7
+PASS Connected walkable CENTRAL PASSAGE on family 7
+PASS Connected walkable CREW QUARTERS on family 7
+PASS Connected walkable MESS / OBSERVATION on family 7
+PASS Connected walkable ENGINEERING on family 7
+PASS Connected walkable CARGO HOLD on family 7
+PASS Connected walkable AIRLOCK on family 7
+PASS Connected walkable FLIGHT DECK on family 9
+PASS Connected walkable CENTRAL PASSAGE on family 9
+PASS Connected walkable CREW QUARTERS on family 9
+PASS Connected walkable MESS / OBSERVATION on family 9
+PASS Connected walkable ENGINEERING on family 9
+PASS Connected walkable CARGO HOLD on family 9
+PASS Connected walkable AIRLOCK on family 9

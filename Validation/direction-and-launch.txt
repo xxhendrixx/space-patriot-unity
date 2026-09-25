@@ -1,0 +1,23 @@
+PASS Up arrow pitches nose upward
+PASS Down arrow pitches nose downward
+PASS Right arrow yaws nose right
+PASS Left arrow yaws nose left
+PASS Q rolls left wing down
+PASS E rolls right wing down
+PASS Forward thrust follows the ship nose after yawing
+PASS Reverse thrust follows the ship tail after yawing
+PASS Mouse up pitches up in normal mode
+PASS Mouse stops steering when mouse movement stops
+PASS Mouse right yaws right
+PASS Mouse angle is independent of frame duration
+PASS Mouse inversion setting reverses only vertical look
+PASS Right stick up pitches up in normal mode
+PASS Right stick right yaws right
+PASS Stick inversion preference works
+PASS Returning from menus cannot lock out keyboard forward thrust
+PASS Returning from menus cannot lock out held vertical thrust
+PASS Held Space launches from a ready berth after menu recovery
+PASS Continuing to hold Space supplies thrust immediately after launch
+PASS Landing retains a usable speed limit
+PASS Forward thrust still works after landing and relaunching
+PASS On-foot mouse up/right looks up/right
