@@ -133,7 +133,7 @@
           "name": "Gear_Nose",
           "position": [
             8.0,
-            1.35,
+            -0.85,
             0
           ],
           "rotation": [
@@ -146,7 +146,7 @@
           "name": "Gear_Port",
           "position": [
             -4.2,
-            1.35,
+            -0.85,
             2.8
           ],
           "rotation": [
@@ -159,7 +159,7 @@
           "name": "Gear_Starboard",
           "position": [
             -4.2,
-            1.35,
+            -0.85,
             -2.8
           ],
           "rotation": [
@@ -190,9 +190,9 @@
         {
           "name": "Drive_Port",
           "position": [
-            -12.3,
-            5.9,
-            4.4
+            -7.2,
+            4.6,
+            2.8
           ],
           "rotation": [
             0,
@@ -203,9 +203,9 @@
         {
           "name": "Drive_Starboard",
           "position": [
-            -12.3,
-            5.9,
-            -4.4
+            -7.2,
+            4.6,
+            -2.8
           ],
           "rotation": [
             0,

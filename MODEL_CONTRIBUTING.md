@@ -6,7 +6,7 @@ The public repository is [xxhendrixx/space-patriot-unity](https://github.com/xxh
 
 ## Start here
 
-- Open [the Kestrel concept references](ArtDirection/Modules/) and [the comparison report](ArtDirection/Generated/KestrelK017/kestrel-v1/Renders/Comparison/index.html). The board compares the current bake with the concepts. Magenta edges are the reference, cyan edges are the mesh, and white edges overlap.
+- Open [the Kestrel concept references](ArtDirection/Modules/), [the comparison report](ArtDirection/Generated/KestrelK017/kestrel-v1/Renders/Comparison/index.html), and the [six-view ship board](ArtDirection/Generated/KestrelK017/kestrel-v1/Renders/Comparison/six-view-ship-board.png). The comparison board uses magenta for the reference, cyan for the mesh, and white for overlapping edges.
 - Read [the local mesh pipeline](Tools/LocalMeshes/README.md) and [the project status](PORT_STATUS.md) before changing generated assets.
 - The editable recipe is [kestrel-kit.json](Tools/LocalMeshes/kestrel-kit.json). It records each part's source image, scale, transform, UV projection, and attachment point.
 
@@ -48,4 +48,4 @@ The model generator is optional for hand-authored Blender work; the final `.blen
 
 ## Current Kestrel review baseline
 
-The committed candidate includes the raw component meshes and provenance, editable Blender assembly, FBX and baked maps, Unity ArtLab prefab, Unity captures, and comparison outputs. The Unity import currently validates 24 mesh renderers across three LODs with bounds of approximately 24.15 × 8.35 × 15 metres. The whole-ship silhouette and color projection still need substantial review; treat this as a baseline for iteration, not a finished ship.
+The candidate includes the raw component meshes and provenance, editable Blender assembly, FBX and baked maps, Unity ArtLab prefab, Unity captures, six directional renders for the ship and each component, and comparison outputs. The current Unity import validates 24 mesh renderers across three LODs with bounds of approximately 19.50 × 9.49 × 15 metres. Concept paint is limited to the concept-facing surfaces; unsupported angles use a restrained base finish and still need authored detail. The whole-ship silhouette, mount fit and color projection need further art review; treat this as a baseline for iteration, not a finished ship.

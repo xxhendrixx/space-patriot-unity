@@ -1,6 +1,6 @@
 PASS: complete locally generated Kestrel FBX imported.
 Build: kestrel-v1
 Renderers: 24 across three LOD levels.
-Bounds: (24.15, 8.35, 15.00) metres.
+Bounds: (19.50, 9.49, 15.00) metres.
 One shared atlas material uses Blender-baked base colour, high-to-low tangent normals, and metallic/smoothness.
 Prefab remains in the ArtLab.

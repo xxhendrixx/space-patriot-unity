@@ -212,16 +212,67 @@ namespace SpacePatriot
         }
         void MakeAudio()
         {
-            ambient=gameObject.AddComponent<AudioSource>();ambient.loop=true;ambient.spatialBlend=0;ambient.clip=Tone("Cabin machinery",100,2,.15f,true);ambient.Play();
-            oneShot=gameObject.AddComponent<AudioSource>();oneShot.spatialBlend=0;
-            shotClip=Tone("Coil discharge",400,.13f,.5f,false);buttonClip=Tone("Relay click",740,.055f,.2f,false);impactClip=Tone("Hull impact",75,.25f,.6f,true);
+            ambient=gameObject.AddComponent<AudioSource>();ambient.loop=true;ambient.spatialBlend=0;ambient.playOnAwake=false;ambient.volume=.2f;ambient.clip=EngineBed();ambient.Play();
+            oneShot=gameObject.AddComponent<AudioSource>();oneShot.spatialBlend=0;oneShot.playOnAwake=false;oneShot.dopplerLevel=0;oneShot.priority=32;
+            shotClip=CoilDischarge();buttonClip=RelayClick();impactClip=HullImpact();
         }
-        AudioClip Tone(string name,float hz,float duration,float gain,bool noise)
+        AudioClip EngineBed()
         {
-            int n=(int)(22050*duration);var samples=new float[n];var random=new System.Random(41);
-            for(int i=0;i<n;i++){float t=i/22050f;float envelope=name=="Cabin machinery"?1:Mathf.Pow(1-i/(float)n,2);samples[i]=((Mathf.Sin(t*hz*6.28318f)*.4f)+(noise?(float)(random.NextDouble()-.5)*.5f:Mathf.Sin(t*hz*12.56f)*.2f))*gain*envelope;}
-            var clip=AudioClip.Create(name,n,1,22050,false);clip.SetData(samples,0);return clip;
+            const int rate=44100;const float duration=4f;int count=(int)(rate*duration);var samples=new float[count];
+            var random=new System.Random(817);float filtered=0;
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate;float breathe=.86f+.14f*Mathf.Sin(t*Mathf.PI);
+                float slow=.94f+.06f*Mathf.Sin(t*Mathf.PI*.5f);
+                filtered=Mathf.Lerp(filtered,(float)(random.NextDouble()*2-1),.035f);
+                float low=Mathf.Sin(t*Mathf.PI*2*38f)*.25f+Mathf.Sin(t*Mathf.PI*2*57f)*.11f;
+                float mid=Mathf.Sin(t*Mathf.PI*2*83f)*.10f+Mathf.Sin(t*Mathf.PI*2*121f)*.035f;
+                float edge=Mathf.Min(1f,Mathf.Min(t/.018f,(duration-t)/.018f));
+                samples[i]=(low*breathe+mid*slow+filtered*.035f)*Mathf.Clamp01(edge)*.32f;
+            }
+            return Clip("Kestrel / reactor and pump bed",samples,rate);
         }
+        AudioClip CoilDischarge()
+        {
+            const int rate=44100;const float duration=.32f;int count=(int)(rate*duration);var samples=new float[count];
+            double phase=0;var random=new System.Random(17021);
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate;float f=920f*Mathf.Exp(-t*9f)+125f;phase+=Math.PI*2*f/rate;
+                float decay=Mathf.Exp(-t*13f);float crack=t<.008f?(float)(random.NextDouble()*2-1)*Mathf.Exp(-t*360f):0;
+                float arc=(Mathf.Sin((float)phase)+.28f*Mathf.Sin((float)(phase*2.03)))*decay;
+                float tail=Mathf.Sin(t*Mathf.PI*2*(82f+18f*Mathf.Exp(-t*16f)))*Mathf.Exp(-t*8f)*.32f;
+                samples[i]=(crack*.72f+arc*.3f+tail*.32f)*Mathf.Min(1f,t/.0015f);
+            }
+            return Clip("Kestrel / capacitor coil discharge",samples,rate);
+        }
+        AudioClip RelayClick()
+        {
+            const int rate=44100;const float duration=.11f;int count=(int)(rate*duration);var samples=new float[count];var random=new System.Random(7401);
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate;float attack=t<.0015f?1f:0f;
+                float knock=Mathf.Sin(t*Mathf.PI*2*1840f)*Mathf.Exp(-t*75f)*.5f;
+                float spring=Mathf.Sin(t*Mathf.PI*2*620f)*Mathf.Exp(-t*43f)*.20f;
+                float grit=t<.004f?(float)(random.NextDouble()*2-1)*Mathf.Exp(-t*620f)*.4f:0;
+                samples[i]=attack*grit+knock+spring;
+            }
+            return Clip("Kestrel / guarded relay click",samples,rate);
+        }
+        AudioClip HullImpact()
+        {
+            const int rate=44100;const float duration=.62f;int count=(int)(rate*duration);var samples=new float[count];var random=new System.Random(7519);
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate;float thud=Mathf.Sin(t*Mathf.PI*2*44f)*Mathf.Exp(-t*9f);
+                float panel=Mathf.Sin(t*Mathf.PI*2*310f)*Mathf.Exp(-t*11f)*.27f+Mathf.Sin(t*Mathf.PI*2*487f)*Mathf.Exp(-t*16f)*.13f;
+                float debris=(float)(random.NextDouble()*2-1)*Mathf.Exp(-t*70f)*.28f;
+                samples[i]=(thud*.55f+panel+debris)*Mathf.Min(1f,t/.001f);
+            }
+            return Clip("Kestrel / hull plate impact",samples,rate);
+        }
+        static AudioClip Clip(string name,float[] samples,int rate)
+        {var clip=AudioClip.Create(name,samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
         void Sound(AudioClip clip,float volume){oneShot.PlayOneShot(clip,volume*PlayerPrefs.GetFloat("sp.volume",.55f));}
         public void Signal(string kind)
         {

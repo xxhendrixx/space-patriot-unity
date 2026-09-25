@@ -1,5 +1,6 @@
 """Assemble, atlas-unwrap and bake the generated Kestrel modules in Blender."""
 import argparse
+from collections import deque
 import json
 import math
 import sys
@@ -42,7 +43,10 @@ normal_atlas = bpy.data.images.new('Kestrel_Normal_4096', atlas_size, atlas_size
 normal_atlas.colorspace_settings.name = 'Non-Color'
 rough_atlas = bpy.data.images.new('Kestrel_Roughness_4096', atlas_size, atlas_size, alpha=False, float_buffer=False)
 rough_atlas.colorspace_settings.name = 'Non-Color'
-metal_atlas = bpy.data.images.new('Kestrel_Metal_4096', atlas_size, atlas_size, alpha=False, float_buffer=False)
+# Unity URP metallic/smoothness textures store smoothness in alpha. Keep that
+# channel through PNG export so the importer does not default the whole hull to
+# full gloss. Alpha is filled from the inverse of the baked roughness map below.
+metal_atlas = bpy.data.images.new('Kestrel_Metal_4096', atlas_size, atlas_size, alpha=True, float_buffer=False)
 metal_atlas.colorspace_settings.name = 'Non-Color'
 atlas_paths = ((base_atlas, 'Kestrel_BaseColor.png'), (normal_atlas, 'Kestrel_Normal.png'),
                (rough_atlas, 'Kestrel_Roughness_source.png'), (metal_atlas, 'Kestrel_MetallicSmoothness.png'))
@@ -61,6 +65,37 @@ def new_image_node(material, name, image):
     node.interpolation = 'Linear'
     node.extension = 'CLIP'
     return node
+
+def foreground_from_edge_connected_white(rgb):
+    """Preserve bright painted panels; exclude only near-white border-connected background."""
+    height, width, _ = rgb.shape
+    candidates = (np.min(rgb, axis=2) > .90).ravel()
+    background = np.zeros(candidates.size, dtype=np.bool_)
+    queue = deque()
+
+    def seed(index):
+        if candidates[index] and not background[index]:
+            background[index] = True
+            queue.append(index)
+
+    for x in range(width):
+        seed(x)
+        seed((height-1)*width+x)
+    for y in range(1, height-1):
+        seed(y*width)
+        seed(y*width+width-1)
+    while queue:
+        index = queue.popleft()
+        x = index % width
+        if x and candidates[index-1] and not background[index-1]:
+            background[index-1] = True; queue.append(index-1)
+        if x+1 < width and candidates[index+1] and not background[index+1]:
+            background[index+1] = True; queue.append(index+1)
+        if index >= width and candidates[index-width] and not background[index-width]:
+            background[index-width] = True; queue.append(index-width)
+        if index+width < candidates.size and candidates[index+width] and not background[index+width]:
+            background[index+width] = True; queue.append(index+width)
+    return ~background.reshape(height, width)
 
 def project_uv(mesh, bounds, ref_box, image_size, category, axes=(0, 1), flip_u=False):
     # Preserve a seam-aware unwrap as the active UV map for atlas baking.
@@ -88,13 +123,15 @@ def project_uv(mesh, bounds, ref_box, image_size, category, axes=(0, 1), flip_u=
             u = x0 + normalized_u * (x1-x0)
             vtop = y0 + ((point[axes[1]] - miny) / max(1e-8, maxy-miny)) * (y1-y0)
             # A 28 px gutter at 4096 keeps each quadrant isolated through filtering.
-            uv.data[loop_index].uv = (
-                slotx*.5 + tile_inset + u*(.5-2*tile_inset),
-                (1-sloty)*.5 + tile_inset + (1-vtop)*(.5-2*tile_inset)
-            )
+            # ArtProjection samples the standalone concept image, so its UVs
+            # must stay in that image's full 0..1 space. Only AtlasUV is packed
+            # into this part's 2x2 atlas tile. Remapping this projection into
+            # the atlas quadrant sampled only a corner of each reference and
+            # made most painted details disappear.
+            uv.data[loop_index].uv = (u, 1-vtop)
     mesh.uv_layers.active = bake_uv
 
-def bake_material(name, reference, fallback, metallic, roughness, base_target):
+def bake_material(name, reference, foreground_mask, fallback, metallic, roughness, base_target, projection_normal):
     material = bpy.data.materials.new(name)
     material.use_nodes = True
     nodes = material.node_tree.nodes
@@ -107,32 +144,100 @@ def bake_material(name, reference, fallback, metallic, roughness, base_target):
     texcoord.uv_map = 'ArtProjection'
     source = new_image_node(material, 'Concept colour projection', reference)
     material.node_tree.links.new(texcoord.outputs['UV'], source.inputs['Vector'])
-    color_bw = nodes.new('ShaderNodeRGBToBW')
-    material.node_tree.links.new(source.outputs['Color'], color_bw.inputs['Color'])
-    foreground = nodes.new('ShaderNodeMath')
-    foreground.operation = 'LESS_THAN'
-    foreground.inputs[1].default_value = .985
-    material.node_tree.links.new(color_bw.outputs['Val'], foreground.inputs[0])
+    mask_node = new_image_node(material, 'Flood-filled concept foreground mask', foreground_mask)
+    material.node_tree.links.new(texcoord.outputs['UV'], mask_node.inputs['Vector'])
+    mask_bw = nodes.new('ShaderNodeRGBToBW')
+    material.node_tree.links.new(mask_node.outputs['Color'], mask_bw.inputs['Color'])
     factor = nodes.new('ShaderNodeMath')
     factor.operation = 'MULTIPLY'
-    material.node_tree.links.new(foreground.outputs[0], factor.inputs[0])
-    if 'Alpha' in source.outputs:
-        material.node_tree.links.new(source.outputs['Alpha'], factor.inputs[1])
-    else:
-        factor.inputs[1].default_value = 1.0
+    material.node_tree.links.new(mask_bw.outputs['Val'], factor.inputs[0])
+    factor.inputs[1].default_value = 1.0
+
+    # A concept sheet is a single view, not a triplanar texture. Only use its
+    # pixels on faces that point toward that view. Without this facing mask,
+    # the side elevation gets stretched over the nose, roof and underside,
+    # which is the streaked appearance visible in the all-angle review.
+    geometry = nodes.new('ShaderNodeNewGeometry')
+    view_direction = nodes.new('ShaderNodeVectorMath')
+    view_direction.operation = 'DOT_PRODUCT'
+    view_direction.inputs[1].default_value = Vector(projection_normal)
+    material.node_tree.links.new(geometry.outputs['Normal'], view_direction.inputs[0])
+    view_facing = nodes.new('ShaderNodeMath')
+    view_facing.operation = 'ABSOLUTE'
+    material.node_tree.links.new(view_direction.outputs['Value'], view_facing.inputs[0])
+    facing = nodes.new('ShaderNodeMapRange')
+    facing.clamp = True
+    facing.inputs['From Min'].default_value = .05
+    facing.inputs['From Max'].default_value = .52
+    facing.inputs['To Min'].default_value = 0.0
+    facing.inputs['To Max'].default_value = 1.0
+    material.node_tree.links.new(view_facing.outputs[0], facing.inputs['Value'])
+    facing_factor = nodes.new('ShaderNodeMath')
+    facing_factor.operation = 'MULTIPLY'
+    material.node_tree.links.new(factor.outputs[0], facing_factor.inputs[0])
+    material.node_tree.links.new(facing.outputs['Result'], facing_factor.inputs[1])
+
+    # A single-view concept cannot specify the roof, belly and end caps. Give
+    # those faces quiet, manufactured plate structure instead of a flat swatch.
+    texcoord_noise = nodes.new('ShaderNodeTexCoord')
+    noise = nodes.new('ShaderNodeTexNoise')
+    noise.inputs['Scale'].default_value = 1.35
+    noise.inputs['Detail'].default_value = 2.0
+    noise.inputs['Roughness'].default_value = .68
+    material.node_tree.links.new(texcoord_noise.outputs['Object'], noise.inputs['Vector'])
+    panel_noise_range = nodes.new('ShaderNodeMapRange')
+    panel_noise_range.clamp = True
+    panel_noise_range.inputs['From Min'].default_value = .15
+    panel_noise_range.inputs['From Max'].default_value = .85
+    panel_noise_range.inputs['To Min'].default_value = .94
+    panel_noise_range.inputs['To Max'].default_value = 1.04
+    material.node_tree.links.new(noise.outputs['Fac'], panel_noise_range.inputs['Value'])
+
+    cell_colors = nodes.new('ShaderNodeTexVoronoi')
+    cell_colors.feature = 'F1'
+    cell_colors.inputs['Scale'].default_value = 1.15
+    material.node_tree.links.new(texcoord_noise.outputs['Object'], cell_colors.inputs['Vector'])
+    cell_tint = nodes.new('ShaderNodeRGBToBW')
+    material.node_tree.links.new(cell_colors.outputs['Color'], cell_tint.inputs['Color'])
+    cell_range = nodes.new('ShaderNodeMapRange')
+    cell_range.clamp = True
+    cell_range.inputs['From Min'].default_value = .0
+    cell_range.inputs['From Max'].default_value = 1.0
+    cell_range.inputs['To Min'].default_value = .90
+    cell_range.inputs['To Max'].default_value = 1.08
+    material.node_tree.links.new(cell_tint.outputs['Val'], cell_range.inputs['Value'])
+    panel_variation = nodes.new('ShaderNodeMath')
+    panel_variation.operation = 'MULTIPLY'
+    material.node_tree.links.new(panel_noise_range.outputs['Result'], panel_variation.inputs[0])
+    material.node_tree.links.new(cell_range.outputs['Result'], panel_variation.inputs[1])
+    panel_tint = nodes.new('ShaderNodeMixRGB')
+    panel_tint.blend_type = 'MULTIPLY'
+    panel_tint.inputs[0].default_value = 1.0
+    panel_tint.inputs[1].default_value = fallback
+    material.node_tree.links.new(panel_variation.outputs[0], panel_tint.inputs[2])
+    panels = nodes.new('ShaderNodeTexVoronoi')
+    panels.feature = 'DISTANCE_TO_EDGE'
+    panels.inputs['Scale'].default_value = 1.15
+    material.node_tree.links.new(texcoord_noise.outputs['Object'], panels.inputs['Vector'])
+    seam_width = nodes.new('ShaderNodeMapRange')
+    seam_width.clamp = True
+    seam_width.inputs['From Min'].default_value = .004
+    seam_width.inputs['From Max'].default_value = .015
+    seam_width.inputs['To Min'].default_value = 0.0
+    seam_width.inputs['To Max'].default_value = 1.0
+    material.node_tree.links.new(panels.outputs['Distance'], seam_width.inputs['Value'])
+    fallback_panels = nodes.new('ShaderNodeMixRGB')
+    fallback_panels.inputs[1].default_value = tuple(c*.76 for c in fallback[:3]) + (1,)
+    material.node_tree.links.new(seam_width.outputs['Result'], fallback_panels.inputs[0])
+    material.node_tree.links.new(panel_tint.outputs['Color'], fallback_panels.inputs[2])
+
     mix = nodes.new('ShaderNodeMixRGB')
     mix.blend_type = 'MIX'
-    mix.inputs[1].default_value = fallback
-    material.node_tree.links.new(factor.outputs[0], mix.inputs[0])
+    material.node_tree.links.new(fallback_panels.outputs['Color'], mix.inputs[1])
+    material.node_tree.links.new(facing_factor.outputs[0], mix.inputs[0])
     material.node_tree.links.new(source.outputs['Color'], mix.inputs[2])
     material.node_tree.links.new(mix.outputs['Color'], bsdf.inputs['Base Color'])
 
-    texcoord_noise = nodes.new('ShaderNodeTexCoord')
-    noise = nodes.new('ShaderNodeTexNoise')
-    noise.inputs['Scale'].default_value = 6.0
-    noise.inputs['Detail'].default_value = 3.0
-    noise.inputs['Roughness'].default_value = .68
-    material.node_tree.links.new(texcoord_noise.outputs['Object'], noise.inputs['Vector'])
     rough_map = nodes.new('ShaderNodeMapRange')
     rough_map.inputs['From Min'].default_value = .15
     rough_map.inputs['From Max'].default_value = .85
@@ -147,7 +252,29 @@ def bake_material(name, reference, fallback, metallic, roughness, base_target):
     color_target.select = True
     for node in material.node_tree.nodes:
         if node != color_target: node.select = False
-    return material, bsdf, output_node, source
+    return material, bsdf, output_node, source, mix
+
+def bake_emission_source(material, output_node, color_socket, low, target):
+    """Bake a shader color directly, without diffuse lighting or view transforms."""
+    links = material.node_tree.links
+    surface = output_node.inputs['Surface']
+    original_surface = [link.from_socket for link in links if link.to_socket == surface]
+    if len(original_surface) != 1:
+        raise RuntimeError(f'Expected one surface shader before color bake; got {len(original_surface)}')
+    emission = material.node_tree.nodes.new('ShaderNodeEmission')
+    links.new(color_socket, emission.inputs['Color'])
+    for link in list(links):
+        if link.to_socket == surface:
+            links.remove(link)
+    links.new(emission.outputs['Emission'], surface)
+    try:
+        bake_pass('EMIT', low, None, material, target)
+    finally:
+        for link in list(links):
+            if link.to_socket == surface:
+                links.remove(link)
+        links.new(original_surface[0], surface)
+        material.node_tree.nodes.remove(emission)
 
 def selected_for_bake(active, high=None):
     bpy.ops.object.select_all(action='DESELECT')
@@ -265,16 +392,23 @@ for part in manifest['parts']:
     print('Preparing component ' + category, flush=True)
     image = bpy.data.images.load(part['reference_path'], check_existing=False)
     image.name = category + '_ColorReference'
-    image.pack()
     image_pixels = np.empty(image.size[0]*image.size[1]*4, dtype=np.float32)
     image.pixels.foreach_get(image_pixels)
     pixels = image_pixels.reshape(image.size[1], image.size[0], 4)
-    mask = np.max(pixels[:,:,:3], axis=2) < .985
-    rows, cols = np.where(mask)
-    if len(cols) < 1000: raise RuntimeError('Reference has no clear foreground: ' + part['reference_path'])
+    foreground = foreground_from_edge_connected_white(pixels[:,:,:3])
+    rows, cols = np.where(foreground)
+    if len(cols) < 1000: raise RuntimeError('Reference has no segmented foreground: ' + part['reference_path'])
     ref_box = (float(cols.min())/image.size[0], float(rows.min())/image.size[1],
                float(cols.max()+1)/image.size[0], float(rows.max()+1)/image.size[1])
-    del image_pixels, pixels, mask, rows, cols
+    mask_pixels = np.ones(image_pixels.size, dtype=np.float32)
+    mask_pixels.reshape(image.size[1], image.size[0], 4)[:,:,:3] = foreground[:,:,None].astype(np.float32)
+    foreground_mask = bpy.data.images.new(category + '_ForegroundMask', image.size[0], image.size[1], alpha=False, float_buffer=False)
+    foreground_mask.colorspace_settings.name = 'Non-Color'
+    foreground_mask.pixels.foreach_set(mask_pixels)
+    foreground_mask.pack()
+    image.pack()
+    print(f"Reference mask {category}: {foreground.mean():.1%} foreground", flush=True)
+    del image_pixels, pixels, mask_pixels, foreground, rows, cols
 
     high, low = clean_and_fit(part['mesh_path'], part)
     axes = tuple(part.get('projection_axes', (0, 1)))
@@ -287,11 +421,19 @@ for part in manifest['parts']:
                 'LandingGear':(.22,.24,.24,1), 'Drive':(.19,.21,.21,1)}[category]
     metal = {'Hull':.32, 'Wing':.27, 'LandingGear':.60, 'Drive':.66}[category]
     roughness = {'Hull':.68, 'Wing':.62, 'LandingGear':.55, 'Drive':.48}[category]
-    material, bsdf, output_node, source_node = bake_material(category + '_Projection', image, fallback, metal, roughness, base_atlas)
+    projection_a = Vector((0, 0, 0)); projection_a[axes[0]] = 1.0
+    projection_b = Vector((0, 0, 0)); projection_b[axes[1]] = 1.0
+    projection_normal = projection_a.cross(projection_b)
+    if part.get('projection_flip_u', False): projection_normal.negate()
+    material, bsdf, output_node, source_node, projected_color = bake_material(
+        category + '_Projection', image, foreground_mask, fallback, metal, roughness, base_atlas, projection_normal)
     high.data.materials.clear(); high.data.materials.append(material)
     low.data.materials.clear(); low.data.materials.append(material)
     set_bake_target(material, base_atlas)
-    bake_pass('DIFFUSE', low, high, material, base_atlas)
+    # Base color is data from the artwork, not a lighting result. Baking the
+    # diffuse pass was darkening and desaturating the projected paint. Emit
+    # the exact projected color into the target atlas instead.
+    bake_emission_source(material, output_node, projected_color.outputs['Color'], low, base_atlas)
 
     normal_target = new_image_node(material, 'Bake target: shared tangent normal atlas', normal_atlas)
     for node in material.node_tree.nodes: node.select = (node == normal_target)

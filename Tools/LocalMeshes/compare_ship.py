@@ -209,11 +209,24 @@ gap=14; cols=3; rows=math.ceil(len(cards)/cols)
 board=Image.new('RGB',(cols*PANEL+(cols+1)*gap,rows*(PANEL+64)+(rows+1)*gap),BG)
 for i,c in enumerate(cards): board.paste(c,(gap+(i%cols)*(PANEL+gap),gap+(i//cols)*(PANEL+64+gap)))
 board_path=out/'comparison-board.png';board.save(board_path)
+view_names=('Nose','Aft','Starboard','Port','Top','Bottom')
+view_cards=[]
+for view_name in view_names:
+    im=Image.open(out/f'Ship_View_{view_name}.png').convert('RGBA')
+    clean=Image.new('RGB',im.size,BG)
+    clean.paste(im,(0,0),im.getchannel('A'))
+    clean=clean.resize((PANEL,PANEL),Image.Resampling.LANCZOS)
+    view_cards.append(card('SHIP / '+view_name.upper(),clean,'Atlas-textured model view · '+view_name))
+view_board=Image.new('RGB',(3*PANEL+4*gap,2*(PANEL+64)+3*gap),BG)
+for i,c in enumerate(view_cards):
+    view_board.paste(c,(gap+(i%3)*(PANEL+gap),gap+(i//3)*(PANEL+64+gap)))
+view_board.save(out/'six-view-ship-board.png')
 (out/'comparison-metrics.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
 html_rows=[]
 for category,metrics in results.items():
     html_rows.append(f'<tr><th>{html.escape(category)}</th><td>{metrics.get("silhouette_iou",0):.3f}</td><td>{metrics.get("mesh_to_reference_area", "—")}</td><td>{metrics.get("mean_hue_error_degrees", "—")}</td><td>{metrics.get("mean_saturation_error_percentage_points", "—")}</td></tr>')
 color_links=''.join(f'<section><h2>{html.escape(category)} color error</h2><p>Hue map: green close, magenta high error. Saturation map: blue close, yellow high error.</p><img src="{html.escape(category)}_hue-error.png" alt="Hue difference"><img src="{html.escape(category)}_saturation-error.png" alt="Saturation difference"></section>' for category in (*[p['id'] for p in config['parts']],'ShipQuarter'))
-page=f'''<!doctype html><meta charset="utf-8"><title>Kestrel bake comparison</title><style>body{{background:#10161b;color:#e6edef;font:16px system-ui;margin:2rem}}img{{max-width:100%;height:auto}}section img{{width:min(48%,700px);image-rendering:auto}}table{{border-collapse:collapse;margin:1.5rem 0}}td,th{{border:1px solid #40515c;padding:.55rem .8rem;text-align:right}}th:first-child{{text-align:left}}.key{{color:#9eacb4}}</style><h1>Kestrel reference and bake check</h1><p class="key">Component images are independently centered and scaled to compare form. The ship overlay keeps all component offsets together. Magenta: concept; cyan: mesh; white: matching edges. Hue map: green close, magenta high error. Saturation map: blue close, yellow high error.</p><table><tr><th>View</th><th>Silhouette IoU</th><th>Area ratio</th><th>Mean hue error °</th><th>Saturation error pp</th></tr>{''.join(html_rows)}</table><img src="comparison-board.png" alt="Reference, baked mesh and edge overlays">{color_links}'''
+model_view_sections=''.join(f'<section><h2>{html.escape(name)} model views</h2>'+''.join(f'<figure><figcaption>{html.escape(view)}</figcaption><img src="{html.escape(name)}_View_{html.escape(view)}.png" alt="{html.escape(name)} from {html.escape(view)} view"></figure>' for view in view_names)+'</section>' for name in ('Ship',*[p['id'] for p in config['parts']]))
+page=f'''<!doctype html><meta charset="utf-8"><title>Kestrel bake comparison</title><style>body{{background:#10161b;color:#e6edef;font:16px system-ui;margin:2rem}}img{{max-width:100%;height:auto}}section img{{width:min(48%,700px);image-rendering:auto}}figure{{display:inline-block;vertical-align:top;width:min(30%,480px);margin:1rem}}figure img{{width:100%}}table{{border-collapse:collapse;margin:1.5rem 0}}td,th{{border:1px solid #40515c;padding:.55rem .8rem;text-align:right}}th:first-child{{text-align:left}}.key{{color:#9eacb4}}</style><h1>Kestrel reference and bake check</h1><p class="key">Component images are independently centered and scaled to compare form. The ship overlay keeps all component offsets together. Magenta: concept; cyan: mesh; white: matching edges. Hue map: green close, magenta high error. Saturation map: blue close, yellow high error. Six-direction model views show the produced atlas from Nose, Aft, Starboard, Port, Top, and Bottom.</p><table><tr><th>View</th><th>Silhouette IoU</th><th>Area ratio</th><th>Mean hue error °</th><th>Saturation error pp</th></tr>{''.join(html_rows)}</table><img src="comparison-board.png" alt="Reference, baked mesh and edge overlays"><h2>Assembled ship from six directions</h2><img src="six-view-ship-board.png" alt="Ship atlas from six directions">{model_view_sections}{color_links}'''
 (out/'index.html').write_text(page,encoding='utf-8')
 print(f'Wrote comparison board: {board_path}')

@@ -65,6 +65,25 @@ def render(path):
     scene.render.filepath = str(path)
     bpy.ops.render.render(write_still=True)
 
+def render_directional(center, extent, direction, up, filename):
+    back = Vector(direction).normalized()
+    up = Vector(up).normalized()
+    right = up.cross(back).normalized()
+    camera_up = back.cross(right).normalized()
+    camera.location = center + back * extent * 2.2
+    camera.rotation_euler = Matrix((right, camera_up, back)).transposed().to_quaternion().to_euler()
+    camera_data.ortho_scale = extent * 1.2
+    render(out / filename)
+
+views = [
+    ('Nose', (1,0,0), (0,1,0)),
+    ('Aft', (-1,0,0), (0,1,0)),
+    ('Starboard', (0,0,1), (0,1,0)),
+    ('Port', (0,0,-1), (0,1,0)),
+    ('Top', (0,1,0), (0,0,1)),
+    ('Bottom', (0,-1,0), (0,0,-1)),
+]
+
 parts = [obj for obj in scene.objects if obj.type == 'MESH' and '_LOD0' in obj.name]
 if not parts:
     raise RuntimeError('No LOD0 meshes in the saved ship build')
@@ -103,6 +122,12 @@ for part in manifest['parts']:
     if part.get('projection_flip_u', False): axis_a = tuple(-v for v in axis_a)
     camera_for_axes(center, axis_a, axis_vectors[axes[1]], dimensions)
     render(out / f'{category}_atlas.png')
+    # Produce true atlas-textured model views from all six principal axes.
+    # These are model-relative captures, so remaining surfaces can be
+    # inspected even when the concept supplies only one camera angle.
+    for view_name, direction, up in views:
+        render_directional(center, max(dimensions), direction, up,
+                           f'{category}_View_{view_name}.png')
     pose = original_poses[obj.name]
     obj.location, obj.rotation_euler, obj.scale, obj.hide_render = pose
     bpy.context.view_layer.update()
@@ -130,6 +155,9 @@ render(out / 'ShipQuarter_atlas.png')
 # Plan view is from above the ship (world +Y) with nose kept on the left.
 camera_for_axes(center, (-1,0,0), (0,0,1), dimensions)
 render(out / 'ShipPlan_atlas.png')
+for view_name, direction, up in views:
+    render_directional(center, max(dimensions), direction, up,
+                       f'Ship_View_{view_name}.png')
 
 # Blender opened a disposable process: restore materials anyway so this script
 # stays safe if reused interactively.

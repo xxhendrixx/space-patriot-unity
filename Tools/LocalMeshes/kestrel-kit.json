@@ -48,9 +48,9 @@
       "projection_axes": [0, 1],
       "uv_angle_degrees": 42,
       "instances": [
-        { "name": "Gear_Nose", "position": [8.0, 1.35, 0], "rotation": [0, 0, 0] },
-        { "name": "Gear_Port", "position": [-4.2, 1.35, 2.8], "rotation": [0, 0, 8] },
-        { "name": "Gear_Starboard", "position": [-4.2, 1.35, -2.8], "rotation": [0, 0, -8] }
+        { "name": "Gear_Nose", "position": [8.0, -0.85, 0], "rotation": [0, 0, 0] },
+        { "name": "Gear_Port", "position": [-4.2, -0.85, 2.8], "rotation": [0, 0, 8] },
+        { "name": "Gear_Starboard", "position": [-4.2, -0.85, -2.8], "rotation": [0, 0, -8] }
       ]
     },
     {
@@ -62,8 +62,8 @@
       "rotation": [0, 0, 0],
       "uv_angle_degrees": 42,
       "instances": [
-        { "name": "Drive_Port", "position": [-12.3, 5.9, 4.4], "rotation": [0, 180, 0] },
-        { "name": "Drive_Starboard", "position": [-12.3, 5.9, -4.4], "rotation": [0, 180, 0] }
+        { "name": "Drive_Port", "position": [-7.2, 4.6, 2.8], "rotation": [0, 180, 0] },
+        { "name": "Drive_Starboard", "position": [-7.2, 4.6, -2.8], "rotation": [0, 180, 0] }
       ]
     }
   ]
