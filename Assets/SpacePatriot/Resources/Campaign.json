@@ -1,0 +1,550 @@
+{
+  "arcs": [
+    {
+      "id": "water",
+      "title": "The Water Ledger",
+      "speaker": "Ivo Rook",
+      "requires": [],
+      "brief": "Someone is buying water for people who no longer exist. Twelve manifests, twelve dead captains, every payment cleared by the same New York office. Rook has been hauling the tanks without asking questions. Last night a girl in the freight queue called him by one of those dead captains’ names. He wants to know who taught her.",
+      "steps": [
+        {
+          "kind": "terminal",
+          "world": "Earth",
+          "objective": "Read a city operations terminal on Earth",
+          "report": "The manifests are genuine. The names are borrowed. A clerk has been routing subsidized shipments through dead accounts to keep an unregistered Martian district alive. The discrepancy is not where the water went; it is who sold the district’s right to buy it.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "delivery",
+          "world": "Mars",
+          "objective": "Deliver four organics at a Martian port",
+          "report": "The cargo includes membrane cultures for the district’s failing water filters. Rook expected a smuggler. The receiver is a schoolteacher, her register written on the reverse of an eviction notice. “Put their real names on your next invoice,” she says. “If you can afford to.”",
+          "good": "organics",
+          "units": 4
+        },
+        {
+          "kind": "terminal",
+          "world": "Earth",
+          "objective": "Return to Earth and read the account authority",
+          "report": "Helix bought the concession legally. The Union approved it quietly. Publishing only one signature would make a useful scandal and leave the contract intact. Publishing the whole chain will embarrass the people offering to protect you.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "Publish the complete ledger",
+          "faction": "union",
+          "standing": 12,
+          "credits": 650,
+          "ending": "The ledger is public, including the Union signatures. Emergency filter supplies reach Mars. Rook starts using his own name on manifests again.",
+          "market": {
+            "world": "Mars",
+            "good": "organics",
+            "stock": 45
+          }
+        },
+        {
+          "label": "Sell the concession back to its residents",
+          "faction": "helix",
+          "standing": 10,
+          "credits": 1100,
+          "ending": "You broker a private transfer. The school keeps its water, Helix keeps the rest of its books closed, and Rook keeps a copy of every signature.",
+          "market": {
+            "world": "Mars",
+            "good": "organics",
+            "stock": 24
+          }
+        }
+      ]
+    },
+    {
+      "id": "orchard",
+      "title": "The Orchard That Remembers",
+      "speaker": "Dr. Mara Sol",
+      "requires": [],
+      "brief": "A grove on TRAPPIST-1 e has grown around a survey stake placed only six days ago. The tree rings say forty years. Mara does not believe in prophetic trees. She does believe that someone has changed the dating standard—and that the colony’s food contracts were priced using the old one.",
+      "steps": [
+        {
+          "kind": "sample",
+          "world": "TRAPPIST-1 e",
+          "objective": "Collect a surface sample on TRAPPIST-1 e · N",
+          "report": "The grove is layered. Older tissue shelters younger shoots from the host star’s activity. The stake did not age the tree. It punctured a living archive, and a contractor called the resulting growth contamination.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "TRAPPIST-1 f",
+          "objective": "Read a laboratory terminal on TRAPPIST-1 f",
+          "report": "The laboratory stores the same growth pattern under a patent number. A technician’s note names her mother as the original collector. Her mother’s citizenship was revoked before the patent was filed.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "delivery",
+          "world": "TRAPPIST-1 e",
+          "objective": "Deliver four organics to the habitat seed bank",
+          "report": "Mara can keep a protected sample alive, but protection is also a claim of ownership. The settlers ask for cultures they can propagate themselves. The lab asks you to keep them sterile.",
+          "good": "organics",
+          "units": 4
+        }
+      ],
+      "choices": [
+        {
+          "label": "Open the seed archive to every habitat",
+          "faction": "union",
+          "standing": 14,
+          "credits": 850,
+          "ending": "The culture instructions travel with the samples. No faction can revoke a seed that has already been planted. Mara keeps the collector’s name on the record.",
+          "market": {
+            "world": "TRAPPIST-1 e",
+            "good": "organics",
+            "stock": 60
+          }
+        },
+        {
+          "label": "Fund a guarded research reserve",
+          "faction": "helix",
+          "standing": 12,
+          "credits": 1300,
+          "ending": "The reserve receives power and trained staff. Its gates also receive locks. Mara accepts the funding and insists that the collector’s descendants hold a key.",
+          "market": {
+            "world": "TRAPPIST-1 f",
+            "good": "crystal",
+            "stock": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "furnace",
+      "title": "A Sun Inside the Invoice",
+      "speaker": "Leonie Park, thermal auditor",
+      "requires": [],
+      "brief": "A refinery bills three systems for cooling the same tonne of metal. Leonie calls that fraud. Her employer calls it a shared thermal obligation. A maintenance crew on WASP-76 b calls it the reason their next shift may not come home.",
+      "steps": [
+        {
+          "kind": "station",
+          "world": "WASP-76 b",
+          "objective": "Reach the WASP-76 b orbital habitat",
+          "report": "The heat balance does not close. A reserve radiator is listed as operational, but the maintenance record says it was sold six months ago. The replacement serial belongs to a reactor controller on K2-141 b.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "power",
+          "world": "K2-141 b",
+          "objective": "Bring a city reactor online on K2-141 b",
+          "report": "The controller contains two calibration tables. One keeps equipment alive; the other meets the export quota. Leonie’s supervisor signed the quota table while his own family was on the safe shift.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "WASP-76 b",
+          "objective": "Read the refinery audit at a WASP-76 b city terminal",
+          "report": "The crews want a shutdown and back pay. The outer habitats need this refinery’s output. Leonie will sign either order if you attach your name beside hers. She refuses to sign a third excuse.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "Suspend the quota and release the evidence",
+          "faction": "union",
+          "standing": 10,
+          "credits": 950,
+          "ending": "Emergency stock buys the crews a maintenance window. Output falls, but the hidden calibration stops deciding who gets to live through a shift.",
+          "market": {
+            "world": "WASP-76 b",
+            "good": "ore",
+            "stock": -35
+          }
+        },
+        {
+          "label": "Finance the repair without stopping exports",
+          "faction": "helix",
+          "standing": 14,
+          "credits": 1600,
+          "ending": "The Compact funds replacement equipment and pays the crews. The quota survives. Leonie makes the repaired controller transmit its real readings to an open channel.",
+          "market": {
+            "world": "K2-141 b",
+            "good": "ore",
+            "stock": 45
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing",
+      "title": "The Passenger in the Cargo Hold",
+      "speaker": "Tamsin Cho, dock physician",
+      "requires": [
+        "water"
+      ],
+      "brief": "A freighter arrived at TOI-270 c with forty-one life-support allocations and forty passengers. Its captain insists the missing allocation belongs to spare parts. Tamsin has heard those spare parts singing through the quarantine wall. The voice knows a childhood song that was never broadcast off Earth.",
+      "steps": [
+        {
+          "kind": "station",
+          "world": "TOI-270 c",
+          "objective": "Reach the quarantine habitat at TOI-270 c",
+          "report": "There is no hidden passenger. The “voice” is a medical archive assembled from colonists who sold memory recordings to pay for passage. One recording has identified the physician who falsified their consent forms.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "TOI-270 b",
+          "objective": "Read the consent register on TOI-270 b",
+          "report": "The forged forms share the concession office from the water ledger. Rook recognizes its witness code. He signed one of the forms before he knew what the company would do with it.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "delivery",
+          "world": "TOI-270 c",
+          "objective": "Deliver four crystals for an independent archive copy",
+          "report": "The archive asks for storage that can leave quarantine. Tamsin refuses to call a collection of voices a person on command, and refuses to erase it on command either. A copy will let the affected families answer for themselves.",
+          "good": "crystal",
+          "units": 4
+        }
+      ],
+      "choices": [
+        {
+          "label": "Give custody to the recorded families",
+          "faction": "union",
+          "standing": 16,
+          "credits": 1200,
+          "ending": "Families receive copies and the right to withdraw their own recordings. Some preserve them. Some delete them. For the first time, the archive’s silence is a choice.",
+          "market": {
+            "world": "TOI-270 c",
+            "good": "crystal",
+            "stock": 20
+          }
+        },
+        {
+          "label": "Grant independent custody to the archive",
+          "faction": "redwake",
+          "standing": 16,
+          "credits": 1500,
+          "ending": "You route the copy through independent ships. The archive chooses a callsign: Forty-One. Tamsin keeps the consent hearing open, including the difficult questions.",
+          "market": {
+            "world": "TOI-270 c",
+            "good": "crystal",
+            "stock": 35
+          }
+        }
+      ]
+    },
+    {
+      "id": "relay",
+      "title": "The Quiet Between Storms",
+      "speaker": "Jun Mercer, relay keeper",
+      "requires": [
+        "orchard"
+      ],
+      "brief": "TRAPPIST-1 g loses a weather relay every time the same convoy leaves port. The official explanation is stellar interference. Jun has serviced those relays for twenty years. Interference, he says, does not wait for the cargo doors to close.",
+      "steps": [
+        {
+          "kind": "power",
+          "world": "TRAPPIST-1 g",
+          "objective": "Restore a city reactor feed on TRAPPIST-1 g",
+          "report": "The backup feed reveals a narrow transmission window. The convoy uses storm outages to conceal a route to unlicensed habitats. The people cutting power say the licensed routes charge more than those habitats can pay.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "combat",
+          "world": "TRAPPIST-1 g",
+          "objective": "Defeat a hostile combatant in a TRAPPIST-1 g encounter",
+          "report": "The recovered orders instruct the raiders to destroy antennas, not cargo. Someone bought their discipline. Jun recognizes the payment schedule: it is his own missing maintenance budget.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "TRAPPIST-1 e",
+          "objective": "Read the relay procurement records on TRAPPIST-1 e",
+          "report": "The evidence connects the patented orchard, the relay budget, and an insurance fund that profits when remote settlements cannot prove a storm warning was withheld.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "Publish a free warning network",
+          "faction": "union",
+          "standing": 14,
+          "credits": 1300,
+          "ending": "The habitats receive independent warnings. Smugglers can read them too. Jun would rather broadcast to a thief than let a child miss the evacuation order.",
+          "market": {
+            "world": "TRAPPIST-1 g",
+            "good": "crystal",
+            "stock": 35
+          }
+        },
+        {
+          "label": "Negotiate protected independent routes",
+          "faction": "redwake",
+          "standing": 20,
+          "credits": 1700,
+          "ending": "Independent captains stop cutting relays in exchange for access to the public forecast. Jun logs the agreement under maintenance, where nobody can pretend it was charity.",
+          "market": {
+            "world": "TRAPPIST-1 g",
+            "good": "organics",
+            "stock": 40
+          }
+        }
+      ]
+    },
+    {
+      "id": "mirror",
+      "title": "The Mirror Fleet",
+      "speaker": "Seren Vale",
+      "requires": [
+        "furnace"
+      ],
+      "brief": "Neptune’s approach radar has counted the same freighter entering port three times in one minute. The pilots blame reflections. Vale has found three matching freight payments. Someone has taught an accounting system to believe in ghosts.",
+      "steps": [
+        {
+          "kind": "station",
+          "world": "Neptune",
+          "objective": "Reach Neptune’s orbital traffic station",
+          "report": "The ghost tracks are old distress telemetry, replayed with new transponders. The missing radiator from Leonie’s audit travelled aboard one of these supposed ships. A salvage cooperative has been collecting docking fees for wrecks.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "delivery",
+          "world": "Earth",
+          "objective": "Deliver four ore to Earth’s replacement-parts pool",
+          "report": "The cooperative used the fees to fabricate parts for abandoned rescue beacons. It also sold the best parts to the highest bidder. Vale refuses to let either fact erase the other.",
+          "good": "ore",
+          "units": 4
+        },
+        {
+          "kind": "delivery",
+          "world": "Neptune",
+          "objective": "Deliver four ore for Neptune’s rescue-beacon repairs",
+          "report": "Live beacon power separates the genuine distress traffic from the forged fleet. One real ship is still out there. Its last manifest lists the clerk who opened the dead water accounts.",
+          "good": "ore",
+          "units": 4
+        }
+      ],
+      "choices": [
+        {
+          "label": "Put the rescue beacons in public trust",
+          "faction": "union",
+          "standing": 18,
+          "credits": 1450,
+          "ending": "The cooperatives keep their workshops under an audited rescue charter. Vale orders the live distress channel to stay open through the hearing.",
+          "market": {
+            "world": "Neptune",
+            "good": "ore",
+            "stock": 35
+          }
+        },
+        {
+          "label": "Keep the cooperative independent with restitution",
+          "faction": "redwake",
+          "standing": 14,
+          "credits": 1850,
+          "ending": "The cooperative repays the forged fees in parts and publishes its beacon map. Independent captains defend the workshops. The falsified records remain evidence.",
+          "market": {
+            "world": "Neptune",
+            "good": "ore",
+            "stock": 50
+          }
+        }
+      ]
+    },
+    {
+      "id": "witness",
+      "title": "A Name No One Can Sell",
+      "speaker": "Forty-One / Ivo Rook",
+      "requires": [
+        "missing",
+        "mirror"
+      ],
+      "brief": "The water clerk survived. Her testimony is distributed across a damaged recorder, the passenger archive, and Rook’s memory of a dock he would rather forget. Each witness can prove one part. None can prove the whole transaction alone.",
+      "steps": [
+        {
+          "kind": "terminal",
+          "world": "Mars",
+          "objective": "Recover the district’s original registry on Mars",
+          "report": "The district was not abandoned by accident. Its debt was packaged with rights to its residents’ medical records and the salvage value of its supply fleet. The same names appear in all three ledgers.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "station",
+          "world": "TOI-270 c",
+          "objective": "Meet the custodians of the passenger archive",
+          "report": "Forty-One offers the missing timestamp but asks that the families’ recordings remain outside the evidence package. Rook offers his own testimony instead. It is weaker evidence and a risk he finally takes himself.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "Earth",
+          "objective": "Prepare the public hearing record on Earth",
+          "report": "The hearing can win a quick conviction by exposing private recordings, or establish a narrower case using voluntary testimony. The residents ask to attend as witnesses, not as data.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "Use only testimony its owners volunteer",
+          "faction": "union",
+          "standing": 22,
+          "credits": 1800,
+          "ending": "The case takes longer. Some counts fail. The concession itself is voided, and the witnesses leave with the rights the prosecution promised to defend.",
+          "market": {
+            "world": "Mars",
+            "good": "organics",
+            "stock": 55
+          }
+        },
+        {
+          "label": "Release the full archive under protected review",
+          "faction": "helix",
+          "standing": 8,
+          "credits": 2300,
+          "ending": "The review convicts more officials and seals the records afterward. Forty-One records every access request. Trust returns slowly, even where the judgment is welcomed.",
+          "market": {
+            "world": "Earth",
+            "good": "crystal",
+            "stock": 40
+          }
+        }
+      ]
+    },
+    {
+      "id": "assembly",
+      "title": "The Night Shift Assembly",
+      "speaker": "Leonie Park / Jun Mercer",
+      "requires": [
+        "relay",
+        "furnace"
+      ],
+      "brief": "Refinery crews, relay keepers, growers, and independent captains have called an assembly. None trusts the others to write the charter. Each has also kept someone else alive without being paid. Their first argument is over who gets to turn the lights on.",
+      "steps": [
+        {
+          "kind": "delivery",
+          "world": "K2-141 b",
+          "objective": "Deliver four crystals for the assembly’s independent power bus",
+          "report": "The bus removes the host refinery’s ability to cut the meeting short. Leonie takes the first night shift. Jun arrives with weather logs, not a speech.",
+          "good": "crystal",
+          "units": 4
+        },
+        {
+          "kind": "terminal",
+          "world": "TRAPPIST-1 g",
+          "objective": "Read the habitat warning charter on TRAPPIST-1 g",
+          "report": "The warning network has outgrown its original bargain. Smaller settlements need representation before the large ports sell priority access back to them.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "station",
+          "world": "WASP-76 b",
+          "objective": "Carry the charter to the refinery habitat",
+          "report": "The workers want guaranteed maintenance. The captains want open docks. The growers want reproducible seed. The Compact offers to enforce every guarantee if it owns the switchboard.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "Ratify a distributed habitat charter",
+          "faction": "union",
+          "standing": 20,
+          "credits": 2000,
+          "ending": "Each habitat controls its local bus; the shared network must publish its tariffs. Disputes remain, but no single switch can silence the assembly.",
+          "market": {
+            "world": "K2-141 b",
+            "good": "crystal",
+            "stock": 55
+          }
+        },
+        {
+          "label": "Create an independent captains’ mutual",
+          "faction": "redwake",
+          "standing": 22,
+          "credits": 2400,
+          "ending": "The captains insure repairs and warning relays collectively. The smallest habitats receive voting shares before the richest ships do. Jun makes that line the first test of the agreement.",
+          "market": {
+            "world": "TRAPPIST-1 g",
+            "good": "organics",
+            "stock": 60
+          }
+        }
+      ]
+    },
+    {
+      "id": "patriot",
+      "title": "What the Flag Is For",
+      "speaker": "Seren Vale",
+      "requires": [
+        "witness",
+        "assembly"
+      ],
+      "brief": "The frontier has your records, your supply routes, and your compromises. Now every faction wants to put its flag on them. Vale offers a hangar for the signing. “Pick a symbol if you like,” she says. “But tell the night shift what it will do when the next pump fails.”",
+      "steps": [
+        {
+          "kind": "delivery",
+          "world": "Mars",
+          "objective": "Deliver four organics to the first district you helped",
+          "report": "The schoolteacher has kept the first invoice. This one has the real residents’ names. She asks you to take a copy to the signing, beside the speeches and the casualty lists.",
+          "good": "organics",
+          "units": 4
+        },
+        {
+          "kind": "power",
+          "world": "Earth",
+          "objective": "Bring an Earth city reactor feed online for the meeting",
+          "report": "The meeting starts while the public maintenance display is still open. A technician asks the delegates to move their chairs away from the service hatch. They do.",
+          "good": "",
+          "units": 0
+        },
+        {
+          "kind": "terminal",
+          "world": "Earth",
+          "objective": "Open the final charter at an Earth city terminal",
+          "report": "Your earlier decisions remain in the journal: who received the seeds, who kept custody of the voices, who paid for repairs. A flag cannot turn those choices into a cleaner story. It can make a promise about the next one.",
+          "good": "",
+          "units": 0
+        }
+      ],
+      "choices": [
+        {
+          "label": "A frontier with public services and open records",
+          "faction": "union",
+          "standing": 25,
+          "credits": 3200,
+          "ending": "The charter funds common rescue, water, warning, and repair services. The signatories keep their factions. The terminals keep their audit logs. Space Patriot continues in a frontier that remembers what your crew changed.",
+          "market": {
+            "world": "Earth",
+            "good": "organics",
+            "stock": 90
+          }
+        },
+        {
+          "label": "A frontier of independent, mutually bound habitats",
+          "faction": "redwake",
+          "standing": 25,
+          "credits": 3500,
+          "ending": "The habitats own their local systems and guarantee reciprocal aid. No captain may collect a rescue debt from a child. The first test is already blinking on the maintenance display.",
+          "market": {
+            "world": "Earth",
+            "good": "ore",
+            "stock": 90
+          }
+        }
+      ]
+    }
+  ]
+}

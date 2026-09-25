@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Space Patriot — The Long Debt</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#081115;color:#dbdcd0;font:14px Arial,sans-serif}body{height:100vh;display:flex;flex-direction:column}header{height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 25px;border-bottom:1px solid #28363a;font-size:11px;letter-spacing:2px}header b{color:#dfa267}button{color:#cad3cf;background:#16252a;border:1px solid #34434a;padding:8px 14px;font:inherit;cursor:pointer}button:hover{background:#304348}main{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}canvas{display:block;background:#081115;width:min(100vw,calc((100vh - 78px)*1.6));height:min(62.5vw,calc(100vh - 78px));outline:none}footer{height:30px;text-align:center;flex:none;font-size:11px;color:#849697;letter-spacing:.6px;padding:8px}#loading{position:absolute;inset:0;display:grid;place-content:center;text-align:left;background:#081115}#loading h1{font-size:clamp(40px,6vw,76px);line-height:1;letter-spacing:-3px;margin:24px 0}#loading small{color:#dfa267;letter-spacing:3px}#track{height:3px;width:360px;background:#26363b;margin:28px 0 14px}#bar{height:100%;width:0;background:#dfa267}#status{color:#93a5a5;font-size:12px}#error{max-width:420px;line-height:1.7;color:#f0ae77;display:none}
+</style></head><body>
+<header><span><b>SP / 07</b> &nbsp; SPACE PATRIOT · FRONTIER BUILD</span><button id="fullscreen" type="button">FULLSCREEN</button></header>
+<main><canvas id="game" width="1440" height="900" tabindex="0" aria-label="Space Patriot 3D game"></canvas>
+<div id="loading"><small>FRONTIER SERVICE / 07</small><h1>SPACE<br>PATRIOT</h1><div id="track"><div id="bar"></div></div><div id="status">Preparing your ship…</div><p id="error"></p></div></main>
+<footer>Keyboard & mouse · Esc opens the flight computer · Progress saves in this browser</footer>
+<script src="Build/{{{ LOADER_FILENAME }}}"></script><script>
+const canvas=document.querySelector('#game');let game;
+const config={dataUrl:'Build/{{{ DATA_FILENAME }}}',frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',codeUrl:'Build/{{{ CODE_FILENAME }}}',streamingAssetsUrl:'StreamingAssets',companyName:'Space Patriot',productName:'Space Patriot',productVersion:'0.1.0',devicePixelRatio:1,matchWebGLToCanvasSize:false};
+createUnityInstance(canvas,config,p=>{document.querySelector('#bar').style.width=(p*100)+'%';document.querySelector('#status').textContent=p<.9?'Loading frontier systems · '+Math.round(p*100)+'%':'Starting the frontier…'}).then(instance=>{game=instance;document.querySelector('#loading').style.display='none';canvas.focus()}).catch(error=>{console.error(error);document.querySelector('#error').style.display='block';document.querySelector('#error').textContent='The game could not start. Reload this page in a browser with hardware acceleration enabled.';document.querySelector('#status').textContent='Launch interrupted';});
+document.querySelector('#fullscreen').addEventListener('click',()=>{if(game)game.SetFullscreen(1)});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());canvas.addEventListener('pointerdown',()=>canvas.focus());
+</script></body></html>

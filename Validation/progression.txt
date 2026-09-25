@@ -1,0 +1,1 @@
+PASS: 19 worlds; 9 cases; 27 objective references; invalid-event guards; cargo requirements and consumption; one-time rewards; dependency gates; save roundtrip; complete campaign traversal.
