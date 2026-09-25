@@ -11,6 +11,11 @@ namespace SpacePatriot
         const float AngleStep=2*Mathf.PI/LongitudeCount;
         public WorldworksTerrain terrainFields;
         public Grassworks grass;
+        Mesh streamedTerrainMesh;
+        Transform streamedTerrainRoot;
+        Material terrainMaterial;
+        Vector2 streamedTerrainAnchor;
+        bool streamedTerrainWalking;
         public Vector3 PlanetCenter=>new Vector3(0,-PlanetRadius-3,0);
         float PlanetwideRelief(Vector3 normal)
         {
@@ -93,8 +98,39 @@ namespace SpacePatriot
             for(int j=0;j<LongitudeCount;j++)Tri(vertices.Count-1,1+(rings-1)*LongitudeCount+j,1+(rings-1)*LongitudeCount+(j+1)%LongitudeCount);
             var mesh=new Mesh{name=info.name+" / continuous Worldworks planet",indexFormat=IndexFormat.UInt32};mesh.SetVertices(vertices);mesh.SetColors(colors);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);mesh.RecalculateNormals();mesh.RecalculateBounds();generatedAssets.Add(mesh);
             var source=Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?5:info.biome=="ice"?10:info.biome=="volcanic"?14:info.biome=="temperate"?6:8));
-            var mat=new Material(Resources.Load<Shader>("Shaders/WorldworksPlanet"));mat.SetTexture("_GroundMap",source.GetTexture("_BaseMap"));mat.SetTexture("_RockMap",Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?1:info.biome=="ice"?9:2)).GetTexture("_BaseMap"));mat.SetFloat("_Living",info.biome=="temperate"?1:0);mat.SetFloat("_Seed",info.seed%997);generatedAssets.Add(mat);
-            var ground=MeshObject("Continuous spherical terrain",content,mesh,mat,Vector3.zero,Vector3.one);ground.AddComponent<MeshCollider>().sharedMesh=mesh;
+            terrainMaterial=new Material(Resources.Load<Shader>("Shaders/WorldworksPlanet"));terrainMaterial.SetTexture("_GroundMap",source.GetTexture("_BaseMap"));terrainMaterial.SetTexture("_RockMap",Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?1:info.biome=="ice"?9:2)).GetTexture("_BaseMap"));terrainMaterial.SetFloat("_Living",info.biome=="temperate"?1:0);terrainMaterial.SetFloat("_Seed",info.seed%997);generatedAssets.Add(terrainMaterial);
+            var ground=MeshObject("Continuous spherical terrain",content,mesh,terrainMaterial,Vector3.zero,Vector3.one);ground.AddComponent<MeshCollider>().sharedMesh=mesh;
+        }
+        public void StreamSurface(Vector3 focus,bool walking)
+        {
+            if(info==null||info.biome=="gas"||Mathf.Abs(focus.y-Height(focus.x,focus.z))>650||new Vector2(focus.x,focus.z).magnitude>PlanetRadius*.94f)
+            {if(streamedTerrainRoot)streamedTerrainRoot.gameObject.SetActive(false);return;}
+            float recenter=walking?120:1200;
+            if(streamedTerrainMesh&&streamedTerrainWalking==walking&&Vector2.Distance(new Vector2(focus.x,focus.z),streamedTerrainAnchor)<recenter)
+            {if(!streamedTerrainRoot.gameObject.activeSelf)streamedTerrainRoot.gameObject.SetActive(true);return;}
+            BuildStreamedSurface(focus,walking);
+        }
+        void BuildStreamedSurface(Vector3 focus,bool walking)
+        {
+            const float halfSize=6000,offset=.035f;int segments=walking?192:96,side=segments+1,count=side*side;
+            var vertices=new Vector3[count];var colors=new Color[count];var uvs=new Vector2[count];var triangles=new int[segments*segments*6];
+            float Spread(float value)=>Mathf.Sign(value)*Mathf.Pow(Mathf.Abs(value),2.1f);
+            for(int z=0;z<side;z++)
+            {
+                float localZ=Spread(z/(float)segments*2-1)*halfSize;
+                for(int x=0;x<side;x++)
+                {
+                    float localX=Spread(x/(float)segments*2-1)*halfSize;float worldX=focus.x+localX,worldZ=focus.z+localZ;
+                    int k=z*side+x;float y=Height(worldX,worldZ)+offset;vertices[k]=new Vector3(localX,y-focus.y,localZ);
+                    colors[k]=GlobeColor((new Vector3(worldX,y,worldZ)-PlanetCenter).normalized);uvs[k]=new Vector2(1,0);
+                }
+            }
+            int t=0;for(int z=0;z<segments;z++)for(int x=0;x<segments;x++)
+            {int a=z*side+x,b=a+1,c=a+side,d=c+1;triangles[t++]=a;triangles[t++]=c;triangles[t++]=b;triangles[t++]=b;triangles[t++]=c;triangles[t++]=d;}
+            var next=new Mesh{name=info.name+" / streamed Worldworks terrain",indexFormat=IndexFormat.UInt32};next.vertices=vertices;next.colors=colors;next.uv=uvs;next.triangles=triangles;next.RecalculateNormals();next.RecalculateBounds();
+            if(!streamedTerrainRoot){streamedTerrainRoot=new GameObject("Worldworks / moving terrain patch").transform;streamedTerrainRoot.SetParent(transform,false);var filter=streamedTerrainRoot.gameObject.AddComponent<MeshFilter>();var renderer=streamedTerrainRoot.gameObject.AddComponent<MeshRenderer>();renderer.sharedMaterial=terrainMaterial;renderer.shadowCastingMode=ShadowCastingMode.Off;renderer.receiveShadows=true;}
+            streamedTerrainRoot.localPosition=new Vector3(focus.x,focus.y,focus.z);streamedTerrainRoot.GetComponent<MeshFilter>().sharedMesh=next;
+            if(streamedTerrainMesh)Destroy(streamedTerrainMesh);streamedTerrainMesh=next;streamedTerrainAnchor=new Vector2(focus.x,focus.z);streamedTerrainWalking=walking;streamedTerrainRoot.gameObject.SetActive(true);
         }
     }
 }

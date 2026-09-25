@@ -121,6 +121,7 @@ namespace SpacePatriot
             if(Down(Key.F11))ToggleDesktopFullscreen();
             float fit=Mathf.Min(Screen.width/1440f,Screen.height/900f);float rw=1440*fit/Screen.width,rh=900*fit/Screen.height;view.rect=new Rect((1-rw)/2,(1-rh)/2,rw,rh);view.aspect=1.6f;
             world.Atmosphere(view,ship.position.y-world.Deck);
+            world.StreamSurface(walking&&!aboard?walkPosition:ship.position,walking&&!aboard);
             if(Time.frameCount%8==0)UpdateInstruments();
             if(Down(Key.Escape)||Gamepad.current?.startButton.wasPressedThisFrame==true)
             {

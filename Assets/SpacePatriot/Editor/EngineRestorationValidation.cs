@@ -8,6 +8,18 @@ using Object=UnityEngine.Object;
 public static class EngineRestorationValidation
 {
     static void Check(bool ok,string message,List<string> lines){if(!ok)throw new Exception(message);lines.Add("PASS: "+message);}
+    public static void Streaming()
+    {
+        var g=FrontierGame.Instance;if(g==null)throw new Exception("Enter Play mode first");var lines=new List<string>();
+        var focus=g.ship.position+new Vector3(200,0,0);focus.y=g.world.Height(focus.x,focus.z)+2;
+        g.world.StreamSurface(focus,true);var patch=GameObject.Find("Worldworks / moving terrain patch");var mesh=patch?patch.GetComponent<MeshFilter>()?.sharedMesh:null;
+        Check(mesh!=null&&mesh.vertexCount==193*193,"On-foot streamed terrain has 193 x 193 samples",lines);
+        Check(Mathf.Abs(patch.transform.localPosition.x-focus.x)<.01f&&Mathf.Abs(patch.transform.localPosition.z-focus.z)<.01f,"Terrain patch recenters on its requested player position",lines);
+        int center=(mesh.vertexCount/2);float renderedHeight=patch.transform.position.y+mesh.vertices[center].y;
+        Check(Mathf.Abs(renderedHeight-(g.world.Height(focus.x,focus.z)+.035f))<.02f,"Patch center follows the active Worldworks height query",lines);
+        Check(patch.GetComponent<MeshCollider>()==null,"Streamed patch renders over the existing planet height/collision system",lines);
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/world-streaming.txt",lines);Debug.Log("WORLD_STREAMING_PASS "+lines.Count);
+    }
     public static void Run()
     {
         var g=FrontierGame.Instance;if(g==null)throw new Exception("Enter Play mode first");var lines=new List<string>();
@@ -24,6 +36,8 @@ public static class EngineRestorationValidation
         Check(worst<.025f,"Rendered terrain / walking height agreement: "+worst.ToString("F5")+" m",lines);
         Vector3 meadow=FindMeadow(g.world);for(int i=0;i<10;i++)g.world.grass.UpdateAround(meadow);
         Check(g.world.grass.BladeCount>1000&&g.world.grass.BladeCount<=Grassworks.MaximumTiles*Grassworks.BladesPerTile,"Grassworks grows bounded terrain-rooted blades: "+g.world.grass.BladeCount,lines);
+        g.world.StreamSurface(meadow,true);var streamed=GameObject.Find("Worldworks / moving terrain patch");var streamedMesh=streamed?streamed.GetComponent<MeshFilter>()?.sharedMesh:null;
+        Check(streamedMesh!=null&&streamedMesh.vertexCount==193*193,"Worldworks streams a 12 km walking terrain patch around the player: "+(streamedMesh?streamedMesh.vertexCount:0)+" vertices",lines);
         int blades=g.world.grass.BladeCount;g.world.grass.UpdateAround(meadow);Check(blades==g.world.grass.BladeCount,"Grass tiles stay stable while observer remains in same tile",lines);
         g.world.grass.UpdateAround(meadow+Vector3.up*300);bool hidden=true;foreach(var r in g.world.grass.GetComponentsInChildren<Renderer>(true))hidden&=!r.gameObject.activeSelf;Check(hidden,"Grass is culled from orbital altitude",lines);
         int events=g.effects.EffectEvents;g.effects.Impact(meadow,Vector3.up,false,1,912345);g.effects.Impact(meadow,Vector3.up,false,1,912345);Check(g.effects.EffectEvents==events+1,"Spellworks suppresses duplicate event IDs",lines);

@@ -1,0 +1,4 @@
+PASS: On-foot streamed terrain has 193 x 193 samples
+PASS: Terrain patch recenters on its requested player position
+PASS: Patch center follows the active Worldworks height query
+PASS: Streamed patch renders over the existing planet height/collision system
