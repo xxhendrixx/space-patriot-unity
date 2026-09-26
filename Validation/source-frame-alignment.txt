@@ -1,0 +1,4 @@
+PASS: Unity pole maps to original Landscape.up.
+PASS: Unity +X/+Z map to original Landscape.right/forward.
+PASS: six globe normals round-trip through the source body frame (max vector error 2.83e-16).
+PASS: planetary shader uses height-driven globe vertex colors; it no longer invents a separate continent mask.

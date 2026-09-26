@@ -7,6 +7,12 @@ namespace SpacePatriot
     {
         const int NoiseSize=64;
         static readonly byte[] noise=CreateNoise();
+        // Match Reference/Original/source/landscape.js. The original Worldworks
+        // patch is authored in this body frame, so the globe sampler must use
+        // the same axes or the close terrain and the distant continents drift.
+        static readonly Vector3 sourceUp=new Vector3(.62f,.37f,.69f).normalized;
+        static readonly Vector3 sourceRight=Vector3.Cross(Vector3.up,sourceUp).normalized;
+        static readonly Vector3 sourceForward=Vector3.Cross(sourceUp,sourceRight).normalized;
         readonly int type;
         readonly float radiusKm,amplitude,frequency,terrainBase;
         readonly Vector3 offset;
@@ -57,7 +63,7 @@ namespace SpacePatriot
         public float HeightMeters(Vector3 normal)
         {
             if(type==3)return 0;
-            normal.Normalize();
+            normal=ToSourceNormal(normal.normalized);
             float q=Noise(normal*(12*frequency)+offset)*2-1;
             float regional=.58f*Noise(normal*(3.5f*frequency)+offset)+.26f*(1-q*q)+.14f*Noise(normal*(42*frequency)+offset)+.02f*Noise(normal*(135*frequency)+offset);
             float warp=Noise(normal*(73*frequency)+offset);
@@ -107,5 +113,9 @@ namespace SpacePatriot
             float heightKm=radiusKm*amplitude*(regional-terrainBase-.02f+landform+.0018f*detail)+relief*localForm;
             return heightKm*FrontierWorld.PlanetRadius/radiusKm;
         }
+
+        /// <summary>Unity's local pole is the original Landscape.up direction.</summary>
+        public static Vector3 ToSourceNormal(Vector3 unityNormal)
+            =>(sourceRight*unityNormal.x+sourceUp*unityNormal.y+sourceForward*unityNormal.z).normalized;
     }
 }

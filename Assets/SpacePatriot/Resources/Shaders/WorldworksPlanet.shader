@@ -28,15 +28,13 @@ Shader "SpacePatriot/WorldworksPlanet" {
   float3 rock=SAMPLE_TEXTURE2D(_RockMap,sampler_RockMap,i.w.zy*.08).rgb*weights.x+SAMPLE_TEXTURE2D(_RockMap,sampler_RockMap,i.w.xz*.08).rgb*weights.y+SAMPLE_TEXTURE2D(_RockMap,sampler_RockMap,i.w.xy*.08).rgb*weights.z;
   float meadow=smoothstep(.6,.94,n.y)*_Living;
   float3 land=lerp(lerp(broad,detail,.6),lerp(float3(.09,.145,.035),float3(.22,.28,.07),detail.g),meadow*.83);land=lerp(rock,land,smoothstep(.55,.85,n.y));
-  float3 radial=normalize(i.w-float3(0,-18003,0)),globe=i.color.rgb;
+  float3 radial=normalize(i.n),globe=i.color.rgb;
   if(_Living>.5){
-   float continents=fbm(radial*3.2+_Seed*.007);continents=lerp(continents,.64,smoothstep(.92,.99,radial.y));
-   float coast=smoothstep(.478,.49,continents),elevation=saturate((continents-.49)*5);
-   float3 sea=lerp(float3(.008,.022,.055),float3(.018,.13,.17),smoothstep(.42,.495,continents));
-   float dry=fbm(radial*9+17);float3 earth=lerp(float3(.055,.11,.03),float3(.36,.26,.11),dry);
-   earth=lerp(earth,float3(.37,.38,.34),elevation*elevation*.5);globe=lerp(sea,earth,coast);
-   globe=lerp(globe,float3(.72,.8,.83),smoothstep(.77,.96,abs(radial.z)+dry*.04));
-   float clouds=smoothstep(.55,.76,fbm(radial*13+float3(1,7,3)))*.7;globe=lerp(globe,float3(.72,.78,.8),clouds);
+   // Keep atmospheric clouds as a separate visual layer. Continents and
+   // shorelines are vertex colors from PlanetEngineSurface, not a second,
+   // unrelated shader noise field that disagrees with collision/terrain.
+   float clouds=smoothstep(.66,.82,fbm(radial*18+float3(1,7,3)))*.24;
+   globe=lerp(globe,float3(.76,.82,.84),clouds);
   }
   float3 base=lerp(globe,land,local);
   Light sun=GetMainLight(TransformWorldToShadowCoord(i.w));float lambert=saturate(dot(n,sun.direction));
