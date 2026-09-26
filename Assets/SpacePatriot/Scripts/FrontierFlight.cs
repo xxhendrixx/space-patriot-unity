@@ -15,6 +15,8 @@ namespace SpacePatriot
         float lastForward=-10,tacticalUntil,tacticalReady;
         bool launchPending;
         float launchClearance;
+        bool surfaceLanding;
+        Vector3 surfaceLandingPosition;
         public float StandHeight=>Spec.height*.3f+2;
         public float LoadedMass=>Spec.mass+save.organics*.5f+save.ore*1.5f+save.crystal*.8f;
         public float EngineAcceleration=>Spec.thrust*Spec.mass/LoadedMass*save.vessel.Factor("engines",powered);
@@ -61,14 +63,14 @@ namespace SpacePatriot
                 if(bindings.Held("Ascend")||bindings.Down("Ascend")||bindings.Down("Landing")||pilot.Down("Ascend"))Launch();
                 return;
             }
-            if(bindings.Held("Brake")){cruise=false;docking=false;tacticalUntil=0;}
+            if(bindings.Held("Brake")){cruise=false;docking=false;surfaceLanding=false;tacticalUntil=0;}
             if(docking)
             {
-                var target=landingTarget.position+Vector3.up*(StandHeight-2.65f);
-                var approach=approachEntry?target+new Vector3(0,9,66):target;
+                var target=surfaceLanding?new Vector3(surfaceLandingPosition.x,world.SurfaceAt(surfaceLandingPosition)+StandHeight,surfaceLandingPosition.z):landingTarget.position+Vector3.up*(StandHeight-2.65f);
+                var approach=surfaceLanding?target:approachEntry?target+new Vector3(0,9,66):target;
                 ship.position=Vector3.MoveTowards(ship.position,approach,dt*Mathf.Max(5,Spec.thrust));
                 ship.rotation=Quaternion.Slerp(ship.rotation,Quaternion.identity,dt*2);velocity=Vector3.zero;speed=0;
-                if(Vector3.Distance(ship.position,approach)<.05f){if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
+                if(Vector3.Distance(ship.position,approach)<.05f){if(surfaceLanding)LandSurface(target);else if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
             }
             if(bindings.Down("Forward")){if(Time.time-lastForward<.32f)TacticalBoost();lastForward=Time.time;}
             if(Mouse.current!=null&&!instruments&&cockpitHint=="")throttle=Mathf.Clamp(throttle*Mathf.Exp(Mouse.current.scroll.ReadValue().y*.0013f),.05f,3);
@@ -118,8 +120,15 @@ namespace SpacePatriot
         {
             if(!flying){Launch();return;}if(!gearDown){Toast("Extend the gear with G before landing.");return;}
             var pad=world.Nearest(ship.position,"landing");float distance=Vector3.Distance(ship.position,pad.position);
-            if(distance<Mathf.Max(140,Spec.length)&&speed<45){landingTarget=pad;docking=true;approachEntry=Spec.length<60&&pad.name=="Port 07 landing pad";Toast("Approach assist engaged. X cancels.");}
-            else Toast("Approach the pad below 45 m/s. X applies braking thrust.");
+            if(distance<Mathf.Max(140,Spec.length)&&speed<45){surfaceLanding=false;landingTarget=pad;docking=true;approachEntry=Spec.length<60&&pad.name=="Port 07 landing pad";Toast("Landing pad approach engaged. X cancels.");return;}
+            // Pads are conveniences, not permission gates. Any safe patch of the
+            // continuous solid surface can accept a controlled vertical descent.
+            float altitude=ship.position.y-world.SurfaceAt(ship.position)-StandHeight;
+            if(world.info.biome!="gas"&&new Vector2(ship.position.x,ship.position.z).magnitude<FrontierWorld.PlanetRadius*.94f&&altitude>=-2&&altitude<650&&speed<45)
+            {surfaceLandingPosition=ship.position;surfaceLanding=true;docking=true;approachEntry=false;Toast("Surface landing assist engaged. Hold position; X cancels.");}
+            else if(speed>=45)Toast("Reduce speed below 45 m/s before landing.");
+            else if(altitude>=650)Toast("Descend below 650 m over solid ground to engage a surface landing.");
+            else Toast("A solid surface is required; gas giants cannot be landed on.");
         }
         void TacticalBoost(){if(Time.time<tacticalReady||!powered||gearDown)return;tacticalUntil=Time.time+2;tacticalReady=Time.time+8;Toast("Tactical thrust engaged.");}
         void ActivateCockpit(int action)

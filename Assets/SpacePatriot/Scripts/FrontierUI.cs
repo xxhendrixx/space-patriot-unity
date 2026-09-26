@@ -261,7 +261,7 @@ namespace SpacePatriot
                 "W/S forward/reverse · A/D strafe · Space/Ctrl up/down · Mouse wheel speed limit · Shift boost · X brake",
                 "Mouse while holding right button, or arrow keys: pitch/yaw · Q/E or [/] roll · U level to horizon",
                 "Space or L launch · T flight assist · G gear · P power · Cockpit switch for cruise · H jump · Double-tap W tactical thrust",
-                "X brake, G extend gear, L landing assist. Buy at exchange; open hatch and load at the cargo ramp. Close hatch before launch.",
+                "X brake · G extend gear · L lands on a pad or any solid ground below 650 m and 45 m/s. Buy at exchange; load at cargo ramp.",
                 "V cockpit/chase · Z/I instruments · Click modeled switches/MFDs · Y arm weapons · 1/2/3 select · R reload · C target · Left click fire · Tab navigation · Esc menu"};
             for(int i=0;i<left.Length;i++){Text(left[i],x,y+i*71,110,30,12,amber,true);Text(right[i],x+118,y+i*71,started?783:522,65,16,paper);}
         }
