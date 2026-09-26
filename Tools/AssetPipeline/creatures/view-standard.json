@@ -1,0 +1,27 @@
+{
+  "schema": "space-patriot-model-review",
+  "version": 1,
+  "units": "metres",
+  "origin": "ground-centre",
+  "up": "+Y",
+  "forward": "+Z",
+  "orthographic": true,
+  "resolution": [1024, 1024],
+  "target": [0, 0.5, 0],
+  "standardViews": ["front", "left", "right", "back", "top", "three-quarter"],
+  "views": {
+    "front": { "camera": [0, 0.5, 8], "up": [0, 1, 0] },
+    "back": { "camera": [0, 0.5, -8], "up": [0, 1, 0] },
+    "left": { "camera": [-8, 0.5, 0], "up": [0, 1, 0] },
+    "right": { "camera": [8, 0.5, 0], "up": [0, 1, 0] },
+    "top": { "camera": [0, 8, 0], "up": [0, 0, 1] },
+    "three-quarter": { "camera": [6, 4.2, 7], "up": [0, 1, 0] }
+  },
+  "bake": {
+    "uvMap": "SP_BakeUV",
+    "resolution": 2048,
+    "paddingPixels": 16,
+    "maps": ["basecolor", "normal-tangent", "ambient-occlusion"],
+    "coordinatesAreIndependentFromViewCameras": true
+  }
+}

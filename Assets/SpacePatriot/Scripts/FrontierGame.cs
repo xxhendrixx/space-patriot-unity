@@ -30,11 +30,13 @@ namespace SpacePatriot
         bool approachEntry;
         int selectedWorld=3,selectedCase,selectedShip;
         string targetedCase="water";
-        AudioSource ambient,oneShot;
-        AudioClip shotClip,buttonClip,impactClip;
+        AudioSource ambient,powerBed,oneShot,weaponSound;
+        AudioClip coilClip,kineticClip,missileClip,rifleClip,pistolClip,buttonClip,impactClip;
         readonly List<Raider> raiders=new List<Raider>();
         readonly List<Bolt> bolts=new List<Bolt>();
         readonly List<Transform> debris=new List<Transform>();
+        readonly List<WildlifeAgent> wildlife=new List<WildlifeAgent>();
+        public Vector3 WildlifeTarget=>walking&&!aboard?walkPosition:ship?ship.position:Vector3.zero;
         const string SaveKey="SpacePatriot.Unity.Frontier.v1";
         public ShipSpec Spec=>ShipSpec.Fleet[save.ship];
         public WorldInfo CurrentWorld=>worlds[save.world];
@@ -144,8 +146,16 @@ namespace SpacePatriot
             TickEconomy(dt);
             TickSociety(dt);
             TickCargo(dt);
-            ambient.volume=Mathf.Lerp(ambient.volume,PlayerPrefs.GetFloat("sp.volume",.55f)*(walking?.15f:flying?.3f:.1f),dt*4);
-            ambient.pitch=Mathf.Lerp(ambient.pitch,flying?.65f+throttle*.45f:.5f,dt*3);
+            float volume=PlayerPrefs.GetFloat("sp.volume",.55f);
+            bool enclosed=aboard||cockpit;
+            ambient.transform.position=ship.position+ship.TransformDirection(new Vector3(0,0,-Spec.length*.32f));
+            powerBed.transform.position=ship.position+ship.TransformDirection(new Vector3(0,Spec.height*.22f,0));
+            ambient.spatialBlend=Mathf.Lerp(ambient.spatialBlend,enclosed?0f:1f,dt*2.5f);
+            ambient.volume=Mathf.Lerp(ambient.volume,volume*(flying?.17f+Mathf.Clamp01(throttle/3f)*.09f:enclosed?.055f:walking?.018f:.025f),dt*3);
+            ambient.pitch=Mathf.Lerp(ambient.pitch,flying?.86f+Mathf.Clamp(throttle,0,3)*.055f:.82f,dt*2);
+            powerBed.spatialBlend=Mathf.Lerp(powerBed.spatialBlend,enclosed?0f:.65f,dt*2);
+            powerBed.volume=Mathf.Lerp(powerBed.volume,volume*(powered?.075f:.012f)*(walking?.35f:1f),dt*2.5f);
+            powerBed.pitch=Mathf.Lerp(powerBed.pitch,.98f+Mathf.Clamp01(heat/100f)*.035f,dt*1.5f);
             if(Time.unscaledTime-saveTime>45)Save();
             FollowCamera(dt);
         }
@@ -213,25 +223,42 @@ namespace SpacePatriot
         }
         void MakeAudio()
         {
-            ambient=gameObject.AddComponent<AudioSource>();ambient.loop=true;ambient.spatialBlend=0;ambient.playOnAwake=false;ambient.volume=.2f;ambient.clip=EngineBed();ambient.Play();
-            oneShot=gameObject.AddComponent<AudioSource>();oneShot.spatialBlend=0;oneShot.playOnAwake=false;oneShot.dopplerLevel=0;oneShot.priority=32;
-            shotClip=CoilDischarge();buttonClip=RelayClick();impactClip=HullImpact();
+            var engineObject=new GameObject("Drive acoustics / aft machinery");engineObject.transform.SetParent(transform,false);
+            ambient=engineObject.AddComponent<AudioSource>();ambient.loop=true;ambient.spatialBlend=1;ambient.playOnAwake=false;ambient.volume=0;ambient.pitch=.82f;ambient.clip=EngineBed();ambient.dopplerLevel=.08f;ambient.rolloffMode=AudioRolloffMode.Logarithmic;ambient.minDistance=5;ambient.maxDistance=420;ambient.priority=32;ambient.Play();
+            var reactorObject=new GameObject("Reactor acoustics / cabin structure");reactorObject.transform.SetParent(transform,false);
+            powerBed=reactorObject.AddComponent<AudioSource>();powerBed.loop=true;powerBed.spatialBlend=.65f;powerBed.playOnAwake=false;powerBed.volume=0;powerBed.pitch=.98f;powerBed.clip=ReactorBed();powerBed.dopplerLevel=0;powerBed.rolloffMode=AudioRolloffMode.Logarithmic;powerBed.minDistance=4;powerBed.maxDistance=250;powerBed.priority=36;powerBed.Play();
+            oneShot=new GameObject("Interface and confirmation sounds").AddComponent<AudioSource>();oneShot.transform.SetParent(transform,false);oneShot.spatialBlend=0;oneShot.playOnAwake=false;oneShot.dopplerLevel=0;oneShot.priority=32;
+            weaponSound=new GameObject("Weapon transient / spatial").AddComponent<AudioSource>();weaponSound.transform.SetParent(transform,false);weaponSound.spatialBlend=.85f;weaponSound.playOnAwake=false;weaponSound.dopplerLevel=.12f;weaponSound.rolloffMode=AudioRolloffMode.Logarithmic;weaponSound.minDistance=4;weaponSound.maxDistance=240;weaponSound.priority=24;
+            coilClip=CoilDischarge();kineticClip=WeaponReport("K-28 / twin autocannon",1080,145,88,.12f,.55f,.38f,2201);missileClip=WeaponReport("M-6 / seeker ignition",340,78,42,.46f,.58f,.48f,3119);rifleClip=WeaponReport("AR-30 / service rifle",1460,180,105,.105f,.82f,.27f,4193);pistolClip=WeaponReport("P-12 / sidearm",1780,260,125,.095f,.75f,.3f,5279);buttonClip=RelayClick();impactClip=HullImpact();
         }
         AudioClip EngineBed()
         {
             const int rate=44100;const float duration=4f;int count=(int)(rate*duration);var samples=new float[count];
-            var random=new System.Random(817);float filtered=0;
+            var random=new System.Random(817);float filtered=0,slowFilter=0;
             for(int i=0;i<count;i++)
             {
-                float t=i/(float)rate;float breathe=.86f+.14f*Mathf.Sin(t*Mathf.PI);
-                float slow=.94f+.06f*Mathf.Sin(t*Mathf.PI*.5f);
+                float t=i/(float)rate;float breathe=.78f+.14f*Mathf.Sin(t*Mathf.PI*1.5f)+.08f*Mathf.Sin(t*Mathf.PI*3.5f);
+                float rotor=.55f+.45f*Mathf.Pow(.5f+.5f*Mathf.Sin(t*Mathf.PI*2*23f),3);
                 filtered=Mathf.Lerp(filtered,(float)(random.NextDouble()*2-1),.035f);
-                float low=Mathf.Sin(t*Mathf.PI*2*38f)*.25f+Mathf.Sin(t*Mathf.PI*2*57f)*.11f;
-                float mid=Mathf.Sin(t*Mathf.PI*2*83f)*.10f+Mathf.Sin(t*Mathf.PI*2*121f)*.035f;
+                slowFilter=Mathf.Lerp(slowFilter,filtered,.006f);
+                float low=Mathf.Sin(t*Mathf.PI*2*31f)*.22f+Mathf.Sin(t*Mathf.PI*2*46f)*.12f+Mathf.Sin(t*Mathf.PI*2*69f)*.055f;
+                float mid=Mathf.Sin(t*Mathf.PI*2*92f)*.075f+Mathf.Sin(t*Mathf.PI*2*138f)*.035f+filtered*.018f-slowFilter*.08f;
                 float edge=Mathf.Min(1f,Mathf.Min(t/.018f,(duration-t)/.018f));
-                samples[i]=(low*breathe+mid*slow+filtered*.035f)*Mathf.Clamp01(edge)*.32f;
+                samples[i]=(low*breathe*rotor+mid)*Mathf.Clamp01(edge)*.28f;
             }
-            return Clip("Kestrel / reactor and pump bed",samples,rate);
+            return Clip("Space Patriot / variable-speed drive bed",samples,rate);
+        }
+        AudioClip ReactorBed()
+        {
+            const int rate=44100;const float duration=4f;int count=(int)(rate*duration);var samples=new float[count];var random=new System.Random(52913);float filtered=0;
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate;float pulse=.86f+.14f*Mathf.Sin(t*Mathf.PI*2*3f);filtered=Mathf.Lerp(filtered,(float)(random.NextDouble()*2-1),.012f);
+                float low=Mathf.Sin(t*Mathf.PI*2*27f)*.34f+Mathf.Sin(t*Mathf.PI*2*41f)*.17f+Mathf.Sin(t*Mathf.PI*2*54f)*.07f;
+                float valve=Mathf.Pow(Mathf.Max(0,Mathf.Sin(t*Mathf.PI*2*2f)),12)*.055f;
+                float edge=Mathf.Min(1,Mathf.Min(t/.02f,(duration-t)/.02f));samples[i]=(low*pulse+filtered*.045f+valve)*Mathf.Clamp01(edge)*.23f;
+            }
+            return Clip("Space Patriot / reactor circulation and cabin structure",samples,rate);
         }
         AudioClip CoilDischarge()
         {
@@ -246,6 +273,19 @@ namespace SpacePatriot
                 samples[i]=(crack*.72f+arc*.3f+tail*.32f)*Mathf.Min(1f,t/.0015f);
             }
             return Clip("Kestrel / capacitor coil discharge",samples,rate);
+        }
+        AudioClip WeaponReport(string name,float startHz,float endHz,float subHz,float duration,float crack,float body,int seed)
+        {
+            const int rate=44100;int count=Mathf.CeilToInt(rate*duration);var samples=new float[count];var random=new System.Random(seed);double phase=0,subPhase=0;
+            for(int i=0;i<count;i++)
+            {
+                float t=i/(float)rate,p=t/duration;float frequency=endHz+(startHz-endHz)*Mathf.Exp(-p*7f);phase+=Math.PI*2*frequency/rate;subPhase+=Math.PI*2*(subHz+18*Mathf.Exp(-p*10f))/rate;
+                float transient=(float)(random.NextDouble()*2-1)*Mathf.Exp(-t*(crack>0.6f?210:145))*crack;
+                float resonant=(Mathf.Sin((float)phase)+.24f*Mathf.Sin((float)(phase*2.01)))*Mathf.Exp(-p*4.1f)*body;
+                float sub=Mathf.Sin((float)subPhase)*Mathf.Exp(-p*3f)*.3f;float tail=(float)(random.NextDouble()*2-1)*Mathf.Exp(-p*14f)*.06f;
+                float attack=Mathf.Clamp01(t/.0018f),envelope=Mathf.Pow(1-p,.9f);samples[i]=(transient+resonant+sub+tail)*attack*envelope*.48f;
+            }
+            return Clip("Space Patriot / "+name,samples,rate);
         }
         AudioClip RelayClick()
         {
@@ -275,9 +315,19 @@ namespace SpacePatriot
         static AudioClip Clip(string name,float[] samples,int rate)
         {var clip=AudioClip.Create(name,samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
         void Sound(AudioClip clip,float volume){oneShot.PlayOneShot(clip,volume*PlayerPrefs.GetFloat("sp.volume",.55f));}
+        public void WeaponShot(string id,Vector3 origin,float volume=.42f)
+        {
+            AudioClip clip=id=="kinetic"?kineticClip:id=="laser"?coilClip:id=="missile"?missileClip:id=="rifle"?rifleClip:pistolClip;
+            weaponSound.transform.position=origin;weaponSound.spatialBlend=walking||aboard?.14f:cockpit?.24f:.88f;weaponSound.pitch=UnityEngine.Random.Range(.97f,1.03f);weaponSound.PlayOneShot(clip,volume*PlayerPrefs.GetFloat("sp.volume",.55f));
+        }
         public void Signal(string kind)
         {
-            if(kind=="sample"||kind=="scan")effects.Survey(walking?walkPosition:ship.position);
+            if(kind=="sample"||kind=="scan")
+            {
+                Vector3 origin=view.transform.position,direction=view.transform.forward,point=origin+direction*42,normal=-direction;
+                if(Physics.Raycast(origin,direction,out var hit,2200,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore)){point=hit.point+hit.normal*.12f;normal=hit.normal;}
+                effects.Survey(point,normal);
+            }
             foreach(var c in cases)
             {
                 if(Progression.CompleteStep(save,c,CurrentWorld.name,kind,out var report))
@@ -314,7 +364,20 @@ namespace SpacePatriot
                 raiders.Add(new Raider{body=body,home=body.position,shoot=Time.time+5+i});
             }
         }
-        void ClearCombat(){selectedTarget=null;foreach(var r in raiders)if(r.body)Destroy(r.body.gameObject);raiders.Clear();foreach(var b in bolts)if(b.body)Destroy(b.body.gameObject);bolts.Clear();}
+        void ClearCombat(){selectedTarget=null;foreach(var r in raiders)if(r.body)Destroy(r.body.gameObject);raiders.Clear();foreach(var b in bolts)if(b.body)Destroy(b.body.gameObject);bolts.Clear();wildlife.Clear();}
+        public void RegisterWildlife(WildlifeAgent actor){if(actor&&!wildlife.Contains(actor))wildlife.Add(actor);}
+        public void WildlifeAttack(WildlifeAgent actor,float damage,string ability,float distance)
+        {
+            if(dead||menu||!walking||aboard)return;float scale=actor.species.Boss?Mathf.Lerp(1,.32f,Mathf.Clamp01(distance/85)):1;
+            Vector3 point=walking?walkPosition:ship.position;string move=ability.ToLowerInvariant();Color cue=move.Contains("spore")||move.Contains("dust")?new Color(.56f,1.05f,.24f):move.Contains("screech")||move.Contains("pulse")?new Color(.28f,.82f,1.4f):new Color(1.4f,.35f,.12f);
+            if(actor.species.Boss){for(int i=0;i<36;i++){float a=i*Mathf.PI*2/36;var dir=new Vector3(Mathf.Cos(a),0,Mathf.Sin(a));effects.Emit(point+dir*1.5f,dir*UnityEngine.Random.Range(4,13)+Vector3.up*.4f,cue,.8f,UnityEngine.Random.Range(.12f,.26f),move.Contains("pulse")?0:4,1.2f,.35f);}}
+            else effects.Impact(point,Vector3.up,false,1);
+            Damage(damage*scale);if(actor.species.Boss)Toast(actor.species.name.ToUpperInvariant()+" / "+ability.ToUpperInvariant()+"  •  EVADE THE TELEGRAPH");
+        }
+        public void WildlifeWarning(CreatureSpecies species,string ability)
+        {if(species!=null&&species.Boss){Toast(species.name.ToUpperInvariant()+" / "+ability.ToUpperInvariant()+" INBOUND");string move=ability.ToLowerInvariant();Color cue=move.Contains("spore")||move.Contains("dust")?new Color(.35f,.82f,.19f):move.Contains("screech")||move.Contains("pulse")?new Color(.22f,.8f,1.15f):new Color(1.2f,.3f,.1f);for(int i=0;i<32;i++){float a=i*Mathf.PI*2/32;var dir=new Vector3(Mathf.Cos(a),0,Mathf.Sin(a));effects.Emit(WildlifeTarget+dir*(3+i%3*2),dir*1.2f,cue,1.35f,.09f,0,.15f,.2f);}}}
+        public void WildlifeDefeated(WildlifeAgent actor)
+        {if(actor?.species==null)return;int reward=actor.species.Boss?450:actor.species.aggression>.25f?75:15;save.credits+=reward;save.journal.Add("Field encounter: "+actor.species.name+" / recovered value "+reward+" cr");if(save.journal.Count>100)save.journal.RemoveAt(0);Toast(actor.species.name+" neutralized. Field salvage: "+reward+" cr.");Save();}
         void UpdateRaiders(float dt)
         {
             foreach(var r in raiders)
@@ -347,10 +410,12 @@ namespace SpacePatriot
                 if(b.missile&&b.target!=null&&!b.target.dead&&b.target.body!=null){var desired=(b.target.body.position+b.target.velocity*.25f-b.body.position).normalized;float v=Mathf.MoveTowards(b.velocity.magnitude,640,dt*120);b.velocity=Vector3.RotateTowards(b.velocity.normalized,desired,dt*1.65f,0)*v;b.body.rotation=Quaternion.LookRotation(b.velocity);}
                 Vector3 from=b.body.position,to=from+b.velocity*dt;bool hit=false;b.age+=dt;float nearest=1;
                 if(Physics.Linecast(from,to,out var environment,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore)){nearest=Vector3.Distance(from,environment.point)/Mathf.Max(.001f,Vector3.Distance(from,to));hit=true;}
-                Raider victim=null;
+                Raider victim=null;WildlifeAgent fauna=null;
                 if(b.enemy){var t=SegmentHit(from,to,walking?walkPosition-Vector3.up*.7f:ship.position,walking?.6f:Spec.width*.22f);if(t.HasValue&&t.Value<=nearest){Damage(b.damage);nearest=t.Value;hit=true;}}
-                else foreach(var r in raiders){if(r.dead)continue;var t=SegmentHit(from,to,r.body.position,4);if(t.HasValue&&t.Value<=nearest){victim=r;nearest=t.Value;hit=true;}}
+                else {foreach(var r in raiders){if(r.dead)continue;var t=SegmentHit(from,to,r.body.position,4);if(t.HasValue&&t.Value<=nearest){victim=r;fauna=null;nearest=t.Value;hit=true;}}
+                    for(int k=wildlife.Count-1;k>=0;k--){var a=wildlife[k];if(!a){wildlife.RemoveAt(k);continue;}if(a.dead)continue;float radius=a.species.Boss?Mathf.Max(2,a.species.height*.16f):1.3f;var t=SegmentHit(from,to,a.transform.position+Vector3.up*radius,radius);if(t.HasValue&&t.Value<=nearest){fauna=a;victim=null;nearest=t.Value;hit=true;}}}
                 if(victim!=null)HitRaider(victim,b.damage);
+                if(fauna!=null)fauna.Hit(b.damage);
                 b.body.position=Vector3.Lerp(from,to,nearest);if(hit||b.age>b.lifetime){if(hit){if(b.missile)Burst(b.body.position);else effects.Impact(b.body.position,-b.velocity.normalized);}Destroy(b.body.gameObject);bolts.RemoveAt(i);}
 
             }

@@ -22,3 +22,4 @@ Validation/*-status.txt
 *.blend1
 __pycache__/
 *.py[cod]
+/.tools/blender/

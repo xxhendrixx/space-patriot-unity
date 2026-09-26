@@ -1,0 +1,52 @@
+PASS: Source terrain is finite and deterministic: mercury
+PASS: Original seeded geological sampler varies across the complete globe: mercury
+PROFILE: mercury / rock / -1.9941 to 14.3485 m
+PASS: Source terrain is finite and deterministic: venus
+PASS: Original seeded geological sampler varies across the complete globe: venus
+PROFILE: venus / desert / -12.3922 to 13.4986 m
+PASS: Source terrain is finite and deterministic: earth
+PASS: Original seeded geological sampler varies across the complete globe: earth
+PROFILE: earth / temperate / -6.2853 to 15.2150 m
+PASS: Source terrain is finite and deterministic: mars
+PASS: Original seeded geological sampler varies across the complete globe: mars
+PROFILE: mars / desert / 9.8479 to 18.6144 m
+PASS: Source terrain is finite and deterministic: jupiter
+PASS: Gas giants have no solid geological relief: jupiter
+PASS: Source terrain is finite and deterministic: saturn
+PASS: Gas giants have no solid geological relief: saturn
+PASS: Source terrain is finite and deterministic: uranus
+PASS: Gas giants have no solid geological relief: uranus
+PASS: Source terrain is finite and deterministic: neptune
+PASS: Gas giants have no solid geological relief: neptune
+PASS: Source terrain is finite and deterministic: trappist-1-b
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-b
+PROFILE: trappist-1-b / volcanic / 1.8456 to 20.1895 m
+PASS: Source terrain is finite and deterministic: trappist-1-c
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-c
+PROFILE: trappist-1-c / desert / 1.7105 to 25.9160 m
+PASS: Source terrain is finite and deterministic: trappist-1-d
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-d
+PROFILE: trappist-1-d / desert / 5.9032 to 31.0979 m
+PASS: Source terrain is finite and deterministic: trappist-1-e
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-e
+PROFILE: trappist-1-e / temperate / -3.4679 to 13.8352 m
+PASS: Source terrain is finite and deterministic: trappist-1-f
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-f
+PROFILE: trappist-1-f / ice / -8.4048 to 19.5693 m
+PASS: Source terrain is finite and deterministic: trappist-1-g
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-g
+PROFILE: trappist-1-g / ice / -6.1115 to 15.5349 m
+PASS: Source terrain is finite and deterministic: trappist-1-h
+PASS: Original seeded geological sampler varies across the complete globe: trappist-1-h
+PROFILE: trappist-1-h / rock / -0.9439 to 21.5246 m
+PASS: Source terrain is finite and deterministic: toi-270-b
+PASS: Original seeded geological sampler varies across the complete globe: toi-270-b
+PROFILE: toi-270-b / desert / 0.3565 to 28.6341 m
+PASS: Source terrain is finite and deterministic: toi-270-c
+PASS: Gas giants have no solid geological relief: toi-270-c
+PASS: Source terrain is finite and deterministic: k2-141-b
+PASS: Original seeded geological sampler varies across the complete globe: k2-141-b
+PROFILE: k2-141-b / volcanic / -12.4922 to 20.9685 m
+PASS: Source terrain is finite and deterministic: wasp-76-b
+PASS: Gas giants have no solid geological relief: wasp-76-b
+PASS: Source global geology covers all 13 solid worlds

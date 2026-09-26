@@ -1,0 +1,453 @@
+{
+  "schema": "space-patriot-creature-concepts",
+  "version": 1,
+  "world": "toi-270-b",
+  "worldName": "TOI-270 b",
+  "biome": "desert",
+  "contract": {
+    "units": "metres",
+    "origin": "ground-centre",
+    "up": "+Y",
+    "forward": "+Z",
+    "views": [
+      "front",
+      "left",
+      "right",
+      "back",
+      "top",
+      "three-quarter"
+    ]
+  },
+  "species": [
+    {
+      "id": "toi-270-b-wild-01",
+      "name": "Ash grazer / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "grazer",
+      "model": "fauna-0",
+      "family": 0,
+      "variant": 0,
+      "seed": 2948913869,
+      "palette": [
+        "#c3a36e",
+        "#69493c",
+        "#dfce9e"
+      ],
+      "height": 1.339505998021923,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "low armored shoulders, a segmented dorsal sail and broad shovel muzzle",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "feeds on mineral films and retreats when challenged",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. low armored shoulders, a segmented dorsal sail and broad shovel muzzle. Habitat: wind-cut basins, salt pans and shadowed slot canyons. feeds on mineral films and retreats when challenged. Palette #c3a36e, #69493c, #dfce9e. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-02",
+      "name": "Cinderkite / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "glider",
+      "model": "fauna-1",
+      "family": 1,
+      "variant": 0,
+      "seed": 2898581012,
+      "palette": [
+        "#c9a66b",
+        "#6f4c39",
+        "#e5d19b"
+      ],
+      "height": 2.0864650938427074,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "long kite membranes, a narrow rudder tail and split sensory crest",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "rides thermal columns and scatters if approached",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. long kite membranes, a narrow rudder tail and split sensory crest. Habitat: wind-cut basins, salt pans and shadowed slot canyons. rides thermal columns and scatters if approached. Palette #c9a66b, #6f4c39, #e5d19b. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-03",
+      "name": "Basalt digger / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "burrower",
+      "model": "fauna-2",
+      "family": 2,
+      "variant": 0,
+      "seed": 2915358631,
+      "palette": [
+        "#c7a56c",
+        "#6d4b3a",
+        "#e3d09c"
+      ],
+      "height": 1.2894086598651484,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "wedge head, compact plated body, digging forelimbs and counterweight tail",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "uses a den network and erupts from loose ground",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. wedge head, compact plated body, digging forelimbs and counterweight tail. Habitat: wind-cut basins, salt pans and shadowed slot canyons. uses a den network and erupts from loose ground. Palette #c7a56c, #6d4b3a, #e3d09c. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-04",
+      "name": "Sulfur drifter / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "drifter",
+      "model": "fauna-3",
+      "family": 3,
+      "variant": 0,
+      "seed": 2865025774,
+      "palette": [
+        "#c3a36e",
+        "#69493c",
+        "#dfce9e"
+      ],
+      "height": 1.0682944691041485,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "floating gas bladders, translucent veils and a dangling lure cluster",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "filters airborne spores and moves with local weather",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. floating gas bladders, translucent veils and a dangling lure cluster. Habitat: wind-cut basins, salt pans and shadowed slot canyons. filters airborne spores and moves with local weather. Palette #c3a36e, #69493c, #dfce9e. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-05",
+      "name": "Cragback / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "sentinel",
+      "model": "fauna-4",
+      "family": 4,
+      "variant": 0,
+      "seed": 2881803393,
+      "palette": [
+        "#bfa170",
+        "#65473e",
+        "#dbcca0"
+      ],
+      "height": 1.5023562212707475,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "towering ridged shoulders, paired crown horns and heavy planted feet",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "guards a nesting or feeding territory",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. towering ridged shoulders, paired crown horns and heavy planted feet. Habitat: wind-cut basins, salt pans and shadowed slot canyons. guards a nesting or feeding territory. Palette #bfa170, #65473e, #dbcca0. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-06",
+      "name": "Glasswing / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "stalker",
+      "model": "fauna-5",
+      "family": 0,
+      "variant": 1,
+      "seed": 2831470536,
+      "palette": [
+        "#c5a46d",
+        "#6b4a3b",
+        "#e1cf9d"
+      ],
+      "height": 0.8125004466390238,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Dust veil"
+      ],
+      "concept": {
+        "silhouette": "lean reverse-jointed limbs, swept-back quills and a low hunting profile",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "hunts by reading vibration and breaking line of sight",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. lean reverse-jointed limbs, swept-back quills and a low hunting profile. Habitat: wind-cut basins, salt pans and shadowed slot canyons. hunts by reading vibration and breaking line of sight. Palette #c5a46d, #6b4a3b, #e1cf9d. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-07",
+      "name": "Scoria crawler / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "scavenger",
+      "model": "fauna-6",
+      "family": 1,
+      "variant": 1,
+      "seed": 2848248155,
+      "palette": [
+        "#cfa968",
+        "#754f36",
+        "#ebd498"
+      ],
+      "height": 1.6443179965252057,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "asymmetric shell plates, one oversized feeler and hooked feeding limbs",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "follows ships and feeds on discarded cargo organics",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. asymmetric shell plates, one oversized feeler and hooked feeding limbs. Habitat: wind-cut basins, salt pans and shadowed slot canyons. follows ships and feeds on discarded cargo organics. Palette #cfa968, #754f36, #ebd498. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-08",
+      "name": "Fumarole lurker / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "ambusher",
+      "model": "fauna-7",
+      "family": 2,
+      "variant": 1,
+      "seed": 2797915298,
+      "palette": [
+        "#c1a26f",
+        "#67483d",
+        "#ddcd9f"
+      ],
+      "height": 1.9042178663192317,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Resonant screech"
+      ],
+      "concept": {
+        "silhouette": "flattened body, camouflaged frill and a spring-loaded neck fan",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "mimics the local substrate before a short burst attack",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. flattened body, camouflaged frill and a spring-loaded neck fan. Habitat: wind-cut basins, salt pans and shadowed slot canyons. mimics the local substrate before a short burst attack. Palette #c1a26f, #67483d, #ddcd9f. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-09",
+      "name": "Caldera ram / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "champion",
+      "model": "fauna-8",
+      "family": 3,
+      "variant": 1,
+      "seed": 2814692917,
+      "palette": [
+        "#bfa170",
+        "#65473e",
+        "#dbcca0"
+      ],
+      "height": 4.8,
+      "health": 520,
+      "damage": 16,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Hooked pounce",
+        "Ground rupture"
+      ],
+      "concept": {
+        "silhouette": "tall layered carapace, branching mineral horns and glowing throat sacs",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "elite territorial defender; combines two attack patterns",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. tall layered carapace, branching mineral horns and glowing throat sacs. Habitat: wind-cut basins, salt pans and shadowed slot canyons. elite territorial defender; combines two attack patterns. Palette #bfa170, #65473e, #dbcca0. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "toi-270-b-wild-10",
+      "name": "The Red Maw / TOI-270 b",
+      "world": "toi-270-b",
+      "biome": "desert",
+      "role": "apex",
+      "model": "fauna-9",
+      "family": 4,
+      "variant": 1,
+      "seed": 348633187,
+      "palette": [
+        "#c7a56c",
+        "#6d4b3a",
+        "#e3d09c"
+      ],
+      "height": 8.5,
+      "health": 1400,
+      "damage": 28,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Spore fan",
+        "Cyclone leap"
+      ],
+      "concept": {
+        "silhouette": "massive interlocking plates, scarred face shield and luminous organ channels",
+        "habitat": "wind-cut basins, salt pans and shadowed slot canyons",
+        "behavior": "planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. massive interlocking plates, scarred face shield and luminous organ channels. Habitat: wind-cut basins, salt pans and shadowed slot canyons. planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows. Palette #c7a56c, #6d4b3a, #e3d09c. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    }
+  ]
+}

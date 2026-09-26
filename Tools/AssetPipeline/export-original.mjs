@@ -12,7 +12,7 @@ import {CityStage} from './visuals/city-stage.js';
 import {HangarStage} from './visuals/hangar-stage.js';
 import {productionRefit as buildRefit,productionCockpit,productionGun} from './visuals/production-art.js';
 import {alienPlant} from './visuals/alien-biology.js';
-import {buildCitizen} from './visuals/fauna.js';
+import {buildAnimal,buildCitizen} from './visuals/fauna.js';
 import {productionLayout} from './visuals/production-layout.js';
 
 const project=path.resolve(import.meta.dirname,'../..');
@@ -20,6 +20,7 @@ const root=path.join(project,'Reference/Original');
 const out=path.join(project,'Assets/SpacePatriot/Original/Converted');
 fs.mkdirSync(out,{recursive:true});
 globalThis.document={createElement(tag){if(tag==='canvas')return createCanvas(1,1);throw Error(tag);}};
+globalThis.ImageData=ImageData;
 const context=vm.createContext({console,globalThis:null,structuredClone,performance});context.globalThis=context;
 for(const file of ['core.js','expedition.js','interior-layout.js','engines-architecture.js','architecture-furniture.js','engines-pathworks.js','engines-machineworks.js','city-world.js'])vm.runInContext(fs.readFileSync(path.join(root,'source',file),'utf8'),context,{filename:file});
 globalThis.LongwayCore=context.LongwayCore;
@@ -69,6 +70,8 @@ function material(mat){
 function exportModel(group,id,kind){
   group.updateMatrixWorld(true);const nodes=[];
   const bones=new Map();for(const {leg,side} of group.userData.walkLegs||[])bones.set(leg,'Leg '+side);for(const {arm,side} of group.userData.arms||[])bones.set(arm,'Arm '+side);
+  for(let i=0;i<(group.userData.legs||[]).length;i++){const limb=group.userData.legs[i].limb;if(limb)bones.set(limb,'Gait '+String(i).padStart(2,'0'));}
+  for(let i=0;i<(group.userData.appendages||[]).length;i++){const joint=group.userData.appendages[i].joint;if(joint)bones.set(joint,'Appendage '+String(i).padStart(2,'0'));}
   group.traverse(o=>{
     if(!o.isMesh||!o.visible)return;
     if(Array.isArray(o.material))throw Error('Unhandled submesh');
@@ -95,6 +98,12 @@ for(let family=0;family<10;family++)exportModel(buildCraft(materials,crafts[fami
 for(let family=0;family<10;family++)exportModel(buildRefit(materials,crafts[family*10]),'refit-'+family,'hull');
 globalThis.LongwayCore.FACTIONS??=[{id:'union',color:'#7c8576'},{id:'helix',color:'#a68f6e'},{id:'redwake',color:'#8c6351'}];
 for(let i=0;i<3;i++)exportModel(buildCitizen(materials,{civilian:true,faction:['union','helix','redwake'][i]}),'citizen-'+i,'resident');
+// Reusable articulated wildlife bodies. World-specific species manifests pick
+// a base anatomy and apply deterministic palettes, scales and behavior data.
+for(let family=0;family<5;family++)for(let variant=0;variant<2;variant++){
+  const bodyScale=[1,.82,1.14,1.05,.92][family]*(variant?1.16:.88);const phenotype={alien:false,scale:[bodyScale,bodyScale,bodyScale],legPairs:variant?4:3};
+  exportModel(buildAnimal(materials,family,phenotype),'fauna-'+(family*2+variant),'wildlife');
+}
 for(const family of [0,1,2,3,4,5,6,7,8,9])exportModel(productionCockpit(materials,crafts[family*10]),'cabin-'+family,'cabin');
 exportModel(productionGun(materials,false),'rifle','weapon');exportModel(productionGun(materials,true),'sidearm','weapon');
 const body={id:'earth',name:'Earth',seed:715317,type:1,settlementStyle:0};

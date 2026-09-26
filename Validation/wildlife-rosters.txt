@@ -1,0 +1,419 @@
+PASS: Ten stable wildlife concepts exist for Mercury
+PASS: Champion and apex encounter roles are present: mercury
+PASS: Concept, views and world assignment agree: mercury-wild-01
+PASS: Creature IDs are unique: mercury-wild-01
+PASS: Concept, views and world assignment agree: mercury-wild-02
+PASS: Creature IDs are unique: mercury-wild-02
+PASS: Concept, views and world assignment agree: mercury-wild-03
+PASS: Creature IDs are unique: mercury-wild-03
+PASS: Concept, views and world assignment agree: mercury-wild-04
+PASS: Creature IDs are unique: mercury-wild-04
+PASS: Concept, views and world assignment agree: mercury-wild-05
+PASS: Creature IDs are unique: mercury-wild-05
+PASS: Concept, views and world assignment agree: mercury-wild-06
+PASS: Creature IDs are unique: mercury-wild-06
+PASS: Concept, views and world assignment agree: mercury-wild-07
+PASS: Creature IDs are unique: mercury-wild-07
+PASS: Concept, views and world assignment agree: mercury-wild-08
+PASS: Creature IDs are unique: mercury-wild-08
+PASS: Concept, views and world assignment agree: mercury-wild-09
+PASS: Creature IDs are unique: mercury-wild-09
+PASS: Concept, views and world assignment agree: mercury-wild-10
+PASS: Creature IDs are unique: mercury-wild-10
+PASS: Ten stable wildlife concepts exist for Venus
+PASS: Champion and apex encounter roles are present: venus
+PASS: Concept, views and world assignment agree: venus-wild-01
+PASS: Creature IDs are unique: venus-wild-01
+PASS: Concept, views and world assignment agree: venus-wild-02
+PASS: Creature IDs are unique: venus-wild-02
+PASS: Concept, views and world assignment agree: venus-wild-03
+PASS: Creature IDs are unique: venus-wild-03
+PASS: Concept, views and world assignment agree: venus-wild-04
+PASS: Creature IDs are unique: venus-wild-04
+PASS: Concept, views and world assignment agree: venus-wild-05
+PASS: Creature IDs are unique: venus-wild-05
+PASS: Concept, views and world assignment agree: venus-wild-06
+PASS: Creature IDs are unique: venus-wild-06
+PASS: Concept, views and world assignment agree: venus-wild-07
+PASS: Creature IDs are unique: venus-wild-07
+PASS: Concept, views and world assignment agree: venus-wild-08
+PASS: Creature IDs are unique: venus-wild-08
+PASS: Concept, views and world assignment agree: venus-wild-09
+PASS: Creature IDs are unique: venus-wild-09
+PASS: Concept, views and world assignment agree: venus-wild-10
+PASS: Creature IDs are unique: venus-wild-10
+PASS: Ten stable wildlife concepts exist for Earth
+PASS: Champion and apex encounter roles are present: earth
+PASS: Concept, views and world assignment agree: earth-wild-01
+PASS: Creature IDs are unique: earth-wild-01
+PASS: Concept, views and world assignment agree: earth-wild-02
+PASS: Creature IDs are unique: earth-wild-02
+PASS: Concept, views and world assignment agree: earth-wild-03
+PASS: Creature IDs are unique: earth-wild-03
+PASS: Concept, views and world assignment agree: earth-wild-04
+PASS: Creature IDs are unique: earth-wild-04
+PASS: Concept, views and world assignment agree: earth-wild-05
+PASS: Creature IDs are unique: earth-wild-05
+PASS: Concept, views and world assignment agree: earth-wild-06
+PASS: Creature IDs are unique: earth-wild-06
+PASS: Concept, views and world assignment agree: earth-wild-07
+PASS: Creature IDs are unique: earth-wild-07
+PASS: Concept, views and world assignment agree: earth-wild-08
+PASS: Creature IDs are unique: earth-wild-08
+PASS: Concept, views and world assignment agree: earth-wild-09
+PASS: Creature IDs are unique: earth-wild-09
+PASS: Concept, views and world assignment agree: earth-wild-10
+PASS: Creature IDs are unique: earth-wild-10
+PASS: Ten stable wildlife concepts exist for Mars
+PASS: Champion and apex encounter roles are present: mars
+PASS: Concept, views and world assignment agree: mars-wild-01
+PASS: Creature IDs are unique: mars-wild-01
+PASS: Concept, views and world assignment agree: mars-wild-02
+PASS: Creature IDs are unique: mars-wild-02
+PASS: Concept, views and world assignment agree: mars-wild-03
+PASS: Creature IDs are unique: mars-wild-03
+PASS: Concept, views and world assignment agree: mars-wild-04
+PASS: Creature IDs are unique: mars-wild-04
+PASS: Concept, views and world assignment agree: mars-wild-05
+PASS: Creature IDs are unique: mars-wild-05
+PASS: Concept, views and world assignment agree: mars-wild-06
+PASS: Creature IDs are unique: mars-wild-06
+PASS: Concept, views and world assignment agree: mars-wild-07
+PASS: Creature IDs are unique: mars-wild-07
+PASS: Concept, views and world assignment agree: mars-wild-08
+PASS: Creature IDs are unique: mars-wild-08
+PASS: Concept, views and world assignment agree: mars-wild-09
+PASS: Creature IDs are unique: mars-wild-09
+PASS: Concept, views and world assignment agree: mars-wild-10
+PASS: Creature IDs are unique: mars-wild-10
+PASS: Ten stable wildlife concepts exist for Jupiter
+PASS: Champion and apex encounter roles are present: jupiter
+PASS: Concept, views and world assignment agree: jupiter-wild-01
+PASS: Creature IDs are unique: jupiter-wild-01
+PASS: Concept, views and world assignment agree: jupiter-wild-02
+PASS: Creature IDs are unique: jupiter-wild-02
+PASS: Concept, views and world assignment agree: jupiter-wild-03
+PASS: Creature IDs are unique: jupiter-wild-03
+PASS: Concept, views and world assignment agree: jupiter-wild-04
+PASS: Creature IDs are unique: jupiter-wild-04
+PASS: Concept, views and world assignment agree: jupiter-wild-05
+PASS: Creature IDs are unique: jupiter-wild-05
+PASS: Concept, views and world assignment agree: jupiter-wild-06
+PASS: Creature IDs are unique: jupiter-wild-06
+PASS: Concept, views and world assignment agree: jupiter-wild-07
+PASS: Creature IDs are unique: jupiter-wild-07
+PASS: Concept, views and world assignment agree: jupiter-wild-08
+PASS: Creature IDs are unique: jupiter-wild-08
+PASS: Concept, views and world assignment agree: jupiter-wild-09
+PASS: Creature IDs are unique: jupiter-wild-09
+PASS: Concept, views and world assignment agree: jupiter-wild-10
+PASS: Creature IDs are unique: jupiter-wild-10
+PASS: Ten stable wildlife concepts exist for Saturn
+PASS: Champion and apex encounter roles are present: saturn
+PASS: Concept, views and world assignment agree: saturn-wild-01
+PASS: Creature IDs are unique: saturn-wild-01
+PASS: Concept, views and world assignment agree: saturn-wild-02
+PASS: Creature IDs are unique: saturn-wild-02
+PASS: Concept, views and world assignment agree: saturn-wild-03
+PASS: Creature IDs are unique: saturn-wild-03
+PASS: Concept, views and world assignment agree: saturn-wild-04
+PASS: Creature IDs are unique: saturn-wild-04
+PASS: Concept, views and world assignment agree: saturn-wild-05
+PASS: Creature IDs are unique: saturn-wild-05
+PASS: Concept, views and world assignment agree: saturn-wild-06
+PASS: Creature IDs are unique: saturn-wild-06
+PASS: Concept, views and world assignment agree: saturn-wild-07
+PASS: Creature IDs are unique: saturn-wild-07
+PASS: Concept, views and world assignment agree: saturn-wild-08
+PASS: Creature IDs are unique: saturn-wild-08
+PASS: Concept, views and world assignment agree: saturn-wild-09
+PASS: Creature IDs are unique: saturn-wild-09
+PASS: Concept, views and world assignment agree: saturn-wild-10
+PASS: Creature IDs are unique: saturn-wild-10
+PASS: Ten stable wildlife concepts exist for Uranus
+PASS: Champion and apex encounter roles are present: uranus
+PASS: Concept, views and world assignment agree: uranus-wild-01
+PASS: Creature IDs are unique: uranus-wild-01
+PASS: Concept, views and world assignment agree: uranus-wild-02
+PASS: Creature IDs are unique: uranus-wild-02
+PASS: Concept, views and world assignment agree: uranus-wild-03
+PASS: Creature IDs are unique: uranus-wild-03
+PASS: Concept, views and world assignment agree: uranus-wild-04
+PASS: Creature IDs are unique: uranus-wild-04
+PASS: Concept, views and world assignment agree: uranus-wild-05
+PASS: Creature IDs are unique: uranus-wild-05
+PASS: Concept, views and world assignment agree: uranus-wild-06
+PASS: Creature IDs are unique: uranus-wild-06
+PASS: Concept, views and world assignment agree: uranus-wild-07
+PASS: Creature IDs are unique: uranus-wild-07
+PASS: Concept, views and world assignment agree: uranus-wild-08
+PASS: Creature IDs are unique: uranus-wild-08
+PASS: Concept, views and world assignment agree: uranus-wild-09
+PASS: Creature IDs are unique: uranus-wild-09
+PASS: Concept, views and world assignment agree: uranus-wild-10
+PASS: Creature IDs are unique: uranus-wild-10
+PASS: Ten stable wildlife concepts exist for Neptune
+PASS: Champion and apex encounter roles are present: neptune
+PASS: Concept, views and world assignment agree: neptune-wild-01
+PASS: Creature IDs are unique: neptune-wild-01
+PASS: Concept, views and world assignment agree: neptune-wild-02
+PASS: Creature IDs are unique: neptune-wild-02
+PASS: Concept, views and world assignment agree: neptune-wild-03
+PASS: Creature IDs are unique: neptune-wild-03
+PASS: Concept, views and world assignment agree: neptune-wild-04
+PASS: Creature IDs are unique: neptune-wild-04
+PASS: Concept, views and world assignment agree: neptune-wild-05
+PASS: Creature IDs are unique: neptune-wild-05
+PASS: Concept, views and world assignment agree: neptune-wild-06
+PASS: Creature IDs are unique: neptune-wild-06
+PASS: Concept, views and world assignment agree: neptune-wild-07
+PASS: Creature IDs are unique: neptune-wild-07
+PASS: Concept, views and world assignment agree: neptune-wild-08
+PASS: Creature IDs are unique: neptune-wild-08
+PASS: Concept, views and world assignment agree: neptune-wild-09
+PASS: Creature IDs are unique: neptune-wild-09
+PASS: Concept, views and world assignment agree: neptune-wild-10
+PASS: Creature IDs are unique: neptune-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 b
+PASS: Champion and apex encounter roles are present: trappist-1-b
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-01
+PASS: Creature IDs are unique: trappist-1-b-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-02
+PASS: Creature IDs are unique: trappist-1-b-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-03
+PASS: Creature IDs are unique: trappist-1-b-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-04
+PASS: Creature IDs are unique: trappist-1-b-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-05
+PASS: Creature IDs are unique: trappist-1-b-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-06
+PASS: Creature IDs are unique: trappist-1-b-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-07
+PASS: Creature IDs are unique: trappist-1-b-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-08
+PASS: Creature IDs are unique: trappist-1-b-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-09
+PASS: Creature IDs are unique: trappist-1-b-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-b-wild-10
+PASS: Creature IDs are unique: trappist-1-b-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 c
+PASS: Champion and apex encounter roles are present: trappist-1-c
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-01
+PASS: Creature IDs are unique: trappist-1-c-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-02
+PASS: Creature IDs are unique: trappist-1-c-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-03
+PASS: Creature IDs are unique: trappist-1-c-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-04
+PASS: Creature IDs are unique: trappist-1-c-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-05
+PASS: Creature IDs are unique: trappist-1-c-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-06
+PASS: Creature IDs are unique: trappist-1-c-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-07
+PASS: Creature IDs are unique: trappist-1-c-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-08
+PASS: Creature IDs are unique: trappist-1-c-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-09
+PASS: Creature IDs are unique: trappist-1-c-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-c-wild-10
+PASS: Creature IDs are unique: trappist-1-c-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 d
+PASS: Champion and apex encounter roles are present: trappist-1-d
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-01
+PASS: Creature IDs are unique: trappist-1-d-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-02
+PASS: Creature IDs are unique: trappist-1-d-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-03
+PASS: Creature IDs are unique: trappist-1-d-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-04
+PASS: Creature IDs are unique: trappist-1-d-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-05
+PASS: Creature IDs are unique: trappist-1-d-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-06
+PASS: Creature IDs are unique: trappist-1-d-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-07
+PASS: Creature IDs are unique: trappist-1-d-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-08
+PASS: Creature IDs are unique: trappist-1-d-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-09
+PASS: Creature IDs are unique: trappist-1-d-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-d-wild-10
+PASS: Creature IDs are unique: trappist-1-d-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 e
+PASS: Champion and apex encounter roles are present: trappist-1-e
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-01
+PASS: Creature IDs are unique: trappist-1-e-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-02
+PASS: Creature IDs are unique: trappist-1-e-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-03
+PASS: Creature IDs are unique: trappist-1-e-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-04
+PASS: Creature IDs are unique: trappist-1-e-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-05
+PASS: Creature IDs are unique: trappist-1-e-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-06
+PASS: Creature IDs are unique: trappist-1-e-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-07
+PASS: Creature IDs are unique: trappist-1-e-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-08
+PASS: Creature IDs are unique: trappist-1-e-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-09
+PASS: Creature IDs are unique: trappist-1-e-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-e-wild-10
+PASS: Creature IDs are unique: trappist-1-e-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 f
+PASS: Champion and apex encounter roles are present: trappist-1-f
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-01
+PASS: Creature IDs are unique: trappist-1-f-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-02
+PASS: Creature IDs are unique: trappist-1-f-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-03
+PASS: Creature IDs are unique: trappist-1-f-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-04
+PASS: Creature IDs are unique: trappist-1-f-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-05
+PASS: Creature IDs are unique: trappist-1-f-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-06
+PASS: Creature IDs are unique: trappist-1-f-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-07
+PASS: Creature IDs are unique: trappist-1-f-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-08
+PASS: Creature IDs are unique: trappist-1-f-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-09
+PASS: Creature IDs are unique: trappist-1-f-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-f-wild-10
+PASS: Creature IDs are unique: trappist-1-f-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 g
+PASS: Champion and apex encounter roles are present: trappist-1-g
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-01
+PASS: Creature IDs are unique: trappist-1-g-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-02
+PASS: Creature IDs are unique: trappist-1-g-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-03
+PASS: Creature IDs are unique: trappist-1-g-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-04
+PASS: Creature IDs are unique: trappist-1-g-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-05
+PASS: Creature IDs are unique: trappist-1-g-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-06
+PASS: Creature IDs are unique: trappist-1-g-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-07
+PASS: Creature IDs are unique: trappist-1-g-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-08
+PASS: Creature IDs are unique: trappist-1-g-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-09
+PASS: Creature IDs are unique: trappist-1-g-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-g-wild-10
+PASS: Creature IDs are unique: trappist-1-g-wild-10
+PASS: Ten stable wildlife concepts exist for TRAPPIST-1 h
+PASS: Champion and apex encounter roles are present: trappist-1-h
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-01
+PASS: Creature IDs are unique: trappist-1-h-wild-01
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-02
+PASS: Creature IDs are unique: trappist-1-h-wild-02
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-03
+PASS: Creature IDs are unique: trappist-1-h-wild-03
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-04
+PASS: Creature IDs are unique: trappist-1-h-wild-04
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-05
+PASS: Creature IDs are unique: trappist-1-h-wild-05
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-06
+PASS: Creature IDs are unique: trappist-1-h-wild-06
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-07
+PASS: Creature IDs are unique: trappist-1-h-wild-07
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-08
+PASS: Creature IDs are unique: trappist-1-h-wild-08
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-09
+PASS: Creature IDs are unique: trappist-1-h-wild-09
+PASS: Concept, views and world assignment agree: trappist-1-h-wild-10
+PASS: Creature IDs are unique: trappist-1-h-wild-10
+PASS: Ten stable wildlife concepts exist for TOI-270 b
+PASS: Champion and apex encounter roles are present: toi-270-b
+PASS: Concept, views and world assignment agree: toi-270-b-wild-01
+PASS: Creature IDs are unique: toi-270-b-wild-01
+PASS: Concept, views and world assignment agree: toi-270-b-wild-02
+PASS: Creature IDs are unique: toi-270-b-wild-02
+PASS: Concept, views and world assignment agree: toi-270-b-wild-03
+PASS: Creature IDs are unique: toi-270-b-wild-03
+PASS: Concept, views and world assignment agree: toi-270-b-wild-04
+PASS: Creature IDs are unique: toi-270-b-wild-04
+PASS: Concept, views and world assignment agree: toi-270-b-wild-05
+PASS: Creature IDs are unique: toi-270-b-wild-05
+PASS: Concept, views and world assignment agree: toi-270-b-wild-06
+PASS: Creature IDs are unique: toi-270-b-wild-06
+PASS: Concept, views and world assignment agree: toi-270-b-wild-07
+PASS: Creature IDs are unique: toi-270-b-wild-07
+PASS: Concept, views and world assignment agree: toi-270-b-wild-08
+PASS: Creature IDs are unique: toi-270-b-wild-08
+PASS: Concept, views and world assignment agree: toi-270-b-wild-09
+PASS: Creature IDs are unique: toi-270-b-wild-09
+PASS: Concept, views and world assignment agree: toi-270-b-wild-10
+PASS: Creature IDs are unique: toi-270-b-wild-10
+PASS: Ten stable wildlife concepts exist for TOI-270 c
+PASS: Champion and apex encounter roles are present: toi-270-c
+PASS: Concept, views and world assignment agree: toi-270-c-wild-01
+PASS: Creature IDs are unique: toi-270-c-wild-01
+PASS: Concept, views and world assignment agree: toi-270-c-wild-02
+PASS: Creature IDs are unique: toi-270-c-wild-02
+PASS: Concept, views and world assignment agree: toi-270-c-wild-03
+PASS: Creature IDs are unique: toi-270-c-wild-03
+PASS: Concept, views and world assignment agree: toi-270-c-wild-04
+PASS: Creature IDs are unique: toi-270-c-wild-04
+PASS: Concept, views and world assignment agree: toi-270-c-wild-05
+PASS: Creature IDs are unique: toi-270-c-wild-05
+PASS: Concept, views and world assignment agree: toi-270-c-wild-06
+PASS: Creature IDs are unique: toi-270-c-wild-06
+PASS: Concept, views and world assignment agree: toi-270-c-wild-07
+PASS: Creature IDs are unique: toi-270-c-wild-07
+PASS: Concept, views and world assignment agree: toi-270-c-wild-08
+PASS: Creature IDs are unique: toi-270-c-wild-08
+PASS: Concept, views and world assignment agree: toi-270-c-wild-09
+PASS: Creature IDs are unique: toi-270-c-wild-09
+PASS: Concept, views and world assignment agree: toi-270-c-wild-10
+PASS: Creature IDs are unique: toi-270-c-wild-10
+PASS: Ten stable wildlife concepts exist for K2-141 b
+PASS: Champion and apex encounter roles are present: k2-141-b
+PASS: Concept, views and world assignment agree: k2-141-b-wild-01
+PASS: Creature IDs are unique: k2-141-b-wild-01
+PASS: Concept, views and world assignment agree: k2-141-b-wild-02
+PASS: Creature IDs are unique: k2-141-b-wild-02
+PASS: Concept, views and world assignment agree: k2-141-b-wild-03
+PASS: Creature IDs are unique: k2-141-b-wild-03
+PASS: Concept, views and world assignment agree: k2-141-b-wild-04
+PASS: Creature IDs are unique: k2-141-b-wild-04
+PASS: Concept, views and world assignment agree: k2-141-b-wild-05
+PASS: Creature IDs are unique: k2-141-b-wild-05
+PASS: Concept, views and world assignment agree: k2-141-b-wild-06
+PASS: Creature IDs are unique: k2-141-b-wild-06
+PASS: Concept, views and world assignment agree: k2-141-b-wild-07
+PASS: Creature IDs are unique: k2-141-b-wild-07
+PASS: Concept, views and world assignment agree: k2-141-b-wild-08
+PASS: Creature IDs are unique: k2-141-b-wild-08
+PASS: Concept, views and world assignment agree: k2-141-b-wild-09
+PASS: Creature IDs are unique: k2-141-b-wild-09
+PASS: Concept, views and world assignment agree: k2-141-b-wild-10
+PASS: Creature IDs are unique: k2-141-b-wild-10
+PASS: Ten stable wildlife concepts exist for WASP-76 b
+PASS: Champion and apex encounter roles are present: wasp-76-b
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-01
+PASS: Creature IDs are unique: wasp-76-b-wild-01
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-02
+PASS: Creature IDs are unique: wasp-76-b-wild-02
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-03
+PASS: Creature IDs are unique: wasp-76-b-wild-03
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-04
+PASS: Creature IDs are unique: wasp-76-b-wild-04
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-05
+PASS: Creature IDs are unique: wasp-76-b-wild-05
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-06
+PASS: Creature IDs are unique: wasp-76-b-wild-06
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-07
+PASS: Creature IDs are unique: wasp-76-b-wild-07
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-08
+PASS: Creature IDs are unique: wasp-76-b-wild-08
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-09
+PASS: Creature IDs are unique: wasp-76-b-wild-09
+PASS: Concept, views and world assignment agree: wasp-76-b-wild-10
+PASS: Creature IDs are unique: wasp-76-b-wild-10
+PASS: All planets have unique wildlife entries: 190

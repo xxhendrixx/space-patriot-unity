@@ -1,0 +1,4 @@
+PASS: Spellworks survey event emits into the live game particle pool
+PASS: Spellworks pool is visible to the active gameplay camera
+PASS: Aft drive sound is a live, spatial engine layer
+PASS: Reactor circulation is a separate live audio layer

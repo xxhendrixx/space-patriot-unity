@@ -42,8 +42,14 @@ namespace SpacePatriot
         }
         public void Muzzle(Vector3 p,Vector3 direction,bool laser=false)
         {for(int i=0;i<4;i++)Emit(p,direction*Random.Range(2,6)+Random.insideUnitSphere*.5f,laser?new Color(2,.03f,.01f):new Color(2,1.1f,.35f),.075f,.18f,5,0,2);}
-        public void Survey(Vector3 p)
-        {EffectEvents++;for(int i=0;i<48;i++){float a=i*Mathf.PI*2/48;var d=new Vector3(Mathf.Cos(a),.1f,Mathf.Sin(a));Emit(p+d*.5f,d*2,new Color(.14f,.8f,.62f),1.3f,.06f,0,0,1.2f);}}
+        public void Survey(Vector3 p)=>Survey(p,Vector3.up);
+        public void Survey(Vector3 p,Vector3 normal)
+        {
+            EffectEvents++;var axis=normal.sqrMagnitude>.01f?normal.normalized:Vector3.up;var reference=Mathf.Abs(Vector3.Dot(axis,Vector3.up))>.92f?Vector3.forward:Vector3.up;
+            var right=Vector3.Cross(reference,axis).normalized;var tangent=Vector3.Cross(axis,right).normalized;Color scan=new Color(.18f,1.45f,1.12f);
+            for(int i=0;i<64;i++){float a=i*Mathf.PI*2/64;var d=right*Mathf.Cos(a)+tangent*Mathf.Sin(a);Emit(p+d*.18f,d*3.2f+axis*.35f,scan,1.25f,.12f,0,0,1.1f);}
+            for(int i=0;i<12;i++){float a=i*Mathf.PI*2/12;var d=right*Mathf.Cos(a)+tangent*Mathf.Sin(a);Emit(p+d*.35f,axis*Random.Range(1.1f,2.4f)+d*Random.Range(.25f,.7f),new Color(.35f,.85f,1.4f),.8f,.08f,5,0,1.4f);}
+        }
         public void Flush(){particles.Flush();smoke.Flush();}
         void LateUpdate()=>Flush();
         void OnDestroy(){particles?.Dispose();smoke?.Dispose();}

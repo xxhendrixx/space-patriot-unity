@@ -1,0 +1,453 @@
+{
+  "schema": "space-patriot-creature-concepts",
+  "version": 1,
+  "world": "trappist-1-h",
+  "worldName": "TRAPPIST-1 h",
+  "biome": "rock",
+  "contract": {
+    "units": "metres",
+    "origin": "ground-centre",
+    "up": "+Y",
+    "forward": "+Z",
+    "views": [
+      "front",
+      "left",
+      "right",
+      "back",
+      "top",
+      "three-quarter"
+    ]
+  },
+  "species": [
+    {
+      "id": "trappist-1-h-wild-01",
+      "name": "Kelpback / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "grazer",
+      "model": "fauna-0",
+      "family": 0,
+      "variant": 0,
+      "seed": 1874075180,
+      "palette": [
+        "#9c8c73",
+        "#585040",
+        "#ca8e56"
+      ],
+      "height": 2.1651262854691593,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "low armored shoulders, a segmented dorsal sail and broad shovel muzzle",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "feeds on mineral films and retreats when challenged",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. low armored shoulders, a segmented dorsal sail and broad shovel muzzle. Habitat: fracture escarpments and mineral talus. feeds on mineral films and retreats when challenged. Palette #9c8c73, #585040, #ca8e56. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-02",
+      "name": "Screehoop / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "glider",
+      "model": "fauna-1",
+      "family": 1,
+      "variant": 0,
+      "seed": 1924408037,
+      "palette": [
+        "#988a75",
+        "#544e42",
+        "#c68c58"
+      ],
+      "height": 2.1787855585105715,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "long kite membranes, a narrow rudder tail and split sensory crest",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "rides thermal columns and scatters if approached",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. long kite membranes, a narrow rudder tail and split sensory crest. Habitat: fracture escarpments and mineral talus. rides thermal columns and scatters if approached. Palette #988a75, #544e42, #c68c58. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-03",
+      "name": "Glassburrow / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "burrower",
+      "model": "fauna-2",
+      "family": 2,
+      "variant": 0,
+      "seed": 1907630418,
+      "palette": [
+        "#9e8d72",
+        "#5a513f",
+        "#cc8f55"
+      ],
+      "height": 1.6147403612965718,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "wedge head, compact plated body, digging forelimbs and counterweight tail",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "uses a den network and erupts from loose ground",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. wedge head, compact plated body, digging forelimbs and counterweight tail. Habitat: fracture escarpments and mineral talus. uses a den network and erupts from loose ground. Palette #9e8d72, #5a513f, #cc8f55. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-04",
+      "name": "Lanternmoth / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "drifter",
+      "model": "fauna-3",
+      "family": 3,
+      "variant": 0,
+      "seed": 1823742323,
+      "palette": [
+        "#a28f70",
+        "#5e533d",
+        "#d09153"
+      ],
+      "height": 1.7822303276741878,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "floating gas bladders, translucent veils and a dangling lure cluster",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "filters airborne spores and moves with local weather",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. floating gas bladders, translucent veils and a dangling lure cluster. Habitat: fracture escarpments and mineral talus. filters airborne spores and moves with local weather. Palette #a28f70, #5e533d, #d09153. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-05",
+      "name": "Cairnstag / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "sentinel",
+      "model": "fauna-4",
+      "family": 4,
+      "variant": 0,
+      "seed": 1806964704,
+      "palette": [
+        "#8a837c",
+        "#464749",
+        "#b8855f"
+      ],
+      "height": 0.908570353128016,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "towering ridged shoulders, paired crown horns and heavy planted feet",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "guards a nesting or feeding territory",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. towering ridged shoulders, paired crown horns and heavy planted feet. Habitat: fracture escarpments and mineral talus. guards a nesting or feeding territory. Palette #8a837c, #464749, #b8855f. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-06",
+      "name": "Needlewake / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "stalker",
+      "model": "fauna-5",
+      "family": 0,
+      "variant": 1,
+      "seed": 1857297561,
+      "palette": [
+        "#9c8c73",
+        "#585040",
+        "#ca8e56"
+      ],
+      "height": 1.304320053034462,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Burrow ambush"
+      ],
+      "concept": {
+        "silhouette": "lean reverse-jointed limbs, swept-back quills and a low hunting profile",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "hunts by reading vibration and breaking line of sight",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. lean reverse-jointed limbs, swept-back quills and a low hunting profile. Habitat: fracture escarpments and mineral talus. hunts by reading vibration and breaking line of sight. Palette #9c8c73, #585040, #ca8e56. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-07",
+      "name": "Saltcrawler / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "scavenger",
+      "model": "fauna-6",
+      "family": 1,
+      "variant": 1,
+      "seed": 1840519942,
+      "palette": [
+        "#8e857a",
+        "#4a4947",
+        "#bc875d"
+      ],
+      "height": 1.2207319347187877,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "asymmetric shell plates, one oversized feeler and hooked feeding limbs",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "follows ships and feeds on discarded cargo organics",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. asymmetric shell plates, one oversized feeler and hooked feeding limbs. Habitat: fracture escarpments and mineral talus. follows ships and feeds on discarded cargo organics. Palette #8e857a, #4a4947, #bc875d. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-08",
+      "name": "Mirehorn / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "ambusher",
+      "model": "fauna-7",
+      "family": 2,
+      "variant": 1,
+      "seed": 2025073751,
+      "palette": [
+        "#8c847b",
+        "#484848",
+        "#ba865e"
+      ],
+      "height": 1.643779047485441,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Hooked pounce"
+      ],
+      "concept": {
+        "silhouette": "flattened body, camouflaged frill and a spring-loaded neck fan",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "mimics the local substrate before a short burst attack",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. flattened body, camouflaged frill and a spring-loaded neck fan. Habitat: fracture escarpments and mineral talus. mimics the local substrate before a short burst attack. Palette #8c847b, #484848, #ba865e. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-09",
+      "name": "Thunderjaw / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "champion",
+      "model": "fauna-8",
+      "family": 3,
+      "variant": 1,
+      "seed": 2008296132,
+      "palette": [
+        "#968976",
+        "#524d43",
+        "#c48b59"
+      ],
+      "height": 4.8,
+      "health": 520,
+      "damage": 16,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Spore fan",
+        "Cyclone leap"
+      ],
+      "concept": {
+        "silhouette": "tall layered carapace, branching mineral horns and glowing throat sacs",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "elite territorial defender; combines two attack patterns",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. tall layered carapace, branching mineral horns and glowing throat sacs. Habitat: fracture escarpments and mineral talus. elite territorial defender; combines two attack patterns. Palette #968976, #524d43, #c48b59. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-h-wild-10",
+      "name": "Pale Regent / TRAPPIST-1 h",
+      "world": "trappist-1-h",
+      "biome": "rock",
+      "role": "apex",
+      "model": "fauna-9",
+      "family": 4,
+      "variant": 1,
+      "seed": 1790039990,
+      "palette": [
+        "#8e857a",
+        "#4a4947",
+        "#bc875d"
+      ],
+      "height": 8.5,
+      "health": 1400,
+      "damage": 28,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Shell ward",
+        "Crown pulse"
+      ],
+      "concept": {
+        "silhouette": "massive interlocking plates, scarred face shield and luminous organ channels",
+        "habitat": "fracture escarpments and mineral talus",
+        "behavior": "planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. massive interlocking plates, scarred face shield and luminous organ channels. Habitat: fracture escarpments and mineral talus. planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows. Palette #8e857a, #4a4947, #bc875d. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    }
+  ]
+}

@@ -19,13 +19,17 @@ public static class OriginalAssetImporter
     { ImportInternal(false); }
     public static void ImportProduction()
     { ImportInternal(true); }
-    static void ImportInternal(bool productionOnly)
+    public static void ImportWildlife()
+    { ImportInternal(false,"wildlife"); }
+    static void ImportInternal(bool productionOnly,string kindOnly=null)
     {
         Directory.CreateDirectory(Dest);Directory.CreateDirectory(Prefabs);AssetDatabase.Refresh();
         var data=JsonUtility.FromJson<Catalog>(File.ReadAllText(Source+"import.json"));
-        var materials=new Dictionary<string,Material>();var meshes=new Dictionary<string,Mesh>();
+        var materials=new Dictionary<string,Material>();var meshes=new Dictionary<string,Mesh>();var neededMaterials=new HashSet<string>();
+        if(kindOnly!=null)foreach(var model in data.models)if(model.kind==kindOnly)foreach(var node in model.nodes)neededMaterials.Add(node.material);
         foreach(var row in data.materials)
         {
+            if(kindOnly!=null&&!neededMaterials.Contains(row.id))continue;
             if(!string.IsNullOrEmpty(row.normal)){
                 var ti=AssetImporter.GetAtPath(Source+row.normal) as TextureImporter;
                 if(ti!=null&&ti.textureType!=TextureImporterType.NormalMap){ti.textureType=TextureImporterType.NormalMap;ti.SaveAndReimport();}}
@@ -42,6 +46,7 @@ public static class OriginalAssetImporter
         }
         foreach(var model in data.models)
         {
+            if(kindOnly!=null&&model.kind!=kindOnly)continue;
             if(productionOnly&&!model.id.StartsWith("refit-")&&!model.id.StartsWith("cabin-")&&!model.id.StartsWith("citizen-")&&model.id!="rifle"&&model.id!="sidearm")continue;
             var root=new GameObject(model.id);var gears=new List<Transform>();var bones=new Dictionary<string,Transform>();
             foreach(var row in model.nodes)
@@ -72,11 +77,11 @@ public static class OriginalAssetImporter
             PrefabUtility.SaveAsPrefabAsset(root,Prefabs+model.id+".prefab");UnityEngine.Object.DestroyImmediate(root);
         }
         string surfaces="Assets/SpacePatriot/Resources/OriginalSurfaces/";Directory.CreateDirectory(surfaces);
-        foreach(var file in Directory.GetFiles(Source,"atlas-*.png")){
+        foreach(var file in kindOnly==null?Directory.GetFiles(Source,"atlas-*.png"):Array.Empty<string>()){
             string name=Path.GetFileNameWithoutExtension(file).Substring(6),path=surfaces+name+".mat";
             var m=AssetDatabase.LoadAssetAtPath<Material>(path);if(m==null){m=new Material(Shader.Find("Universal Render Pipeline/Lit"));AssetDatabase.CreateAsset(m,path);}
             m.name=name;m.SetColor("_BaseColor",Color.white);m.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(file.Replace('\\','/')));m.SetFloat("_Smoothness",.24f);m.SetFloat("_Metallic",name.StartsWith("interior")||name.StartsWith("exterior")||name.StartsWith("machinery")?.35f:0);EditorUtility.SetDirty(m);
         }
-        AssetDatabase.SaveAssets();Debug.Log("ORIGINAL_ASSETS_IMPORTED: "+data.models.Length+" original models; "+materials.Count+" materials; "+meshes.Count+" meshes; all 100 fleet specifications; 128 atlas cells.");
+        AssetDatabase.SaveAssets();Debug.Log((kindOnly==null?"ORIGINAL_ASSETS_IMPORTED: ":"ASSET_KIND_IMPORTED: "+kindOnly+" / ")+data.models.Length+" catalog models; "+materials.Count+" materials; "+meshes.Count+" meshes.");
     }
 }

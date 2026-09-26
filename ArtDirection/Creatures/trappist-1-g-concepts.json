@@ -1,0 +1,453 @@
+{
+  "schema": "space-patriot-creature-concepts",
+  "version": 1,
+  "world": "trappist-1-g",
+  "worldName": "TRAPPIST-1 g",
+  "biome": "ice",
+  "contract": {
+    "units": "metres",
+    "origin": "ground-centre",
+    "up": "+Y",
+    "forward": "+Z",
+    "views": [
+      "front",
+      "left",
+      "right",
+      "back",
+      "top",
+      "three-quarter"
+    ]
+  },
+  "species": [
+    {
+      "id": "trappist-1-g-wild-01",
+      "name": "Ice shelf grazer / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "grazer",
+      "model": "fauna-0",
+      "family": 0,
+      "variant": 0,
+      "seed": 3084523601,
+      "palette": [
+        "#abc1bd",
+        "#586d73",
+        "#dddcc2"
+      ],
+      "height": 1.5406923914095387,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "low armored shoulders, a segmented dorsal sail and broad shovel muzzle",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "feeds on mineral films and retreats when challenged",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. low armored shoulders, a segmented dorsal sail and broad shovel muzzle. Habitat: blue-ice crevasses, brine vents and pressure ridges. feeds on mineral films and retreats when challenged. Palette #abc1bd, #586d73, #dddcc2. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-02",
+      "name": "Aurora skater / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "glider",
+      "model": "fauna-1",
+      "family": 1,
+      "variant": 0,
+      "seed": 3034190744,
+      "palette": [
+        "#afc3bb",
+        "#5c6f71",
+        "#e1dec0"
+      ],
+      "height": 2.122884095367044,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "long kite membranes, a narrow rudder tail and split sensory crest",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "rides thermal columns and scatters if approached",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. long kite membranes, a narrow rudder tail and split sensory crest. Habitat: blue-ice crevasses, brine vents and pressure ridges. rides thermal columns and scatters if approached. Palette #afc3bb, #5c6f71, #e1dec0. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-03",
+      "name": "Frost burrower / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "burrower",
+      "model": "fauna-2",
+      "family": 2,
+      "variant": 0,
+      "seed": 3050968363,
+      "palette": [
+        "#abc1bd",
+        "#586d73",
+        "#dddcc2"
+      ],
+      "height": 0.8533330339239911,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "wedge head, compact plated body, digging forelimbs and counterweight tail",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "uses a den network and erupts from loose ground",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. wedge head, compact plated body, digging forelimbs and counterweight tail. Habitat: blue-ice crevasses, brine vents and pressure ridges. uses a den network and erupts from loose ground. Palette #abc1bd, #586d73, #dddcc2. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-04",
+      "name": "Prismwing / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "drifter",
+      "model": "fauna-3",
+      "family": 3,
+      "variant": 0,
+      "seed": 3134856458,
+      "palette": [
+        "#a1bcc2",
+        "#4e6878",
+        "#d3d7c7"
+      ],
+      "height": 2.2795127500547094,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "floating gas bladders, translucent veils and a dangling lure cluster",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "filters airborne spores and moves with local weather",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. floating gas bladders, translucent veils and a dangling lure cluster. Habitat: blue-ice crevasses, brine vents and pressure ridges. filters airborne spores and moves with local weather. Palette #a1bcc2, #4e6878, #d3d7c7. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-05",
+      "name": "Rimeback / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "sentinel",
+      "model": "fauna-4",
+      "family": 4,
+      "variant": 0,
+      "seed": 3151634077,
+      "palette": [
+        "#9bb9c5",
+        "#48657b",
+        "#cdd4ca"
+      ],
+      "height": 1.9912689117016271,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "towering ridged shoulders, paired crown horns and heavy planted feet",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "guards a nesting or feeding territory",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. towering ridged shoulders, paired crown horns and heavy planted feet. Habitat: blue-ice crevasses, brine vents and pressure ridges. guards a nesting or feeding territory. Palette #9bb9c5, #48657b, #cdd4ca. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-06",
+      "name": "Hailstalker / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "stalker",
+      "model": "fauna-5",
+      "family": 0,
+      "variant": 1,
+      "seed": 3101301220,
+      "palette": [
+        "#9bb9c5",
+        "#48657b",
+        "#cdd4ca"
+      ],
+      "height": 2.058842597249895,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Crown pulse"
+      ],
+      "concept": {
+        "silhouette": "lean reverse-jointed limbs, swept-back quills and a low hunting profile",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "hunts by reading vibration and breaking line of sight",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. lean reverse-jointed limbs, swept-back quills and a low hunting profile. Habitat: blue-ice crevasses, brine vents and pressure ridges. hunts by reading vibration and breaking line of sight. Palette #9bb9c5, #48657b, #cdd4ca. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-07",
+      "name": "Brine shell / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "scavenger",
+      "model": "fauna-6",
+      "family": 1,
+      "variant": 1,
+      "seed": 3118078839,
+      "palette": [
+        "#a7bfbf",
+        "#546b75",
+        "#d9dac4"
+      ],
+      "height": 0.8940771641908214,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "asymmetric shell plates, one oversized feeler and hooked feeding limbs",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "follows ships and feeds on discarded cargo organics",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. asymmetric shell plates, one oversized feeler and hooked feeding limbs. Habitat: blue-ice crevasses, brine vents and pressure ridges. follows ships and feeds on discarded cargo organics. Palette #a7bfbf, #546b75, #d9dac4. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-08",
+      "name": "Night glider / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "ambusher",
+      "model": "fauna-7",
+      "family": 2,
+      "variant": 1,
+      "seed": 2933525030,
+      "palette": [
+        "#a3bdc1",
+        "#506977",
+        "#d5d8c6"
+      ],
+      "height": 1.4934817146975548,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Dust veil"
+      ],
+      "concept": {
+        "silhouette": "flattened body, camouflaged frill and a spring-loaded neck fan",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "mimics the local substrate before a short burst attack",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. flattened body, camouflaged frill and a spring-loaded neck fan. Habitat: blue-ice crevasses, brine vents and pressure ridges. mimics the local substrate before a short burst attack. Palette #a3bdc1, #506977, #d5d8c6. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-09",
+      "name": "Glacier titan / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "champion",
+      "model": "fauna-8",
+      "family": 3,
+      "variant": 1,
+      "seed": 2950302649,
+      "palette": [
+        "#afc3bb",
+        "#5c6f71",
+        "#e1dec0"
+      ],
+      "height": 4.8,
+      "health": 520,
+      "damage": 16,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Burrow ambush",
+        "Spore fan"
+      ],
+      "concept": {
+        "silhouette": "tall layered carapace, branching mineral horns and glowing throat sacs",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "elite territorial defender; combines two attack patterns",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. tall layered carapace, branching mineral horns and glowing throat sacs. Habitat: blue-ice crevasses, brine vents and pressure ridges. elite territorial defender; combines two attack patterns. Palette #afc3bb, #5c6f71, #e1dec0. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-g-wild-10",
+      "name": "The White Choir / TRAPPIST-1 g",
+      "world": "trappist-1-g",
+      "biome": "ice",
+      "role": "apex",
+      "model": "fauna-9",
+      "family": 4,
+      "variant": 1,
+      "seed": 1021126727,
+      "palette": [
+        "#a3bdc1",
+        "#506977",
+        "#d5d8c6"
+      ],
+      "height": 8.5,
+      "health": 1400,
+      "damage": 28,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Resonant screech",
+        "Shell ward"
+      ],
+      "concept": {
+        "silhouette": "massive interlocking plates, scarred face shield and luminous organ channels",
+        "habitat": "blue-ice crevasses, brine vents and pressure ridges",
+        "behavior": "planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. massive interlocking plates, scarred face shield and luminous organ channels. Habitat: blue-ice crevasses, brine vents and pressure ridges. planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows. Palette #a3bdc1, #506977, #d5d8c6. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    }
+  ]
+}

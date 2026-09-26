@@ -5,9 +5,52 @@
     "seed": 3321527684,
     "type": 0,
     "humidity": 0,
-    "style": "alpine",
-    "min": -86.3678710214576,
-    "max": 611.5468147750918,
+    "styles": [
+      "highlands",
+      "alpine",
+      "islands",
+      "highlands",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "highlands",
+        "seed": 1680996157,
+        "temperature": 0.33000000000000007,
+        "moisture": 0,
+        "contributingSamples": 10602
+      },
+      {
+        "style": "alpine",
+        "seed": 40464630,
+        "temperature": 0.7000000000000001,
+        "moisture": 0.12,
+        "contributingSamples": 6584
+      },
+      {
+        "style": "islands",
+        "seed": 2694900399,
+        "temperature": 0.47000000000000003,
+        "moisture": 0.28,
+        "contributingSamples": 7012
+      },
+      {
+        "style": "highlands",
+        "seed": 1054368872,
+        "temperature": 0.65,
+        "moisture": 0,
+        "contributingSamples": 3429
+      },
+      {
+        "style": "desert",
+        "seed": 3708804641,
+        "temperature": 0.79,
+        "moisture": 0,
+        "contributingSamples": 5655
+      }
+    ],
+    "min": -226.1164539481175,
+    "max": 333.89060008721606,
     "samples": 16641
   },
   {
@@ -16,9 +59,52 @@
     "seed": 1732359244,
     "type": 2,
     "humidity": 0.1,
-    "style": "desert",
-    "min": -32.632140084971354,
-    "max": 385.6452018106096,
+    "styles": [
+      "desert",
+      "highlands",
+      "islands",
+      "desert",
+      "alpine"
+    ],
+    "provinces": [
+      {
+        "style": "desert",
+        "seed": 91827717,
+        "temperature": 0.68,
+        "moisture": 0,
+        "contributingSamples": 5274
+      },
+      {
+        "style": "highlands",
+        "seed": 2746263486,
+        "temperature": 1,
+        "moisture": 0.22,
+        "contributingSamples": 8937
+      },
+      {
+        "style": "islands",
+        "seed": 1105731959,
+        "temperature": 0.8200000000000001,
+        "moisture": 0.38,
+        "contributingSamples": 9171
+      },
+      {
+        "style": "desert",
+        "seed": 3760167728,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 2223
+      },
+      {
+        "style": "alpine",
+        "seed": 2119636201,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 7677
+      }
+    ],
+    "min": -265.2086070400515,
+    "max": 466.98025701424626,
     "samples": 16641
   },
   {
@@ -27,9 +113,52 @@
     "seed": 1270752749,
     "type": 1,
     "humidity": 0.9,
-    "style": "highlands",
-    "min": -147.62463165271782,
-    "max": 539.3668233105026,
+    "styles": [
+      "highlands",
+      "islands",
+      "alpine",
+      "highlands",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "highlands",
+        "seed": 3925188518,
+        "temperature": 0.33000000000000007,
+        "moisture": 0.68,
+        "contributingSamples": 7624
+      },
+      {
+        "style": "islands",
+        "seed": 2284656991,
+        "temperature": 0.7000000000000001,
+        "moisture": 1,
+        "contributingSamples": 5995
+      },
+      {
+        "style": "alpine",
+        "seed": 644125464,
+        "temperature": 0.47000000000000003,
+        "moisture": 1,
+        "contributingSamples": 5682
+      },
+      {
+        "style": "highlands",
+        "seed": 3298561233,
+        "temperature": 0.65,
+        "moisture": 0.8,
+        "contributingSamples": 3917
+      },
+      {
+        "style": "desert",
+        "seed": 1658029706,
+        "temperature": 0.79,
+        "moisture": 0.6000000000000001,
+        "contributingSamples": 10064
+      }
+    ],
+    "min": -261.34206562378955,
+    "max": 373.97376390689817,
     "samples": 16641
   },
   {
@@ -38,9 +167,52 @@
     "seed": 3778613462,
     "type": 2,
     "humidity": 0.1,
-    "style": "desert",
-    "min": -32.03976629761894,
-    "max": 419.70973419812674,
+    "styles": [
+      "desert",
+      "highlands",
+      "islands",
+      "desert",
+      "alpine"
+    ],
+    "provinces": [
+      {
+        "style": "desert",
+        "seed": 2138081935,
+        "temperature": 0.68,
+        "moisture": 0,
+        "contributingSamples": 7298
+      },
+      {
+        "style": "highlands",
+        "seed": 497550408,
+        "temperature": 1,
+        "moisture": 0.22,
+        "contributingSamples": 5272
+      },
+      {
+        "style": "islands",
+        "seed": 3151986177,
+        "temperature": 0.8200000000000001,
+        "moisture": 0.38,
+        "contributingSamples": 8412
+      },
+      {
+        "style": "desert",
+        "seed": 1511454650,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 3321
+      },
+      {
+        "style": "alpine",
+        "seed": 4165890419,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 8979
+      }
+    ],
+    "min": -250.17814936165777,
+    "max": 519.1821645913191,
     "samples": 16641
   },
   {
@@ -49,9 +221,52 @@
     "seed": 1953829944,
     "type": 5,
     "humidity": 0.01,
-    "style": "alpine",
-    "min": -201.49377977847007,
-    "max": 469.97205156524853,
+    "styles": [
+      "alpine",
+      "highlands",
+      "desert",
+      "alpine",
+      "islands"
+    ],
+    "provinces": [
+      {
+        "style": "alpine",
+        "seed": 313298417,
+        "temperature": 0.33000000000000007,
+        "moisture": 0,
+        "contributingSamples": 5652
+      },
+      {
+        "style": "highlands",
+        "seed": 2967734186,
+        "temperature": 0.7000000000000001,
+        "moisture": 0.13,
+        "contributingSamples": 5858
+      },
+      {
+        "style": "desert",
+        "seed": 1327202659,
+        "temperature": 0.47000000000000003,
+        "moisture": 0.29000000000000004,
+        "contributingSamples": 11191
+      },
+      {
+        "style": "alpine",
+        "seed": 3981638428,
+        "temperature": 0.65,
+        "moisture": 0,
+        "contributingSamples": 4425
+      },
+      {
+        "style": "islands",
+        "seed": 2341106901,
+        "temperature": 0.79,
+        "moisture": 0,
+        "contributingSamples": 6156
+      }
+    ],
+    "min": -206.44689820859196,
+    "max": 715.487209844246,
     "samples": 16641
   },
   {
@@ -60,9 +275,52 @@
     "seed": 1970607563,
     "type": 2,
     "humidity": 0.1,
-    "style": "desert",
-    "min": -106.47058452732335,
-    "max": 337.61310793999655,
+    "styles": [
+      "desert",
+      "highlands",
+      "islands",
+      "desert",
+      "alpine"
+    ],
+    "provinces": [
+      {
+        "style": "desert",
+        "seed": 330076036,
+        "temperature": 0.68,
+        "moisture": 0,
+        "contributingSamples": 6972
+      },
+      {
+        "style": "highlands",
+        "seed": 2984511805,
+        "temperature": 1,
+        "moisture": 0.22,
+        "contributingSamples": 3898
+      },
+      {
+        "style": "islands",
+        "seed": 1343980278,
+        "temperature": 0.8200000000000001,
+        "moisture": 0.38,
+        "contributingSamples": 11888
+      },
+      {
+        "style": "desert",
+        "seed": 3998416047,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 8106
+      },
+      {
+        "style": "alpine",
+        "seed": 2357884520,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 2418
+      }
+    ],
+    "min": -335.0902129729607,
+    "max": 406.7469675649401,
     "samples": 16641
   },
   {
@@ -71,9 +329,52 @@
     "seed": 2054495658,
     "type": 2,
     "humidity": 0.1,
-    "style": "desert",
-    "min": -132.38776027704716,
-    "max": 339.01803676345247,
+    "styles": [
+      "desert",
+      "highlands",
+      "islands",
+      "desert",
+      "alpine"
+    ],
+    "provinces": [
+      {
+        "style": "desert",
+        "seed": 413964131,
+        "temperature": 0.68,
+        "moisture": 0,
+        "contributingSamples": 11664
+      },
+      {
+        "style": "highlands",
+        "seed": 3068399900,
+        "temperature": 1,
+        "moisture": 0.22,
+        "contributingSamples": 6144
+      },
+      {
+        "style": "islands",
+        "seed": 1427868373,
+        "temperature": 0.8200000000000001,
+        "moisture": 0.38,
+        "contributingSamples": 2690
+      },
+      {
+        "style": "desert",
+        "seed": 4082304142,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 5986
+      },
+      {
+        "style": "alpine",
+        "seed": 2441772615,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 6798
+      }
+    ],
+    "min": -290.7283948770128,
+    "max": 484.6090071895668,
     "samples": 16641
   },
   {
@@ -82,9 +383,52 @@
     "seed": 2071273277,
     "type": 1,
     "humidity": 0.9,
-    "style": "highlands",
-    "min": -328.46413406593007,
-    "max": 455.2878136056278,
+    "styles": [
+      "highlands",
+      "islands",
+      "alpine",
+      "highlands",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "highlands",
+        "seed": 430741750,
+        "temperature": 0.33000000000000007,
+        "moisture": 0.68,
+        "contributingSamples": 6193
+      },
+      {
+        "style": "islands",
+        "seed": 3085177519,
+        "temperature": 0.7000000000000001,
+        "moisture": 1,
+        "contributingSamples": 5524
+      },
+      {
+        "style": "alpine",
+        "seed": 1444645992,
+        "temperature": 0.47000000000000003,
+        "moisture": 1,
+        "contributingSamples": 10942
+      },
+      {
+        "style": "highlands",
+        "seed": 4099081761,
+        "temperature": 0.65,
+        "moisture": 0.8,
+        "contributingSamples": 5169
+      },
+      {
+        "style": "desert",
+        "seed": 2458550234,
+        "temperature": 0.79,
+        "moisture": 0.6000000000000001,
+        "contributingSamples": 5454
+      }
+    ],
+    "min": -310.69561297972064,
+    "max": 492.27139556918246,
     "samples": 16641
   },
   {
@@ -93,9 +437,52 @@
     "seed": 2020940420,
     "type": 4,
     "humidity": 0.13,
-    "style": "alpine",
-    "min": -261.8467431215935,
-    "max": 347.0878741633494,
+    "styles": [
+      "alpine",
+      "highlands",
+      "islands",
+      "alpine",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "alpine",
+        "seed": 380408893,
+        "temperature": 0,
+        "moisture": 0,
+        "contributingSamples": 7468
+      },
+      {
+        "style": "highlands",
+        "seed": 3034844662,
+        "temperature": 0.25,
+        "moisture": 0.25,
+        "contributingSamples": 4244
+      },
+      {
+        "style": "islands",
+        "seed": 1394313135,
+        "temperature": 0.020000000000000004,
+        "moisture": 0.41000000000000003,
+        "contributingSamples": 6723
+      },
+      {
+        "style": "alpine",
+        "seed": 4048748904,
+        "temperature": 0.2,
+        "moisture": 0.03,
+        "contributingSamples": 5460
+      },
+      {
+        "style": "desert",
+        "seed": 2408217377,
+        "temperature": 0.33999999999999997,
+        "moisture": 0,
+        "contributingSamples": 9387
+      }
+    ],
+    "min": -231.7252748553189,
+    "max": 635.5516583422393,
     "samples": 16641
   },
   {
@@ -104,9 +491,52 @@
     "seed": 2037718039,
     "type": 4,
     "humidity": 0.13,
-    "style": "alpine",
-    "min": -61.94474777625723,
-    "max": 624.0846588228757,
+    "styles": [
+      "alpine",
+      "highlands",
+      "islands",
+      "alpine",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "alpine",
+        "seed": 397186512,
+        "temperature": 0,
+        "moisture": 0,
+        "contributingSamples": 4173
+      },
+      {
+        "style": "highlands",
+        "seed": 3051622281,
+        "temperature": 0.25,
+        "moisture": 0.25,
+        "contributingSamples": 5251
+      },
+      {
+        "style": "islands",
+        "seed": 1411090754,
+        "temperature": 0.020000000000000004,
+        "moisture": 0.41000000000000003,
+        "contributingSamples": 9881
+      },
+      {
+        "style": "alpine",
+        "seed": 4065526523,
+        "temperature": 0.2,
+        "moisture": 0.03,
+        "contributingSamples": 4710
+      },
+      {
+        "style": "desert",
+        "seed": 2424994996,
+        "temperature": 0.33999999999999997,
+        "moisture": 0,
+        "contributingSamples": 9267
+      }
+    ],
+    "min": -224.8630002221612,
+    "max": 619.4817785826128,
     "samples": 16641
   },
   {
@@ -115,9 +545,52 @@
     "seed": 1853164230,
     "type": 0,
     "humidity": 0,
-    "style": "alpine",
-    "min": -126.9895745208068,
-    "max": 498.09606699172963,
+    "styles": [
+      "highlands",
+      "alpine",
+      "islands",
+      "highlands",
+      "desert"
+    ],
+    "provinces": [
+      {
+        "style": "highlands",
+        "seed": 212632703,
+        "temperature": 0.33000000000000007,
+        "moisture": 0,
+        "contributingSamples": 9218
+      },
+      {
+        "style": "alpine",
+        "seed": 2867068472,
+        "temperature": 0.7000000000000001,
+        "moisture": 0.12,
+        "contributingSamples": 11134
+      },
+      {
+        "style": "islands",
+        "seed": 1226536945,
+        "temperature": 0.47000000000000003,
+        "moisture": 0.28,
+        "contributingSamples": 5284
+      },
+      {
+        "style": "highlands",
+        "seed": 3880972714,
+        "temperature": 0.65,
+        "moisture": 0,
+        "contributingSamples": 5706
+      },
+      {
+        "style": "desert",
+        "seed": 2240441187,
+        "temperature": 0.79,
+        "moisture": 0,
+        "contributingSamples": 1940
+      }
+    ],
+    "min": -286.1485661356864,
+    "max": 282.6850535394822,
     "samples": 16641
   },
   {
@@ -126,9 +599,52 @@
     "seed": 274680840,
     "type": 2,
     "humidity": 0.1,
-    "style": "desert",
-    "min": -64.01504181627197,
-    "max": 247.72104104615013,
+    "styles": [
+      "desert",
+      "highlands",
+      "islands",
+      "desert",
+      "alpine"
+    ],
+    "provinces": [
+      {
+        "style": "desert",
+        "seed": 2929116609,
+        "temperature": 0.68,
+        "moisture": 0,
+        "contributingSamples": 5427
+      },
+      {
+        "style": "highlands",
+        "seed": 1288585082,
+        "temperature": 1,
+        "moisture": 0.22,
+        "contributingSamples": 6422
+      },
+      {
+        "style": "islands",
+        "seed": 3943020851,
+        "temperature": 0.8200000000000001,
+        "moisture": 0.38,
+        "contributingSamples": 7951
+      },
+      {
+        "style": "desert",
+        "seed": 2302489324,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 7281
+      },
+      {
+        "style": "alpine",
+        "seed": 661957797,
+        "temperature": 1,
+        "moisture": 0,
+        "contributingSamples": 6201
+      }
+    ],
+    "min": -193.14336045470847,
+    "max": 438.2122363315942,
     "samples": 16641
   },
   {
@@ -137,9 +653,52 @@
     "seed": 3969741818,
     "type": 5,
     "humidity": 0.01,
-    "style": "alpine",
-    "min": -74.73246580375543,
-    "max": 881.3472070203821,
+    "styles": [
+      "alpine",
+      "highlands",
+      "desert",
+      "alpine",
+      "islands"
+    ],
+    "provinces": [
+      {
+        "style": "alpine",
+        "seed": 2329210291,
+        "temperature": 0.33000000000000007,
+        "moisture": 0,
+        "contributingSamples": 5861
+      },
+      {
+        "style": "highlands",
+        "seed": 688678764,
+        "temperature": 0.7000000000000001,
+        "moisture": 0.13,
+        "contributingSamples": 8040
+      },
+      {
+        "style": "desert",
+        "seed": 3343114533,
+        "temperature": 0.47000000000000003,
+        "moisture": 0.29000000000000004,
+        "contributingSamples": 5783
+      },
+      {
+        "style": "alpine",
+        "seed": 1702583006,
+        "temperature": 0.65,
+        "moisture": 0,
+        "contributingSamples": 5504
+      },
+      {
+        "style": "islands",
+        "seed": 62051479,
+        "temperature": 0.79,
+        "moisture": 0,
+        "contributingSamples": 8094
+      }
+    ],
+    "min": -252.72940563288495,
+    "max": 831.5254606872586,
     "samples": 16641
   }
 ]

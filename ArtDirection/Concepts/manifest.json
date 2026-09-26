@@ -1,0 +1,13 @@
+{
+  "schema": "space-patriot-art-package",
+  "version": 1,
+  "coordinateContract": { "units": "metres", "origin": "ground-centre", "up": "+Y", "forward": "+Z" },
+  "standardViews": ["front", "left", "right", "back", "top", "three-quarter"],
+  "categories": {
+    "weapon": { "concept": "Weapons/weapon-emitters-v1.png", "bakeProfile": "metal-ceramic-emissive", "pivot": "grip-or-mount-centre", "forward": "+Z", "requiredParts": ["housing", "power-cell", "emitter", "sights", "service-access"] },
+    "flora": { "concept": "Flora/flora-field-guide-v1.png", "bakeProfile": "organic-fiber-wetness", "pivot": "ground-centre", "forward": "+Z", "requiredParts": ["root-base", "stem-or-trunk", "growth-joints", "crown-or-fronds"] },
+    "fauna": { "concept": "Fauna/fauna-field-guide-v1.png", "bakeProfile": "hide-shell-bioglow", "pivot": "ground-centre", "forward": "+Z", "requiredParts": ["body", "head", "locomotion-joints", "sensory-features", "ability-telegraph-parts"] },
+    "geology": { "concept": "Geology/planetary-terrain-mosaic-v1.png", "bakeProfile": "strata-mineral-ice", "pivot": "contact-base-centre", "forward": "+Z", "requiredParts": ["primary-landform", "strata-or-fracture", "erosion-detail", "biome-material-zones"] }
+  },
+  "bake": { "uvMap": "SP_BakeUV", "resolution": 2048, "paddingPixels": 16, "maps": ["basecolor", "normal-tangent", "ambient-occlusion"], "viewCameraCoordinatesAreUvCoordinates": false }
+}

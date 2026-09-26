@@ -50,6 +50,7 @@ namespace SpacePatriot
             if(!started)TitleScreen();else
             {
                 FlightHud();WeaponsHud();SocietyHud();
+                var boss=WildlifeAgent.NearestBoss(WildlifeTarget,125);if(boss)BossHud(boss);
                 if(!menu&&cockpitHint!="")Prompt(cockpitHint);
                 if(menu)Computer();
                 if(reportText!="")Report();
@@ -59,6 +60,11 @@ namespace SpacePatriot
             {Fill(265,831,910,46,new Color(.035f,.05f,.055f,.97f));Fill(265,831,3,46,amber);Text(toast,284,845,870,30,16,paper);}
             if(travelFade>0)
             {Fill(0,0,1440,900,new Color(.015f,.025f,.03f,Mathf.Clamp01(travelFade)));Text("TRANSIT / "+worlds[selectedWorld].name.ToUpperInvariant(),0,440,1440,60,24,aqua,true,TextAnchor.MiddleCenter);}
+        }
+        void BossHud(WildlifeAgent actor)
+        {
+            Fill(424,38,592,58,new Color(.025f,.04f,.043f,.91f));Text(actor.species.name.ToUpperInvariant()+"  /  APEX CONTACT",440,44,560,20,13,amber,true,TextAnchor.MiddleCenter);
+            Fill(465,72,510,8,new Color(.18f,.22f,.22f));Fill(465,72,510*actor.HealthFraction,8,actor.HealthFraction<.25f?new Color(.83f,.23f,.15f):amber);
         }
         void TitleScreen()
         {

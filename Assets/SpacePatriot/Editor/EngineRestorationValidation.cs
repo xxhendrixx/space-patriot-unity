@@ -22,6 +22,38 @@ public static class EngineRestorationValidation
         for(int i=0;i<families.GetLength(0);i++){var w=Array.Find(catalog.worlds,x=>x.id==families[i,0]);Check(w!=null&&w.biome==families[i,1],"Original biome family restored: "+families[i,0]+" / "+families[i,1],lines);}
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/source-world-fields.txt",lines);Debug.Log("SOURCE_WORLD_FIELDS_PASS "+lines.Count);
     }
+    public static void SourceGlobalSurfaces()
+    {
+        var catalog=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text);var lines=new List<string>();int solids=0;
+        Vector3[] directions={Vector3.right,Vector3.up,Vector3.forward,new Vector3(1,1,1).normalized,new Vector3(-1,2,.4f).normalized,new Vector3(.3f,-1,1).normalized};
+        foreach(var w in catalog.worlds)
+        {
+            var surface=new PlanetEngineSurface(w);float min=float.MaxValue,max=float.MinValue;
+            bool stable=true;foreach(var d in directions){float h=surface.HeightMeters(d),again=surface.HeightMeters(d);stable&=!float.IsNaN(h)&&!float.IsInfinity(h)&&Mathf.Abs(h-again)<.0001f;min=Mathf.Min(min,h);max=Mathf.Max(max,h);}
+            Check(stable,"Source terrain is finite and deterministic: "+w.id,lines);
+            if(w.biome=="gas"){Check(max-min<.001f,"Gas giants have no solid geological relief: "+w.id,lines);continue;}
+            Check(max-min>.001f,"Original seeded geological sampler varies across the complete globe: "+w.id,lines);solids++;
+            lines.Add("PROFILE: "+w.id+" / "+w.biome+" / "+min.ToString("F4")+" to "+max.ToString("F4")+" m");
+        }
+        Check(solids==13,"Source global geology covers all 13 solid worlds",lines);
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/source-global-surfaces.txt",lines);Debug.Log("SOURCE_GLOBAL_SURFACES_PASS "+lines.Count);
+    }
+    public static void WildlifeRosters()
+    {
+        var worldCatalog=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text);var lines=new List<string>();var ids=new HashSet<string>();
+        foreach(var world in worldCatalog.worlds){var entries=WildlifeCatalog.For(world.id);Check(entries.Length==10,"Ten stable wildlife concepts exist for "+world.name,lines);Check(entries.Length==10&&Array.Exists(entries,x=>x.role=="champion")&&Array.Exists(entries,x=>x.role=="apex"),"Champion and apex encounter roles are present: "+world.id,lines);foreach(var entry in entries){Check(entry.world==world.id&&entry.concept!=null&&entry.concept.views.Length==6,"Concept, views and world assignment agree: "+entry.id,lines);Check(ids.Add(entry.id),"Creature IDs are unique: "+entry.id,lines);}}
+        Check(ids.Count==worldCatalog.worlds.Length*10,"All planets have unique wildlife entries: "+ids.Count,lines);
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/wildlife-rosters.txt",lines);Debug.Log("WILDLIFE_ROSTERS_PASS "+lines.Count);
+    }
+    public static void RuntimeWildlife()
+    {
+        var g=FrontierGame.Instance;if(g==null||!EditorApplication.isPlaying)throw new Exception("Enter Play mode first");var lines=new List<string>();var actors=g.world.GetComponentsInChildren<WildlifeAgent>(true);
+        Check(actors.Length==10,"Ten habitat-specific wildlife agents are loaded in the active world: "+actors.Length,lines);Check(Array.Exists(actors,x=>x.species!=null&&x.species.Boss),"Active biome includes its boss encounter",lines);Check(Array.Exists(actors,x=>x.species!=null&&x.species.aggression>.25f),"Active biome includes hunting wildlife",lines);
+        int before=g.effects.EffectEvents;var boss=Array.Find(actors,x=>x.species!=null&&x.species.Boss);if(boss!=null)g.WildlifeWarning(boss.species,"validation telegraph");Check(boss!=null&&g.effects.EffectEvents==before,"A boss ability warning emits its visible telegraph into Spellworks",lines);
+        float oldHp=boss.health;boss.Hit(11);Check(boss.health==oldHp-11,"Wildlife accepts damage from the shared weapon hit path",lines);boss.health=oldHp;
+        bool wasStarted=g.started,wasWalking=g.walking,wasAboard=g.aboard,wasMenu=g.menu;float oldCrew=g.save.crewHealth;g.started=true;g.walking=true;g.aboard=false;g.menu=false;g.WildlifeAttack(boss,1,"validation pounce",0);Check(g.save.crewHealth<oldCrew,"Telegraphed boss attack reaches player health",lines);g.save.crewHealth=oldCrew;g.started=wasStarted;g.walking=wasWalking;g.aboard=wasAboard;g.menu=wasMenu;
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/runtime-wildlife.txt",lines);Debug.Log("RUNTIME_WILDLIFE_PASS "+lines.Count);
+    }
     public static void Streaming()
     {
         var g=FrontierGame.Instance;if(g==null)throw new Exception("Enter Play mode first");var lines=new List<string>();
@@ -33,6 +65,22 @@ public static class EngineRestorationValidation
         Check(Mathf.Abs(renderedHeight-(g.world.Height(focus.x,focus.z)+.035f))<.02f,"Patch center follows the active Worldworks height query",lines);
         Check(patch.GetComponent<MeshCollider>()==null,"Streamed patch renders over the existing planet height/collision system",lines);
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/world-streaming.txt",lines);Debug.Log("WORLD_STREAMING_PASS "+lines.Count);
+    }
+    public static void RuntimeEffectsAndAudio()
+    {
+        var g=FrontierGame.Instance;if(g==null||!EditorApplication.isPlaying)throw new Exception("Enter Play mode first");var lines=new List<string>();
+        int emitted=g.effects.Emitted,events=g.effects.EffectEvents;Vector3 at=g.view.transform.position+g.view.transform.forward*12f;
+        g.effects.Survey(at,-g.view.transform.forward);g.effects.Flush();
+        var pool=GameObject.Find("Spellworks particle pool");var renderer=pool?pool.GetComponent<MeshRenderer>():null;
+        Check(g.effects.EffectEvents==events+1&&g.effects.Emitted>emitted,"Spellworks survey event emits into the live game particle pool",lines);
+        Check(renderer!=null&&renderer.enabled&&renderer.sharedMaterial!=null&&g.view!=null&&(g.view.cullingMask&(1<<pool.layer))!=0,"Spellworks pool is visible to the active gameplay camera",lines);
+        var audio=g.GetComponentsInChildren<AudioSource>(true);var drive=Array.Find(audio,x=>x.gameObject.name.StartsWith("Drive acoustics"));var reactor=Array.Find(audio,x=>x.gameObject.name.StartsWith("Reactor acoustics"));
+        Check(drive!=null&&drive.loop&&drive.isPlaying&&drive.clip!=null,"Aft drive sound is a live, spatial engine layer",lines);
+        Check(reactor!=null&&reactor.loop&&reactor.isPlaying&&reactor.clip!=null,"Reactor circulation is a separate live audio layer",lines);
+        var weaponClips=new[]{"kineticClip","coilClip","missileClip","rifleClip","pistolClip"};var names=new HashSet<string>();bool differentiated=true;
+        foreach(var field in weaponClips){var clip=typeof(FrontierGame).GetField(field,System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)?.GetValue(g) as AudioClip;if(clip==null){differentiated=false;continue;}names.Add(clip.name);}
+        Check(differentiated&&names.Count==weaponClips.Length,"Autocannon, pulse, missile, rifle and sidearm use distinct sound designs",lines);
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/runtime-effects-audio.txt",lines);Save(g.view,"spellworks-runtime.png");Debug.Log("RUNTIME_EFFECTS_AUDIO_PASS "+lines.Count);
     }
     public static void Run()
     {

@@ -2,10 +2,13 @@
 
 Run `npm install` in this directory. From the project root:
 
-1. `node Tools/AssetPipeline/export-worldworks.mjs` compiles original terrain fields.
-2. `node Tools/AssetPipeline/export-original.mjs` exports original assets, revised cabins, weapons, residents and layouts.
-3. `blender --background --python Tools/AssetPipeline/blender_fleet.py` builds the ten production exteriors and the editable `ArtDirection/Production/SpacePatriot-Fleet.blend` file.
-4. Outside Play mode, use the live Unity CLI to invoke `OriginalAssetImporter.Import()` for a complete import, or `OriginalAssetImporter.ImportProduction()` for updated cabins, weapons, citizens and exteriors.
+1. `node Tools/AssetPipeline/compile-creature-rosters.mjs` writes ten world-specific wildlife concept/encounter entries per catalogued world and `Assets/SpacePatriot/Resources/CreatureRosters.json`.
+2. `node Tools/AssetPipeline/export-worldworks.mjs` compiles five blended source-engine geology/climate provinces per solid world.
+3. `node Tools/AssetPipeline/export-original.mjs` exports original assets, revised cabins, weapons, residents, ten reusable fauna anatomies and layouts.
+4. `blender --background --python Tools/AssetPipeline/blender_fleet.py` builds the ten production exteriors and the editable `ArtDirection/Production/SpacePatriot-Fleet.blend` file.
+5. Outside Play mode, use the live Unity CLI to invoke `OriginalAssetImporter.Import()` for a complete import, or `OriginalAssetImporter.ImportProduction()` for updated cabins, weapons, citizens and exteriors. A full import also refreshes the fauna prefab set.
+
+For Tripo output, use `ArtDirection/PIPELINE_STANDARD.md`. `creatures/prepare_tripo_asset.py` handles weapon, flora, fauna and geology FBX/GLB sources with fixed view cameras, a separate globally packed `SP_BakeUV`, three baked maps, Unity FBX, and a coordinate report. `creatures/compare-views.mjs` makes repeatable concept/render overlays.
 
 Blender must run after the Node exporter. Unity imports retain existing GUIDs. Production meshes have immutable content hashes; the full import additionally repairs existing mesh data and triangle orientation. The original reference source is unchanged.
 

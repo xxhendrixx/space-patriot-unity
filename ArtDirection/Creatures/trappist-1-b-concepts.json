@@ -1,0 +1,453 @@
+{
+  "schema": "space-patriot-creature-concepts",
+  "version": 1,
+  "world": "trappist-1-b",
+  "worldName": "TRAPPIST-1 b",
+  "biome": "volcanic",
+  "contract": {
+    "units": "metres",
+    "origin": "ground-centre",
+    "up": "+Y",
+    "forward": "+Z",
+    "views": [
+      "front",
+      "left",
+      "right",
+      "back",
+      "top",
+      "three-quarter"
+    ]
+  },
+  "species": [
+    {
+      "id": "trappist-1-b-wild-01",
+      "name": "Ash grazer / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "grazer",
+      "model": "fauna-0",
+      "family": 0,
+      "variant": 0,
+      "seed": 4060023074,
+      "palette": [
+        "#744e4b",
+        "#2a2a33",
+        "#cb8852"
+      ],
+      "height": 2.2454929432831703,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "low armored shoulders, a segmented dorsal sail and broad shovel muzzle",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "feeds on mineral films and retreats when challenged",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. low armored shoulders, a segmented dorsal sail and broad shovel muzzle. Habitat: lava tubes, ash dunes and warm fumaroles. feeds on mineral films and retreats when challenged. Palette #744e4b, #2a2a33, #cb8852. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-02",
+      "name": "Cinderkite / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "glider",
+      "model": "fauna-1",
+      "family": 1,
+      "variant": 0,
+      "seed": 4043245455,
+      "palette": [
+        "#845643",
+        "#3a322b",
+        "#db904a"
+      ],
+      "height": 1.2600054785842076,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "long kite membranes, a narrow rudder tail and split sensory crest",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "rides thermal columns and scatters if approached",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. long kite membranes, a narrow rudder tail and split sensory crest. Habitat: lava tubes, ash dunes and warm fumaroles. rides thermal columns and scatters if approached. Palette #845643, #3a322b, #db904a. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-03",
+      "name": "Basalt digger / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "burrower",
+      "model": "fauna-2",
+      "family": 2,
+      "variant": 0,
+      "seed": 4026467836,
+      "palette": [
+        "#7e5346",
+        "#342f2e",
+        "#d58d4d"
+      ],
+      "height": 2.1097963001346214,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "wedge head, compact plated body, digging forelimbs and counterweight tail",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "uses a den network and erupts from loose ground",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. wedge head, compact plated body, digging forelimbs and counterweight tail. Habitat: lava tubes, ash dunes and warm fumaroles. uses a den network and erupts from loose ground. Palette #7e5346, #342f2e, #d58d4d. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-04",
+      "name": "Sulfur drifter / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "drifter",
+      "model": "fauna-3",
+      "family": 3,
+      "variant": 0,
+      "seed": 4009690217,
+      "palette": [
+        "#785049",
+        "#2e2c31",
+        "#cf8a50"
+      ],
+      "height": 0.9040070354938508,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "floating gas bladders, translucent veils and a dangling lure cluster",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "filters airborne spores and moves with local weather",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. floating gas bladders, translucent veils and a dangling lure cluster. Habitat: lava tubes, ash dunes and warm fumaroles. filters airborne spores and moves with local weather. Palette #785049, #2e2c31, #cf8a50. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-05",
+      "name": "Cragback / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "sentinel",
+      "model": "fauna-4",
+      "family": 4,
+      "variant": 0,
+      "seed": 3992912598,
+      "palette": [
+        "#724d4c",
+        "#282934",
+        "#c98753"
+      ],
+      "height": 1.0546926948707551,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "towering ridged shoulders, paired crown horns and heavy planted feet",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "guards a nesting or feeding territory",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. towering ridged shoulders, paired crown horns and heavy planted feet. Habitat: lava tubes, ash dunes and warm fumaroles. guards a nesting or feeding territory. Palette #724d4c, #282934, #c98753. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-06",
+      "name": "Glasswing / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "stalker",
+      "model": "fauna-5",
+      "family": 0,
+      "variant": 1,
+      "seed": 3976134979,
+      "palette": [
+        "#785049",
+        "#2e2c31",
+        "#cf8a50"
+      ],
+      "height": 1.1843480561627076,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Burrow ambush"
+      ],
+      "concept": {
+        "silhouette": "lean reverse-jointed limbs, swept-back quills and a low hunting profile",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "hunts by reading vibration and breaking line of sight",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. lean reverse-jointed limbs, swept-back quills and a low hunting profile. Habitat: lava tubes, ash dunes and warm fumaroles. hunts by reading vibration and breaking line of sight. Palette #785049, #2e2c31, #cf8a50. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-07",
+      "name": "Scoria crawler / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "scavenger",
+      "model": "fauna-6",
+      "family": 1,
+      "variant": 1,
+      "seed": 3959357360,
+      "palette": [
+        "#7a5148",
+        "#302d30",
+        "#d18b4f"
+      ],
+      "height": 1.7454303878592328,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "asymmetric shell plates, one oversized feeler and hooked feeding limbs",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "follows ships and feeds on discarded cargo organics",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. asymmetric shell plates, one oversized feeler and hooked feeding limbs. Habitat: lava tubes, ash dunes and warm fumaroles. follows ships and feeds on discarded cargo organics. Palette #7a5148, #302d30, #d18b4f. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-08",
+      "name": "Fumarole lurker / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "ambusher",
+      "model": "fauna-7",
+      "family": 2,
+      "variant": 1,
+      "seed": 4211021645,
+      "palette": [
+        "#764f4a",
+        "#2c2b32",
+        "#cd8951"
+      ],
+      "height": 1.0484590626554564,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Hooked pounce"
+      ],
+      "concept": {
+        "silhouette": "flattened body, camouflaged frill and a spring-loaded neck fan",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "mimics the local substrate before a short burst attack",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. flattened body, camouflaged frill and a spring-loaded neck fan. Habitat: lava tubes, ash dunes and warm fumaroles. mimics the local substrate before a short burst attack. Palette #764f4a, #2c2b32, #cd8951. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-09",
+      "name": "Caldera ram / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "champion",
+      "model": "fauna-8",
+      "family": 3,
+      "variant": 1,
+      "seed": 4194244026,
+      "palette": [
+        "#744e4b",
+        "#2a2a33",
+        "#cb8852"
+      ],
+      "height": 4.8,
+      "health": 520,
+      "damage": 16,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Spore fan",
+        "Cyclone leap"
+      ],
+      "concept": {
+        "silhouette": "tall layered carapace, branching mineral horns and glowing throat sacs",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "elite territorial defender; combines two attack patterns",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. tall layered carapace, branching mineral horns and glowing throat sacs. Habitat: lava tubes, ash dunes and warm fumaroles. elite territorial defender; combines two attack patterns. Palette #744e4b, #2a2a33, #cb8852. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "trappist-1-b-wild-10",
+      "name": "The Red Maw / TRAPPIST-1 b",
+      "world": "trappist-1-b",
+      "biome": "volcanic",
+      "role": "apex",
+      "model": "fauna-9",
+      "family": 4,
+      "variant": 1,
+      "seed": 3975987884,
+      "palette": [
+        "#865742",
+        "#3c332a",
+        "#dd9149"
+      ],
+      "height": 8.5,
+      "health": 1400,
+      "damage": 28,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Shell ward",
+        "Crown pulse"
+      ],
+      "concept": {
+        "silhouette": "massive interlocking plates, scarred face shield and luminous organ channels",
+        "habitat": "lava tubes, ash dunes and warm fumaroles",
+        "behavior": "planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. massive interlocking plates, scarred face shield and luminous organ channels. Habitat: lava tubes, ash dunes and warm fumaroles. planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows. Palette #865742, #3c332a, #dd9149. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    }
+  ]
+}

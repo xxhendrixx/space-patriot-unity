@@ -1,0 +1,6 @@
+PASS: Ten habitat-specific wildlife agents are loaded in the active world: 10
+PASS: Active biome includes its boss encounter
+PASS: Active biome includes hunting wildlife
+PASS: A boss ability warning emits its visible telegraph into Spellworks
+PASS: Wildlife accepts damage from the shared weapon hit path
+PASS: Telegraphed boss attack reaches player health

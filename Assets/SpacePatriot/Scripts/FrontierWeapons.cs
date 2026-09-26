@@ -47,8 +47,9 @@ namespace SpacePatriot
             if(!armed||reloadRemaining>0||heat>=95||cruise||!(walking||aboard)&&save.vessel.Factor("weapons",powered)<.05f)return;
             var spec=Weapon;if(spec.id=="laser"&&capacitor<12||spec.id!="laser"&&Ammo.mag<=0){Toast(spec.id=="laser"?"Capacitor charging.":"Magazine empty. R reloads.");fireTime=Time.time+.3f;return;}
             if(spec.id=="missile"&&lockProgress<1){Toast("Select a target with C and keep it inside the reticle until seeker lock.");fireTime=Time.time+.3f;return;}
-            fireTime=Time.time+spec.interval;heat+=spec.heat;Sound(shotClip,.45f);if(spec.id=="laser")capacitor-=12;else Ammo.mag--;
+            fireTime=Time.time+spec.interval;heat+=spec.heat;if(spec.id=="laser")capacitor-=12;else Ammo.mag--;
             Vector3 direction=walking||aboard?view.transform.forward:ship.forward,origin=walking||aboard?view.transform.position+direction*.4f:ship.position+direction*Spec.length*.5f;
+            WeaponShot(spec.id,origin);
             effects.Muzzle(origin,direction,spec.id=="laser");
             if(spec.id=="laser"){
                 Vector3 end=origin+direction*spec.range;float distance=spec.range;if(Physics.Raycast(origin,direction,out var hit,distance,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore)){distance=hit.distance;end=hit.point;}

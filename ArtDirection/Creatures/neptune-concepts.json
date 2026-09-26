@@ -1,0 +1,453 @@
+{
+  "schema": "space-patriot-creature-concepts",
+  "version": 1,
+  "world": "neptune",
+  "worldName": "Neptune",
+  "biome": "gas",
+  "contract": {
+    "units": "metres",
+    "origin": "ground-centre",
+    "up": "+Y",
+    "forward": "+Z",
+    "views": [
+      "front",
+      "left",
+      "right",
+      "back",
+      "top",
+      "three-quarter"
+    ]
+  },
+  "species": [
+    {
+      "id": "neptune-wild-01",
+      "name": "Cloud leviathan / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "grazer",
+      "model": "fauna-0",
+      "family": 0,
+      "variant": 0,
+      "seed": 1944282563,
+      "palette": [
+        "#708088",
+        "#3d4d56",
+        "#dbbf75"
+      ],
+      "height": 1.4250474182888866,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "low armored shoulders, a segmented dorsal sail and broad shovel muzzle",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "feeds on mineral films and retreats when challenged",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. low armored shoulders, a segmented dorsal sail and broad shovel muzzle. Habitat: high-altitude ammonia cloud bands and lightning shear. feeds on mineral films and retreats when challenged. Palette #708088, #3d4d56, #dbbf75. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-02",
+      "name": "Cyclone ray / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "glider",
+      "model": "fauna-1",
+      "family": 1,
+      "variant": 0,
+      "seed": 1961060182,
+      "palette": [
+        "#62798f",
+        "#2f465d",
+        "#cdb87c"
+      ],
+      "height": 1.4470036236569286,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "long kite membranes, a narrow rudder tail and split sensory crest",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "rides thermal columns and scatters if approached",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. long kite membranes, a narrow rudder tail and split sensory crest. Habitat: high-altitude ammonia cloud bands and lightning shear. rides thermal columns and scatters if approached. Palette #62798f, #2f465d, #cdb87c. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-03",
+      "name": "Aerosac drifter / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "burrower",
+      "model": "fauna-2",
+      "family": 2,
+      "variant": 0,
+      "seed": 1977837801,
+      "palette": [
+        "#6e7f89",
+        "#3b4c57",
+        "#d9be76"
+      ],
+      "height": 1.5121463844086975,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "wedge head, compact plated body, digging forelimbs and counterweight tail",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "uses a den network and erupts from loose ground",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. wedge head, compact plated body, digging forelimbs and counterweight tail. Habitat: high-altitude ammonia cloud bands and lightning shear. uses a den network and erupts from loose ground. Palette #6e7f89, #3b4c57, #d9be76. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-04",
+      "name": "Static lantern / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "drifter",
+      "model": "fauna-3",
+      "family": 3,
+      "variant": 0,
+      "seed": 1994615420,
+      "palette": [
+        "#5c7692",
+        "#294360",
+        "#c7b57f"
+      ],
+      "height": 0.9224030879093335,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "floating gas bladders, translucent veils and a dangling lure cluster",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "filters airborne spores and moves with local weather",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. floating gas bladders, translucent veils and a dangling lure cluster. Habitat: high-altitude ammonia cloud bands and lightning shear. filters airborne spores and moves with local weather. Palette #5c7692, #294360, #c7b57f. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-05",
+      "name": "Crown grazer / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "sentinel",
+      "model": "fauna-4",
+      "family": 4,
+      "variant": 0,
+      "seed": 2011393039,
+      "palette": [
+        "#667b8d",
+        "#33485b",
+        "#d1ba7a"
+      ],
+      "height": 1.127240230049938,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "towering ridged shoulders, paired crown horns and heavy planted feet",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "guards a nesting or feeding territory",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. towering ridged shoulders, paired crown horns and heavy planted feet. Habitat: high-altitude ammonia cloud bands and lightning shear. guards a nesting or feeding territory. Palette #667b8d, #33485b, #d1ba7a. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-06",
+      "name": "Needle stormer / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "stalker",
+      "model": "fauna-5",
+      "family": 0,
+      "variant": 1,
+      "seed": 2028170658,
+      "palette": [
+        "#6e7f89",
+        "#3b4c57",
+        "#d9be76"
+      ],
+      "height": 2.054878160660155,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Dust veil"
+      ],
+      "concept": {
+        "silhouette": "lean reverse-jointed limbs, swept-back quills and a low hunting profile",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "hunts by reading vibration and breaking line of sight",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. lean reverse-jointed limbs, swept-back quills and a low hunting profile. Habitat: high-altitude ammonia cloud bands and lightning shear. hunts by reading vibration and breaking line of sight. Palette #6e7f89, #3b4c57, #d9be76. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-07",
+      "name": "Pressure mantis / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "scavenger",
+      "model": "fauna-6",
+      "family": 1,
+      "variant": 1,
+      "seed": 2044948277,
+      "palette": [
+        "#5e7791",
+        "#2b445f",
+        "#c9b67e"
+      ],
+      "height": 1.9972444399725646,
+      "health": 70,
+      "damage": 0,
+      "aggression": 0.06,
+      "detection": 18,
+      "abilities": [],
+      "concept": {
+        "silhouette": "asymmetric shell plates, one oversized feeler and hooked feeding limbs",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "follows ships and feeds on discarded cargo organics",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. asymmetric shell plates, one oversized feeler and hooked feeding limbs. Habitat: high-altitude ammonia cloud bands and lightning shear. follows ships and feeds on discarded cargo organics. Palette #5e7791, #2b445f, #c9b67e. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-08",
+      "name": "Gale lurker / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "ambusher",
+      "model": "fauna-7",
+      "family": 2,
+      "variant": 1,
+      "seed": 2061725896,
+      "palette": [
+        "#607890",
+        "#2d455e",
+        "#cbb77d"
+      ],
+      "height": 0.8173104922287167,
+      "health": 145,
+      "damage": 9,
+      "aggression": 0.72,
+      "detection": 42,
+      "abilities": [
+        "Resonant screech"
+      ],
+      "concept": {
+        "silhouette": "flattened body, camouflaged frill and a spring-loaded neck fan",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "mimics the local substrate before a short burst attack",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. flattened body, camouflaged frill and a spring-loaded neck fan. Habitat: high-altitude ammonia cloud bands and lightning shear. mimics the local substrate before a short burst attack. Palette #607890, #2d455e, #cbb77d. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-09",
+      "name": "Thunderhead elder / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "champion",
+      "model": "fauna-8",
+      "family": 3,
+      "variant": 1,
+      "seed": 2078503515,
+      "palette": [
+        "#647a8e",
+        "#31475c",
+        "#cfb97b"
+      ],
+      "height": 4.8,
+      "health": 520,
+      "damage": 16,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Hooked pounce",
+        "Ground rupture"
+      ],
+      "concept": {
+        "silhouette": "tall layered carapace, branching mineral horns and glowing throat sacs",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "elite territorial defender; combines two attack patterns",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. tall layered carapace, branching mineral horns and glowing throat sacs. Habitat: high-altitude ammonia cloud bands and lightning shear. elite territorial defender; combines two attack patterns. Palette #647a8e, #31475c, #cfb97b. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    },
+    {
+      "id": "neptune-wild-10",
+      "name": "The Blue Tempest / Neptune",
+      "world": "neptune",
+      "biome": "gas",
+      "role": "apex",
+      "model": "fauna-9",
+      "family": 4,
+      "variant": 1,
+      "seed": 2028317753,
+      "palette": [
+        "#6a7d8b",
+        "#374a59",
+        "#d5bc78"
+      ],
+      "height": 8.5,
+      "health": 1400,
+      "damage": 28,
+      "aggression": 1,
+      "detection": 115,
+      "abilities": [
+        "Spore fan",
+        "Cyclone leap"
+      ],
+      "concept": {
+        "silhouette": "massive interlocking plates, scarred face shield and luminous organ channels",
+        "habitat": "high-altitude ammonia cloud bands and lightning shear",
+        "behavior": "planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows",
+        "views": [
+          "front",
+          "left",
+          "right",
+          "back",
+          "top",
+          "three-quarter"
+        ],
+        "measure": {
+          "units": "metres",
+          "origin": "ground-centre",
+          "up": "+Y",
+          "forward": "+Z"
+        },
+        "prompt": "Original Space Patriot alien wildlife design. massive interlocking plates, scarred face shield and luminous organ channels. Habitat: high-altitude ammonia cloud bands and lightning shear. planetary apex encounter with a distinct arena, telegraphed abilities and recovery windows. Palette #6a7d8b, #374a59, #d5bc78. Distinct asymmetrical anatomy, readable at distance, no humanoid armor or Earth animal copy."
+      }
+    }
+  ]
+}

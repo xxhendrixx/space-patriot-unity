@@ -11,6 +11,7 @@ namespace SpacePatriot
         const float AngleStep=2*Mathf.PI/LongitudeCount;
         public WorldworksTerrain terrainFields;
         public Grassworks grass;
+        PlanetEngineSurface sourceSurface;
         Mesh streamedTerrainMesh;
         Transform streamedTerrainRoot;
         Material terrainMaterial;
@@ -19,12 +20,7 @@ namespace SpacePatriot
         public Vector3 PlanetCenter=>new Vector3(0,-PlanetRadius-3,0);
         float PlanetwideRelief(Vector3 normal)
         {
-            normal.Normalize();float seed=(info.seed%65521)*.0017f;
-            Vector3 weights=new Vector3(Mathf.Abs(normal.x),Mathf.Abs(normal.y),Mathf.Abs(normal.z));weights/=Mathf.Max(.001f,weights.x+weights.y+weights.z);
-            float broad=weights.x*Mathf.PerlinNoise(normal.y*19+seed,normal.z*19-seed*.31f)+weights.y*Mathf.PerlinNoise(normal.x*19+seed*.73f,normal.z*19+seed)+weights.z*Mathf.PerlinNoise(normal.x*19-seed*.22f,normal.y*19+seed*.47f);
-            float ridged=weights.x*Mathf.PerlinNoise(normal.y*57-seed,normal.z*57+seed*.19f)+weights.y*Mathf.PerlinNoise(normal.x*57+seed*.11f,normal.z*57-seed)+weights.z*Mathf.PerlinNoise(normal.x*57+seed*.29f,normal.y*57-seed*.37f);
-            float amplitude=info.biome=="ice"?76:info.biome=="temperate"?92:info.biome=="volcanic"?145:118;
-            return (broad-.5f)*amplitude+(ridged-.5f)*amplitude*.24f;
+            return sourceSurface.HeightMeters(normal);
         }
         public float RawPlanetHeight(float x,float z)
         {
@@ -80,6 +76,7 @@ namespace SpacePatriot
         void Terrain()
         {
             terrainFields=new WorldworksTerrain(info.id);
+            sourceSurface=new PlanetEngineSurface(info);
             var vertices=new List<Vector3>();var colors=new List<Color>();var uv=new List<Vector2>();var indices=new List<int>();
             void Add(Vector3 p,float local){vertices.Add(p);colors.Add(GlobeColor((p-PlanetCenter).normalized));uv.Add(new Vector2(local,0));}
             Add(new Vector3(0,RawPlanetHeight(0,0),0),1);
