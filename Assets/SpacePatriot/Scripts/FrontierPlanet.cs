@@ -22,6 +22,11 @@ namespace SpacePatriot
         {
             return sourceSurface.HeightMeters(normal);
         }
+        static float SmoothRange(float from,float to,float value)
+        {
+            float t=Mathf.Clamp01(Mathf.InverseLerp(from,to,value));
+            return t*t*(3f-2f*t);
+        }
         public float RawPlanetHeight(float x,float z)
         {
             float radius=new Vector2(x,z).magnitude;
@@ -36,7 +41,7 @@ namespace SpacePatriot
             float edge=1-Mathf.SmoothStep(0,1,(radius-2400)/600);
             float relief=terrainFields.Sample(x,z).x;
             var radial=new Vector3(x,PlanetRadius+curvature,z).normalized;
-            float macro=PlanetwideRelief(radial)*Mathf.SmoothStep(2000,3900,radius);
+            float macro=PlanetwideRelief(radial)*SmoothRange(2000,3900,radius);
             return Mathf.Lerp(-3,curvature+macro+Mathf.Clamp(relief,-16,55)*.62f*edge,basin);
         }
         Vector3 RingVertex(int ring,int sector)
@@ -76,22 +81,22 @@ namespace SpacePatriot
             {
                 float band=.5f+.5f*Mathf.Sin(source.y*38+Mathf.Sin(source.x*9+seed)*.55f+detail*.7f);
                 Color gas=Color.Lerp(new Color(.24f,.30f,.34f),info.Surface*1.45f,band);
-                float storm=Mathf.SmoothStep(.78f,.94f,Mathf.PerlinNoise(source.x*8+seed,source.z*8+source.y*4));
+                float storm=SmoothRange(.78f,.94f,Mathf.PerlinNoise(source.x*8+seed,source.z*8+source.y*4));
                 return Color.Lerp(gas,new Color(.62f,.39f,.22f),storm*.5f);
             }
             if(info.biome=="temperate")
             {
                 // Coastlines and land relief come from the same seeded source
                 // geology used by collision; climate texture only colors land.
-                float land=Mathf.SmoothStep(-1.2f,1.2f,height);
+                float land=SmoothRange(-1.2f,1.2f,height);
                 Color deep=new Color(.012f,.035f,.085f),shallow=new Color(.025f,.20f,.25f);
                 Color sea=Color.Lerp(deep,shallow,Mathf.Clamp01((height+18)/18));
                 Color green=Color.Lerp(new Color(.13f,.17f,.09f),new Color(.22f,.34f,.13f),broad);
                 Color dry=Color.Lerp(new Color(.34f,.27f,.14f),new Color(.53f,.43f,.25f),detail);
-                Color terrain=Color.Lerp(dry,green,Mathf.SmoothStep(.28f,.68f,broad));
-                terrain=Color.Lerp(terrain,new Color(.46f,.43f,.36f),Mathf.SmoothStep(.54f,.84f,elevation)*.62f);
-                terrain=Color.Lerp(terrain,new Color(.83f,.84f,.79f),Mathf.SmoothStep(.76f,.98f,Mathf.Abs(source.y))*.78f);
-                terrain=Color.Lerp(terrain,new Color(.68f,.58f,.36f),1-Mathf.SmoothStep(1.2f,4.2f,Mathf.Abs(height)));
+                Color terrain=Color.Lerp(dry,green,SmoothRange(.28f,.68f,broad));
+                terrain=Color.Lerp(terrain,new Color(.46f,.43f,.36f),SmoothRange(.54f,.84f,elevation)*.62f);
+                terrain=Color.Lerp(terrain,new Color(.83f,.84f,.79f),SmoothRange(.76f,.98f,Mathf.Abs(source.y))*.78f);
+                terrain=Color.Lerp(terrain,new Color(.68f,.58f,.36f),1-SmoothRange(1.2f,4.2f,Mathf.Abs(height)));
                 return Color.Lerp(sea,terrain,land);
             }
             if(info.biome=="desert")
@@ -101,14 +106,14 @@ namespace SpacePatriot
             }
             if(info.biome=="ice")
             {
-                float crevasse=Mathf.SmoothStep(.27f,.62f,detail*.65f+broad*.35f);
+                float crevasse=SmoothRange(.27f,.62f,detail*.65f+broad*.35f);
                 return Color.Lerp(new Color(.20f,.30f,.34f),new Color(.77f,.84f,.86f),Mathf.Clamp01(.48f+crevasse*.32f+Mathf.Abs(source.y)*.3f+elevation*.15f));
             }
             if(info.biome=="volcanic")
             {
                 float fissure=1-Mathf.Abs(Mathf.Sin(source.x*52+source.y*37+detail*8));
                 Color basalt=Color.Lerp(new Color(.075f,.068f,.063f),new Color(.30f,.26f,.22f),broad*.78f+elevation*.2f);
-                return Color.Lerp(basalt,new Color(.88f,.19f,.035f),Mathf.SmoothStep(.975f,.997f,fissure)*.9f);
+                return Color.Lerp(basalt,new Color(.88f,.19f,.035f),SmoothRange(.975f,.997f,fissure)*.9f);
             }
             return Color.Lerp(new Color(.19f,.18f,.17f),new Color(.57f,.53f,.45f),Mathf.Clamp01(broad*.7f+detail*.16f+elevation*.35f));
         }
@@ -124,7 +129,7 @@ namespace SpacePatriot
             {
                 Vector3 p;float local=0;
                 if(ring<=120){p=RingVertex(ring,j);local=1-Mathf.SmoothStep(0,1,(ring*RingStep-2100)/900);}
-                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-120)/113f),a=j*AngleStep;var radial=new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a));float reliefWeight=Mathf.SmoothStep(2000,3900,theta*PlanetRadius);p=PlanetCenter+radial*(PlanetRadius+PlanetwideRelief(radial)*reliefWeight);}
+                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-120)/113f),a=j*AngleStep;var radial=new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a));float reliefWeight=SmoothRange(2000,3900,theta*PlanetRadius);p=PlanetCenter+radial*(PlanetRadius+PlanetwideRelief(radial)*reliefWeight);}
                 Add(p,local);
             }
             Add(PlanetCenter-Vector3.up*PlanetRadius,0);

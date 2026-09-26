@@ -38,6 +38,16 @@ public static class EngineRestorationValidation
         Check(solids==13,"Source global geology covers all 13 solid worlds",lines);
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/source-global-surfaces.txt",lines);Debug.Log("SOURCE_GLOBAL_SURFACES_PASS "+lines.Count);
     }
+    public static void PlanetMeshBounds()
+    {
+        var g=FrontierGame.Instance;if(g==null||!EditorApplication.isPlaying)throw new Exception("Enter Play mode first");
+        var ground=GameObject.Find("Continuous spherical terrain");var mesh=ground?ground.GetComponent<MeshFilter>()?.sharedMesh:null;
+        if(mesh==null)throw new Exception("Continuous spherical terrain mesh is missing");
+        float min=float.MaxValue,max=0;foreach(var vertex in mesh.vertices){float radius=Vector3.Distance(vertex,g.world.PlanetCenter);min=Mathf.Min(min,radius);max=Mathf.Max(max,radius);}
+        var lines=new List<string>();Check(mesh.vertexCount>50000,"Planet globe mesh is regenerated with full-resolution topology: "+mesh.vertexCount+" vertices",lines);
+        Check(min>FrontierWorld.PlanetRadius-150&&max<FrontierWorld.PlanetRadius+150,"Planet relief stays within its authored radius band: "+min.ToString("F2")+" to "+max.ToString("F2")+" m",lines);
+        Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/planet-mesh-bounds.txt",lines);Debug.Log("PLANET_MESH_BOUNDS_PASS "+lines.Count);
+    }
     public static void WildlifeRosters()
     {
         var worldCatalog=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text);var lines=new List<string>();var ids=new HashSet<string>();

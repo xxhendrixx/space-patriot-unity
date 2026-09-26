@@ -1,0 +1,2 @@
+PASS: Planet globe mesh is regenerated with full-resolution topology: 59394 vertices
+PASS: Planet relief stays within its authored radius band: 17977.55 to 18040.34 m
