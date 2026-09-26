@@ -1,5 +1,5 @@
 Shader "SpacePatriot/WorldworksPlanet" {
- Properties { _GroundMap("Original geology atlas",2D)="white"{} _RockMap("Original cliff atlas",2D)="white"{} _Living("Living world",Float)=0 _Seed("World seed",Float)=0 }
+ Properties { _GroundMap("Original geology atlas",2D)="white"{} _RockMap("Original cliff atlas",2D)="white"{} _Living("Living world",Float)=0 _Seed("World seed",Float)=0 _PlanetCenter("Planet center",Vector)=(0,-18003,0,0) _PlanetRadius("Planet radius",Float)=18000 }
  SubShader { Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" } Cull Off Pass {
  Tags {"LightMode"="UniversalForward"}
  HLSLPROGRAM
@@ -12,7 +12,8 @@ Shader "SpacePatriot/WorldworksPlanet" {
  TEXTURE2D(_GroundMap); SAMPLER(sampler_GroundMap);
  TEXTURE2D(_RockMap); SAMPLER(sampler_RockMap);
  CBUFFER_START(UnityPerMaterial)
- float _Living,_Seed;
+ float _Living,_Seed,_PlanetRadius;
+ float4 _PlanetCenter;
  CBUFFER_END
  float hash3(float3 p){p=frac(p*.1031);p+=dot(p,p.yzx+33.33);return frac((p.x+p.y)*p.z);}
  float noise3(float3 p){float3 i=floor(p),f=frac(p);f=f*f*(3-2*f);return lerp(lerp(lerp(hash3(i),hash3(i+float3(1,0,0)),f.x),lerp(hash3(i+float3(0,1,0)),hash3(i+float3(1,1,0)),f.x),f.y),lerp(lerp(hash3(i+float3(0,0,1)),hash3(i+float3(1,0,1)),f.x),lerp(hash3(i+float3(0,1,1)),hash3(i+1),f.x),f.y),f.z);}
@@ -43,8 +44,12 @@ Shader "SpacePatriot/WorldworksPlanet" {
   float3 light=SampleSH(n)*.6+sun.color*lambert*sun.shadowAttenuation*.85;
   float3 c=base*light;float rim=pow(1-saturate(dot(n,normalize(_WorldSpaceCameraPos-i.w))),4);
   c+=float3(.055,.12,.19)*rim*lambert*smoothstep(900,3200,dist);
-  float atmosphere=1-smoothstep(650,1200,_WorldSpaceCameraPos.y);
-  float fog=1-exp(-pow(dist*.0008*atmosphere,2));
+  // World-space Y is not altitude on this wrapped world: a ship can be
+  // thousands of kilometres sideways from the planet while keeping y near 0.
+  // Measure altitude radially or distant planets are incorrectly fogged solid.
+  float cameraAltitude=length(_WorldSpaceCameraPos-_PlanetCenter.xyz)-_PlanetRadius;
+  float atmosphere=1-smoothstep(450,1500,cameraAltitude);
+  float fog=1-exp(-pow(dist*.00015*atmosphere,2));
   return half4(lerp(c,float3(.20,.28,.34),saturate(fog)),1);
  }
  ENDHLSL

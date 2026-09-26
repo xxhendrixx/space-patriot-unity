@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 using UnityEngine;
 using UnityEditor;
 using SpacePatriot;
@@ -38,13 +39,24 @@ public static class EngineRestorationValidation
         Check(solids==13,"Source global geology covers all 13 solid worlds",lines);
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/source-global-surfaces.txt",lines);Debug.Log("SOURCE_GLOBAL_SURFACES_PASS "+lines.Count);
     }
+    public static void ExportSourceHeightSamples()
+    {
+        var catalog=JsonUtility.FromJson<WorldCatalog>(Resources.Load<TextAsset>("Worlds").text);
+        Vector3[] directions={Vector3.right,Vector3.up,Vector3.forward,new Vector3(1,1,1).normalized,new Vector3(-1,2,.4f).normalized,new Vector3(.3f,-1,1).normalized};
+        var surfaceRows=new System.Text.StringBuilder("world,nx,ny,nz,rawHeightMeters,geologyHeightMeters\n");
+        foreach(var world in catalog.worlds){var surface=new PlanetEngineSurface(world);foreach(var normal in directions)
+        {
+            surfaceRows.Append(world.id).Append(',').Append(normal.x.ToString("R",CultureInfo.InvariantCulture)).Append(',').Append(normal.y.ToString("R",CultureInfo.InvariantCulture)).Append(',').Append(normal.z.ToString("R",CultureInfo.InvariantCulture)).Append(',').Append(surface.SourceHeightMeters(normal).ToString("R",CultureInfo.InvariantCulture)).Append(',').Append(surface.HeightMeters(normal).ToString("R",CultureInfo.InvariantCulture)).Append('\n');
+        }}
+        Directory.CreateDirectory("Validation");File.WriteAllText("Validation/unity-source-height-samples.csv",surfaceRows.ToString());Debug.Log("UNITY_SOURCE_HEIGHT_SAMPLES_PASS "+(catalog.worlds.Length*directions.Length));
+    }
     public static void PlanetMeshBounds()
     {
         var g=FrontierGame.Instance;if(g==null||!EditorApplication.isPlaying)throw new Exception("Enter Play mode first");
         var ground=GameObject.Find("Continuous spherical terrain");var mesh=ground?ground.GetComponent<MeshFilter>()?.sharedMesh:null;
         if(mesh==null)throw new Exception("Continuous spherical terrain mesh is missing");
         float min=float.MaxValue,max=0;foreach(var vertex in mesh.vertices){float radius=Vector3.Distance(vertex,g.world.PlanetCenter);min=Mathf.Min(min,radius);max=Mathf.Max(max,radius);}
-        var lines=new List<string>();Check(mesh.vertexCount>50000,"Planet globe mesh is regenerated with full-resolution topology: "+mesh.vertexCount+" vertices",lines);
+        var lines=new List<string>();Check(mesh.vertexCount>130000,"Planet globe has collision-stable global tessellation plus a resolved local cap: "+mesh.vertexCount+" vertices",lines);
         Check(min>FrontierWorld.PlanetRadius-150&&max<FrontierWorld.PlanetRadius+150,"Planet relief stays within its authored radius band: "+min.ToString("F2")+" to "+max.ToString("F2")+" m",lines);
         Directory.CreateDirectory("Validation");File.WriteAllLines("Validation/planet-mesh-bounds.txt",lines);Debug.Log("PLANET_MESH_BOUNDS_PASS "+lines.Count);
     }

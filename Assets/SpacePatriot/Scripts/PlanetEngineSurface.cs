@@ -14,7 +14,7 @@ namespace SpacePatriot
         static readonly Vector3 sourceRight=Vector3.Cross(Vector3.up,sourceUp).normalized;
         static readonly Vector3 sourceForward=Vector3.Cross(sourceUp,sourceRight).normalized;
         readonly int type;
-        readonly float radiusKm,amplitude,frequency,terrainBase;
+        readonly float radiusKm,amplitude,frequency,terrainBase,landscapePhase;
         readonly Vector3 offset;
 
         static byte[] CreateNoise()
@@ -62,6 +62,7 @@ namespace SpacePatriot
             type=world.biome switch{"temperate"=>1,"desert"=>2,"gas"=>3,"ice"=>4,"volcanic"=>5,_=>0};
             radiusKm=Mathf.Clamp(Mathf.Sqrt(Mathf.Max(.0001f,world.radius))*900,160,3600);
             uint seed=unchecked((uint)world.seed),state=seed;
+            landscapePhase=(seed%57)*.031f;
             Random01(ref state); // living.js consumes one value for the body's position before its terrain profile.
             amplitude=type==3?0:.0025f+Random01(ref state)*.002f;
             frequency=.75f+Random01(ref state)*.75f;
@@ -121,6 +122,19 @@ namespace SpacePatriot
             else localForm=.75f*SmoothStep(.32f,.75f,broad)*Mathf.Pow(fineRidge,2)+.12f*Local(4);
 
             float heightKm=radiusKm*amplitude*(regional-terrainBase-.02f+landform+.0018f*detail)+relief*localForm;
+            // Match Landscape.shape from the original HTML: a seeded river
+            // valley is carved into the temperate body's source geology.
+            if(type==1&&Vector3.Dot(normal,sourceUp)>.98f)
+            {
+                Vector3 p=normal*radiusKm;float x=Vector3.Dot(p,sourceRight),z=Vector3.Dot(p,sourceForward),phase=landscapePhase;
+                float river=.6f*Mathf.Sin(z*.32f+phase)+.17f*Mathf.Sin(z*.95f+phase*.5f);
+                float mask=(1-SmoothStep(6,9,Mathf.Abs(x)))*(1-SmoothStep(10,14,Mathf.Abs(z))),d=Mathf.Abs(x-river);
+                float width=.08f+.015f*Mathf.Cos(z*.22f+phase);
+                float crags=.62f+.38f*Mathf.Pow(1-Mathf.Abs(Mathf.Sin(x*6.7f+Mathf.Sin(z*1.6f)*1.3f)*Mathf.Cos(z*2.1f+Mathf.Cos(x*2.3f))),3);
+                float hills=.85f*Mathf.Exp(-Mathf.Pow((d-2.45f)/.95f,2))*(.72f+.28f*Mathf.Sin(z*.47f+phase))*crags;
+                float valley=.03f+.12f*SmoothStep(.14f,1.4f,d)+hills+.018f*SmoothStep(.25f,.8f,d)*Mathf.Sin(x*23+Mathf.Sin(z*5))*Mathf.Cos(z*19)-.055f*(1-SmoothStep(width*.5f,width,d));
+                heightKm=Mathf.Lerp(heightKm,valley,mask);
+            }
             return heightKm*FrontierWorld.PlanetRadius/radiusKm;
         }
 

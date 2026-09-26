@@ -7,7 +7,7 @@ namespace SpacePatriot
     public partial class FrontierWorld
     {
         public const float PlanetRadius=18000, RegionRadius=3000, RingStep=25;
-        public const int LongitudeCount=256;
+        public const int LongitudeCount=384;
         const float AngleStep=2*Mathf.PI/LongitudeCount;
         public WorldworksTerrain terrainFields;
         public Grassworks grass;
@@ -20,7 +20,7 @@ namespace SpacePatriot
         public Vector3 PlanetCenter=>new Vector3(0,-PlanetRadius-3,0);
         float PlanetwideRelief(Vector3 normal)
         {
-            return sourceSurface.HeightMeters(normal);
+            return sourceSurface.SourceHeightMeters(normal);
         }
         static float SmoothRange(float from,float to,float value)
         {
@@ -41,8 +41,10 @@ namespace SpacePatriot
             float edge=1-Mathf.SmoothStep(0,1,(radius-2400)/600);
             float relief=terrainFields.Sample(x,z).x;
             var radial=new Vector3(x,PlanetRadius+curvature,z).normalized;
-            float macro=PlanetwideRelief(radial)*SmoothRange(2000,3900,radius);
-            return Mathf.Lerp(-3,curvature+macro+Mathf.Clamp(relief,-16,55)*.62f*edge,basin);
+            float globe=PlanetwideRelief(radial);
+            float localGeology=sourceSurface.HeightMeters(radial);
+            float geology=Mathf.Lerp(globe,localGeology,edge);
+            return Mathf.Lerp(-3,curvature+geology+Mathf.Clamp(relief,-16,55)*.62f*edge,basin);
         }
         Vector3 RingVertex(int ring,int sector)
         {
@@ -124,12 +126,12 @@ namespace SpacePatriot
             var vertices=new List<Vector3>();var colors=new List<Color>();var uv=new List<Vector2>();var indices=new List<int>();
             void Add(Vector3 p,float local){vertices.Add(p);colors.Add(GlobeColor((p-PlanetCenter).normalized));uv.Add(new Vector2(local,0));}
             Add(new Vector3(0,RawPlanetHeight(0,0),0),1);
-            int rings=120+112;float cap=Mathf.Asin(RegionRadius/PlanetRadius);
+            const int localRings=120,globalRings=240;int rings=localRings+globalRings;float cap=Mathf.Asin(RegionRadius/PlanetRadius);
             for(int ring=1;ring<=rings;ring++)for(int j=0;j<LongitudeCount;j++)
             {
                 Vector3 p;float local=0;
-                if(ring<=120){p=RingVertex(ring,j);local=1-Mathf.SmoothStep(0,1,(ring*RingStep-2100)/900);}
-                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-120)/113f),a=j*AngleStep;var radial=new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a));float reliefWeight=SmoothRange(2000,3900,theta*PlanetRadius);p=PlanetCenter+radial*(PlanetRadius+PlanetwideRelief(radial)*reliefWeight);}
+                if(ring<=localRings){p=RingVertex(ring,j);local=1-Mathf.SmoothStep(0,1,(ring*RingStep-2100)/900);}
+                else{float theta=Mathf.Lerp(cap,Mathf.PI,(ring-localRings)/(globalRings+1f)),a=j*AngleStep;var radial=new Vector3(Mathf.Sin(theta)*Mathf.Cos(a),Mathf.Cos(theta),Mathf.Sin(theta)*Mathf.Sin(a));p=PlanetCenter+radial*(PlanetRadius+PlanetwideRelief(radial));}
                 Add(p,local);
             }
             Add(PlanetCenter-Vector3.up*PlanetRadius,0);
@@ -139,7 +141,7 @@ namespace SpacePatriot
             for(int j=0;j<LongitudeCount;j++)Tri(vertices.Count-1,1+(rings-1)*LongitudeCount+j,1+(rings-1)*LongitudeCount+(j+1)%LongitudeCount);
             var mesh=new Mesh{name=info.name+" / continuous Worldworks planet",indexFormat=IndexFormat.UInt32};mesh.SetVertices(vertices);mesh.SetColors(colors);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);mesh.RecalculateNormals();mesh.RecalculateBounds();generatedAssets.Add(mesh);
             var source=Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?5:info.biome=="ice"?10:info.biome=="volcanic"?14:info.biome=="temperate"?6:8));
-            terrainMaterial=new Material(Resources.Load<Shader>("Shaders/WorldworksPlanet"));terrainMaterial.SetTexture("_GroundMap",source.GetTexture("_BaseMap"));terrainMaterial.SetTexture("_RockMap",Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?1:info.biome=="ice"?9:2)).GetTexture("_BaseMap"));terrainMaterial.SetFloat("_Living",info.biome=="temperate"?1:0);terrainMaterial.SetFloat("_Seed",info.seed%997);generatedAssets.Add(terrainMaterial);
+            terrainMaterial=new Material(Resources.Load<Shader>("Shaders/WorldworksPlanet"));terrainMaterial.SetTexture("_GroundMap",source.GetTexture("_BaseMap"));terrainMaterial.SetTexture("_RockMap",Resources.Load<Material>("OriginalSurfaces/geology-"+(info.biome=="desert"?1:info.biome=="ice"?9:2)).GetTexture("_BaseMap"));terrainMaterial.SetFloat("_Living",info.biome=="temperate"?1:0);terrainMaterial.SetFloat("_Seed",info.seed%997);terrainMaterial.SetVector("_PlanetCenter",transform.TransformPoint(PlanetCenter));terrainMaterial.SetFloat("_PlanetRadius",PlanetRadius*Mathf.Max(transform.lossyScale.x,Mathf.Max(transform.lossyScale.y,transform.lossyScale.z)));generatedAssets.Add(terrainMaterial);
             var ground=MeshObject("Continuous spherical terrain",content,mesh,terrainMaterial,Vector3.zero,Vector3.one);ground.AddComponent<MeshCollider>().sharedMesh=mesh;
         }
         public void StreamSurface(Vector3 focus,bool walking)
