@@ -7,6 +7,7 @@ namespace SpacePatriot
     {
         const int NoiseSize=64;
         static readonly byte[] noise=CreateNoise();
+        static Texture3D noiseTexture;
         // Match Reference/Original/source/landscape.js. The original Worldworks
         // patch is authored in this body frame, so the globe sampler must use
         // the same axes or the close terrain and the distant continents drift.
@@ -16,6 +17,26 @@ namespace SpacePatriot
         readonly int type;
         readonly float radiusKm,amplitude,frequency,terrainBase,landscapePhase;
         readonly Vector3 offset;
+
+        public float Amplitude=>amplitude;
+        public float Frequency=>frequency;
+        public float TerrainBase=>terrainBase;
+        public Vector3 NoiseOffset=>offset;
+        public int MaterialType=>type;
+        public static Vector3 SourceRight=>sourceRight;
+        public static Vector3 SourceUp=>sourceUp;
+        public static Vector3 SourceForward=>sourceForward;
+        public static Texture3D NoiseVolume
+        {
+            get
+            {
+                if(noiseTexture)return noiseTexture;
+                noiseTexture=new Texture3D(NoiseSize,NoiseSize,NoiseSize,TextureFormat.R8,false)
+                {name="Original 64-cube world noise",filterMode=FilterMode.Bilinear,wrapMode=TextureWrapMode.Repeat};
+                noiseTexture.SetPixelData(noise,0);noiseTexture.Apply(false,true);
+                return noiseTexture;
+            }
+        }
 
         static byte[] CreateNoise()
         {

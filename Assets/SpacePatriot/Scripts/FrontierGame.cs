@@ -204,11 +204,11 @@ namespace SpacePatriot
             }
             if(Vector3.Distance(walkPosition,ship.position)<Spec.width*.7f+5)BoardOrExit();
         }
-        void Land(Place pad)=>CompleteLanding(pad.position+Vector3.up*(StandHeight-2.65f));
-        void LandSurface(Vector3 shipCenter)=>CompleteLanding(shipCenter);
-        void CompleteLanding(Vector3 position)
+        void Land(Place pad)=>CompleteLanding(pad.position+Vector3.up*(StandHeight-2.65f),Quaternion.identity);
+        void LandSurface(Vector3 shipCenter,Quaternion attitude)=>CompleteLanding(shipCenter,attitude);
+        void CompleteLanding(Vector3 position,Quaternion attitude)
         {
-            ship.position=position;ship.rotation=Quaternion.identity;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;surfaceLanding=false;launchClearance=0;
+            ship.position=position;ship.rotation=attitude;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;surfaceLanding=false;launchClearance=0;
             Save();Toast("Surface landing secured. F to leave the seat. Cargo hatch and loading are available while landed.");Sound(buttonClip,.4f);
         }
         void FollowCamera(float dt)

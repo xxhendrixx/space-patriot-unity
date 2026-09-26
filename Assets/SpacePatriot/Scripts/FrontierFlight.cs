@@ -15,8 +15,10 @@ namespace SpacePatriot
         float lastForward=-10,tacticalUntil,tacticalReady;
         bool launchPending;
         float launchClearance;
+        Vector3 launchNormal=Vector3.up,launchStart;
         bool surfaceLanding;
         Vector3 surfaceLandingPosition;
+        Quaternion surfaceLandingRotation=Quaternion.identity;
         public float StandHeight=>Spec.height*.3f+2;
         public float LoadedMass=>Spec.mass+save.organics*.5f+save.ore*1.5f+save.crystal*.8f;
         public float EngineAcceleration=>Spec.thrust*Spec.mass/LoadedMass*save.vessel.Factor("engines",powered);
@@ -66,11 +68,11 @@ namespace SpacePatriot
             if(bindings.Held("Brake")){cruise=false;docking=false;surfaceLanding=false;tacticalUntil=0;}
             if(docking)
             {
-                var target=surfaceLanding?new Vector3(surfaceLandingPosition.x,world.SurfaceAt(surfaceLandingPosition)+StandHeight,surfaceLandingPosition.z):landingTarget.position+Vector3.up*(StandHeight-2.65f);
+                var target=surfaceLanding?surfaceLandingPosition:landingTarget.position+Vector3.up*(StandHeight-2.65f);
                 var approach=surfaceLanding?target:approachEntry?target+new Vector3(0,9,66):target;
                 ship.position=Vector3.MoveTowards(ship.position,approach,dt*Mathf.Max(5,Spec.thrust));
-                ship.rotation=Quaternion.Slerp(ship.rotation,Quaternion.identity,dt*2);velocity=Vector3.zero;speed=0;
-                if(Vector3.Distance(ship.position,approach)<.05f){if(surfaceLanding)LandSurface(target);else if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
+                ship.rotation=Quaternion.Slerp(ship.rotation,surfaceLanding?surfaceLandingRotation:Quaternion.identity,dt*2);velocity=Vector3.zero;speed=0;
+                if(Vector3.Distance(ship.position,approach)<.05f){if(surfaceLanding)LandSurface(target,surfaceLandingRotation);else if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
             }
             if(bindings.Down("Forward")){if(Time.time-lastForward<.32f)TacticalBoost();lastForward=Time.time;}
             if(Mouse.current!=null&&!instruments&&cockpitHint=="")throttle=Mathf.Clamp(throttle*Mathf.Exp(Mouse.current.scroll.ReadValue().y*.0013f),.05f,3);
@@ -78,7 +80,7 @@ namespace SpacePatriot
             Vector3 rates=new Vector3(bindings.Axis("Pitch up","Pitch down"),bindings.Axis("Yaw left","Yaw right"),-bindings.Axis("Roll left","Roll right"));
             rates.z-=Axis(Key.LeftBracket,Key.RightBracket);
             bool brake=bindings.Held("Brake"),boost=bindings.Held("Boost");
-            if(launchClearance>0){if(brake||translation.y<0||ship.position.y>=launchClearance)launchClearance=0;else translation.y=Mathf.Max(translation.y,.55f);}
+            if(launchClearance>0){if(brake||translation.y<0||Vector3.Dot(ship.position-launchStart,launchNormal)>=launchClearance)launchClearance=0;else translation+=ship.InverseTransformDirection(launchNormal)*.55f;}
             if(analogReady){translation+=pilot.Translation;rates+=pilot.Rotation;brake|=pilot.Held("Brake");boost|=pilot.Held("Boost");}
             Vector3 mouseDegrees=Vector3.zero;
             if(instruments){translation=launchClearance>0?Vector3.up*.55f:Vector3.zero;rates=Vector3.zero;boost=false;}
@@ -97,10 +99,17 @@ namespace SpacePatriot
             if(motion.sqrMagnitude>.000001f&&Physics.SphereCast(ship.position,Mathf.Max(1,Spec.width*.1f),motion.normalized,out var hit,motion.magnitude,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore))
             {if(velocity.magnitude>12)Damage((velocity.magnitude-10)*.7f);velocity=Vector3.Reflect(velocity,hit.normal)*.15f;cruise=false;}
             else ship.position+=motion;
-            float floor=world.SurfaceAt(ship.position)+StandHeight;
-            if(ship.position.y<floor){if(gearDown&&velocity.magnitude<12&&Vector3.Dot(ship.up,Vector3.up)>.88f){var landing=world.Nearest(ship.position,"landing");if(Vector3.Distance(ship.position,landing.position)<landing.range+StandHeight){Land(landing);return;}
-                    flying=false;velocity=Vector3.zero;ship.position=new Vector3(ship.position.x,floor,ship.position.z);Save();Toast("Surface landing secured.");}
-                else{Damage(Mathf.Max(0,Mathf.Abs(velocity.y)-4)*2);ship.position=new Vector3(ship.position.x,floor,ship.position.z);velocity.y=Mathf.Abs(velocity.y)*.15f;}}
+            if(world.TrySurface(ship.position,out var surfacePoint,out var surfaceNormal))
+            {
+                float altitude=Vector3.Dot(ship.position-surfacePoint,surfaceNormal)-StandHeight;
+                if(altitude<0)
+                {
+                    if(gearDown&&velocity.magnitude<12&&Vector3.Dot(ship.up,surfaceNormal)>.88f)
+                    {var forward=Vector3.ProjectOnPlane(ship.forward,surfaceNormal);if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(surfaceNormal,Vector3.right);var attitude=Quaternion.LookRotation(forward,surfaceNormal);CompleteLanding(surfacePoint+surfaceNormal*StandHeight,attitude);return;}
+                    Damage(Mathf.Max(0,Mathf.Abs(Vector3.Dot(velocity,surfaceNormal))-4)*2);ship.position=surfacePoint+surfaceNormal*StandHeight;
+                    float normalSpeed=Vector3.Dot(velocity,surfaceNormal);if(normalSpeed<0)velocity-=surfaceNormal*normalSpeed*1.15f;
+                }
+            }
             speed=velocity.magnitude;
             float load=translation.magnitude+(brake?1:0);if(powered)save.fuel=Mathf.Max(0,save.fuel-dt*(boost?.12f:.012f)*load);
             if(boost)heat=Mathf.Min(100,heat+dt*24);
@@ -114,20 +123,23 @@ namespace SpacePatriot
             if(Mathf.Abs(ship.position.x)<65&&Mathf.Abs(ship.position.z)<110&&world.lift!=null&&!world.lift.Ready){world.lift.Raise();launchPending=true;Toast("Hangar lift raising. Roof opening; flight control transfers after clearance.");return;}
             // A tap starts an actual clearance climb; releasing Space while the lift
             // moves must not immediately drop the ship back onto the platform.
-            launchPending=false;launchClearance=ship.position.y+14;flying=true;velocity=Vector3.up*5;ship.position+=Vector3.up*1.5f;inputNeutral=!pilot.Neutral;Toast("Launch climb engaged. WASD and Space/Ctrl thrust; arrows steer; G gear; X brake.");
+            launchPending=false;launchNormal=ship.up.sqrMagnitude>.5f?ship.up:Vector3.up;launchStart=ship.position;launchClearance=14;flying=true;velocity=launchNormal*5;ship.position+=launchNormal*1.5f;inputNeutral=!pilot.Neutral;Toast("Launch climb engaged. WASD and Space/Ctrl thrust; arrows steer; G gear; X brake.");
         }
         void RequestLanding()
         {
             if(!flying){Launch();return;}if(!gearDown){Toast("Extend the gear with G before landing.");return;}
             var pad=world.Nearest(ship.position,"landing");float distance=Vector3.Distance(ship.position,pad.position);
             if(distance<Mathf.Max(140,Spec.length)&&speed<45){surfaceLanding=false;landingTarget=pad;docking=true;approachEntry=Spec.length<60&&pad.name=="Port 07 landing pad";Toast("Landing pad approach engaged. X cancels.");return;}
-            // Pads are conveniences, not permission gates. Any safe patch of the
-            // continuous solid surface can accept a controlled vertical descent.
-            float altitude=ship.position.y-world.SurfaceAt(ship.position)-StandHeight;
-            if(world.info.biome!="gas"&&new Vector2(ship.position.x,ship.position.z).magnitude<FrontierWorld.PlanetRadius*.94f&&altitude>=-2&&altitude<650&&speed<45)
-            {surfaceLandingPosition=ship.position;surfaceLanding=true;docking=true;approachEntry=false;Toast("Surface landing assist engaged. Hold position; X cancels.");}
-            else if(speed>=45)Toast("Reduce speed below 45 m/s before landing.");
-            else if(altitude>=650)Toast("Descend below 650 m over solid ground to engage a surface landing.");
+            // Landing is available on the complete solid globe, not just the port's local map.
+            if(world.TrySurface(ship.position,out var point,out var normal))
+            {
+                float altitude=Vector3.Dot(ship.position-point,normal)-StandHeight;
+                if(altitude>=-2&&altitude<650&&speed<45)
+                {surfaceLandingPosition=point+normal*StandHeight;var forward=Vector3.ProjectOnPlane(ship.forward,normal);if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(normal,Vector3.right);surfaceLandingRotation=Quaternion.LookRotation(forward,normal);surfaceLanding=true;docking=true;approachEntry=false;Toast("Surface landing assist engaged. Hold position; X cancels.");}
+                else if(speed>=45)Toast("Reduce speed below 45 m/s before landing.");
+                else if(altitude>=650)Toast("Descend below 650 m over solid ground to engage a surface landing.");
+                else Toast("Move clear of the surface before requesting landing.");
+            }
             else Toast("A solid surface is required; gas giants cannot be landed on.");
         }
         void TacticalBoost(){if(Time.time<tacticalReady||!powered||gearDown)return;tacticalUntil=Time.time+2;tacticalReady=Time.time+8;Toast("Tactical thrust engaged.");}

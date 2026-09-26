@@ -49,6 +49,7 @@ namespace SpacePatriot
                 velocity=Vector3.zero;FrameDesktop(Key.Space);DesktopCheck(velocity.y>0,"Space supplies upward thrust");
                 velocity=Vector3.zero;FrameDesktop(Key.LeftCtrl);DesktopCheck(velocity.y<0,"Ctrl supplies downward thrust");
                 velocity=new Vector3(20,0,0);FrameDesktop(Key.X);DesktopCheck(velocity.magnitude<20,"X brakes the ship");
+                VerifyAnywhereLanding();
                 FrameDesktop();velocity=Vector3.zero;ship.rotation=Quaternion.identity;FollowCamera(10);Physics.SyncTransforms();
                 var dial=cabin.GetComponentsInChildren<CockpitControl>().First(c=>c.action==43);
                 var point=view.WorldToScreenPoint(dial.GetComponent<Renderer>().bounds.center);float previousThrottle=throttle;
@@ -101,6 +102,19 @@ namespace SpacePatriot
         {
             try{action();return true;}
             catch(Exception e){desktopChecks.Add("FAIL "+e);File.WriteAllLines(Path.Combine(verificationDirectory,"desktop-player.txt"),desktopChecks);Debug.LogException(e);Application.Quit(1);return false;}
+        }
+        void VerifyAnywhereLanding()
+        {
+            var previousPosition=ship.position;var previousRotation=ship.rotation;var previousVelocity=velocity;var previousSpeed=speed;bool previousFlying=flying,previousGear=gearDown;
+            var center=world.transform.TransformPoint(world.PlanetCenter);float probeRadius=FrontierWorld.PlanetRadius+100;
+            foreach(var direction in new[]{Vector3.up,Vector3.down,Vector3.right,Vector3.left,Vector3.forward,Vector3.back})
+                DesktopCheck(world.TrySurface(center+direction*probeRadius,out _,out _),"Solid terrain resolves on planet face "+direction);
+            DesktopCheck(world.TrySurface(center+Vector3.down*probeRadius,out var point,out var normal),"Far-hemisphere surface resolves for landing");
+            ship.position=point+normal*(StandHeight+100);var forward=Vector3.ProjectOnPlane(Vector3.forward,normal);if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(normal,Vector3.right);
+            ship.rotation=Quaternion.LookRotation(forward,normal);gearDown=true;flying=true;speed=0;velocity=Vector3.zero;RequestLanding();
+            DesktopCheck(surfaceLanding&&docking,"Landing assist accepts unpadded ground on the far hemisphere");
+            DesktopCheck(Vector3.Dot(surfaceLandingRotation*Vector3.up,normal)>.999f,"Landing assist aligns landing gear to local ground normal");
+            surfaceLanding=false;docking=false;flying=previousFlying;gearDown=previousGear;velocity=previousVelocity;speed=previousSpeed;ship.position=previousPosition;ship.rotation=previousRotation;
         }
         void FrameDesktop(params Key[] keys)
         {InputSystem.QueueStateEvent(verificationMouse,new MouseState());InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();focused=true;inputNeutral=false;Flight(.02f);}
