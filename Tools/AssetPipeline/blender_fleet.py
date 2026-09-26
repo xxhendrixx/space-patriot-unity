@@ -181,9 +181,35 @@ def build(craft):
    for deck in range(4 if f==9 else 3):
     for k in range(14):box('Habitation viewport',(side*bw*1.045,H*.18-deck*1.0,-L*.22+k*L*.033),(.04,.34,.7),'glass',.045)
    for k in range(3):tube('Turret ring',(x,H*.16,-L*.20+k*L*.15),(x,H*.16+.23*u,-L*.20+k*L*.15),.6*u,'steel');box('Defensive turret',(x,H*.16+.4*u,-L*.20+k*L*.15),(.9*u,.5*u,1.1*u),'olive',.13)
+  if f==9:
+   # The carrier has a broad, readable flight deck with a raised center spine,
+   # offset launch lanes and perimeter guidance lights instead of a scaled-up fighter shell.
+   deckY=H*.30
+   box('Flight deck island',(0,deckY+.44,-L*.03),(bw*.76,.74,L*.54),'olive',.28)
+   box('Flight deck armored crown',(0,deckY+.83,-L*.01),(bw*.62,.12,L*.47),'steel',.12)
+   for side in [-1,1]:
+    beam('Landing lane centerline',(side*bw*.28,deckY+.91,L*.22),(side*bw*.28,deckY+.91,-L*.29),.12,'ochre')
+    for k in range(13):
+     z=-L*.29+k*L*.041
+     box('Deck approach marker',(side*bw*.28,deckY+.92,z),(.48,.035,.20),'lamp',.025)
+     box('Deck edge arrestor',(side*bw*.47,deckY+.08,z),(.22,.12,.72),'ochre',.035)
+   # Hangar entrances are deep framed apertures with a visible door and track.
+   for side in [-1,1]:
+    x=side*W*.33;y=-H*.13;z=L*.20
+    box('Hangar throat shadow',(x,y,z),(W*.125,H*.35,.16),'rubber',.025)
+    for sx in [-1,1]:beam('Hangar pressure frame',(x+sx*W*.061,y-H*.18,z+.02),(x+sx*W*.061,y+H*.18,z+.02),.28*u,'steel')
+    box('Retracting blast door',(x,y-H*.16,z+.10),(W*.105,.22,.12),'olive',.05)
  else:
+  outlines={
+   0:[(.12,.15),(.20,.19),(.42,-.03),(.43,-.25),(.28,-.20),(.12,-.14)],
+   1:[(.12,.28),(.24,.24),(.50,-.02),(.45,-.24),(.30,-.18),(.12,-.25)],
+   3:[(.10,.26),(.17,.22),(.31,-.03),(.28,-.24),(.18,-.19),(.10,-.23)],
+   4:[(.12,.25),(.21,.29),(.47,-.10),(.48,-.31),(.29,-.22),(.12,-.30)],
+   6:[(.12,.18),(.25,.20),(.43,.02),(.46,-.18),(.28,-.16),(.12,-.14)],
+   8:[(.15,.35),(.23,.31),(.44,.09),(.48,-.10),(.32,-.04),(.16,-.17)]
+  }
   for side in [-1,1]:
-   outline=[(.12,.25),(.21,.29),(.47,-.10),(.48,-.31),(.29,-.22),(.12,-.30)] if f==4 else [(.13,.07),(.20,.09),(.45,-.10),(.47,-.23),(.24,-.23),(.13,-.18)]
+   outline=outlines.get(f,[(.13,.07),(.20,.09),(.45,-.10),(.47,-.23),(.24,-.23),(.13,-.18)])
    points=[(side*x*W,-H*.01,z*L) for x,z in outline];plate('Swept structural wing',points,(0,1,0),H*.11,'ivory',0)
    # Divided armor sections track the swept load-bearing spar.
    for k in range(4):
@@ -192,12 +218,38 @@ def build(craft):
    beam('Wing reinforcement',(side*bw,0,-L*.17),(side*W*.45,0,-L*.19),.1*u)
    fin=[(side*W*.44,H*.09,-L*.16),(side*W*.47,H*.58,-L*.27),(side*W*.49,H*.14,-L*.34)]
    plate('Canted stabilizer',fin,(side,0,0),.06*u,'olive',0)
- ex=W*(.34 if cargo else .30 if large else .29);ez=-L*.32;er=min(W*.087,H*.31)
- for side in [-1,1]:
-  beam('Articulated drive pylon',(side*bw,0,-L*.23),(side*ex,H*.13,ez),.45*u)
-  engine(side*ex,H*.14,ez,er,L*.26)
-  if cargo or f==9:engine(side*ex,-H*.42,ez,er*.83,L*.24)
-  landing(side*bw*.82,L*.23,H,u);landing(side*W*.26,-L*.22,H,u)
+ ex=W*(.34 if cargo else .30 if large else .29);ez=-L*.32;er=min(W*.087,H*.31)*math.sqrt(2/max(2,craft['engines']))
+ engineCount=max(2,int(craft['engines']))
+ driveX=[0] if engineCount==1 else [((i/(engineCount-1))*2-1)*ex for i in range(engineCount)]
+ for index,x in enumerate(driveX):
+  side=-1 if x<0 else 1
+  z=ez+(L*.065 if engineCount>=4 and index%2 else -L*.065 if engineCount>=4 else 0)
+  y=H*.14 if index%2==0 else -H*.18
+  beam('Articulated drive pylon',(side*min(abs(x),bw),0,z+L*.09),(x,y,z),.45*u)
+  engine(x,y,z,er,L*.26)
+ for side in [-1,1]:landing(side*bw*.82,L*.23,H,u);landing(side*W*.26,-L*.22,H,u)
+ if f==1:
+  # Interceptor: paired forward canards and close-set armor give it a compact attack profile.
+  for side in [-1,1]:
+   plate('Interceptor nose canard',[(side*bw*.70,H*.02,L*.27),(side*W*.39,H*.02,L*.40),(side*W*.34,H*.02,L*.20),(side*bw*.62,H*.02,L*.09)],(0,1,0),H*.10,'ochre',.015)
+   tube('Twin sensor lance',(side*bw*.42,H*.04,L*.39),(side*bw*.42,H*.04,L*.53),.045*u,'steel',segments=10)
+ if f==3:
+  # Courier: paired cargo outriggers leave the centerline open for fast service access.
+  for side in [-1,1]:
+   beam('Courier cargo outrigger',(side*bw*.7,-H*.10,-L*.22),(side*W*.34,-H*.16,L*.12),.34*u,'steel')
+   box('Courier sealed packet',(side*W*.31,-H*.12,-L*.015),(W*.13,H*.25,L*.22),'olive',.10)
+ if f==6:
+  # Shuttle: explicit passenger pressure cabin, window belt and aft boarding sill.
+  box('Shuttle passenger cabin',(0,H*.16,-L*.02),(bw*1.45,H*.38,L*.39),'olive',.18)
+  for side in [-1,1]:
+   for k in range(5):box('Shuttle cabin window',(side*bw*.73,H*.19,L*.12-k*L*.052),(.055,.32,.62),'glass',.07)
+   box('Shuttle boarding threshold',(side*bw*.78,-H*.05,-L*.27),(1.25,.12,L*.12),'ochre',.06)
+ if f==8:
+  # Racer: a low dorsal keel and twin tail fins produce a separate silhouette in profile.
+  box('Racer dorsal spine',(0,H*.49,-L*.12),(bw*.27,.24*u,L*.55),'dark',.08)
+  for side in [-1,1]:
+   fin=[(side*bw*.55,H*.18,-L*.27),(side*bw*.92,H*.58,-L*.36),(side*bw*.78,H*.16,-L*.43)]
+   plate('Racer split-tail fin',fin,(side,0,0),.11*u,'ochre',.01)
  tube('Nose sensor gimbal',(0,-H*.29,L*.36),(0,-H*.29,L*.44),.29*u,'dark',segments=24)
  ring('Optical sensor collar',(0,-H*.29,L*.445),.21*u,.025*u);tube('Optical sensor face',(0,-H*.29,L*.447),(0,-H*.29,L*.45),.18*u,'glass',segments=24)
  for side in [-1,1]:tube('Nose lamp',(side*bw*.52,-H*.22,L*.44),(side*bw*.52,-H*.22,L*.446),.085*u,'lamp',segments=12)

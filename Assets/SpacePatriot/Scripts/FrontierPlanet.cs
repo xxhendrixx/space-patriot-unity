@@ -27,6 +27,9 @@ namespace SpacePatriot
             float radius=new Vector2(x,z).magnitude;
             float curvature=Mathf.Sqrt(Mathf.Max(0,PlanetRadius*PlanetRadius-radius*radius))-PlanetRadius-3;
             if(info.biome=="gas")return curvature;
+            // Update can run during scene startup before Generate has loaded the
+            // source fields. Keep the collision query finite until they are ready.
+            if(terrainFields==null||sourceSurface==null)return curvature;
             // Preserve the port's working plane; fade it into the original engine's hills.
             float flatDistance=new Vector2(Mathf.Max(0,Mathf.Abs(x-120)-315),Mathf.Max(0,Mathf.Abs(z)-260)).magnitude;
             float basin=Mathf.SmoothStep(0,1,flatDistance/230);
@@ -65,7 +68,7 @@ namespace SpacePatriot
         Color GlobeColor(Vector3 normal)
         {
             Vector3 source=PlanetEngineSurface.ToSourceNormal(normal);
-            float height=sourceSurface.HeightMeters(normal),seed=(info.seed%997)*.013f;
+            float height=sourceSurface.SourceHeightMeters(normal),seed=(info.seed%997)*.013f;
             float broad=Mathf.PerlinNoise(source.x*3.1f+seed,source.z*3.1f+source.y*1.7f);
             float detail=Mathf.PerlinNoise(source.x*13.7f+seed,source.z*13.7f+source.y*6.3f);
             float elevation=Mathf.Clamp01(Mathf.InverseLerp(-8,48,height));

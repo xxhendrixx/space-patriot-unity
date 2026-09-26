@@ -19,9 +19,11 @@ public static class OriginalAssetImporter
     { ImportInternal(false); }
     public static void ImportProduction()
     { ImportInternal(true); }
+    public static void ImportFleet()
+    { ImportInternal(true,"hull",true); }
     public static void ImportWildlife()
     { ImportInternal(false,"wildlife"); }
-    static void ImportInternal(bool productionOnly,string kindOnly=null)
+    static void ImportInternal(bool productionOnly,string kindOnly=null,bool preserveExistingMaterials=false)
     {
         Directory.CreateDirectory(Dest);Directory.CreateDirectory(Prefabs);AssetDatabase.Refresh();
         var data=JsonUtility.FromJson<Catalog>(File.ReadAllText(Source+"import.json"));
@@ -35,6 +37,7 @@ public static class OriginalAssetImporter
                 if(ti!=null&&ti.textureType!=TextureImporterType.NormalMap){ti.textureType=TextureImporterType.NormalMap;ti.SaveAndReimport();}}
             string path=Dest+row.id+".mat";var m=AssetDatabase.LoadAssetAtPath<Material>(path);
             if(m==null){m=new Material(Shader.Find(row.unlit?"Universal Render Pipeline/Unlit":"Universal Render Pipeline/Lit"));AssetDatabase.CreateAsset(m,path);}
+            else if(preserveExistingMaterials){materials.Add(row.id,m);continue;}
             m.SetColor("_BaseColor",new Color(row.color[0],row.color[1],row.color[2],row.opacity));m.SetTexture("_BaseMap",Tex(row.map));
             m.SetTextureScale("_BaseMap",new Vector2(row.repeat[0],row.repeat[1]));m.SetFloat("_Cull",row.doubleSided?0:2);
             if(!row.unlit){m.SetFloat("_Metallic",row.metal);m.SetFloat("_Smoothness",1-row.rough);

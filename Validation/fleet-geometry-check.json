@@ -1,0 +1,70 @@
+{
+  "blend": "SpacePatriot-Fleet.blend",
+  "families": [
+    {
+      "family": 0,
+      "name": "Strider Chalk",
+      "engines": 2,
+      "meshObjects": 428
+    },
+    {
+      "family": 1,
+      "name": "Kite Chalk",
+      "engines": 2,
+      "meshObjects": 432
+    },
+    {
+      "family": 2,
+      "name": "Mule Chalk",
+      "engines": 4,
+      "meshObjects": 662
+    },
+    {
+      "family": 3,
+      "name": "Wisp Chalk",
+      "engines": 2,
+      "meshObjects": 432
+    },
+    {
+      "family": 4,
+      "name": "Manta Chalk",
+      "engines": 2,
+      "meshObjects": 428
+    },
+    {
+      "family": 5,
+      "name": "Spur Chalk",
+      "engines": 3,
+      "meshObjects": 499
+    },
+    {
+      "family": 6,
+      "name": "Gannet Chalk",
+      "engines": 4,
+      "meshObjects": 571
+    },
+    {
+      "family": 7,
+      "name": "Wayfarer Chalk",
+      "engines": 4,
+      "meshObjects": 1496
+    },
+    {
+      "family": 8,
+      "name": "Peregrine Chalk",
+      "engines": 2,
+      "meshObjects": 431
+    },
+    {
+      "family": 9,
+      "name": "Meridian Chalk",
+      "engines": 6,
+      "meshObjects": 1858
+    }
+  ],
+  "checks": [
+    "PASS: all 10 ship families have the propulsion count specified by Fleet.json.",
+    "PASS: carrier has a flight deck, landing lanes, and framed hangar/blast door.",
+    "PASS: shuttle has a dedicated passenger cabin."
+  ]
+}

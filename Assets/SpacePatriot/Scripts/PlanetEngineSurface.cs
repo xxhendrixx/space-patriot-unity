@@ -47,6 +47,16 @@ namespace SpacePatriot
         }
         static float SmoothStep(float lo,float hi,float value)=>Smooth01(Mathf.Clamp01((value-lo)/(hi-lo)));
 
+        /// <summary>The globe-scale height in living.js Universe.rawHeight.</summary>
+        public float SourceHeightMeters(Vector3 unityNormal)
+        {
+            if(type==3)return 0;
+            Vector3 normal=ToSourceNormal(unityNormal.normalized);
+            float q=Noise(normal*(12*frequency)+offset)*2-1;
+            float regional=.58f*Noise(normal*(3.5f*frequency)+offset)+.26f*(1-q*q)+.14f*Noise(normal*(42*frequency)+offset)+.02f*Noise(normal*(135*frequency)+offset);
+            return radiusKm*amplitude*(regional-terrainBase-.02f)*FrontierWorld.PlanetRadius/radiusKm;
+        }
+
         public PlanetEngineSurface(WorldInfo world)
         {
             type=world.biome switch{"temperate"=>1,"desert"=>2,"gas"=>3,"ice"=>4,"volcanic"=>5,_=>0};
