@@ -97,7 +97,9 @@ def foreground_from_edge_connected_white(rgb):
             background[index+width] = True; queue.append(index+width)
     return ~background.reshape(height, width)
 
-def project_uv(mesh, bounds, ref_box, image_size, category, axes=(0, 1), flip_u=False):
+def project_uv(mesh, bounds, ref_box, image_size, category, axes=(0, 1), mirror_u=False,
+               perspective_distance=2.6, view_sign=1, azimuth_degrees=0.0,
+               elevation_degrees=0.0):
     # Preserve a seam-aware unwrap as the active UV map for atlas baking.
     # The separate ArtProjection map below samples the concept sheet only.
     bake_uv = mesh.uv_layers.get('AtlasUV')
@@ -115,13 +117,52 @@ def project_uv(mesh, bounds, ref_box, image_size, category, axes=(0, 1), flip_u=
     minx, maxx, miny, maxy = bounds
     x0, y0, x1, y1 = ref_box
     width, height = image_size
+    # Project through a real camera basis. The references are close three-quarter
+    # illustrations; an axis-aligned side projection stretches them over the
+    # wrong surfaces and creates the large pale patches seen in earlier bakes.
+    axis_a = Vector((0, 0, 0)); axis_a[axes[0]] = 1.0
+    axis_b = Vector((0, 0, 0)); axis_b[axes[1]] = 1.0
+    world_up = axis_b.normalized()
+    base_normal = axis_a.cross(axis_b).normalized() * (1 if int(view_sign) >= 0 else -1)
+    azimuth = math.radians(float(azimuth_degrees))
+    elevation = math.radians(float(elevation_degrees))
+    # Rotate about the part's vertical axis, then raise the camera above it.
+    normal = base_normal.copy()
+    from mathutils import Quaternion
+    normal.rotate(Quaternion(world_up, azimuth))
+    right = world_up.cross(normal).normalized()
+    normal.rotate(Quaternion(right, -elevation))
+    normal.normalize()
+    right = world_up.cross(normal).normalized()
+    up = normal.cross(right).normalized()
+    if mirror_u:
+        right.negate()
+    spans=[max(vertex.co[axis] for vertex in mesh.vertices)-min(vertex.co[axis] for vertex in mesh.vertices) for axis in range(3)]
+    camera_distance = max(spans) * max(1.2, float(perspective_distance))
+    mesh_center = Vector(((minx+maxx)*.5, (miny+maxy)*.5, 0))
+    mesh_center[axes[0]] = (minx + maxx) * .5
+    mesh_center[axes[1]] = (miny + maxy) * .5
+    # Center on all three mesh dimensions, not the source image's 2D plane.
+    for axis in range(3):
+        values=[v.co[axis] for v in mesh.vertices]
+        mesh_center[axis]=(min(values)+max(values))*.5
+    projected = []
+    for vertex in mesh.vertices:
+        relative = vertex.co - mesh_center
+        distance = max(camera_distance*.25, camera_distance-relative.dot(normal))
+        px = relative.dot(right)/distance
+        py = relative.dot(up)/distance
+        projected.append((px,py))
+    px0=min(p[0] for p in projected);px1=max(p[0] for p in projected)
+    py0=min(p[1] for p in projected);py1=max(p[1] for p in projected)
+    project_width=max(1e-8,px1-px0);project_height=max(1e-8,py1-py0)
     for poly in mesh.polygons:
         for loop_index in poly.loop_indices:
-            point = mesh.vertices[mesh.loops[loop_index].vertex_index].co
-            normalized_u = (point[axes[0]] - minx) / max(1e-8, maxx-minx)
-            if flip_u: normalized_u = 1.0 - normalized_u
+            vertex_index=mesh.loops[loop_index].vertex_index
+            projected_x,projected_y=projected[vertex_index]
+            normalized_u=(projected_x-px0)/project_width
             u = x0 + normalized_u * (x1-x0)
-            vtop = y0 + ((point[axes[1]] - miny) / max(1e-8, maxy-miny)) * (y1-y0)
+            vtop = y0 + ((projected_y-py0)/project_height) * (y1-y0)
             # A 28 px gutter at 4096 keeps each quadrant isolated through filtering.
             # ArtProjection samples the standalone concept image, so its UVs
             # must stay in that image's full 0..1 space. Only AtlasUV is packed
@@ -162,16 +203,17 @@ def bake_material(name, reference, foreground_mask, fallback, metallic, roughnes
     view_direction.operation = 'DOT_PRODUCT'
     view_direction.inputs[1].default_value = Vector(projection_normal)
     material.node_tree.links.new(geometry.outputs['Normal'], view_direction.inputs[0])
-    view_facing = nodes.new('ShaderNodeMath')
-    view_facing.operation = 'ABSOLUTE'
-    material.node_tree.links.new(view_direction.outputs['Value'], view_facing.inputs[0])
+    facing_value = view_direction.outputs['Value']
+    # Only the photographed side receives projected paint. The back side has
+    # its own manufactured finish; mirroring the photo there smears cockpit
+    # glazing, labels and wear across surfaces the reference never showed.
     facing = nodes.new('ShaderNodeMapRange')
     facing.clamp = True
-    facing.inputs['From Min'].default_value = .05
-    facing.inputs['From Max'].default_value = .52
+    facing.inputs['From Min'].default_value = .08
+    facing.inputs['From Max'].default_value = .72
     facing.inputs['To Min'].default_value = 0.0
     facing.inputs['To Max'].default_value = 1.0
-    material.node_tree.links.new(view_facing.outputs[0], facing.inputs['Value'])
+    material.node_tree.links.new(facing_value, facing.inputs['Value'])
     facing_factor = nodes.new('ShaderNodeMath')
     facing_factor.operation = 'MULTIPLY'
     material.node_tree.links.new(factor.outputs[0], facing_factor.inputs[0])
@@ -415,8 +457,13 @@ for part in manifest['parts']:
     coords_a = [vertex.co[axes[0]] for vertex in low.data.vertices]
     coords_b = [vertex.co[axes[1]] for vertex in low.data.vertices]
     local_bounds = (min(coords_a), max(coords_a), min(coords_b), max(coords_b))
+    flip_u=bool(part.get('projection_flip_u',False))
+    view_sign = int(part.get('projection_view_sign',-1 if flip_u else 1))
     project_uv(low.data, local_bounds, ref_box, image.size, category, axes,
-               bool(part.get('projection_flip_u', False)))
+               bool(part.get('projection_mirror_u',False)),
+               float(part.get('projection_distance',2.6)), view_sign,
+               float(part.get('projection_azimuth_degrees',0)),
+               float(part.get('projection_elevation_degrees',0)))
     fallback = {'Hull':(.39,.37,.31,1), 'Wing':(.39,.37,.31,1),
                 'LandingGear':(.22,.24,.24,1), 'Drive':(.19,.21,.21,1)}[category]
     metal = {'Hull':.32, 'Wing':.27, 'LandingGear':.60, 'Drive':.66}[category]
@@ -424,7 +471,12 @@ for part in manifest['parts']:
     projection_a = Vector((0, 0, 0)); projection_a[axes[0]] = 1.0
     projection_b = Vector((0, 0, 0)); projection_b[axes[1]] = 1.0
     projection_normal = projection_a.cross(projection_b)
-    if part.get('projection_flip_u', False): projection_normal.negate()
+    if view_sign < 0: projection_normal.negate()
+    from mathutils import Quaternion
+    projection_normal.rotate(Quaternion(projection_b.normalized(), math.radians(float(part.get('projection_azimuth_degrees',0)))))
+    projection_right = projection_b.normalized().cross(projection_normal).normalized()
+    projection_normal.rotate(Quaternion(projection_right, -math.radians(float(part.get('projection_elevation_degrees',0)))))
+    projection_normal.normalize()
     material, bsdf, output_node, source_node, projected_color = bake_material(
         category + '_Projection', image, foreground_mask, fallback, metal, roughness, base_atlas, projection_normal)
     high.data.materials.clear(); high.data.materials.append(material)

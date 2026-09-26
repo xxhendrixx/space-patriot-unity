@@ -16,7 +16,11 @@
       "mesh_rotation": [0, 0, 90],
       "mesh_scale": [1, 1, 0.7],
       "projection_axes": [0, 1],
-      "projection_flip_u": true,
+      "projection_flip_u": false,
+      "projection_view_sign": 1,
+      "projection_azimuth_degrees": -32,
+      "projection_elevation_degrees": 16,
+      "projection_distance": 2.6,
       "uv_angle_degrees": 62,
       "instances": [
         { "name": "Hull", "position": [-0.5, 3.25, 0], "rotation": [0, 0, 0] }

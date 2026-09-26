@@ -25,7 +25,7 @@ Hunyuan3D 2.1 was also investigated. Its shape stage fits the GPU's nominal memo
 
 ## Kestrel multipart ship build
 
-`kestrel-kit.json` is the editable ship recipe: it assigns one isolated reference and deterministic model seed per component, sizes the mesh in metres, places mirrored wings and duplicate engine nacelles, and sets per-part LOD budgets. The hull, wing and landing gear are generated locally; the two engine instances reuse the already generated engine. All prompts and source references are in `ArtDirection/Modules/prompts.json` and `ArtDirection/Modules/`.
+`kestrel-kit.json` is the editable ship recipe: it assigns one isolated reference and deterministic model seed per component, sizes the mesh in metres, places mirrored wings and duplicate engine nacelles, records each projection camera's view sign/azimuth/elevation, and sets per-part LOD budgets. The hull, wing and landing gear are generated locally; the two engine instances reuse the already generated engine. All prompts and source references are in `ArtDirection/Modules/prompts.json` and `ArtDirection/Modules/`.
 
 Run the full pipeline from PowerShell on the configured development machine:
 
@@ -49,7 +49,7 @@ Before accepting a bake, run the comparison pass:
 .\Tools\LocalMeshes\compare-kestrel.ps1 -BuildId kestrel-v1
 ```
 
-It renders the ship and each LOD0 component from Nose, Aft, Starboard, Port, Top and Bottom with the actual atlas through an unlit material. It compares the concept-facing part renders in hue/saturation space and writes silhouette IoU, area, and centroid metrics. Magenta/cyan contour overlays show where the concept and mesh disagree; white edges overlap. The six-view ship board exposes attachment gaps and unsupported surfaces; a whole-ship quarter-view overlay and plan render help review form and mounting offsets. Outputs are stored under `Renders/Comparison/`, including `six-view-ship-board.png`. Part comparisons fit foreground bounds to equal review cells; only whole-ship views preserve assembly offsets. These metrics flag mismatches for review; they do not certify a generated mesh as production-ready.
+It renders the ship and each LOD0 component from Nose, Aft, Starboard, Port, Top and Bottom with the actual atlas through an unlit material. It also renders each component from its recorded projection camera, so the concept comparison uses the same side and perspective that drove its UV bake. It compares the concept-facing part renders in hue/saturation space and writes silhouette IoU, area, and centroid metrics. Magenta/cyan contour overlays show where the concept and mesh disagree; white edges overlap. The six-view ship board exposes attachment gaps and unsupported surfaces; a whole-ship quarter-view overlay and plan render help review form and mounting offsets. Outputs are stored under `Renders/Comparison/`, including `six-view-ship-board.png`. Part comparisons fit foreground bounds to equal review cells; only whole-ship views preserve assembly offsets. These metrics flag mismatches for review; they do not certify a generated mesh as production-ready.
 
 ## Commands
 

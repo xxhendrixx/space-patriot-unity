@@ -1,11 +1,12 @@
 """Render atlas-textured part and ship-plan comparison views from a Blender build."""
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
 import bpy
-from mathutils import Matrix, Vector
+from mathutils import Matrix, Quaternion, Vector
 
 args_parser = argparse.ArgumentParser()
 args_parser.add_argument('--blend', required=True, type=Path)
@@ -60,6 +61,23 @@ def camera_for_axes(center, axis_a, axis_b, dimensions):
     camera.rotation_euler = Matrix((a, b, back)).transposed().to_quaternion().to_euler()
     camera.location = center + back * max(dimensions) * 3
     camera_data.ortho_scale = max(dimensions) * 1.18
+
+def camera_for_reference(center, extent, part):
+    axes = part.get('projection_axes', [0,1])
+    axis_a = Vector(axis_vectors[axes[0]])
+    axis_b = Vector(axis_vectors[axes[1]]).normalized()
+    sign = int(part.get('projection_view_sign', -1 if part.get('projection_flip_u',False) else 1))
+    back = axis_a.cross(axis_b).normalized() * sign
+    back.rotate(Quaternion(axis_b, math.radians(float(part.get('projection_azimuth_degrees',0)))))
+    right = axis_b.cross(back).normalized()
+    back.rotate(Quaternion(right, -math.radians(float(part.get('projection_elevation_degrees',0)))))
+    back.normalize()
+    right = axis_b.cross(back).normalized()
+    up = back.cross(right).normalized()
+    camera.location = center + back * extent * float(part.get('projection_distance',2.6))
+    camera.rotation_euler = Matrix((right, up, back)).transposed().to_quaternion().to_euler()
+    camera_data.type = 'PERSP'
+    camera_data.lens = 50
 
 def render(path):
     scene.render.filepath = str(path)
@@ -117,10 +135,7 @@ for part in manifest['parts']:
     high = Vector((max(v.x for v in bounds), max(v.y for v in bounds), max(v.z for v in bounds)))
     center = (low + high) * .5
     dimensions = high - low
-    axes = part.get('projection_axes', [0,1])
-    axis_a = axis_vectors[axes[0]]
-    if part.get('projection_flip_u', False): axis_a = tuple(-v for v in axis_a)
-    camera_for_axes(center, axis_a, axis_vectors[axes[1]], dimensions)
+    camera_for_reference(center, max(dimensions), part)
     render(out / f'{category}_atlas.png')
     # Produce true atlas-textured model views from all six principal axes.
     # These are model-relative captures, so remaining surfaces can be
