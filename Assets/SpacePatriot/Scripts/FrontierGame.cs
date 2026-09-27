@@ -99,8 +99,11 @@ namespace SpacePatriot
             velocityDisplay.gameObject.SetActive(false);serviceDisplay.gameObject.SetActive(false);navigationDisplay.gameObject.SetActive(false);SetupMfd();
             foreach(var r in exterior.GetComponentsInChildren<MeshRenderer>())if(r.sharedMaterial.name=="Hull finish"){var material=r.material;material.SetColor("_BaseColor",Color.Lerp(Spec.paint,new Color(.14f,.17f,.19f),.45f));}
             var spawn=Spec.length>60?new Vector3(650,0,230):Vector3.zero;
-            spawn.y=(Spec.length<=60&&world.lift!=null?world.Deck+world.lift.DeckOffset:world.SurfaceAt(spawn))+StandHeight;ship.position=spawn;ship.rotation=Quaternion.identity;
-            velocity=Vector3.zero;angularVelocity=Vector3.zero;yaw=pitch=roll=0;throttle=1;speed=0;docking=false;flying=false;walking=false;aboard=false;
+            if(Spec.length>60&&ResolveDeckLanding(new Vector3(650,world.Deck+3,230),Quaternion.identity,4,8,
+                out var quayCenter,out _,out _))spawn=quayCenter;
+            else spawn.y=(Spec.length<=60&&world.lift!=null?world.Deck+world.lift.DeckOffset:world.SurfaceAt(spawn))+LandingCenterHeight;
+            ship.position=spawn;ship.rotation=Quaternion.identity;
+            velocity=Vector3.zero;angularVelocity=Vector3.zero;yaw=pitch=roll=0;throttle=1;speed=0;docking=false;surfaceLanding=false;deckLanding=false;flying=false;walking=false;aboard=false;
             gearDown=true;flightAssist=true;powered=true;cruise=false;cargoDoor=false;inputNeutral=true;launchPending=false;launchClearance=0;systemsHull=save.hull;
             save.hull=Mathf.Clamp(save.hull,1,Spec.health);RebuildCargo();
         }
@@ -230,11 +233,16 @@ namespace SpacePatriot
             }
             if(Vector3.Distance(walkPosition,ship.position)<Spec.width*.7f+5)BoardOrExit();
         }
-        void Land(Place pad)=>CompleteLanding(pad.position+Vector3.up*(StandHeight-2.65f),Quaternion.identity);
+        void Land(Place pad)
+        {
+            if(ResolveDeckLanding(pad.position,Quaternion.identity,4,8,out var center,out var attitude,out _))
+                CompleteLanding(center,attitude);
+            else Toast("That landing pad has no clear deck for this ship.");
+        }
         void LandSurface(Vector3 shipCenter,Quaternion attitude)=>CompleteLanding(shipCenter,attitude);
         void CompleteLanding(Vector3 position,Quaternion attitude)
         {
-            ship.position=position;ship.rotation=attitude;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;surfaceLanding=false;launchClearance=0;
+            ship.position=position;ship.rotation=attitude;velocity=Vector3.zero;speed=0;throttle=Mathf.Clamp(throttle,.05f,3);pitch=yaw=roll=0;flying=false;docking=false;surfaceLanding=false;deckLanding=false;launchClearance=0;
             Save();Toast("Surface landing secured. F to leave the seat. Cargo hatch and loading are available while landed.");Sound(buttonClip,.4f);
         }
         void FollowCamera(float dt)

@@ -96,8 +96,10 @@ public static class FrontierBuild
     {
         Validate();
         ConfigureDesktopTarget();
-        Directory.CreateDirectory("../Windows/SpacePatriot");
-        var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName="../Windows/SpacePatriot/SpacePatriot.exe",target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
+        string output=Environment.GetEnvironmentVariable("SPACE_PATRIOT_BUILD_PATH");
+        if(string.IsNullOrWhiteSpace(output))output="../Windows/SpacePatriot/SpacePatriot.exe";
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output)));
+        var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
         if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Windows build failed: "+report.summary.result);
         File.WriteAllText("Validation/windows-build.txt","PASS: Windows x64 desktop player / Mono / Direct3D 11. Total output bytes: "+report.summary.totalSize+"\n");
         AssetDatabase.SaveAssets();Debug.Log("SPACE_PATRIOT_WINDOWS_BUILD_SUCCESS bytes="+report.summary.totalSize);

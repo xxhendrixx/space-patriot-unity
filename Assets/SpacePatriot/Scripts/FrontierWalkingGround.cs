@@ -4,10 +4,11 @@ namespace SpacePatriot
 {
     public partial class FrontierWorld
     {
-        // Walking uses the actual floor collision, including port/city/lift decks.
-        // TrySurface is intentionally planet-only because ships use it for landing.
+        // Walking and ship landing use the actual constructed floors. TrySurface
+        // remains planet-only, so unpadded landings can still use the whole globe.
         readonly RaycastHit[] walkingHits = new RaycastHit[64];
         readonly Collider[] walkingObstacles = new Collider[64];
+        readonly RaycastHit[] landingHits = new RaycastHit[64];
 
         public Vector3 WalkUp(Vector3 at)
         {
@@ -36,6 +37,62 @@ namespace SpacePatriot
                 default:
                     return false;
             }
+        }
+
+        // A landing deck must be a known structural floor, not a roof, prop or
+        // the planet mesh beneath a city. Querying from above also tracks the
+        // hangar lift after its collision surface moves.
+        public bool TryLandingDeck(Vector3 near, float maxRise, float maxDrop,
+            out Vector3 point, out Vector3 normal, out Collider support)
+        {
+            point = default;
+            normal = transform.up;
+            support = null;
+            Vector3 up = transform.up;
+            Ray ray = new Ray(near + up * (maxRise + .02f), -up);
+            float reach = maxRise + maxDrop + .04f;
+            Physics.SyncTransforms();
+            int count = Physics.RaycastNonAlloc(ray, landingHits, reach,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            RaycastHit[] hits = count == landingHits.Length
+                ? Physics.RaycastAll(ray, reach, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+                : landingHits;
+            if (count == landingHits.Length) count = hits.Length;
+            float highest = -maxDrop - .01f;
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit hit = hits[i];
+                if (!IsWalkDeck(hit.collider) || Vector3.Dot(hit.normal, up) < .96f) continue;
+                float rise = Vector3.Dot(hit.point - near, up);
+                if (rise > maxRise + .01f || rise < -maxDrop - .01f || rise < highest) continue;
+                highest = rise;
+                point = hit.point;
+                normal = hit.normal;
+                support = hit.collider;
+            }
+            return support != null;
+        }
+
+        // All four gear-area corners must rest on level constructed floor. A
+        // large vessel cannot be secured on a narrow street or off a quay edge.
+        public bool LandingFootprintFits(Vector3 deckPoint, Quaternion attitude,
+            float shipWidth, float shipLength)
+        {
+            Vector3 up = transform.up;
+            Vector3 right = Vector3.ProjectOnPlane(attitude * Vector3.right, up).normalized;
+            Vector3 forward = Vector3.ProjectOnPlane(attitude * Vector3.forward, up).normalized;
+            if (right.sqrMagnitude < .5f || forward.sqrMagnitude < .5f) return false;
+            float halfWidth = Mathf.Max(.8f, shipWidth * .42f);
+            float halfLength = Mathf.Max(.8f, shipLength * .42f);
+            for (int x = -1; x <= 1; x += 2)
+                for (int z = -1; z <= 1; z += 2)
+                {
+                    Vector3 sample = deckPoint + right * (x * halfWidth) + forward * (z * halfLength) + up;
+                    if (!TryLandingDeck(sample, .5f, 1.5f, out Vector3 gearPoint, out Vector3 normal, out _) ||
+                        Mathf.Abs(Vector3.Dot(gearPoint - deckPoint, up)) > .35f ||
+                        Vector3.Dot(normal, up) < .96f) return false;
+                }
+            return true;
         }
 
         public bool TryWalkSupport(Vector3 feet, float maxRise, float maxDrop,

@@ -74,6 +74,7 @@ namespace SpacePatriot
                 velocity=Vector3.zero;FrameDesktop(Key.LeftCtrl);DesktopCheck(velocity.y<0,"Ctrl supplies downward thrust");
                 velocity=new Vector3(20,0,0);FrameDesktop(Key.X);DesktopCheck(velocity.magnitude<20,"X brakes the ship");
                 VerifyAnywhereLanding();
+                VerifyConstructedLandings();
                 FrameDesktop();velocity=Vector3.zero;ship.rotation=Quaternion.identity;FollowCamera(10);Physics.SyncTransforms();
                 var dial=cabin.GetComponentsInChildren<CockpitControl>().First(c=>c.action==43);
                 var point=view.WorldToScreenPoint(dial.GetComponent<Renderer>().bounds.center);float previousThrottle=throttle;
@@ -98,6 +99,13 @@ namespace SpacePatriot
             {
                 if(!DesktopStep(()=>{
                     save.ship=index;RespawnShip();aboard=true;walking=false;deckPosition=new Vector3(0,0,-5);focused=true;
+                    if(Spec.length>60)
+                        DesktopCheck(world.TryLandingDeck(ship.position,1,LandingCenterHeight+1,
+                            out var berth,out _,out var berthSupport)&&
+                            berthSupport.name=="Capital landing quay"&&
+                            Mathf.Abs(ship.position.y-berth.y-LandingCenterHeight)<.05f&&
+                            world.LandingFootprintFits(berth,ship.rotation,Spec.width,Spec.length),
+                            Spec.name+" spawns on the capital quay above its landing gear");
                     for(int level=1;level<activeDeck.decks.Length;level++){
                         InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState());InputSystem.Update();InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(Key.E));InputSystem.Update();WalkDeck(.02f);
                         InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState());InputSystem.Update();for(int i=0;i<120;i++)WalkDeck(.02f);
@@ -164,6 +172,51 @@ namespace SpacePatriot
             CheckGrounded("Far-side walker stays grounded after movement",false);
             walking=false;aboard=false;cockpit=true;
             surfaceLanding=false;docking=false;flying=previousFlying;gearDown=previousGear;velocity=previousVelocity;speed=previousSpeed;ship.position=previousPosition;ship.rotation=previousRotation;
+        }
+        void VerifyConstructedLandings()
+        {
+            Vector3 previousPosition=ship.position,previousVelocity=velocity;
+            Quaternion previousRotation=ship.rotation;
+            float previousSpeed=speed;
+            bool previousFlying=flying,previousGear=gearDown;
+            FrameDesktop(); // Release the brake key used by the previous control check.
+            var port=world.places.First(p=>p.name=="Port 07 landing pad");
+            VerifyDeckLanding("Raised port lift",port.position+Vector3.up*70,"Lift deck collision",true);
+            VerifyDeckLanding("Capital quay edge",new Vector3(840,world.Deck+LandingCenterHeight+80,230),
+                "Capital landing quay",false);
+            VerifyDeckLanding("City boulevard",new Vector3(450,world.Deck+LandingCenterHeight+80,-100),
+                "Central utility boulevard",false);
+            VerifyDeckLanding("Orbital station",world.station+new Vector3(0,LandingCenterHeight+80,-3),
+                "Structural collision",false);
+            var large=ShipSpec.Fleet[90];
+            DesktopCheck(world.TryLandingDeck(new Vector3(450,world.Deck+80,-100),1,100,
+                    out var street,out _,out _) &&
+                !world.LandingFootprintFits(street,Quaternion.identity,large.width,large.length),
+                "Meridian's landing gear does not fit a narrow city street");
+            ship.position=previousPosition;ship.rotation=previousRotation;velocity=previousVelocity;
+            speed=previousSpeed;flying=previousFlying;gearDown=previousGear;
+            docking=false;surfaceLanding=false;deckLanding=false;approachEntry=false;
+        }
+        void VerifyDeckLanding(string label,Vector3 start,string expectedSupport,bool expectHangarEntry)
+        {
+            ship.position=start;ship.rotation=Quaternion.identity;velocity=Vector3.zero;
+            speed=0;flying=true;gearDown=true;docking=false;surfaceLanding=false;deckLanding=false;
+            RequestLanding();
+            DesktopCheck(docking&&surfaceLanding&&deckLanding,label+" accepts a constructed-deck approach");
+            DesktopCheck(approachEntry==expectHangarEntry,label+" approach has the expected entry path");
+            for(int frame=0;frame<512&&docking;frame++)Flight(.2f);
+            DesktopCheck(!flying&&!docking,label+" completes actual assisted touchdown");
+            DesktopCheck(world.TryLandingDeck(ship.position,1,LandingCenterHeight+1,
+                out var deck,out _,out var support)&&support.name==expectedSupport&&
+                Mathf.Abs(Vector3.Dot(ship.position-deck,Vector3.up)-LandingCenterHeight)<.05f,
+                label+" secures the landing gear on the visible deck, not terrain below");
+            DesktopCheck(world.LandingFootprintFits(deck,ship.rotation,Spec.width,Spec.length),
+                label+" supports the complete landing-gear footprint");
+            var renderers=exterior.GetComponentsInChildren<Renderer>(true);
+            float lowest=float.PositiveInfinity;
+            foreach(var renderer in renderers)if(renderer is MeshRenderer)
+                lowest=Mathf.Min(lowest,renderer.bounds.min.y);
+            DesktopCheck(lowest>=deck.y-.03f,label+" keeps visible ship geometry above the deck");
         }
         void CheckGrounded(string label,bool requireDeck)
         {

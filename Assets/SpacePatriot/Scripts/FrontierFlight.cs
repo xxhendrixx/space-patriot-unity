@@ -19,6 +19,10 @@ namespace SpacePatriot
         bool surfaceLanding;
         Vector3 surfaceLandingPosition;
         Quaternion surfaceLandingRotation=Quaternion.identity;
+        bool deckLanding;
+        Vector3 landingDeckAnchor;
+        const float LandingGearClearance=.12f;
+        float LandingCenterHeight=>StandHeight+LandingGearClearance;
         public float StandHeight=>Spec.height*.3f+2;
         public float LoadedMass=>Spec.mass+save.organics*.5f+save.ore*1.5f+save.crystal*.8f;
         public float EngineAcceleration=>Spec.thrust*Spec.mass/LoadedMass*save.vessel.Factor("engines",powered);
@@ -99,14 +103,20 @@ namespace SpacePatriot
                 if(bindings.Held("Ascend")||bindings.Down("Ascend")||bindings.Down("Landing")||pilot.Down("Ascend"))Launch();
                 return;
             }
-            if(bindings.Held("Brake")){cruise=false;docking=false;surfaceLanding=false;tacticalUntil=0;}
+            if(bindings.Held("Brake")){cruise=false;docking=false;surfaceLanding=false;deckLanding=false;tacticalUntil=0;}
             if(docking)
             {
-                var target=surfaceLanding?surfaceLandingPosition:landingTarget.position+Vector3.up*(StandHeight-2.65f);
-                var approach=surfaceLanding?target:approachEntry?target+new Vector3(0,9,66):target;
+                if(deckLanding)
+                {
+                    if(!ResolveDeckLanding(landingDeckAnchor,surfaceLandingRotation,32,32,
+                        out surfaceLandingPosition,out surfaceLandingRotation,out _))
+                    {docking=false;surfaceLanding=false;deckLanding=false;Toast("Landing deck moved or is obstructed. Approach cancelled.");return;}
+                }
+                var target=surfaceLandingPosition;
+                var approach=approachEntry?target+new Vector3(0,9,66):target;
                 ship.position=Vector3.MoveTowards(ship.position,approach,dt*Mathf.Max(5,Spec.thrust));
-                ship.rotation=Quaternion.Slerp(ship.rotation,surfaceLanding?surfaceLandingRotation:Quaternion.identity,dt*2);velocity=Vector3.zero;speed=0;
-                if(Vector3.Distance(ship.position,approach)<.05f){if(surfaceLanding)LandSurface(target,surfaceLandingRotation);else if(approachEntry)approachEntry=false;else Land(landingTarget);}return;
+                ship.rotation=Quaternion.Slerp(ship.rotation,surfaceLandingRotation,dt*2);velocity=Vector3.zero;speed=0;
+                if(Vector3.Distance(ship.position,approach)<.05f){if(approachEntry)approachEntry=false;else LandSurface(target,surfaceLandingRotation);}return;
             }
             if(bindings.Down("Forward")){if(Time.time-lastForward<.32f)TacticalBoost();lastForward=Time.time;}
             if(Mouse.current!=null&&!instruments&&cockpitHint=="")throttle=Mathf.Clamp(throttle*Mathf.Exp(Mouse.current.scroll.ReadValue().y*.0013f),.05f,3);
@@ -133,14 +143,17 @@ namespace SpacePatriot
             if(motion.sqrMagnitude>.000001f&&Physics.SphereCast(ship.position,Mathf.Max(1,Spec.width*.1f),motion.normalized,out var hit,motion.magnitude,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore))
             {if(velocity.magnitude>12)Damage((velocity.magnitude-10)*.7f);velocity=Vector3.Reflect(velocity,hit.normal)*.15f;cruise=false;}
             else ship.position+=motion;
-            if(world.TrySurface(ship.position,out var surfacePoint,out var surfaceNormal))
+            bool hasDeck=world.TryLandingDeck(ship.position,1,Mathf.Max(650,StandHeight+4),
+                out var surfacePoint,out var surfaceNormal,out _);
+            if(hasDeck||world.TrySurface(ship.position,out surfacePoint,out surfaceNormal))
             {
-                float altitude=Vector3.Dot(ship.position-surfacePoint,surfaceNormal)-StandHeight;
+                float altitude=Vector3.Dot(ship.position-surfacePoint,surfaceNormal)-LandingCenterHeight;
                 if(altitude<0)
                 {
-                    if(gearDown&&velocity.magnitude<12&&Vector3.Dot(ship.up,surfaceNormal)>.88f)
-                    {var forward=Vector3.ProjectOnPlane(ship.forward,surfaceNormal);if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(surfaceNormal,Vector3.right);var attitude=Quaternion.LookRotation(forward,surfaceNormal);CompleteLanding(surfacePoint+surfaceNormal*StandHeight,attitude);return;}
-                    Damage(Mathf.Max(0,Mathf.Abs(Vector3.Dot(velocity,surfaceNormal))-4)*2);ship.position=surfacePoint+surfaceNormal*StandHeight;
+                    bool safeDeck=!hasDeck||world.LandingFootprintFits(surfacePoint,ship.rotation,Spec.width,Spec.length);
+                    if(safeDeck&&gearDown&&velocity.magnitude<12&&Vector3.Dot(ship.up,surfaceNormal)>.88f)
+                    {CompleteLanding(surfacePoint+surfaceNormal*LandingCenterHeight,LandingAttitude(ship.rotation,surfaceNormal));return;}
+                    Damage(Mathf.Max(0,Mathf.Abs(Vector3.Dot(velocity,surfaceNormal))-4)*2);ship.position=surfacePoint+surfaceNormal*LandingCenterHeight;
                     float normalSpeed=Vector3.Dot(velocity,surfaceNormal);if(normalSpeed<0)velocity-=surfaceNormal*normalSpeed*1.15f;
                 }
             }
@@ -163,18 +176,61 @@ namespace SpacePatriot
         {
             if(!flying){Launch();return;}if(!gearDown){Toast("Extend the gear with G before landing.");return;}
             var pad=world.Nearest(ship.position,"landing");float distance=Vector3.Distance(ship.position,pad.position);
-            if(distance<Mathf.Max(140,Spec.length)&&speed<45){surfaceLanding=false;landingTarget=pad;docking=true;approachEntry=Spec.length<60&&pad.name=="Port 07 landing pad";Toast("Landing pad approach engaged. X cancels.");return;}
+            if(distance<Mathf.Max(140,Spec.length))
+            {
+                if(speed>=45){Toast("Reduce speed below 45 m/s before landing.");return;}
+                if(!ResolveDeckLanding(pad.position,Quaternion.identity,4,8,
+                    out surfaceLandingPosition,out surfaceLandingRotation,out _))
+                {Toast("That landing pad has no clear deck for this ship.");return;}
+                landingTarget=pad;landingDeckAnchor=surfaceLandingPosition-Vector3.up*LandingCenterHeight;
+                surfaceLanding=true;deckLanding=true;docking=true;
+                approachEntry=Spec.length<60&&pad.name=="Port 07 landing pad";
+                Toast("Landing pad approach engaged. X cancels.");return;
+            }
+            // Streets and the outer quay have real collision well beyond the
+            // small named-pad markers. Never fall through one to terrain below.
+            if(world.TryLandingDeck(ship.position,1,650,out var deckPoint,out var deckNormal,out _))
+            {
+                float altitude=Vector3.Dot(ship.position-deckPoint,deckNormal)-LandingCenterHeight;
+                if(!world.LandingFootprintFits(deckPoint,ship.rotation,Spec.width,Spec.length))
+                {Toast("This deck is too narrow for the ship's landing gear.");return;}
+                if(altitude < -2 || altitude >= 650 || speed >= 45)
+                {Toast(altitude < -2 ? "Move above the deck before landing." : speed >= 45 ?
+                    "Reduce speed below 45 m/s before landing." : "Descend below 650 m to land on this deck.");return;}
+                landingDeckAnchor=deckPoint;
+                if(!ResolveDeckLanding(deckPoint,ship.rotation,1,2,
+                    out surfaceLandingPosition,out surfaceLandingRotation,out _))
+                {Toast("This deck is no longer clear for landing.");return;}
+                surfaceLanding=true;deckLanding=true;docking=true;approachEntry=false;
+                Toast("City deck landing assist engaged. X cancels.");return;
+            }
             // Landing is available on the complete solid globe, not just the port's local map.
             if(world.TrySurface(ship.position,out var point,out var normal))
             {
-                float altitude=Vector3.Dot(ship.position-point,normal)-StandHeight;
+                float altitude=Vector3.Dot(ship.position-point,normal)-LandingCenterHeight;
                 if(altitude>=-2&&altitude<650&&speed<45)
-                {surfaceLandingPosition=point+normal*StandHeight;var forward=Vector3.ProjectOnPlane(ship.forward,normal);if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(normal,Vector3.right);surfaceLandingRotation=Quaternion.LookRotation(forward,normal);surfaceLanding=true;docking=true;approachEntry=false;Toast("Surface landing assist engaged. Hold position; X cancels.");}
+                {surfaceLandingPosition=point+normal*LandingCenterHeight;surfaceLandingRotation=LandingAttitude(ship.rotation,normal);surfaceLanding=true;deckLanding=false;docking=true;approachEntry=false;Toast("Surface landing assist engaged. Hold position; X cancels.");}
                 else if(speed>=45)Toast("Reduce speed below 45 m/s before landing.");
                 else if(altitude>=650)Toast("Descend below 650 m over solid ground to engage a surface landing.");
                 else Toast("Move clear of the surface before requesting landing.");
             }
             else Toast("A solid surface is required; gas giants cannot be landed on.");
+        }
+        Quaternion LandingAttitude(Quaternion heading,Vector3 normal)
+        {
+            var forward=Vector3.ProjectOnPlane(heading*Vector3.forward,normal);
+            if(forward.sqrMagnitude<.001f)forward=Vector3.Cross(normal,Vector3.right);
+            return Quaternion.LookRotation(forward,normal);
+        }
+        bool ResolveDeckLanding(Vector3 near,Quaternion heading,float maxRise,float maxDrop,
+            out Vector3 center,out Quaternion attitude,out Collider support)
+        {
+            center=default;attitude=Quaternion.identity;support=null;
+            if(!world.TryLandingDeck(near,maxRise,maxDrop,out var point,out var normal,out support))return false;
+            attitude=LandingAttitude(heading,normal);
+            if(!world.LandingFootprintFits(point,attitude,Spec.width,Spec.length))return false;
+            center=point+normal*LandingCenterHeight;
+            return true;
         }
         void TacticalBoost(){if(Time.time<tacticalReady||!powered||gearDown)return;tacticalUntil=Time.time+2;tacticalReady=Time.time+8;Toast("Tactical thrust engaged.");}
         void ActivateCockpit(int action)
