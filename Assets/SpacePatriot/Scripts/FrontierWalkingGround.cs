@@ -15,8 +15,31 @@ namespace SpacePatriot
             return up.sqrMagnitude > 1f ? up.normalized : transform.up;
         }
 
+        public bool IsWalkDeck(Collider support)
+        {
+            if (!(support is BoxCollider) || !support.transform.IsChildOf(transform)) return false;
+            switch (support.name)
+            {
+                case "Lift deck collision":
+                case "Capital landing quay":
+                case "Dock connection":
+                case "Central utility boulevard":
+                case "Public service square":
+                case "Street connection":
+                case "Survey field deck":
+                    return true;
+                case "Structural collision":
+                    // The original port, outpost and orbital station use broad
+                    // floor boxes. The hangar wall boxes are much taller.
+                    return support.bounds.size.y <= 16.1f &&
+                        support.bounds.size.x >= 20f && support.bounds.size.z >= 20f;
+                default:
+                    return false;
+            }
+        }
+
         public bool TryWalkSupport(Vector3 feet, float maxRise, float maxDrop,
-            out Vector3 point, out Vector3 normal, out Collider support)
+            out Vector3 point, out Vector3 normal, out Collider support, bool deckOnly = false)
         {
             point = default;
             normal = WalkUp(feet);
@@ -38,15 +61,27 @@ namespace SpacePatriot
             {
                 RaycastHit hit = hits[i];
                 if (!hit.collider || !hit.collider.transform.IsChildOf(transform)) continue;
+                bool deck = IsWalkDeck(hit.collider);
+                if (deckOnly && !deck) continue;
                 if (Vector3.Dot(hit.normal, up) < .7f) continue; // slope over ~45 degrees
                 float rise = Vector3.Dot(hit.point - feet, up);
-                if (rise > maxRise + .01f || rise < -maxDrop - .01f || rise < highest) continue;
+                if (rise > maxRise + .01f || rise < -maxDrop - .01f) continue;
+                if (support != null)
+                {
+                    bool selectedDeck = IsWalkDeck(support);
+                    // The planet cap and port deck can be coplanar. Keep the
+                    // constructed floor as the authoritative walk surface.
+                    if (deck != selectedDeck && Mathf.Abs(rise - highest) < .25f)
+                    { if (!deck) continue; }
+                    else if (rise < highest) continue;
+                }
                 highest = rise;
                 point = hit.point;
                 normal = hit.normal;
                 support = hit.collider;
             }
             if (support != null) return true;
+            if (deckOnly) return false;
             // The planetary mesh can lag one frame behind the moving local
             // patch. Its radial query is safe only within the same step limits.
             if (!TrySurface(feet, out Vector3 terrain, out Vector3 terrainNormal)) return false;

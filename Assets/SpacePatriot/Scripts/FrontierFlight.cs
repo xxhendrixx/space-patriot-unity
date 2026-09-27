@@ -35,6 +35,9 @@ namespace SpacePatriot
         bool SetSurfaceWalker(Vector3 near,Vector3 facing)
         {
             Vector3 up=world.WalkUp(near);
+            // An airlock at a marked port must put the player on the constructed
+            // deck. The planet beneath it is not a safe fallback spawn point.
+            bool requireDeck=AtPort;
             Vector3 right=Vector3.Cross(up,facing).normalized;
             if(right.sqrMagnitude<.01f)right=Vector3.right;
             Vector3 forward=Vector3.ProjectOnPlane(facing,up).normalized;
@@ -47,7 +50,7 @@ namespace SpacePatriot
                 {
                     Vector3 offset=direction==0?right:direction==1?-right:direction==2?forward:-forward;
                     Vector3 guess=near+offset*distance-up*1.75f;
-                    if(!world.TryWalkSupport(guess,.65f,Mathf.Max(8,StandHeight+5),out var point,out _,out var support))continue;
+                    if(!world.TryWalkSupport(guess,.65f,Mathf.Max(8,StandHeight+5),out var point,out _,out var support,requireDeck))continue;
                     Vector3 groundUp=world.WalkUp(point);
                     if(!world.WalkClear(point,groundUp,support))continue;
                     walkPosition=point+groundUp*1.75f;
@@ -59,7 +62,8 @@ namespace SpacePatriot
                 }
             }
             walking=false;cockpit=true;
-            Toast("No clear ground beside the ship. Stay aboard and try another landing spot.");
+            Toast(requireDeck?"No clear deck at this berth. Stay aboard and use another landing pad.":
+                "No clear ground beside the ship. Stay aboard and try another landing spot.");
             return false;
         }
         bool NeutralControls()

@@ -21,11 +21,12 @@ public static class GroundWalkingValidation
         }
         try
         {
-            var floor = IndustrialArt.Box("Test port apron", root.transform,
+            var floor = IndustrialArt.Box("Capital landing quay", root.transform,
                 new Vector3(0, -.25f, 0), new Vector3(12, .5f, 12), material, true);
             var collider = floor.GetComponent<BoxCollider>();
             Check(collider != null && collider.size == new Vector3(12, .5f, 12),
                 "visible floor and collision footprint have matching dimensions");
+            Check(world.IsWalkDeck(collider),"constructed port floor is classified as a deck");
 
             Vector3 at = root.transform.position;
             Vector3 supportedFeet = at + new Vector3(4, .05f, 4);
@@ -35,6 +36,17 @@ public static class GroundWalkingValidation
                 Mathf.Abs(point.x - supportedFeet.x) < .01f &&
                 Mathf.Abs(point.z - supportedFeet.z) < .01f,
                 "walk support uses the port floor at its edge, without horizontal drift");
+            var terrainProxy = new GameObject("Coplanar planet surface proxy");
+            terrainProxy.transform.SetParent(root.transform, false);
+            terrainProxy.transform.localPosition = new Vector3(0, -.25f, 0);
+            terrainProxy.AddComponent<BoxCollider>().size = new Vector3(12, .5f, 12);
+            Check(world.TryWalkSupport(supportedFeet, .45f, .85f,
+                out _, out _, out support, true) && support == collider,
+                "deck-only spawn ignores coplanar non-deck ground");
+            Check(world.TryWalkSupport(supportedFeet, .45f, .85f,
+                out _, out _, out support) && support == collider,
+                "general walk prefers the deck where deck and planet overlap");
+            terrainProxy.SetActive(false);
             Check(!world.TryWalkSupport(at + new Vector3(7, .05f, 0), .45f, .85f,
                 out _, out _, out _), "missing floor stops movement at the apron edge");
 

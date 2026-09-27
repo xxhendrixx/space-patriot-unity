@@ -33,12 +33,36 @@ namespace SpacePatriot
                 File.WriteAllBytes(Path.Combine(verificationDirectory,"title.png"),image.EncodeToPNG());Destroy(image);
                 enabled=false; // Freeze normal input, autosave and showcase; exercise the same game methods below.
                 foreach(var device in InputSystem.devices.ToArray())InputSystem.DisableDevice(device);
-                verificationKeyboard=InputSystem.AddDevice<Keyboard>();verificationMouse=InputSystem.AddDevice<Mouse>();bindings=new FlightBindings(false);
+                verificationKeyboard=InputSystem.AddDevice<Keyboard>();verificationMouse=InputSystem.AddDevice<Mouse>();
+                verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();bindings=new FlightBindings(false);
                 DesktopCheck(!Application.isEditor&&Application.platform==RuntimePlatform.WindowsPlayer,"Actual Windows player started with a graphics device: "+SystemInfo.graphicsDeviceName);
                 DesktopCheck(worlds.Length==19&&cases.Length==9,"World and campaign resources load in the native player");
                 DesktopCheck(save.society.cities.Count==420&&save.society.residents.Count>4000,"420 settlements and more than 4,000 persistent residents initialise");
-                StartGame();menu=false;walking=false;aboard=false;cockpit=true;focused=true;inputNeutral=false;
+                StartGame();menu=false;
+                DesktopCheck(walking&&!aboard,"Player starts outside the ship on walkable port ground");
+                CheckGrounded("Starting position has a solid port floor",true);
+                BoardOrExit();DesktopCheck(!walking&&!aboard,"Player can board from the apron");
+                BoardOrExit();DesktopCheck(aboard,"F enters the ship's actual interior");
+                deckPosition=new Vector3(0,0,-activeDeck.end+1);
+                FrameGround(true,Key.E);
+                DesktopCheck(walking&&!aboard,"Airlock disembarks onto the generated port");
+                CheckGrounded("Airlock exit has a solid port floor",true);
+                Vector3 portStart=walkPosition;
+                for(int i=0;i<80;i++)FrameGround(false,Key.A);
+                DesktopCheck(Vector3.Distance(portStart,walkPosition)>.3f,"Player walks away from the ship without falling");
+                CheckGrounded("Port walker remains grounded after movement",true);
+                Vector3 stopped=walkPosition;
+                for(int i=0;i<120;i++)FrameGround(false);
+                DesktopCheck(Vector3.Distance(stopped,walkPosition)<.02f,"Standing still does not slide across the port floor");
+                walking=false;aboard=false;cockpit=true;focused=true;inputNeutral=false;
                 FrameDesktop(Key.Space);
+                if(!world.lift.Raising||flying)
+                    Debug.LogError("DESKTOP_LAUNCH_DIAGNOSTIC key="+(Keyboard.current?.spaceKey.isPressed??false)+
+                        " keyboard="+(Keyboard.current?.deviceId.ToString()??"none")+
+                        " ship="+ship.position+" liftReady="+world.lift.Ready+
+                        " liftRaising="+world.lift.Raising+" flying="+flying+
+                        " powered="+powered+" fuel="+save.fuel+
+                        " cargoDoor="+cargoDoor+" toast="+toast);
                 DesktopCheck(world.lift.Raising&&!flying,"Space requests launch and starts the hangar lift");
                 world.lift.Advance(9);FrameDesktop();
                 DesktopCheck(flying&&world.lift.Ready,"Ship launches after the platform and roof clear");
@@ -80,6 +104,15 @@ namespace SpacePatriot
                         DesktopCheck(Mathf.Abs(deckPosition.y+level*3.3f)<.01f,Spec.name+" service lift reaches deck "+(level+1));
                     }
                     walkYaw=180;walkPitch=0;deckPosition.z=-8;FollowCamera(10);DesktopCapture("ship-"+index+"-lower-deck");
+                    deckLevel=0;deckPosition=new Vector3(0,0,-activeDeck.end+1);
+                    FrameGround(true,Key.E);
+                    DesktopCheck(walking&&!aboard,Spec.name+" airlock disembarks onto the city quay");
+                    CheckGrounded(Spec.name+" exit has a solid quay floor",true);
+                    Vector3 exit=walkPosition;
+                    for(int i=0;i<60;i++)FrameGround(false,Key.A);
+                    DesktopCheck(Vector3.Distance(exit,walkPosition)>.5f,Spec.name+" can walk away from the hull");
+                    CheckGrounded(Spec.name+" walker stays on the quay",true);
+                    walking=false;aboard=false;
                 }))yield break;
                 yield return null;
             }
@@ -119,10 +152,48 @@ namespace SpacePatriot
             Vector3 tangent=Vector3.ProjectOnPlane(Vector3.forward,streamedNormal).normalized;
             if(tangent.sqrMagnitude<.01f)tangent=Vector3.ProjectOnPlane(Vector3.right,streamedNormal).normalized;
             DesktopCheck(world.TrySurface(farWalker+tangent*4,out var walkedGround,out var walkedNormal)&&Vector3.Dot(streamedNormal,walkedNormal)>.8f&&Vector3.Distance(streamedGround,walkedGround)<5,"On-foot steps remain attached to the far-side tangent terrain");
+            CompleteLanding(surfaceLandingPosition,surfaceLandingRotation);
+            BoardOrExit();DesktopCheck(aboard,"Landed ship opens its interior on the far hemisphere");
+            deckPosition=new Vector3(0,0,-activeDeck.end+1);
+            FrameGround(true,Key.E);
+            DesktopCheck(walking&&!aboard,"Airlock disembarks onto unpadded planetary terrain");
+            CheckGrounded("Far-side walker stands on collidable terrain",false);
+            Vector3 farStart=walkPosition;
+            for(int i=0;i<80;i++)FrameGround(false,Key.A);
+            DesktopCheck(Vector3.Distance(farStart,walkPosition)>.3f,"Player walks across unpadded planetary terrain");
+            CheckGrounded("Far-side walker stays grounded after movement",false);
+            walking=false;aboard=false;cockpit=true;
             surfaceLanding=false;docking=false;flying=previousFlying;gearDown=previousGear;velocity=previousVelocity;speed=previousSpeed;ship.position=previousPosition;ship.rotation=previousRotation;
         }
+        void CheckGrounded(string label,bool requireDeck)
+        {
+            Vector3 up=world.WalkUp(walkPosition),feet=walkPosition-up*1.75f;
+            bool found=world.TryWalkSupport(feet,.45f,.85f,out var point,out _,out var support);
+            float deckHeight=world.Deck+(support!=null&&support.name=="Lift deck collision"&&world.lift!=null?
+                world.lift.DeckOffset:0);
+            bool valid=found&&support!=null&&(!requireDeck||world.IsWalkDeck(support))&&
+                Mathf.Abs(Vector3.Dot(walkPosition-point,up)-1.75f)<.08f&&
+                (!requireDeck||Mathf.Abs(point.y-deckHeight)<.1f)&&
+                world.WalkClear(point,world.WalkUp(point),support);
+            if(!valid)Debug.LogError("DESKTOP_GROUND_DIAGNOSTIC "+label+" walk="+walkPosition+
+                " feet="+feet+" point="+point+" support="+(support?support.name:"none")+
+                " floor="+deckHeight+" walking="+walking+" aboard="+aboard+" toast="+toast);
+            DesktopCheck(valid,label);
+        }
+        void FrameGround(bool onDeck,params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(verificationMouse,new MouseState());
+            InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();
+            verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();
+            if(onDeck)WalkDeck(.02f);
+            else {world.StreamSurface(walkPosition,true);Walk(.02f);}
+        }
         void FrameDesktop(params Key[] keys)
-        {InputSystem.QueueStateEvent(verificationMouse,new MouseState());InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();focused=true;inputNeutral=false;Flight(.02f);}
+        {InputSystem.QueueStateEvent(verificationMouse,new MouseState());InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();
+            // A Windows hardware event can reclaim Keyboard.current between
+            // synthetic frames. FlightBindings reads current, not a device ID.
+            verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();
+            focused=true;inputNeutral=false;Flight(.02f);}
         void DesktopCapture(string name)
         {
             cabin.GetComponent<CabinLighting>().SendMessage("LateUpdate");
