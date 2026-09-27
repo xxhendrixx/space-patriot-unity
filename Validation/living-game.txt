@@ -5,8 +5,23 @@ PASS: Absent-world pilots travel and finish jobs without actors or a player
 PASS: Residents meet one another and preserve relationships
 PASS: Background event log stays bounded
 PASS: Jobs, owned ships and world time survive save round trip
-PASS: Freighter loads actual source-market cargo
-PASS: Delivery conserves cargo and applies destination stock once
+PASS: Freighter reserves an actual offered delivery and loads six source-market crates
+PASS: Two NPC pilots cannot reserve the same food delivery
+PASS: Freight manifest and job reservation survive a save round trip
+PASS: Arrival lands at the assigned city before stock or job completion
+PASS: Docked freighter is visible only at its assigned active port
+PASS: Arrival and departure paths meet the constructed quay at gear height
+PASS: Freight ship builds six nonblocking physical cargo visuals
+PASS: Cargo stays aboard before dock service begins
+PASS: Manifest crates unload progressively rather than appearing at once
+PASS: All six crates reach the dock before transfer completion
+PASS: Cargo visuals clear when the ship departs
+PASS: Six crates unload exactly once at the receiving market
+PASS: NPC freight completes the offered food job without taking player rewards
+PASS: Turnaround does not duplicate the shipment
+PASS: Counted freight ship departs the active berth after turnaround
+PASS: An accepted player delivery cannot be claimed by NPC freight
+PASS: A player who accepts during transit keeps the job even when NPC market cargo arrives
 PASS: Crafting away from a powered terminal is atomic and rejected
 PASS: Original six-alloy rifle recipe feeds real weapon reserve
 PASS: Missing ingredients do not create repair components
