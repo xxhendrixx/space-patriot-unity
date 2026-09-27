@@ -10,8 +10,10 @@ namespace SpacePatriot
     public sealed class FlightBindings
     {
         public List<KeyBinding> entries;
-        public FlightBindings(bool useSaved=true)
+        readonly Func<Key,bool> heldOverride,downOverride;
+        public FlightBindings(bool useSaved=true,Func<Key,bool> held=null,Func<Key,bool> down=null)
         {
+            heldOverride=held;downOverride=down;
             entries=new List<KeyBinding>{new("Forward",Key.W),new("Reverse",Key.S),new("Strafe left",Key.A),new("Strafe right",Key.D),
                 new("Ascend",Key.Space),new("Descend",Key.LeftCtrl),new("Roll left",Key.Q),new("Roll right",Key.E),
                 new("Pitch up",Key.UpArrow),new("Pitch down",Key.DownArrow),new("Yaw left",Key.LeftArrow),new("Yaw right",Key.RightArrow),
@@ -24,8 +26,8 @@ namespace SpacePatriot
             } catch { }
         }
         public Key KeyFor(string action)=>entries.Find(x=>x.action==action)?.key??Key.None;
-        public bool Held(string action){var key=KeyFor(action);return key!=Key.None&&Keyboard.current!=null&&Keyboard.current[key].isPressed;}
-        public bool Down(string action){var key=KeyFor(action);return key!=Key.None&&Keyboard.current!=null&&Keyboard.current[key].wasPressedThisFrame;}
+        public bool Held(string action){var key=KeyFor(action);return key!=Key.None&&(heldOverride!=null?heldOverride(key):Keyboard.current!=null&&Keyboard.current[key].isPressed);}
+        public bool Down(string action){var key=KeyFor(action);return key!=Key.None&&(downOverride!=null?downOverride(key):Keyboard.current!=null&&Keyboard.current[key].wasPressedThisFrame);}
         public float Axis(string negative,string positive)=>(Held(positive)?1:0)-(Held(negative)?1:0);
         public void Bind(string action,Key key)
         {

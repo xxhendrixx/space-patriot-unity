@@ -1,2 +1,3 @@
 PASS: near/behind particles suppressed; 24px cap at 256 and 1024; 65 overlapping sparks remain nonwhite.
 Visible width=24px; high-resolution width=24px; overlap green=0.700, blue=0.150.
+PASS: Fireworks near/behind suppression; 56px cap at 256 and 1024; 240 overlapping flames remain amber. Width=35px; overlap green=0.480, blue=0.087.

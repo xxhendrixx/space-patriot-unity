@@ -109,12 +109,17 @@ namespace SpacePatriot
         }
         void PointCockpit()
         {
-            cockpitHint="";if(!cockpit||menu||Mouse.current==null)return;var ray=view.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if(Mouse.current==null)return;
+            PointCockpit(Mouse.current.position.ReadValue(),Mouse.current.scroll.ReadValue().y,Mouse.current.leftButton.wasPressedThisFrame);
+        }
+        void PointCockpit(Vector2 pointer,float wheel,bool clicked)
+        {
+            cockpitHint="";if(!cockpit||menu)return;var ray=view.ScreenPointToRay(pointer);
             if(!Physics.Raycast(ray,out var hit,8,1<<2)||!hit.collider.TryGetComponent<CockpitControl>(out var control))return;
             int a=control.action;cockpitHint=a>=0?MfdControlHint(a):control.screen>=0&&control.screen<3?"Click: "+MfdMenu(control.screen)+" / Scroll: display page":"Live multifunction display";
-            float wheel=Mouse.current.scroll.ReadValue().y;if(a>=40&&a<=43&&Mathf.Abs(wheel)>.01f){OperateMfd(a,wheel>0?1:-1);return;}
+            if(a>=40&&a<=43&&Mathf.Abs(wheel)>.01f){OperateMfd(a,wheel>0?1:-1);return;}
             if(a<0&&control.screen>=0&&control.screen<3&&Mathf.Abs(wheel)>.01f){int screen=control.screen;mfdPage[screen]=(mfdPage[screen]+3+(wheel>0?1:-1))%3;mfdNext=0;return;}
-            if(!Mouse.current.leftButton.wasPressedThisFrame)return;
+            if(!clicked)return;
             if(a>=40&&a<=43){if(a==40)mfdPage[1]=1;if(a==41)mfdPage[1]=2;if(a==42)mfdPage[1]=0;if(a==43)mfdPage[0]=(mfdPage[0]+1)%3;mfdNext=0;}
             else if(a>=0)OperateMfd(a);else if(control.screen>=0)OpenMfdMenu(control.screen);
         }

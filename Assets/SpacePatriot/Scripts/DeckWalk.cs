@@ -38,7 +38,12 @@ namespace SpacePatriot
             foreach(var part in cabin.GetComponentsInChildren<OriginalDoorPart>())part.SetOpen(openDoors.Contains(part.id),dt);
             if(bindings.Down("Board / leave seat")){aboard=false;inputNeutral=true;return;}
             if(!Down(Key.E)&&!Down(Key.Z)&&pad?.buttonEast.wasPressedThisFrame!=true)return;
-            if(activeDeck.decks.Length>1&&Mathf.Abs(deckPosition.x)<1.05f&&Mathf.Abs(deckPosition.z+5)<1.05f){deckLevel=(deckLevel+(Held(Key.LeftShift)?activeDeck.decks.Length-1:1))%activeDeck.decks.Length;deckLiftTarget=activeDeck.decks[deckLevel].y;deckPosition.x=0;deckPosition.z=-5;deckLiftMoving=true;Toast("Service lift travelling to deck "+(deckLevel+1));return;}
+            OperateDeck(Held(Key.LeftShift));
+        }
+        // The deck interaction itself is independent of keyboard event timing.
+        void OperateDeck(bool reverseLift)
+        {
+            if(activeDeck.decks.Length>1&&Mathf.Abs(deckPosition.x)<1.05f&&Mathf.Abs(deckPosition.z+5)<1.05f){deckLevel=(deckLevel+(reverseLift?activeDeck.decks.Length-1:1))%activeDeck.decks.Length;deckLiftTarget=activeDeck.decks[deckLevel].y;deckPosition.x=0;deckPosition.z=-5;deckLiftMoving=true;Toast("Service lift travelling to deck "+(deckLevel+1));return;}
             if(-deckPosition.z>activeDeck.end-2.4f){if(flying){Toast("Airlock interlock: land before disembarking.");return;}aboard=false;walking=true;if(!SetSurfaceWalker(CargoAccess,ship.forward))aboard=true;return;}
             foreach(var station in activeDeck.stations)if(station.deck==deckLevel&&Vector2.Distance(new Vector2(deckPosition.x,-deckPosition.z),new Vector2(station.x,station.z))<1.3f){
                 if(station.id=="pilot"){aboard=false;inputNeutral=true;}

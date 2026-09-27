@@ -40,7 +40,18 @@ namespace SpacePatriot
         const string SaveKey="SpacePatriot.Unity.Frontier.v1";
         public ShipSpec Spec=>ShipSpec.Fleet[save.ship];
         public WorldInfo CurrentWorld=>worlds[save.world];
-        public bool AtPort {get {if(flying||jumping||ship==null||world==null)return false;var pad=world.Nearest(ship.position,"landing");return pad!=null&&Vector3.Distance(ship.position,pad.position)<pad.range+StandHeight;}}
+        public bool AtPort
+        {
+            get
+            {
+                if(flying||jumping||ship==null||world==null)return false;
+                // A city quay or street is a constructed berth even when its
+                // landing marker is farther away than the marker's UI radius.
+                if(world.TryLandingDeck(ship.position,1,LandingCenterHeight+1,out _,out _,out _))return true;
+                var pad=world.Nearest(ship.position,"landing");
+                return pad!=null&&Vector3.Distance(ship.position,pad.position)<pad.range+StandHeight;
+            }
+        }
         public float HullPercent=>save.hull/Spec.health*100;
         public bool HasSave=>!DesktopVerification.Active&&CampaignStorage.Exists;
 
@@ -184,6 +195,15 @@ namespace SpacePatriot
             var pad=Gamepad.current;var stick=pad?.leftStick.ReadValue()??Vector2.zero;var look=pad?.rightStick.ReadValue()??Vector2.zero;
             walkYaw+=look.x*110*dt;walkPitch=Mathf.Clamp(walkPitch+look.y*90*dt*(PlayerPrefs.GetInt("sp.padInvert",0)==1?1:-1),-75,75);
             var move=new Vector3(bindings.Axis("Strafe left","Strafe right")+stick.x,0,bindings.Axis("Reverse","Forward")+stick.y);if(move.sqrMagnitude>1)move.Normalize();
+            MoveSurfaceWalker(move,dt,Held(Key.LeftShift));
+            if(Down(Key.E)||Down(Key.Z)||pad?.buttonEast.wasPressedThisFrame==true)Interact();
+            if(bindings.Down("Board / leave seat")||Down(Key.J))BoardOrExit();
+            if(Down(Key.B)){if(Held(Key.LeftShift))CollectFieldSample();else {Signal("scan");Toast("Survey scan complete. Shift+B collects a sample near the field station.");}}
+        }
+        // Ground collision is shared by real input and the deterministic desktop
+        // verification path; virtual keyboard focus cannot affect the floor check.
+        void MoveSurfaceWalker(Vector3 move,float dt,bool running)
+        {
             Vector3 up=world.WalkUp(walkPosition);
             Vector3 feet=walkPosition-up*1.75f;
             Vector3 forward=Vector3.ProjectOnPlane(walkForward,up).normalized;
@@ -192,7 +212,7 @@ namespace SpacePatriot
             Vector3 travel=right*move.x+forward*move.z;
             if(travel.sqrMagnitude>.0001f)
             {
-                Vector3 nextFeet=feet+travel*(Held(Key.LeftShift)?8:4.5f)*dt;
+                Vector3 nextFeet=feet+travel*(running?8:4.5f)*dt;
                 if(world.TryWalkSupport(nextFeet,.45f,.85f,out var nextPoint,out _,out var support))
                 {
                     Vector3 nextUp=world.WalkUp(nextPoint);
@@ -206,9 +226,6 @@ namespace SpacePatriot
                 // No input means no horizontal drift. Follow a moving deck vertically.
                 walkPosition+=up*Vector3.Dot(currentPoint-feet,up);
             }
-            if(Down(Key.E)||Down(Key.Z)||pad?.buttonEast.wasPressedThisFrame==true)Interact();
-            if(bindings.Down("Board / leave seat")||Down(Key.J))BoardOrExit();
-            if(Down(Key.B)){if(Held(Key.LeftShift))CollectFieldSample();else {Signal("scan");Toast("Survey scan complete. Shift+B collects a sample near the field station.");}}
         }
         Place NearInteract()
         {

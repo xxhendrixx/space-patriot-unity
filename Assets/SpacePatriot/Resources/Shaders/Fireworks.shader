@@ -1,6 +1,6 @@
 Shader "SpacePatriot/Fireworks" {
  Properties {_Start("Ignition",Float)=0 _End("Extinguish",Float)=8 _Scale("Scale",Float)=1}
- SubShader {Tags {"RenderPipeline"="UniversalPipeline" "Queue"="Transparent"} Cull Off ZWrite Off Blend SrcAlpha One
+ SubShader {Tags {"RenderPipeline"="UniversalPipeline" "Queue"="Transparent"} Cull Off ZWrite Off Blend SrcAlpha OneMinusSrcAlpha
  Pass {HLSLPROGRAM
  #pragma vertex vert
  #pragma fragment frag
@@ -22,11 +22,18 @@ Shader "SpacePatriot/Fireworks" {
  p.xz+=_WeatherworksWind.xz*.055*life*life*height*.18;
  float gust=sin(time*1.7+life*4+seed*6.283)+sin(time*3.7+seed*11)*.4;p.xz+=float2(.9063,.4226)*gust*.45*life*.30;
  float flicker=sin(time*9+seed*17)+sin(time*14+seed*7)*.4;p.y+=flicker*.65*.08*life;
- float3 view=TransformWorldToView(TransformObjectToWorld(p));view.xy+=i.uv*(.32+width*.18)*lerp(1.15,.35,life);o.p=mul(UNITY_MATRIX_P,float4(view,1));
- o.uv=i.uv;o.life=life;o.heat=saturate(pow(1-life,.55)*.95);o.fade=saturate((_End-_Time.y)/1.8)*saturate(time*5);return o;}
- half4 frag(V i):SV_Target{float radial=1-smoothstep(.08,.5,length(i.uv));float temperature=saturate(i.heat*.64);float3 red=float3(1,.055,.005),orange=float3(1,.22,.015),yellow=float3(1,.68,.12),white=float3(1,.94,.72);
+ float3 view=TransformWorldToView(TransformObjectToWorld(p));float depth=-view.z;
+ // Fuel flames can be very close to the cockpit after an explosion. Keep
+ // billboards out of the near plane and below a fixed screen-space diameter.
+ float size=(.32+width*.18)*lerp(1.15,.35,life);
+ float pixelsPerMetre=.5*_ScreenParams.y*abs(UNITY_MATRIX_P._m11)/max(depth,.08);
+ size=min(size,56/max(1,pixelsPerMetre));
+ view.xy+=i.uv*size;o.p=depth>.08?mul(UNITY_MATRIX_P,float4(view,1)):float4(2,2,2,1);
+ o.uv=i.uv;o.life=life;o.heat=saturate(pow(1-life,.55)*.95);
+ o.fade=saturate((_End-_Time.y)/1.8)*saturate(time*5)*smoothstep(.35,1.5,depth);return o;}
+ half4 frag(V i):SV_Target{float radial=1-smoothstep(.08,.5,length(i.uv));float temperature=saturate(i.heat*.64);float3 red=float3(1,.055,.005),orange=float3(1,.22,.015),yellow=float3(1,.68,.12),white=float3(1,.72,.38);
  float3 c=temperature<.33?lerp(red,orange,temperature/.33):temperature<.68?lerp(orange,yellow,(temperature-.33)/.35):lerp(yellow,white,(temperature-.68)/.32);
- c+=white*pow(1-i.life,2)*.35*.35;float alpha=radial*smoothstep(0,.06,i.life)*(1-smoothstep(.58,1,i.life))*.23*i.fade;return half4(c,alpha);}
+ c+=white*pow(1-i.life,2)*.35*.35;float alpha=radial*smoothstep(0,.06,i.life)*(1-smoothstep(.58,1,i.life))*.23*i.fade;return half4(saturate(c),alpha);}
  ENDHLSL
  } }
 }

@@ -17,6 +17,7 @@ namespace SpacePatriot
         string verificationDirectory;
         Keyboard verificationKeyboard;
         Mouse verificationMouse;
+        readonly HashSet<Key> verificationHeldKeys=new(),verificationDownKeys=new();
         void DesktopCheck(bool value, string label)
         { if (!value) throw new InvalidOperationException(label); desktopChecks.Add("PASS " + label); }
 
@@ -34,7 +35,11 @@ namespace SpacePatriot
                 enabled=false; // Freeze normal input, autosave and showcase; exercise the same game methods below.
                 foreach(var device in InputSystem.devices.ToArray())InputSystem.DisableDevice(device);
                 verificationKeyboard=InputSystem.AddDevice<Keyboard>();verificationMouse=InputSystem.AddDevice<Mouse>();
-                verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();bindings=new FlightBindings(false);
+                verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();
+                bindings=new FlightBindings(false,k=>verificationHeldKeys.Contains(k),k=>verificationDownKeys.Contains(k));
+                DesktopCheck(bindings.KeyFor("Ascend")==Key.Space&&bindings.KeyFor("Descend")==Key.LeftCtrl&&
+                    bindings.KeyFor("Strafe left")==Key.A&&bindings.KeyFor("Strafe right")==Key.D&&
+                    bindings.KeyFor("Brake")==Key.X,"Default keyboard maps flight thrust and brake controls");
                 DesktopCheck(!Application.isEditor&&Application.platform==RuntimePlatform.WindowsPlayer,"Actual Windows player started with a graphics device: "+SystemInfo.graphicsDeviceName);
                 DesktopCheck(worlds.Length==19&&cases.Length==9,"World and campaign resources load in the native player");
                 DesktopCheck(save.society.cities.Count==420&&save.society.residents.Count>4000,"420 settlements and more than 4,000 persistent residents initialise");
@@ -78,10 +83,10 @@ namespace SpacePatriot
                 FrameDesktop();velocity=Vector3.zero;ship.rotation=Quaternion.identity;FollowCamera(10);Physics.SyncTransforms();
                 var dial=cabin.GetComponentsInChildren<CockpitControl>().First(c=>c.action==43);
                 var point=view.WorldToScreenPoint(dial.GetComponent<Renderer>().bounds.center);float previousThrottle=throttle;
-                InputSystem.QueueStateEvent(verificationMouse,new MouseState{position=new Vector2(point.x,point.y),scroll=new Vector2(0,120)});InputSystem.Update();PointCockpit();
+                PointCockpit(new Vector2(point.x,point.y),120,false);
                 DesktopCheck(throttle>previousThrottle,"Physical DRIVE knob changes actual flight speed limit");
                 var soft=cabin.GetComponentsInChildren<CockpitControl>().First(c=>c.action==101);point=view.WorldToScreenPoint(soft.GetComponent<Renderer>().bounds.center);int previousPage=mfdPage[0];
-                InputSystem.ResetDevice(verificationMouse);InputSystem.QueueStateEvent(verificationMouse,new MouseState{position=new Vector2(point.x,point.y),buttons=1});InputSystem.Update();PointCockpit();
+                PointCockpit(new Vector2(point.x,point.y),0,true);
                 DesktopCheck(mfdPage[0]!=previousPage,"Physical MFD softkey selects the next live page");
                 mfdNext=0;UpdateMfd();DesktopCheck(mfd.Select(s=>s.texture.GetInstanceID()).Distinct().Count()==3,"Three independent live cockpit displays render");
                 var pixels=mfd[1].texture.GetPixels32();DesktopCheck(pixels.Count(p=>p.g>120)>300&&pixels.Count(p=>p.g<40)>100000,"Navigation display contains illuminated marks on a dark background");
@@ -210,6 +215,7 @@ namespace SpacePatriot
                 out var deck,out _,out var support)&&support.name==expectedSupport&&
                 Mathf.Abs(Vector3.Dot(ship.position-deck,Vector3.up)-LandingCenterHeight)<.05f,
                 label+" secures the landing gear on the visible deck, not terrain below");
+            DesktopCheck(AtPort,label+" retains dock service and deck-only disembark access");
             DesktopCheck(world.LandingFootprintFits(deck,ship.rotation,Spec.width,Spec.length),
                 label+" supports the complete landing-gear footprint");
             var renderers=exterior.GetComponentsInChildren<Renderer>(true);
@@ -235,16 +241,20 @@ namespace SpacePatriot
         }
         void FrameGround(bool onDeck,params Key[] keys)
         {
-            InputSystem.QueueStateEvent(verificationMouse,new MouseState());
-            InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();
-            verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();
-            if(onDeck)WalkDeck(.02f);
-            else {world.StreamSurface(walkPosition,true);Walk(.02f);}
+            // Feed the same ground/deck action methods called by live input.
+            // Windows can reclaim Keyboard.current between synthetic events;
+            // timing that event must not make a collision regression flaky.
+            if(onDeck){if(keys.Contains(Key.E))OperateDeck(keys.Contains(Key.LeftShift));else WalkDeck(.02f);}
+            else
+            {
+                world.StreamSurface(walkPosition,true);
+                MoveSurfaceWalker(keys.Contains(Key.A)?Vector3.left:Vector3.zero,.02f,keys.Contains(Key.LeftShift));
+            }
         }
         void FrameDesktop(params Key[] keys)
-        {InputSystem.QueueStateEvent(verificationMouse,new MouseState());InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(keys));InputSystem.Update();
-            // A Windows hardware event can reclaim Keyboard.current between
-            // synthetic frames. FlightBindings reads current, not a device ID.
+        {InputSystem.QueueStateEvent(verificationMouse,new MouseState());InputSystem.Update();
+            verificationDownKeys.Clear();foreach(var key in keys)if(!verificationHeldKeys.Contains(key))verificationDownKeys.Add(key);
+            verificationHeldKeys.Clear();foreach(var key in keys)verificationHeldKeys.Add(key);
             verificationKeyboard.MakeCurrent();verificationMouse.MakeCurrent();
             focused=true;inputNeutral=false;Flight(.02f);}
         void DesktopCapture(string name)
