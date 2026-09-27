@@ -112,8 +112,8 @@ namespace SpacePatriot
                             world.LandingFootprintFits(berth,ship.rotation,Spec.width,Spec.length),
                             Spec.name+" spawns on the capital quay above its landing gear");
                     for(int level=1;level<activeDeck.decks.Length;level++){
-                        InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState());InputSystem.Update();InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState(Key.E));InputSystem.Update();WalkDeck(.02f);
-                        InputSystem.QueueStateEvent(verificationKeyboard,new KeyboardState());InputSystem.Update();for(int i=0;i<120;i++)WalkDeck(.02f);
+                        OperateDeck(false);
+                        for(int i=0;i<120;i++)WalkDeck(.02f);
                         DesktopCheck(Mathf.Abs(deckPosition.y+level*3.3f)<.01f,Spec.name+" service lift reaches deck "+(level+1));
                     }
                     walkYaw=180;walkPitch=0;deckPosition.z=-8;FollowCamera(10);DesktopCapture("ship-"+index+"-lower-deck");
