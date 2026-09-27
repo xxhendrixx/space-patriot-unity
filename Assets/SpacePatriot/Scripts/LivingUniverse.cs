@@ -175,6 +175,70 @@ namespace SpacePatriot
         public static Vector3 Berth(Place capitalQuay,float standHeight)
             =>capitalQuay.position+new Vector3(150,standHeight-2.65f,0);
 
+        // The freight itinerary belongs to the resident, but the visible berth
+        // belongs to the active port. Port 07 has a clear outer slab east of the
+        // hangar; the city quay has two bays so a parked player never shares one.
+        public static bool TryBerth(FrontierWorld world,ShipSpec freight,
+            Vector3 playerPosition,Quaternion playerRotation,ShipSpec playerShip,bool playerLanded,
+            out Vector3 center,out bool besidePlayer)
+        {
+            center=default;besidePlayer=false;
+            var nearest=playerLanded?world.Nearest(playerPosition,"landing"):null;
+            bool atPort07=nearest!=null&&(nearest.name=="Port 07 landing pad"||nearest.name=="Capital ship apron");
+            bool atStation=nearest!=null&&nearest.name=="Traffic station landing pad";
+            if(atPort07&&TryCandidate(world,freight,new Vector3(335,world.Deck+2.65f,-120),
+                playerPosition,playerRotation,playerShip,playerLanded,out center))
+            {besidePlayer=true;return true;}
+            if(atStation)
+            {
+                if(TryCandidate(world,freight,world.station+new Vector3(220,2.65f,-3),
+                    playerPosition,playerRotation,playerShip,playerLanded,out center))
+                {besidePlayer=true;return true;}
+                if(TryCandidate(world,freight,world.station+new Vector3(-220,2.65f,-3),
+                    playerPosition,playerRotation,playerShip,playerLanded,out center))
+                {besidePlayer=true;return true;}
+            }
+            if(TryCandidate(world,freight,new Vector3(800,world.Deck+2.65f,230),
+                playerPosition,playerRotation,playerShip,playerLanded,out center))
+            {besidePlayer=nearest!=null&&nearest.name=="Capital ship quay";return true;}
+            if(TryCandidate(world,freight,new Vector3(580,world.Deck+2.65f,230),
+                playerPosition,playerRotation,playerShip,playerLanded,out center))
+            {besidePlayer=nearest!=null&&nearest.name=="Capital ship quay";return true;}
+            return false;
+        }
+
+        static bool TryCandidate(FrontierWorld world,ShipSpec freight,Vector3 near,
+            Vector3 playerPosition,Quaternion playerRotation,ShipSpec playerShip,bool playerLanded,
+            out Vector3 center)
+        {
+                center=default;
+                if(!world.TryLandingDeck(near,1,8,out var deck,out var normal,out _)||
+                    !world.LandingFootprintFits(deck,Quaternion.identity,freight.width,freight.length))return false;
+                // A supported floor is insufficient if the hull would be
+                // embedded in a building or a cargo module beside the bay.
+                Vector3 hullCenter=deck+normal*(freight.height*.5f+.35f);
+                Vector3 hullExtents=new Vector3(freight.width*.5f+.75f,
+                    Mathf.Max(.1f,freight.height*.5f-.35f),freight.length*.5f+.75f);
+                foreach(var obstacle in Physics.OverlapBox(hullCenter,hullExtents,Quaternion.identity,
+                    Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore))
+                    if(obstacle.transform.IsChildOf(world.transform)&&!world.IsWalkDeck(obstacle)&&
+                       obstacle.bounds.max.y>deck.y+.6f)return false;
+                if(playerLanded)
+                {
+                    // Project the player's rotated hull onto the port axes. A
+                    // gear-only footprint is too small for a safe second berth.
+                    Vector3 playerRight=playerRotation*Vector3.right*(playerShip.width*.5f);
+                    Vector3 playerForward=playerRotation*Vector3.forward*(playerShip.length*.5f);
+                    float playerX=Mathf.Abs(playerRight.x)+Mathf.Abs(playerForward.x);
+                    float playerZ=Mathf.Abs(playerRight.z)+Mathf.Abs(playerForward.z);
+                    if(Mathf.Abs(deck.x-playerPosition.x)<freight.width*.5f+playerX+8&&
+                       Mathf.Abs(deck.z-playerPosition.z)<freight.length*.5f+playerZ+8&&
+                       Mathf.Abs(deck.y-playerPosition.y)<freight.height+playerShip.height+8)return false;
+                }
+                center=deck+normal*(freight.height*.3f+2);
+                return true;
+        }
+
         public static Vector3 FlightPosition(Vector3 berth,float transitProgress,bool outgoing)
         {
             float local=outgoing?Mathf.Clamp01(transitProgress/ApproachFraction):
@@ -192,6 +256,7 @@ namespace SpacePatriot
     {
         readonly Transform[] crates=new Transform[FreightLogistics.LoadSize];
         Transform ramp;float width,standHeight;
+        public Vector3 berth;
         public void Initialize(ShipSpec spec)
         {
             width=spec.width;standHeight=spec.height*.3f+2;
@@ -250,15 +315,15 @@ namespace SpacePatriot
                 bool outgoing=r.world==CurrentWorld.id&&t<.5f;
                 if(r.job=="Freight pilot")
                 {
-                    var quay=world.places.Find(p=>p.name=="Capital ship quay");if(quay==null)continue;
-                    var berth=FreightLogistics.Berth(quay,ShipSpec.Fleet[r.ship].height*.3f+2);
+                    var freight=tr.GetComponent<FreightShipActor>();if(freight==null)continue;
+                    var berth=freight.berth;
                     bool service=r.activity=="Dock service"||r.activity=="Port turnaround";
                     var target=service?berth:FreightLogistics.FlightPosition(berth,t,outgoing);
                     Vector3 direction=target-tr.position;
                     if(service)tr.rotation=Quaternion.Slerp(tr.rotation,Quaternion.identity,dt*4);
                     else if(direction.sqrMagnitude>1){var heading=Vector3.ProjectOnPlane(direction,Vector3.up);if(heading.sqrMagnitude>1)tr.rotation=Quaternion.Slerp(tr.rotation,Quaternion.LookRotation(heading,Vector3.up),dt*2);}
                     tr.position=target;
-                    var freight=tr.GetComponent<FreightShipActor>();if(freight!=null){if(r.activity=="Dock service"&&r.cargoUnits>0)freight.PoseCargo(t);else if(r.activity=="Port turnaround")freight.PoseCargo(1);else freight.HideCargo();}
+                    if(r.activity=="Dock service"&&r.cargoUnits>0)freight.PoseCargo(t);else if(r.activity=="Port turnaround")freight.PoseCargo(1);else freight.HideCargo();
                 }
                 else
                 {
@@ -272,13 +337,21 @@ namespace SpacePatriot
         static Vector3 Route(Vector3 a,Vector3 b,Vector3 c,Vector3 d,float t){float ab=Vector3.Distance(a,b),bc=Vector3.Distance(b,c),cd=Vector3.Distance(c,d),n=t*(ab+bc+cd);if(n<ab)return Vector3.Lerp(a,b,n/Mathf.Max(.001f,ab));n-=ab;if(n<bc)return Vector3.Lerp(b,c,n/Mathf.Max(.001f,bc));return Vector3.Lerp(c,d,(n-bc)/Mathf.Max(.001f,cd));}
         void SyncResidents()
         {
-            Resident featuredFreight=null;int featuredScore=int.MinValue;
+            Resident featuredFreight=null;int featuredScore=int.MinValue;Vector3 featuredBerth=default;
             foreach(var r in save.society.residents)
             {
                 if(r.job!="Freight pilot"||!FreightLogistics.Visible(r,CurrentWorld.id,save.settlement,save.society.time))continue;
+                bool existing=traffic.TryGetValue(r.id,out var existingVessel);
+                var existingActor=existing?existingVessel.GetComponent<FreightShipActor>():null;
+                bool local;
+                Vector3 berth;
+                if(existingActor!=null){berth=existingActor.berth;local=Vector3.Distance(berth,ship.position)<450;}
+                else if(!FreightLogistics.TryBerth(world,ShipSpec.Fleet[r.ship],ship.position,ship.rotation,
+                    Spec,!flying,out berth,out local))continue;
                 int score=(r.cargoJobId!=""&&r.cargoCity==save.settlement?100:0)+
-                    (r.activity=="Dock service"?30:r.activity=="Port turnaround"?20:r.world!=CurrentWorld.id?10:0);
-                if(score<=featuredScore)continue;featuredFreight=r;featuredScore=score;
+                    (r.activity=="Dock service"?30:r.activity=="Port turnaround"?20:r.world!=CurrentWorld.id?10:0)+
+                    (local?200:0)+(existing?5:0);
+                if(score<=featuredScore)continue;featuredFreight=r;featuredScore=score;featuredBerth=berth;
             }
             var stale=new List<string>();foreach(var pair in people)if(pair.Value.data.city!=save.settlement){Destroy(pair.Value.gameObject);stale.Add(pair.Key);}foreach(var id in stale)people.Remove(id);
             foreach(var r in save.society.residents){if(r.city!=save.settlement||people.ContainsKey(r.id)||people.Count>=48)continue;
@@ -296,7 +369,8 @@ namespace SpacePatriot
                 var hull=Instantiate(prefab,vessel).transform;hull.localPosition=Vector3.zero;hull.localRotation=Quaternion.identity;
                 var basis=ShipSpec.Fleet[spec.family*10];hull.localScale=new Vector3(spec.width/basis.width,spec.height/basis.height,spec.length/basis.length);
                 var renderers=hull.GetComponentsInChildren<MeshRenderer>();if(renderers.Length>0){var bounds=renderers[0].bounds;foreach(var renderer in renderers)bounds.Encapsulate(renderer.bounds);hull.localPosition=Vector3.up*(-(spec.height*.3f+2)-(bounds.min.y-vessel.position.y));}
-                if(r.job=="Freight pilot")vessel.gameObject.AddComponent<FreightShipActor>().Initialize(spec);
+                if(r.job=="Freight pilot")
+                {var freight=vessel.gameObject.AddComponent<FreightShipActor>();freight.berth=featuredBerth;freight.Initialize(spec);}
                 vessel.position=Stop(0)+Vector3.up*10;traffic.Add(r.id,vessel);
             }
         }
