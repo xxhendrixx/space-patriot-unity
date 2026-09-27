@@ -19,7 +19,9 @@ namespace SpacePatriot
                 capacity=count;positions=new Vector3[count*4];colors=new Color[count*4];velocity=new(count*4);life=new(count*4);style=new(count*4);var uv=new Vector2[count*4];var indices=new int[count*6];
                 for(int i=0;i<count;i++){for(int j=0;j<4;j++){int k=i*4+j;uv[k]=new Vector2(j==0||j==3?-.5f:.5f,j<2?-.5f:.5f);velocity.Add(Vector4.zero);life.Add(new Vector4(-10000,1,0,0));style.Add(Vector4.zero);}int q=i*6,a=i*4;indices[q]=a;indices[q+1]=a+1;indices[q+2]=a+2;indices[q+3]=a;indices[q+4]=a+2;indices[q+5]=a+3;}
                 mesh=new Mesh{name=smoke?"Spellworks smoke pool":"Spellworks particle pool"};mesh.MarkDynamic();mesh.vertices=positions;mesh.uv=uv;mesh.triangles=indices;mesh.bounds=new Bounds(Vector3.zero,Vector3.one*150000);
-                material=new Material(Resources.Load<Shader>("Shaders/Spellworks"));material.SetFloat("_DstBlend",smoke?(float)BlendMode.OneMinusSrcAlpha:(float)BlendMode.One);
+                // Normal alpha compositing keeps overlapping weather, impacts and
+                // survey motes from accumulating into a white screen flash.
+                material=new Material(Resources.Load<Shader>("Shaders/Spellworks"));material.SetFloat("_DstBlend",(float)BlendMode.OneMinusSrcAlpha);
                 var go=new GameObject(mesh.name);go.transform.SetParent(root,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;var r=go.AddComponent<MeshRenderer>();r.sharedMaterial=material;r.shadowCastingMode=ShadowCastingMode.Off;r.receiveShadows=false;dirty=true;
             }
             public void Emit(Vector3 p,Vector3 v,Color c,float start,float duration,float size,int type,float gravity,float drag,float seed)
